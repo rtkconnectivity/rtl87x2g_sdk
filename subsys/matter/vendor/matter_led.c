@@ -7,6 +7,7 @@ extern "C" {
 #include "rtl_gpio.h"
 #include "rtl_pinmux.h"
 #include "rtl_rcc.h"
+#include "rtl_tim.h"
 #include "os_mem.h"
 #include "os_queue.h"
 #include "os_timer.h"
@@ -15,21 +16,30 @@ extern "C" {
 #ifdef BOARD_RTL8777G
 #define LED_PIN_NUM  3
 const uint8_t LED_PIN[LED_PIN_NUM] = {P2_0, XO32K, XI32K};
+const uint8_t PIN_FUNC[LED_PIN_NUM] = {TIMER_PWM2, TIMER_PWM3, TIMER_PWM4};
+const void *PWM_REG[LED_PIN_NUM] = {TIM2, TIM3, TIM4};
 #else
 #define LED_PIN_NUM  4
 const uint8_t LED_PIN[LED_PIN_NUM] = {P0_1, P0_2, P1_3, P1_4};
+const uint8_t PIN_FUNC[LED_PIN_NUM] = {TIMER_PWM2, TIMER_PWM3, TIMER_PWM4, TIMER_PWM5};
+const void *PWM_REG[LED_PIN_NUM] = {TIM2, TIM3, TIM4, TIM5};
 #endif
+
+#define LED_PWM_FREQ        200 //!< Hz
+#define LED_PWM_COUNT       (40000000/LED_PWM_FREQ)
 
 typedef struct t_matter_led
 {
     struct t_matter_led      *p_next;
-    uint8_t                   led_pin;
+    uint8_t                   pin_index;
+    uint16_t                  brightness;
     uint16_t                  current_count;
     uint16_t                  target_count;
     uint32_t                  blink_on_time_ms;
     uint32_t                  blink_off_time_ms;
     void                     *led_timer;
     bool                      state;
+    bool                      dimmable;
 } T_MATTER_LED;
 
 typedef struct t_matter_led_db
@@ -45,11 +55,13 @@ void matter_led_state_do_set(T_MATTER_LED *matter_led, bool state)
 
     if (true == state)
     {
-        GPIO_WriteBit(GPIO_GetPort(matter_led->led_pin), GPIO_GetPin(matter_led->led_pin), Bit_SET);
+        GPIO_WriteBit(GPIO_GetPort(LED_PIN[matter_led->pin_index]),
+                      GPIO_GetPin(LED_PIN[matter_led->pin_index]), Bit_SET);
     }
     else
     {
-        GPIO_WriteBit(GPIO_GetPort(matter_led->led_pin), GPIO_GetPin(matter_led->led_pin), Bit_RESET);
+        GPIO_WriteBit(GPIO_GetPort(LED_PIN[matter_led->pin_index]),
+                      GPIO_GetPin(LED_PIN[matter_led->pin_index]), Bit_RESET);
     }
 }
 
@@ -86,25 +98,7 @@ bool matter_led_init(void)
 {
     if (matter_led_db == NULL)
     {
-        uint8_t i;
-
-        for (i = 0; i < LED_PIN_NUM; i++)
-        {
-            Pad_Config(LED_PIN[i], PAD_PINMUX_MODE, PAD_IS_PWRON, PAD_PULL_NONE, PAD_OUT_ENABLE, PAD_OUT_HIGH);
-            Pinmux_Config(LED_PIN[i], DWGPIO);
-        }
-
         RCC_PeriphClockCmd(APBPeriph_GPIOA, APBPeriph_GPIOA_CLOCK, ENABLE);
-        GPIO_InitTypeDef GPIO_InitStruct;
-        GPIO_StructInit(&GPIO_InitStruct);
-        GPIO_InitStruct.GPIO_Mode   = GPIO_Mode_OUT;
-        GPIO_InitStruct.GPIO_ITCmd  = DISABLE;
-        for (i = 0; i < LED_PIN_NUM; i++)
-        {
-            GPIO_InitStruct.GPIO_Pin    = GPIO_GetPin(LED_PIN[i]);
-            GPIO_Init(GPIO_GetPort(LED_PIN[i]), &GPIO_InitStruct);
-            GPIO_ResetBits(GPIOA, GPIO_GetPin(LED_PIN[i]));
-        }
 
         matter_led_db = os_mem_alloc2(sizeof(T_MATTER_LED_DB));
         if (matter_led_db == NULL)
@@ -118,7 +112,7 @@ bool matter_led_init(void)
     return true;
 }
 
-T_MATTER_LED_HANDLE matter_led_create(uint8_t index)
+T_MATTER_LED_HANDLE matter_led_create(uint8_t index, bool dimmable, uint16_t brightness)
 {
     T_MATTER_LED *matter_led;
     int32_t ret = 0;
@@ -132,7 +126,7 @@ T_MATTER_LED_HANDLE matter_led_create(uint8_t index)
     matter_led = os_queue_peek(&matter_led_db->leds, 0);
     while (matter_led != NULL)
     {
-        if (matter_led->led_pin == LED_PIN[index])
+        if (matter_led->pin_index == index)
         {
             ret = 2;
             goto fail_check_pin;
@@ -148,12 +142,57 @@ T_MATTER_LED_HANDLE matter_led_create(uint8_t index)
         goto fail_alloc_led;
     }
 
-    matter_led->led_pin = LED_PIN[index];
+    matter_led->pin_index = index;
     matter_led->state = false;
     matter_led->current_count = 0;
     matter_led->target_count = 0;
     matter_led->blink_on_time_ms = 0;
     matter_led->blink_off_time_ms = 0;
+    matter_led->dimmable = dimmable;
+    matter_led->brightness = brightness;
+
+    if (dimmable)
+    {
+        Pad_Config(LED_PIN[index], PAD_PINMUX_MODE, PAD_IS_PWRON, PAD_PULL_NONE, PAD_OUT_ENABLE,
+                   PAD_OUT_LOW);
+        Pinmux_Config(LED_PIN[index], PIN_FUNC[index]);
+        /* TIM */
+        TIM_TimeBaseInitTypeDef TIM_InitStruct;
+        TIM_StructInit(&TIM_InitStruct);
+        TIM_InitStruct.TIM_PWM_En = ENABLE;
+        /*<! PWM output freqency = 40M/(TIM_PWM_High_Count + TIM_PWM_Low_Count) */
+        /*<! PWM duty cycle = TIM_PWM_High_Count/(TIM_PWM_High_Count + TIM_PWM_Low_Count) */
+        uint32_t high_count;
+        if (0xffff == brightness)
+        {
+            high_count = LED_PWM_COUNT;
+        }
+        else
+        {
+            high_count = (LED_PWM_COUNT / 65535.0) * brightness;
+        }
+
+        TIM_InitStruct.TIM_PWM_High_Count = high_count;
+        TIM_InitStruct.TIM_PWM_Low_Count = LED_PWM_COUNT - high_count;
+        TIM_InitStruct.TIM_Mode = TIM_Mode_UserDefine;
+        TIM_TimeBaseInit(PWM_REG[index], &TIM_InitStruct);
+        /* Enable PWM output */
+        TIM_Cmd(PWM_REG[index], ENABLE);
+    }
+    else
+    {
+        Pad_Config(LED_PIN[index], PAD_PINMUX_MODE, PAD_IS_PWRON, PAD_PULL_NONE, PAD_OUT_ENABLE,
+                   PAD_OUT_HIGH);
+        Pinmux_Config(LED_PIN[index], DWGPIO);
+
+        GPIO_InitTypeDef GPIO_InitStruct;
+        GPIO_StructInit(&GPIO_InitStruct);
+        GPIO_InitStruct.GPIO_Mode   = GPIO_Mode_OUT;
+        GPIO_InitStruct.GPIO_ITCmd  = DISABLE;
+        GPIO_InitStruct.GPIO_Pin    = GPIO_GetPin(LED_PIN[index]);
+        GPIO_Init(GPIO_GetPort(LED_PIN[index]), &GPIO_InitStruct);
+        GPIO_ResetBits(GPIOA, GPIO_GetPin(LED_PIN[index]));
+    }
 
     os_timer_create(&matter_led->led_timer, "led timer", (uint32_t)matter_led,
                     1000, false, matter_led_timeout_cb);
@@ -269,6 +308,59 @@ bool matter_led_blink_stop(T_MATTER_LED_HANDLE handle)
 
 fail_check_handle:
     MATTER_PRINT_ERROR2("matter_led_blink_stop: handle %p, failed %d", matter_led, -ret);
+    return false;
+}
+
+bool matter_led_brightness_get(T_MATTER_LED_HANDLE handle, uint16_t *brightness)
+{
+    T_MATTER_LED *matter_led;
+    int32_t       ret = 0;
+
+    matter_led = (T_MATTER_LED *)handle;
+    if (os_queue_search(&matter_led_db->leds, matter_led) == false)
+    {
+        ret = 1;
+        goto fail_check_handle;
+    }
+
+    *brightness = matter_led->brightness;
+
+    return true;
+
+fail_check_handle:
+    MATTER_PRINT_ERROR2("matter_led_brightness_set: handle %p, failed %d", matter_led, -ret);
+    return false;
+}
+
+bool matter_led_brightness_set(T_MATTER_LED_HANDLE handle, uint16_t brightness)
+{
+    T_MATTER_LED *matter_led;
+    uint32_t      high_count;
+    int32_t       ret = 0;
+
+    matter_led = (T_MATTER_LED *)handle;
+    if (os_queue_search(&matter_led_db->leds, matter_led) == false)
+    {
+        ret = 1;
+        goto fail_check_handle;
+    }
+
+    if (0xffff == brightness)
+    {
+        high_count = LED_PWM_COUNT;
+    }
+    else
+    {
+        high_count = (LED_PWM_COUNT / 65535.0) * brightness;
+    }
+    TIM_PWMChangeFreqAndDuty(PWM_REG[matter_led->pin_index], high_count, LED_PWM_COUNT - high_count);
+
+    matter_led->brightness = brightness;
+
+    return true;
+
+fail_check_handle:
+    MATTER_PRINT_ERROR2("matter_led_brightness_set: handle %p, failed %d", matter_led, -ret);
     return false;
 }
 

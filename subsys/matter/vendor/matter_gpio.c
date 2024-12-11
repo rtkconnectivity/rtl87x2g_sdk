@@ -23,14 +23,16 @@ extern "C" {
 #define RX_BUF_SIZE 16
 static void *matter_gpio_queue = NULL;
 static void *matter_gpio_handle = NULL;
-static matter_gpio_callback gpio_callback = NULL;
+static P_MATTER_GPIO_CBACK gpio_callback = NULL;
 
 #ifdef BOARD_RTL8777G
-#define GPIO_NUM  2
-const uint8_t GPIO_PIN[GPIO_NUM] = {P9_1, P9_0};
-const uint8_t GPIO_PIN_IRQN[GPIO_NUM] = {GPIOB22_IRQn, GPIOB21_IRQn};
+#define GPIO_NUM  4
+const uint8_t GPIO_PIN[GPIO_NUM] = {P9_1, P9_0, P4_3, P4_2};
+const uint8_t GPIO_PIN_IRQN[GPIO_NUM] = {GPIOB22_IRQn, GPIOB21_IRQn, GPIOB8_IRQn, GPIOB7_IRQn};
 #define GPIO_Pin_Key0_Handler    GPIOB22_Handler
 #define GPIO_Pin_Key1_Handler    GPIOB21_Handler
+#define GPIO_Pin_Key2_Handler    GPIOB8_Handler
+#define GPIO_Pin_Key3_Handler    GPIOB7_Handler
 #elif BOARD_EVB
 #define GPIO_NUM  5
 const uint8_t GPIO_PIN[GPIO_NUM] = {P4_0, P4_1, P2_4, P2_3, P3_5};
@@ -68,8 +70,9 @@ static void gpio_key_interrupt_handler(uint8_t index)
         state = MATTER_GPIO_KEY_STATE_RELEASE;
     }
 
-    msg = index << 8 | state;
-    os_msg_send(matter_gpio_queue, &msg, 0);
+    //msg = index << 8 | state;
+    //os_msg_send(matter_gpio_queue, &msg, 0);
+    gpio_callback(index, state);
 
     GPIO_ClearINTPendingBit(GPIO_GetPort(GPIO_PIN[index]), GPIO_GetPin(GPIO_PIN[index]));
     GPIO_MaskINTConfig(GPIO_GetPort(GPIO_PIN[index]), GPIO_GetPin(GPIO_PIN[index]), DISABLE);
@@ -86,7 +89,6 @@ void GPIO_Pin_Key1_Handler(void)
     gpio_key_interrupt_handler(1);
 }
 
-#ifdef BOARD_EVB
 void GPIO_Pin_Key2_Handler(void)
 {
     gpio_key_interrupt_handler(2);
@@ -97,6 +99,7 @@ void GPIO_Pin_Key3_Handler(void)
     gpio_key_interrupt_handler(3);
 }
 
+#ifdef BOARD_EVB
 void GPIO_Pin_Key4_Handler(void)
 {
     gpio_key_interrupt_handler(4);
@@ -123,9 +126,12 @@ void matter_gpio_task(void *param)
     }
 }
 
-void matter_gpio_init(matter_gpio_callback func)
+void matter_gpio_init(P_MATTER_GPIO_CBACK func)
 {
     uint8_t i;
+
+  //  os_msg_queue_create(&matter_gpio_queue, "matter_gpio_queue", RX_BUF_SIZE, sizeof(uint16_t));
+  //  os_task_create(&matter_gpio_handle, "matter_gpio_test", matter_gpio_task, 0, 2048, 1);
 
     for (i = 0; i < GPIO_NUM; i++)
     {
@@ -174,8 +180,7 @@ void matter_gpio_init(matter_gpio_callback func)
     }
 
     gpio_callback = func;
-    os_msg_queue_create(&matter_gpio_queue, "matter_gpio_queue", RX_BUF_SIZE, sizeof(uint16_t));
-    os_task_create(&matter_gpio_handle, "matter_gpio_test", matter_gpio_task, 0, 2048, 1);
+   
 }
 
 #ifdef __cplusplus

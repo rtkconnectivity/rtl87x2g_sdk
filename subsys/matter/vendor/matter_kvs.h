@@ -1,67 +1,145 @@
+/**
+*********************************************************************************************************
+*               Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
+**********************************************************************************************************
+* \file     matter_kvs.h
+* \brief    This file provides key value storage functions.
+* \details
+* \author   rock ding
+* \date     2024-04-17
+* \version  v1.0
+*********************************************************************************************************
+*/
+
+/*============================================================================*
+ *               Define to prevent recursive inclusion
+ *============================================================================*/
+#ifndef MATTER_KVS_H
+#define MATTER_KVS_H
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+/*============================================================================*
+ *                        Header Files
+ *============================================================================*/
 #include "matter_types.h"
 
-#define MATTER_KVS_ENABLE_BACKUP        0
-#define MATTER_KVS_ENABLE_WEAR_LEVELING 0
-#define MATTER_KVS_BEGIN_ADDR           FTL_ADDR
-/*1024 elements per page, every element occupy 4 bytes*/
-#define PAGE_ELEMENT_NUM            (4096 / 4)
-#define PAGE_NUM  (FTL_SIZE/4096 - 1)
-#define MAX_NUM     (511*PAGE_NUM - PAGE_ELEMENT_NUM /2 - 2)
-#define MAX_PAGE_ELEMENT_NUM    511
-#define MAX_ALL_PAGE_ELEMENT_NUM    (MAX_PAGE_ELEMENT_NUM * 20)
+/*============================================================================*
+ *                         Constants
+ *============================================================================*/
+/** \defgroup Matter_KVS_Exported_Constants Matter KVS Exported Constants
+  * \brief
+  * \{
+  */
 
-#define BEE_KVS_STATUS_NO_ERROR         0
-#define BEE_KVS_HASH_INVALID            9
-#define BEE_KVS_LOOKUP_FOUND            10
-#define BEE_KVS_LOOKUP_NOT_FOUND        11
-#define BEE_KVS_LOOKUP_NOT_FOUND_MAX    12
-#define BEE_KVS_NO_MEM                  13
-
-/*
- * Debug level definiation
+/**
+ * \defgroup    Matter_KVS_Status Matter KVS Status
+ * \{
+ * \ingroup     Matter_KVS_Exported_Constants
  */
-#define FTL_DBG_LV_ERR 0x01
-#define FTL_DBG_LV_INFO 0x02
-#define FTL_DBG_LV_ALL (FTL_DBG_LV_ERR | FTL_DBG_LV_INFO)
+#define MATTER_KVS_STATUS_NO_ERROR         0
+#define MATTER_KVS_HASH_INVALID            1
+#define MATTER_KVS_LOOKUP_NOT_FOUND        2
+#define MATTER_KVS_BUFFER_TOO_SMALL        3
 
-#define CFG_FTL_DEBUG 1
-#define FTL_DBG_LEVEL FTL_DBG_LV_ERR
+/** End of Matter_KVS_Status
+  * \}
+  */
 
-#ifdef CFG_FTL_DEBUG
-#   define FTL_DBG(lv, fmt, args...) \
-    do { \
-        if (lv & FTL_DBG_LEVEL) { \
-            DBG_DIRECT("[FTL]" fmt , ##args); \
-        } \
-    } while(0)
-#else
-#   define FTL_DBG(lv, fmt, args...) do { } while(0)
-#endif
+/** End of Matter_KVS_Exported_Constants
+  * \}
+  */
+
+/*============================================================================*
+ *                         Functions
+ *============================================================================*/
+/** \defgroup Matter_KVS_Exported_Functions Matter KVS Exported Functions
+  * \brief
+  * \{
+  */
+
+/**
+  * @brief  Initialize the matter kvs module.
+  *
+  * @retval 0  On success.
+  * @retval -1 On failure.
+  */
+int32_t matter_kvs_init(void);
+
+/**
+  * @brief  Clean the matter kvs module, all the key-value entries will be deleted.
+  *
+  * @retval none.
+  */
+void matter_kvs_clean(void);
+
+/**
+  * @brief  Adds a key-value entry to the KVS. If the key was already present, its value is overwritten.
+  * @param[in]  key          The name of the key to update, this is a null-terminated string.
+  * @param[in]  value        Pointer to the data.
+  * @param[in]  valueSize    Size of the data.
+  *
+  * @retval #MATTER_KVS_STATUS_NO_ERROR On success.
+  * @retval Other value on failure.
+  */
+int32_t matter_kvs_put(const char *key, const void *value, size_t valueSize);
+
+/**
+  * @brief  Reads the value of an entry in the KVS. The value is read into the
+  *         provided buffer and the number of bytes read is returned.
+  * @param[in]      key                 The name of the key to get, this is a null-terminated string.
+  * @param[in,out]  buffer              A buffer to read the value into.
+  * @param[in]      buffer_size         The size of the buffer in bytes.
+  * @param[out]     read_bytes_size     The number of bytes which were copied into the buffer.
+  *
+  * @retval #MATTER_KVS_STATUS_NO_ERROR   On success.
+  * @retval #MATTER_KVS_LOOKUP_NOT_FOUND  The key is not present in the KVS.
+  */
+int32_t matter_kvs_get(const char *key, void *buffer, size_t buffer_size, size_t *read_bytes_size);
+
+/**
+  * @brief  Removes a key-value entry from the KVS.
+  * @param[in]  key   The name of the key to delete, this is a null-terminated string.
+  *
+  * @retval #MATTER_KVS_STATUS_NO_ERROR   On success.
+  * @retval #MATTER_KVS_LOOKUP_NOT_FOUND  The key is not present in the KVS.
+  */
+int32_t matter_kvs_key_delete(const char *key);
+
+/**
+  * @brief  Check if a key exists in the KVS.
+  * @param[in]  key   The name of the key to find, this is a null-terminated string.
+  *
+  * @retval #true  On success.
+  * @retval #false The key is not present in the KVS.
+  */
+bool matter_kvs_key_find(const char *key);
 
 
-int32_t Bee4_KvsInit(void);
-int32_t Bee4_KvsClean(void);
-int32_t Bee4_lookup_key(uint8_t *hask_key, uint32_t key_len, uint16_t *lookup_idx);
-int32_t Bee4_KvsPut(const char *key, const void *value, size_t valueSize);
-int32_t Bee4_KvsGet(const char *key, void *value, size_t valueSize, size_t *readBytesSize);
 
-// for BeeConfig
-int32_t Bee4_KvsDeleteKey(const char *key);
-bool checkExist(const char *domain, const char *key);
-int32_t setPref_new(const char *domain, const char *key, uint8_t *value, size_t byteCount);
-int32_t getPref_bool_new(const char *domain, const char *key, uint8_t *val);
-int32_t getPref_u32_new(const char *domain, const char *key, uint32_t *val);
-int32_t getPref_u64_new(const char *domain, const char *key, uint64_t *val);
-int32_t getPref_str_new(const char *domain, const char *key, char *buf, size_t bufSize,
-                        size_t *outLen);
-int32_t getPref_bin_new(const char *domain, const char *key, uint8_t *buf, size_t bufSize,
-                        size_t *outLen);
+/**
+  * Dispatch and execute the command for the given argument list.
+  *
+  * @param[in] aContext           No use
+  * @param[in] argc               Number of arguments in argv.
+  * @param[in] argv               Array of arguments in the tokenized command line to execute.
+  *
+  * @retval                       success or failure
+  */
+int32_t matter_kvs_cmd_handle(void *aContext, int argc, char *argv[]);
 
-int32_t Bee4_KvsCmd(void *aContext, int argc, char *argv[]);
+/** End of Matter_KVS_Exported_Functions
+  * \}
+  */
+
+
 #ifdef __cplusplus
 }
 #endif
+
+#endif /*MATTER_KVS_H*/
+
+
+/******************* (C) COPYRIGHT 2023 Realtek Semiconductor Corporation *****END OF FILE****/

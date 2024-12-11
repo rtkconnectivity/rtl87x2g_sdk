@@ -70,7 +70,7 @@ typedef struct
 } FactoryData;
 
 // Functions
-int32_t ReadFactory(uint8_t *buffer, uint16_t *pfactorydata_len);
+int32_t ReadFactory(uint8_t *buffer, uint32_t buffer_len, uint16_t *pfactorydata_len);
 int32_t DecodeFactory(uint8_t *buffer, FactoryData *fdp, uint16_t data_len);
 int rtl_get_random_bytes(uint8_t * dst, size_t size);
 

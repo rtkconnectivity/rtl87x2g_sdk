@@ -4,8 +4,22 @@
 
 #include <errno.h>
 #include <string.h>
+#include "os_queue.h"
 #include "kvmgr.h"
 
+#define MAPPING_TABLE_ENABLE 1
+#ifdef MAPPING_TABLE_ENABLE
+#define MAPPING_TABLE_ITEM_MAX 200
+
+typedef struct _mapping_table_item_t
+{
+    struct _mapping_table_item_t      *p_next;
+    char                              *p_key;          /* The store buffer for key */
+    uint8_t                            key_len;        /* The length of the key */
+    uint16_t                           val_len;        /* The length of the value */
+    uint16_t                           pos;            /* The store position of the key-value item */
+} mapping_table_item_t;
+#endif
 
 /* Key-value function return code description */
 typedef enum
@@ -41,7 +55,7 @@ typedef enum
 #define ITEM_STATE_NORMAL       0xEE                        /* Key-value item state: NORMAL --> the key-value item is valid */
 #define ITEM_STATE_DELETE       0                           /* Key-value item state: DELETE --> the key-value item is deleted */
 #define ITEM_MAX_KEY_LEN        255                         /* The max key length for key-value item */
-#define ITEM_MAX_VAL_LEN        512                         /* The max value length for key-value item */
+#define ITEM_MAX_VAL_LEN        2048                         /* The max value length for key-value item */
 #define ITEM_MAX_LEN            (ITEM_HEADER_SIZE + ITEM_MAX_KEY_LEN + ITEM_MAX_VAL_LEN)
 
 /* Defination of key-value store information */
@@ -98,6 +112,7 @@ typedef struct _kv_mgr_t
     void        *gc_sem;
     void        *kv_mutex;
     block_info_t block_info[BLK_NUMS]; /* The array to record block management information */
+    T_OS_QUEUE   mapping_table;
     void        *gc_task_handle;
 } kv_mgr_t;
 
@@ -140,24 +155,38 @@ static uint8_t utils_crc8(uint8_t *buf, uint16_t length)
 
 static uint8_t page_cache[FLASH_PAGE_SIZE];
 
-static int raw_read(uint32_t offset, void *buf, size_t aSize)
+static int raw_read(uint32_t offset, void *buf, size_t size)
 {
-    uint32_t dst_addr = g_kv_mgr.kv_addr + offset;
-    uint8_t *src_addr = (uint8_t *)buf;
-    flash_nor_read_locked(dst_addr, page_cache, aSize);
-    memcpy(src_addr, page_cache, aSize);
+    uint32_t dst_addr;
+    uint8_t *src_addr;
+
+    if (size > 0)
+    {
+        dst_addr = g_kv_mgr.kv_addr + offset;
+        src_addr = (uint8_t *)buf;
+
+        flash_nor_read_locked(dst_addr, page_cache, size);
+        memcpy(src_addr, page_cache, size);
+    }
 
     return 0;
 }
 
 static int raw_write(uint32_t offset, const void *data, size_t size)
 {
-    uint32_t dst_addr = g_kv_mgr.kv_addr + offset;
-    uint8_t *src_addr = (uint8_t *)data;
-    memcpy(page_cache, src_addr, size);
-    flash_nor_write_locked(dst_addr, page_cache, size);
-    
-    return 0;
+    uint32_t dst_addr;
+    uint8_t *src_addr;
+
+    if (size > 0)
+    {
+        dst_addr = g_kv_mgr.kv_addr + offset;
+        src_addr = (uint8_t *)data;
+
+        memcpy(page_cache, src_addr, size);
+        flash_nor_write_locked(dst_addr, page_cache, size);
+    }
+
+    return RES_OK;
 }
 
 static int raw_erase(uint32_t offset, uint32_t size)
@@ -178,10 +207,10 @@ static void trigger_gc(void)
     g_kv_mgr.gc_waiter = 0;
     g_kv_mgr.gc_triggered = 1;
     //APP_PRINT_INFO0(">> aos_kv_gc");
-    //aos_kv_gc(NULL);
+    aos_kv_gc(NULL);
     //APP_PRINT_INFO0("<< aos_kv_gc");
-    APP_PRINT_INFO0("trigger_gc");
-    os_task_create(&g_kv_mgr.gc_task_handle, "kv-gc", aos_kv_gc, NULL, KV_GC_STACK_SIZE, 6);
+    //APP_PRINT_INFO0("trigger_gc");
+    //os_task_notify_give(g_kv_mgr.gc_task_handle);
 }
 
 static void kv_item_free(kv_item_t *item)
@@ -274,6 +303,132 @@ static uint16_t kv_item_calc_pos(uint16_t len)
     return 0;
 }
 
+#if (MAPPING_TABLE_ENABLE == 1)
+static int __item_mapping_table_init_cb(kv_item_t *item, const char *key)
+{
+    mapping_table_item_t *p_mapping_item = (mapping_table_item_t *)malloc(sizeof(mapping_table_item_t));
+    if (!p_mapping_item)
+    {
+        return RES_MALLOC_FAILED;
+    }
+    memset(p_mapping_item, 0, sizeof(mapping_table_item_t));
+
+    p_mapping_item->p_key = (char *)malloc(item->hdr.key_len);
+    if (!p_mapping_item->p_key)
+    {
+        free(p_mapping_item);
+        return RES_MALLOC_FAILED;
+    }
+    memset(p_mapping_item->p_key, 0, item->hdr.key_len);
+
+    p_mapping_item->key_len = item->hdr.key_len;
+    p_mapping_item->val_len = item->hdr.val_len;
+    p_mapping_item->pos     = item->pos;
+    raw_read(item->pos + ITEM_HEADER_SIZE, p_mapping_item->p_key, item->hdr.key_len);
+
+    os_queue_in(&g_kv_mgr.mapping_table, p_mapping_item);
+
+    return RES_CONT;
+}
+
+static int kv_mapping_table_item_add(const char *key, uint8_t key_len, uint16_t val_len,
+                                     uint16_t offset)
+{
+    mapping_table_item_t *p_mapping_item;
+    int ret;
+
+    p_mapping_item = os_queue_peek(&g_kv_mgr.mapping_table, 0);
+    while (p_mapping_item)
+    {
+        if ((p_mapping_item->key_len == key_len) &&
+            (memcmp(p_mapping_item->p_key, key, key_len) == 0))
+        {
+            break;
+        }
+
+        p_mapping_item = p_mapping_item->p_next;
+    }
+
+    if (p_mapping_item)
+    {
+        p_mapping_item->val_len = val_len;
+        p_mapping_item->pos = offset;
+    }
+    else
+    {
+        if (g_kv_mgr.mapping_table.count >= MAPPING_TABLE_ITEM_MAX)
+        {
+            ret = RES_NO_SPACE;
+            goto fail_item_enqueue;
+        }
+
+        p_mapping_item = (mapping_table_item_t *)malloc(sizeof(mapping_table_item_t));
+        if (!p_mapping_item)
+        {
+            ret = RES_MALLOC_FAILED;
+            goto fail_alloc_item;
+        }
+
+        p_mapping_item->p_key = (char *)malloc(key_len);
+        if (!p_mapping_item->p_key)
+        {
+            ret = RES_MALLOC_FAILED;
+            goto fail_alloc_key;
+        }
+
+        //APP_PRINT_INFO2("kv_mapping_table_item_add: key %s, offset 0x%x", TRACE_STRING(key), offset);
+
+        memcpy(p_mapping_item->p_key, key, key_len);
+        p_mapping_item->key_len = key_len;
+        p_mapping_item->val_len = val_len;
+        p_mapping_item->pos = offset;
+
+        os_queue_in(&g_kv_mgr.mapping_table, p_mapping_item);
+    }
+
+    return RES_OK;
+
+fail_alloc_key:
+    free(p_mapping_item);
+fail_alloc_item:
+fail_item_enqueue:
+    APP_PRINT_ERROR2("kv_mapping_table_item_add: failed key %s, ret %d", TRACE_STRING(key), ret);
+    return ret;
+}
+
+static int kv_mapping_table_item_del(uint16_t offset)
+{
+    mapping_table_item_t *p_mapping_item;
+
+    p_mapping_item = os_queue_peek(&g_kv_mgr.mapping_table, 0);
+    while (p_mapping_item)
+    {
+        if (p_mapping_item->pos == offset)
+        {
+            break;
+        }
+
+        p_mapping_item = p_mapping_item->p_next;
+    }
+
+    if (p_mapping_item)
+    {
+        //APP_PRINT_INFO1("kv_mapping_table_item_del: key %s", TRACE_STRING(p_mapping_item->p_key));
+
+        os_queue_delete(&g_kv_mgr.mapping_table, p_mapping_item);
+        if (p_mapping_item->p_key)
+        {
+            free(p_mapping_item->p_key);
+        }
+        free(p_mapping_item);
+
+        return RES_OK;
+    }
+
+    return RES_ITEM_NOT_FOUND;
+}
+#endif
+
 static int kv_item_del(kv_item_t *item, int mode)
 {
     int ret = RES_OK;
@@ -334,6 +489,10 @@ static int kv_item_del(kv_item_t *item, int mode)
     {
         return ret;
     }
+
+#if (MAPPING_TABLE_ENABLE == 1)
+    kv_mapping_table_item_del(offset);
+#endif
 
     i = offset >> BLK_BITS;
     if (g_kv_mgr.block_info[i].state == BLK_STATE_USED)
@@ -432,6 +591,11 @@ static int __item_gc_cb(kv_item_t *item, const char *key)
         ret = RES_FLASH_WRITE_ERR;
         goto err;
     }
+
+#if (MAPPING_TABLE_ENABLE == 1)
+    kv_mapping_table_item_add(p + ITEM_HEADER_SIZE, item->hdr.key_len, item->hdr.val_len,
+                              g_kv_mgr.write_pos);
+#endif
 
     g_kv_mgr.write_pos += len;
     index = (g_kv_mgr.write_pos) >> BLK_BITS;
@@ -544,54 +708,6 @@ static kv_item_t *kv_item_get(const char *key)
     return NULL;
 }
 
-static int __item_peek_cb(kv_item_t *item, const char *key)
-{
-    char *p_key = (char *)malloc(item->hdr.key_len);
-    if (!p_key)
-    {
-        return RES_MALLOC_FAILED;
-    }
-
-    memset(p_key, 0, item->hdr.key_len);
-    if (raw_read(item->pos + ITEM_HEADER_SIZE, p_key, item->hdr.key_len) != RES_OK)
-    {
-        free(p_key);
-        return RES_FLASH_READ_ERR;
-    }
-
-    if (memcmp(p_key, key, strlen(key)) == 0)
-    {
-        free(p_key);
-        return RES_OK;
-    }
-    else
-    {
-        free(p_key);
-        return RES_CONT;
-    }
-}
-
-void *aos_key_find(const char *key)
-{
-    kv_item_t *item;
-    uint8_t i;
-
-    for (i = 0; i < BLK_NUMS; i++)
-    {
-        if (g_kv_mgr.block_info[i].state != BLK_STATE_CLEAN)
-        {
-            item = kv_item_traverse(__item_peek_cb, i, key);
-            if (item)
-            {
-                APP_PRINT_INFO2("<< %s %s success", TRACE_STRING(__func__), TRACE_STRING(key));
-                return item;
-            }
-        }
-    }
-    APP_PRINT_INFO2("<< %s %s failed", TRACE_STRING(__func__), TRACE_STRING(key));
-    return NULL;
-}
-
 typedef struct
 {
     char *p;
@@ -636,6 +752,10 @@ static int kv_item_store(const char *key, const void *val, int len, uint16_t ori
             g_kv_mgr.write_pos = pos + store.len;
             uint8_t index = g_kv_mgr.write_pos >> BLK_BITS;
             g_kv_mgr.block_info[index].space -= store.len;
+
+#if (MAPPING_TABLE_ENABLE == 1)
+            kv_mapping_table_item_add(key, hdr.key_len, hdr.val_len, pos);
+#endif
         }
     }
     else
@@ -782,10 +902,15 @@ static int kv_init(void)
 
 void aos_kv_gc(void *arg)
 {
+    uint32_t notify;
     uint8_t i;
     uint8_t gc_index;
     uint8_t gc_copy = 0;
     uint16_t origin_pos;
+
+    //while (1)
+    //{
+    //os_task_notify_take(1, 0xffffffff, &notify);
 
     os_mutex_take(g_kv_mgr.kv_mutex, 0xffffffff);
 
@@ -852,7 +977,8 @@ exit:
         os_sem_give(g_kv_mgr.gc_sem);
     }
 
-    os_task_delete(NULL);
+    //}
+    //os_task_delete(NULL);
 }
 
 int aos_kv_del(const char *key)
@@ -908,6 +1034,156 @@ int aos_kv_set(const char *key, const void *val, int len, int sync)
 }
 //EXPORT_SYMBOL_K(1, aos_kv_set, "int aos_kv_set(const char *key, const void *val, int len, int sync)")
 
+#if (MAPPING_TABLE_ENABLE == 1)
+void *aos_key_find(const char *key)
+{
+    mapping_table_item_t *p_mapping_item;
+
+    p_mapping_item = os_queue_peek(&g_kv_mgr.mapping_table, 0);
+    while (p_mapping_item)
+    {
+        if ((p_mapping_item->key_len == strlen(key)) &&
+            (memcmp(p_mapping_item->p_key, key, strlen(key)) == 0))
+        {
+            break;
+        }
+
+        p_mapping_item = p_mapping_item->p_next;
+    }
+
+    if (p_mapping_item == NULL)
+    {
+        APP_PRINT_ERROR1("aos_key_find: key %s failed", TRACE_STRING(key));
+    }
+
+    return p_mapping_item;
+}
+
+int aos_kv_get(const char *key, void *buffer, int *buffer_len)
+{
+    mapping_table_item_t *p_mapping_item;
+
+    if (!key || !buffer || !buffer_len || *buffer_len <= 0)
+    {
+        return RES_INVALID_PARAM;
+    }
+
+    os_mutex_take(g_kv_mgr.kv_mutex, 0xffffffff);
+
+    p_mapping_item = os_queue_peek(&g_kv_mgr.mapping_table, 0);
+    while (p_mapping_item)
+    {
+        if ((p_mapping_item->key_len == strlen(key)) &&
+            (memcmp(p_mapping_item->p_key, key, strlen(key)) == 0))
+        {
+            break;
+        }
+
+        p_mapping_item = p_mapping_item->p_next;
+    }
+
+    os_mutex_give(g_kv_mgr.kv_mutex);
+
+    if (p_mapping_item)
+    {
+        if (*buffer_len < p_mapping_item->val_len)
+        {
+            *buffer_len = p_mapping_item->val_len;
+            return RES_NO_SPACE;
+        }
+
+        raw_read(p_mapping_item->pos + ITEM_HEADER_SIZE + p_mapping_item->key_len, buffer,
+                 p_mapping_item->val_len);
+        *buffer_len = p_mapping_item->val_len;
+
+        return RES_OK;
+    }
+
+    return RES_ITEM_NOT_FOUND;
+}
+
+void kv_mapping_table_init(void)
+{
+    os_queue_init(&g_kv_mgr.mapping_table);
+
+    for (int i = 0; i < BLK_NUMS; i++)
+    {
+        kv_item_traverse(__item_mapping_table_init_cb, i, NULL);
+    }
+}
+
+void kv_mapping_table_deinit()
+{
+    if (g_kv_mgr.kv_initialize)
+    {
+        mapping_table_item_t *p_mapping_item;
+        mapping_table_item_t *p_next;
+
+        p_mapping_item = os_queue_peek(&g_kv_mgr.mapping_table, 0);
+        while (p_mapping_item)
+        {
+            p_next = p_mapping_item->p_next;
+
+            os_queue_delete(&g_kv_mgr.mapping_table, p_mapping_item);
+            if (p_mapping_item->p_key)
+            {
+                free(p_mapping_item->p_key);
+            }
+            free(p_mapping_item);
+
+            p_mapping_item = p_next;
+        }
+    }
+}
+#else
+static int __item_peek_cb(kv_item_t *item, const char *key)
+{
+    char *p_key = (char *)malloc(item->hdr.key_len);
+    if (!p_key)
+    {
+        return RES_MALLOC_FAILED;
+    }
+
+    memset(p_key, 0, item->hdr.key_len);
+    if (raw_read(item->pos + ITEM_HEADER_SIZE, p_key, item->hdr.key_len) != RES_OK)
+    {
+        free(p_key);
+        return RES_FLASH_READ_ERR;
+    }
+
+    if (memcmp(p_key, key, strlen(key)) == 0)
+    {
+        free(p_key);
+        return RES_OK;
+    }
+    else
+    {
+        free(p_key);
+        return RES_CONT;
+    }
+}
+
+void *aos_key_find(const char *key)
+{
+    kv_item_t *item;
+    uint8_t i;
+
+    for (i = 0; i < BLK_NUMS; i++)
+    {
+        if (g_kv_mgr.block_info[i].state != BLK_STATE_CLEAN)
+        {
+            item = kv_item_traverse(__item_peek_cb, i, key);
+            if (item)
+            {
+                return item;
+            }
+        }
+    }
+
+    APP_PRINT_ERROR1("aos_key_find: key %s failed", TRACE_STRING(key));
+    return NULL;
+}
+
 int aos_kv_get(const char *key, void *buffer, int *buffer_len)
 {
     kv_item_t *item = NULL;
@@ -944,12 +1220,11 @@ int aos_kv_get(const char *key, void *buffer, int *buffer_len)
     kv_item_free(item);
     return RES_OK;
 }
+#endif
 //EXPORT_SYMBOL_K(1, aos_kv_get, "int aos_kv_get(const char *key, void *buffer, int *buffer_len)")
 
 /* CLI Support */
 #if 1
-#include <openthread/cli.h>
-
 static int __item_print_cb(kv_item_t *item, const char *key)
 {
     char *p_key = (char *)malloc(item->hdr.key_len + 1);
@@ -969,14 +1244,12 @@ static int __item_print_cb(kv_item_t *item, const char *key)
     memset(p_val, 0, item->hdr.val_len + 1);
     raw_read(item->pos + ITEM_HEADER_SIZE + item->hdr.key_len, p_val, item->hdr.val_len);
 
-   // dbg_printf("%s = ", p_key);
     APP_PRINT_INFO1("%s = ", TRACE_STRING(p_key));
     for (uint16_t i = 0; i < item->hdr.val_len; i++)
     {
         APP_PRINT_TRACE1("%02x", p_val[i]);
-        //dbg_printf("%02x", p_val[i]);
     }
-    //dbg_printf("\r\n");
+
     free(p_key);
     free(p_val);
 
@@ -1003,7 +1276,6 @@ otError kv_cmd_handler(void *aContext, uint8_t argc, char *argv[])
         if (ret != 0)
         {
             APP_PRINT_INFO0("cli set kv failed");
-            //dbg_printf("cli set kv failed\r\n");
         }
     }
     else if (strncmp(argv[0], "get", 3) == 0)
@@ -1017,7 +1289,6 @@ otError kv_cmd_handler(void *aContext, uint8_t argc, char *argv[])
         if (!buffer)
         {
             APP_PRINT_INFO0("cli get kv failed");
-            //dbg_printf("cli get kv failed");
             return OT_ERROR_NO_BUFS;
         }
 
@@ -1028,18 +1299,14 @@ otError kv_cmd_handler(void *aContext, uint8_t argc, char *argv[])
         if (ret != 0)
         {
             APP_PRINT_INFO0("cli: no paired kv");
-            //dbg_printf("cli: no paired kv\r\n");
         }
         else
         {
             APP_PRINT_INFO0("value is ");
-            //dbg_printf("value is ");
             for (int i = 0; i < len; i++)
             {
                 APP_PRINT_TRACE1("%02x", buffer[i]);
-                //dbg_printf("%02x", buffer[i]);
             }
-            //dbg_printf("\r\n");
         }
 
         if (buffer)
@@ -1056,20 +1323,18 @@ otError kv_cmd_handler(void *aContext, uint8_t argc, char *argv[])
         ret = aos_kv_del(argv[1]);
         if (ret != 0)
         {
-            //dbg_printf("cli kv del failed\r\n");
             APP_PRINT_INFO0("cli kv del failed");
         }
     }
     else if (strncmp(argv[0], "list", 4) == 0)
     {
         APP_PRINT_INFO0("list begin");
-        //dbg_printf("list begin\r\n");
+
         for (int i = 0; i < BLK_NUMS; i++)
         {
             kv_item_traverse(__item_print_cb, i, NULL);
         }
         APP_PRINT_INFO0("list end");
-        //dbg_printf("list end\r\n");
     }
     return OT_ERROR_NONE;
 }
@@ -1102,7 +1367,12 @@ int aos_kv_init(uint32_t kv_addr)
     os_sem_create(&g_kv_mgr.gc_sem, "gc_sem", 0, 1);
 
     g_kv_mgr.kv_initialize = 1;
-    
+
+    //os_task_create(&g_kv_mgr.gc_task_handle, "kv-gc", aos_kv_gc, NULL, KV_GC_STACK_SIZE, 6);
+
+#if (MAPPING_TABLE_ENABLE == 1)
+    kv_mapping_table_init();
+#endif
 
     blk_index = (g_kv_mgr.write_pos >> BLK_BITS);
     if (((g_kv_mgr.block_info[blk_index].space) < ITEM_MAX_LEN) &&
@@ -1117,6 +1387,15 @@ int aos_kv_init(uint32_t kv_addr)
 
 void aos_kv_deinit(uint32_t kv_addr)
 {
+#if (MAPPING_TABLE_ENABLE == 1)
+    kv_mapping_table_deinit();
+#endif
+
+    //if (g_kv_mgr.gc_task_handle)
+    //{
+    //    os_task_delete(g_kv_mgr.gc_task_handle);
+    //}
+
     g_kv_mgr.kv_initialize = 0;
     g_kv_mgr.kv_addr = kv_addr;
     if (g_kv_mgr.gc_sem)

@@ -5,8 +5,6 @@
 extern "C" {
 #endif
 
-
-//
 #include "matter_kvs.h"
 #include "matter_gpio.h"
 #include "matter_utils.h"
@@ -14,8 +12,6 @@ extern "C" {
 #include <cmsis_compiler.h>
 #include <trace.h>
 #include "wdt.h"
-
-//extern void dbg_send(const uint8_t *aBuf, uint16_t aBufLength);
 
 #ifdef __cplusplus
 }
