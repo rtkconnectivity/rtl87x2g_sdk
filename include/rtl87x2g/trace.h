@@ -1,6 +1,6 @@
 /**
 ************************************************************************************************************
-*               Copyright(c) 2017, Realtek Semiconductor Corporation. All rights reserved.
+*               Copyright (c) 2017, Realtek Semiconductor Corporation. All rights reserved.
 ************************************************************************************************************
 * @file     trace.h
 * @brief    for log print
@@ -65,7 +65,7 @@ extern "C" {
 /* Log type definition */
 typedef enum
 {
-    TYPE_UPPERSTACK_RESET       = 0,    /* Bee1(deprecated) */
+    TYPE_UPPERSTACK_RESET       = 0,    /* Bee1 (deprecated) */
     TYPE_UPPERSTACK_FORMAT      = 1,    /* Bee1 */
     TYPE_UPPERSTACK_MESSAGE     = 2,    /* Bee1 */
     TYPE_UPPERSTACK_BINARY      = 3,    /* Bee1 */
@@ -84,7 +84,7 @@ typedef enum
     TYPE_PLATFORM_DBG_DIRECT    = 16,   /* Bee1 */
 
     /* type 32~127 reserved for project id, e.g. bumblebee3, bee2 */
-    TYPE_BUMBLEBEE3             = 32,   /* BBPRO1(deprecated, use TYPE_BBPRO1 instead) */
+    TYPE_BUMBLEBEE3             = 32,   /* BBPRO1 (deprecated, use TYPE_BBPRO1 instead) */
     TYPE_BEE2                   = 33,
     TYPE_BEE3                   = 35,
     TYPE_BEE3PRO                = 36,
@@ -343,10 +343,14 @@ const char *trace_binary(uint32_t info, uint16_t length, uint8_t *p_data);
 #define DBG_TEXT_LEVEL_ERROR(module, fmt, ...) do {\
         log_text(COMBINE_TRACE_INFO(LOG_TYPE, SUBTYPE_TEXT, module, LEVEL_ERROR), fmt, ##__VA_ARGS__);\
     } while (0)
+#define DBG_TEXT_COMBINE_LEVEL_ERROR(module, submodule, fmt, ...) do {\
+        log_text_combine(COMBINE_TRACE_INFO(LOG_TYPE, SUBTYPE_TEXT, module, LEVEL_ERROR), submodule, 0, fmt, ##__VA_ARGS__);\
+    } while (0)
 #else
 #define DBG_BUFFER_LEVEL_ERROR(type, sub_type, module, fmt, param_num, ...)
 #define DBG_INDEX_LEVEL_ERROR(type, sub_type, module, fmt, param_num, ...)
-#define DBG_TEXT_LEVEL_ERROR(type, sub_type, module, fmt, ...)
+#define DBG_TEXT_LEVEL_ERROR(module, fmt, ...)
+#define DBG_TEXT_COMBINE_LEVEL_ERROR(module, submodule, fmt, ...)
 #endif
 
 #if (DBG_LEVEL >= LEVEL_WARN)
@@ -359,10 +363,14 @@ const char *trace_binary(uint32_t info, uint16_t length, uint8_t *p_data);
 #define DBG_TEXT_LEVEL_WARN(module, fmt, ...) do {\
         log_text(COMBINE_TRACE_INFO(LOG_TYPE, SUBTYPE_TEXT, module, LEVEL_WARN), fmt, ##__VA_ARGS__);\
     } while (0)
+#define DBG_TEXT_COMBINE_LEVEL_WARN(module, submodule, fmt, ...) do {\
+        log_text_combine(COMBINE_TRACE_INFO(LOG_TYPE, SUBTYPE_TEXT, module, LEVEL_WARN), submodule, 0, fmt, ##__VA_ARGS__);\
+    } while (0)
 #else
 #define DBG_BUFFER_LEVEL_WARN(type, sub_type, module, fmt, param_num, ...)
 #define DBG_INDEX_LEVEL_WARN(type, sub_type, module, fmt, param_num, ...)
-#define DBG_TEXT_LEVEL_WARN(type, sub_type, module, fmt, ...)
+#define DBG_TEXT_LEVEL_WARN(module, fmt, ...)
+#define DBG_TEXT_COMBINE_LEVEL_WARN(module, submodule, fmt, ...)
 #endif
 
 #if (DBG_LEVEL >= LEVEL_INFO)
@@ -375,10 +383,14 @@ const char *trace_binary(uint32_t info, uint16_t length, uint8_t *p_data);
 #define DBG_TEXT_LEVEL_INFO(module, fmt, ...) do {\
         log_text(COMBINE_TRACE_INFO(LOG_TYPE, SUBTYPE_TEXT, module, LEVEL_INFO), fmt, ##__VA_ARGS__);\
     } while (0)
+#define DBG_TEXT_COMBINE_LEVEL_INFO(module, submodule, fmt, ...) do {\
+        log_text_combine(COMBINE_TRACE_INFO(LOG_TYPE, SUBTYPE_TEXT, module, LEVEL_INFO), submodule, 0, fmt, ##__VA_ARGS__);\
+    } while (0)
 #else
 #define DBG_BUFFER_LEVEL_INFO(type, sub_type, module, fmt, param_num, ...)
 #define DBG_INDEX_LEVEL_INFO(type, sub_type, module, fmt, param_num, ...)
-#define DBG_TEXT_LEVEL_INFO(type, sub_type, module, fmt, ...)
+#define DBG_TEXT_LEVEL_INFO(module, fmt, ...)
+#define DBG_TEXT_COMBINE_LEVEL_INFO(module, submodule, fmt, ...)
 #endif
 
 #if (DBG_LEVEL >= LEVEL_TRACE)
@@ -391,10 +403,14 @@ const char *trace_binary(uint32_t info, uint16_t length, uint8_t *p_data);
 #define DBG_TEXT_LEVEL_TRACE(module, fmt, ...) do {\
         log_text(COMBINE_TRACE_INFO(LOG_TYPE, SUBTYPE_TEXT, module, LEVEL_TRACE), fmt, ##__VA_ARGS__);\
     } while (0)
+#define DBG_TEXT_COMBINE_LEVEL_TRACE(module, submodule, fmt, ...) do {\
+        log_text_combine(COMBINE_TRACE_INFO(LOG_TYPE, SUBTYPE_TEXT, module, LEVEL_TRACE), submodule, 0, fmt, ##__VA_ARGS__);\
+    } while (0)
 #else
 #define DBG_BUFFER_LEVEL_TRACE(type, sub_type, module, fmt, param_num, ...)
 #define DBG_INDEX_LEVEL_TRACE(type, sub_type, module, fmt, param_num, ...)
-#define DBG_TEXT_LEVEL_TRACE(type, sub_type, module, fmt, ...)
+#define DBG_TEXT_LEVEL_TRACE(module, fmt, ...)
+#define DBG_TEXT_COMBINE_LEVEL_TRACE(module, submodule, fmt, ...)
 #endif
 
 #define DBG_BUFFER(type, sub_type, module, level, fmt, param_num,...)   \
@@ -463,7 +479,7 @@ void log_module_trace_init(uint64_t mask[LEVEL_NUM]);
  *
  * \return           The status of setting module ID's trace.
  * \retval true      Module ID's trace was set successfully.
- * \retval false     Module ID's trace was failed to set.
+ * \retval false     Module ID's trace failed to set.
  *
  * \ingroup  TRACE
  */
@@ -484,7 +500,7 @@ extern bool log_module_trace_set(T_MODULE_ID module_id, uint8_t trace_level, boo
  *
  * \return           The status of setting module bitmap's trace.
  * \retval true      Module bitmap's trace was set successfully.
- * \retval false     Module bitmap's trace was failed to set.
+ * \retval false     Module bitmap's trace failed to set.
  *
  * \ingroup  TRACE
  */
