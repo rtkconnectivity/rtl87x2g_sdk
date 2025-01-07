@@ -1051,10 +1051,10 @@ void *aos_key_find(const char *key)
         p_mapping_item = p_mapping_item->p_next;
     }
 
-    if (p_mapping_item == NULL)
-    {
-        APP_PRINT_ERROR1("aos_key_find: key %s failed", TRACE_STRING(key));
-    }
+    // if (p_mapping_item == NULL)
+    // {
+    //     APP_PRINT_ERROR1("aos_key_find: key %s failed", TRACE_STRING(key));
+    // }
 
     return p_mapping_item;
 }
@@ -1180,7 +1180,7 @@ void *aos_key_find(const char *key)
         }
     }
 
-    APP_PRINT_ERROR1("aos_key_find: key %s failed", TRACE_STRING(key));
+    //APP_PRINT_ERROR1("aos_key_find: key %s failed", TRACE_STRING(key));
     return NULL;
 }
 

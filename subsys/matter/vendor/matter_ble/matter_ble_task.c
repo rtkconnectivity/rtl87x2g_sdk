@@ -12,6 +12,11 @@
 #include "matter_ble.h"
 #include "matter_ble_service.h"
 
+#if (SUPPORT_BLE_OTA == 1)
+#include "ota_service.h"
+#include "dfu_service.h"
+#endif
+
 #ifndef EXTERNAL_BLE
 
 #define APP_TASK_PRIORITY             4         //!< Task priorities
@@ -31,7 +36,13 @@ static void *bt_matter_io_queue_handle;   //!< IO queue handle
 
 void matter_ble_profile_init(void)
 {
+#if (SUPPORT_BLE_OTA == 1)
+    server_init(3);
+    ota_add_service(NULL);
+    dfu_add_service(matter_ble_profile_callback);
+#else
     server_init(1);
+#endif
     matter_ble_add_service((void *)matter_ble_profile_callback);
     server_register_app_cb(matter_ble_profile_callback);
 }

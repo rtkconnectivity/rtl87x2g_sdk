@@ -28,7 +28,7 @@ import qrcode
 
 SDK_ROOT = "../../../connectedhomeip"
 sys.path.append(os.path.join(SDK_ROOT, "src/setup_payload/python"))
-from generate_setup_payload import CommissioningFlow, SetupPayload
+from SetupPayload import CommissioningFlow, SetupPayload
 
 
 
@@ -155,14 +155,17 @@ def populate_factory_data(args, spake2p_params):
     f.close()
 
     # split up dac-key files into pub and priv keys, extract only the priv keys
-    dac_priv_key = get_raw_private_key_der(os.path.abspath(args.dac_key), None)  # password set as None first
-    if dac_priv_key is None:
-        logging.error("Cannot read DAC keys from : {}".format(args.dac_key))
-        sys.exit(-1)
+    if args.dac_key.endswith(".enc"):
+        with open(os.path.abspath(args.dac_key), "rb") as f:
+            dac_priv_key = f.read()
+            print("encrypted dac key")
+    else:
+        dac_priv_key = get_raw_private_key_der(os.path.abspath(args.dac_key), None)  # password set as None first
+        if dac_priv_key is None:
+            logging.error("Cannot read DAC keys from : {}".format(args.dac_key))
+            sys.exit(-1)
     FACTORY_DATA.dac.dac_key.value = dac_priv_key
     FACTORY_DATA.dac.dac_key.length = len(dac_priv_key)
-    # FACTORY_DATA.dac.dac_key.value = bytes(DACPriKey)
-    # FACTORY_DATA.dac.dac_key.length = len(DACPriKey)
 
     if args.vendor_id is not None:
         FACTORY_DATA.dii.vendor_id = args.vendor_id
@@ -196,7 +199,7 @@ def main():
     def any_base_int(s):
         return int(s, 0)
 
-    parser = argparse.ArgumentParser(description='Ameba Factory NVS Data generator tool')
+    parser = argparse.ArgumentParser(description='Realtech Factory NVS Data generator tool')
 
     parser.add_argument('--spake2p_path', type=str, required=True,
                         help='The path to the spake2p binary')

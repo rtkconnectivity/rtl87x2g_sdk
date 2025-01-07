@@ -74,6 +74,8 @@ int32_t ReadFactory(uint8_t *buffer, uint32_t buffer_len, uint16_t *pfactorydata
 int32_t DecodeFactory(uint8_t *buffer, FactoryData *fdp, uint16_t data_len);
 int rtl_get_random_bytes(uint8_t * dst, size_t size);
 
+int app_entropy_source(void * data, unsigned char * output, size_t len, size_t * olen);
+
 #ifdef __cplusplus
 }
 #endif

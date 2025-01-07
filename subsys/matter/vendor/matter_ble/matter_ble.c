@@ -8,6 +8,11 @@
 #include <app_msg.h>
 #include "matter_ble.h"
 
+#if (SUPPORT_BLE_OTA == 1)
+#include "ble_dfu_transport.h"
+#include "dfu_common.h"
+#endif
+
 static void *matter_ble_evt_queue_handle;  //!< Event queue handle
 static void *matter_ble_io_queue_handle;   //!< IO queue handle
 P_MATTER_BLE_CBACK matter_ble_cback = NULL;
@@ -37,6 +42,82 @@ void matter_ble_send_msg(uint16_t sub_type, uint32_t param)
     }
 }
 
+#if (SUPPORT_BLE_OTA == 1)
+void matter_ble_handle_conn_state_evt(uint8_t conn_id, T_GAP_CONN_STATE new_state,
+                                      uint16_t disc_cause)
+{
+    MATTER_PRINT_INFO3("matter_ble_handle_conn_state_evt: conn_id %d, new_state %d, disc_cause 0x%x",
+                       conn_id, new_state, disc_cause);
+    switch (new_state)
+    {
+    case GAP_CONN_STATE_DISCONNECTED:
+        {
+            if ((disc_cause != (HCI_ERR | HCI_ERR_REMOTE_USER_TERMINATE))
+                && (disc_cause != (HCI_ERR | HCI_ERR_LOCAL_HOST_TERMINATE)))
+            {
+                MATTER_PRINT_ERROR1("matter_ble_handle_conn_state_evt: connection lost cause 0x%x", disc_cause);
+            }
+
+            if (dfu_switch_to_ota_mode_pending)
+            {
+#if (SUPPORT_NORMAL_OTA == 1)
+                dfu_switch_to_ota_mode_pending = false;
+
+                dfu_switch_to_ota_mode();
+#endif
+            }
+            else
+            {
+                if (dfu_active_reset_pending)
+                {
+                    DBG_DIRECT("OTA APP Active reset....");
+                    dfu_active_reset_pending = false;
+
+#if (ENABLE_AUTO_BANK_SWITCH == 1)
+                    if (is_ota_support_bank_switch())
+                    {
+                        uint32_t ota_addr;
+                        ota_addr = get_header_addr_by_img_id(IMG_OTA);
+                        DBG_DIRECT("FOR QC Test: Bank switch Erase OTA Header=0x%x", ota_addr);
+                        fmc_flash_nor_erase(ota_addr, FMC_FLASH_NOR_ERASE_SECTOR);
+                    }
+#endif
+
+                    //unlock_flash_bp_all();   //GRACE TO CHECK
+                    dfu_fw_reboot(RESET_ALL, DFU_ACTIVE_RESET);
+                }
+            }
+        }
+        break;
+
+    default:
+        break;
+    }
+}
+
+void matter_ble_handle_gap_msg(T_IO_MSG *p_gap_msg)
+{
+    T_LE_GAP_MSG gap_msg;
+    uint8_t conn_id;
+    memcpy(&gap_msg, &p_gap_msg->u.param, sizeof(p_gap_msg->u.param));
+
+    MATTER_PRINT_TRACE1("matter_ble_handle_gap_msg: subtype %d", p_gap_msg->subtype);
+    switch (p_gap_msg->subtype)
+    {
+    case GAP_MSG_LE_CONN_STATE_CHANGE:
+        {
+            matter_ble_handle_conn_state_evt(gap_msg.msg_data.gap_conn_state_change.conn_id,
+                                             (T_GAP_CONN_STATE)gap_msg.msg_data.gap_conn_state_change.new_state,
+                                             gap_msg.msg_data.gap_conn_state_change.disc_cause);
+        }
+        break;
+
+    default:
+        break;
+    }
+}
+#endif
+
 void matter_ble_handle_io_msg(T_IO_MSG io_msg)
 {
     uint16_t msg_type = io_msg.type;
@@ -44,9 +125,15 @@ void matter_ble_handle_io_msg(T_IO_MSG io_msg)
     switch (msg_type)
     {
     case IO_MSG_TYPE_BT_STATUS:
-        if (matter_ble_cback)
         {
-            matter_ble_cback((void *)&io_msg, 0, CB_GAP_MSG_CALLBACK);
+#if (SUPPORT_BLE_OTA == 1)
+            matter_ble_handle_gap_msg(&io_msg);
+#endif
+
+            if (matter_ble_cback)
+            {
+                matter_ble_cback((void *)&io_msg, 0, CB_GAP_MSG_CALLBACK);
+            }
         }
         break;
 

@@ -37,8 +37,12 @@ void matter_kvs_clean(void)
     aos_kv_delall();
 }
 
-#define CONFIG_ENABLE_KVS_ENCRYPTION 0
-#if CONFIG_ENABLE_KVS_ENCRYPTION
+
+#ifndef CONFIG_KVS_ENCRYPTION
+#define CONFIG_KVS_ENCRYPTION 0
+#endif
+
+#if CONFIG_KVS_ENCRYPTION
 
 #define KVS_ENCRYPTION_DBG 0
 
