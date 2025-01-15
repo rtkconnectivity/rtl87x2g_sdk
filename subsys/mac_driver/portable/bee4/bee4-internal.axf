@@ -159,3 +159,7 @@ pvPortMalloc = 0x0013db74 ;
 xPortGetMinimumEverFreeHeapSize = 0x000310e1 ;
 modem_set_zb_cca_combination = 0x0013d774 ;
 modem_set_zb_cca_energy_detect_threshold = 0x0013d778 ;
+mac_GetTxGainIndex = 0x0002548d ;
+pzbpm_adapter = 0x0013dee4 ;
+mac_ClkEnable_Ctrl = 0x00024c35 ;
+mac_FunctionEnable_Ctrl = 0x00025201 ;
