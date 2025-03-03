@@ -170,6 +170,7 @@ xEventGroupSetBitsFromISR = 0x00030eed ;
 xEventGroupSync = 0x00030efd ;
 xEventGroupWaitBits = 0x00030fad ;
 xIsPrivileged = 0x000310a1 ;
+xPortGetMinimumEverFreeHeapSize = 0x000310e1 ;
 xPortIsInsideInterrupt = 0x000310f1 ;
 xPortStartScheduler = 0x000310fd ;
 xQueueCreateCountingSemaphore = 0x00031129 ;
