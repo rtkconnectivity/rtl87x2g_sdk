@@ -652,12 +652,41 @@ typedef struct
     uint8_t rxon_off_dly;                   /*!< Frame RX end to RX off delay */
 } mac_attribute_t;
 
+typedef enum mac_phy_arbitration_method_e
+{
+    MAC_PHY_ARBI_ZB_ONLY = 0,
+    MAC_PHY_ARBI_ANCH = 1,
+    MAC_PHY_ARBI_IMMEDIATE = 2,
+} mac_phy_arbitration_method;
+
 enum mac_phy_arbitration_priority_e
 {
     MAC_PHY_ARBI_LOW_PRIORITY = 0,
     MAC_PHY_ARBI_MID_PRIORITY = 1,
     MAC_PHY_ARBI_HIGH_PRIORITY = 2,
 };
+
+#if defined(DUAL_CHNL_EN) && (DUAL_CHNL_EN)
+typedef struct zb_phy_2symb_correlation_cfg_s
+{
+    uint32_t sfd_timeout_2symb_off : 4; /*!< [3..0] timer for waiting sfd detection timeout
+                                             when zb_2symbol_sync = 0，0 ~ 8 for 8 ~ 16 symbol */
+    uint32_t sfd_timeout_2symb_on : 4;  /*!< [7..4] timer for waiting sfd detection timeout
+                                             after 2-preamble-symbol detected when
+                                             zb_2symbol_sync = 1，0 ~ 8 for 8 ~ 16 symbol. */
+    uint32_t two_sym_sync_timeout : 3; /*!< [10..8] timer for waiting next 2 symbol sync or
+                                            SFD, 0 ~ 7 for 1 ~ 8 symbol */
+    uint32_t zb_rx_term_1sym_en : 1; /*!< [11..11] 1-preamble symbol correlation enable */
+    uint32_t zb_rx_term_1sym_det_time : 4;  /*!< [15..12] extra time for 1-symbol detection
+                                                 0~15 for 2us~17us, unit: 1us */
+    uint32_t zb_rx_term_2sym_en : 1; /*!< [16..16] 2-preamble symbol correlation enable */
+    uint32_t zb_rx_2sym_sync_th_1st : 6; /*!< [22..17] the 1st 2-preamble symbol correlation
+                                          threshold */
+    uint32_t zb_rx_2sym_sync_th : 7; /*!< [29..23] the 2-preamble symbol correlation threshold */
+    uint32_t zb_preamb_hit_mode_sel : 1; /*!< [30..30] preamble hit mode selection */
+} zb_phy_2symb_correlation_cfg_t, *pzb_phy_2symb_correlation_cfg_t;
+
+#endif  /* #if defined(DUAL_CHNL_EN) && (DUAL_CHNL_EN) */
 
 #if defined(MULTI_PAN_EN) && (MULTI_PAN_EN != 0)
 

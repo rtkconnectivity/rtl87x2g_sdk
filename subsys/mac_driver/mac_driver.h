@@ -7,25 +7,30 @@
  *
  * @note
  *
- ******************************************************************************
- *
- * Copyright(c) 2007 - 2021 Realtek Corporation. All rights reserved.
- *
- * SPDX-License-Identifier: Apache-2.0
- *
- * Licensed under the Apache License, Version 2.0 (the License); you may
- * not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an AS IS BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- ******************************************************************************/
+ *    **************************************************************************************
+   * @attention
+   * <h2><center>&copy; COPYRIGHT 2023 Realtek Semiconductor Corporation</center></h2>
+   **************************************************************************************
+  */
+/******************************************************************************
+*
+* Copyright(c) 2007 - 2021 Realtek Corporation. All rights reserved.
+*
+* SPDX-License-Identifier: Apache-2.0
+*
+* Licensed under the Apache License, Version 2.0 (the License); you may
+* not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an AS IS BASIS, WITHOUT
+* WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*
+******************************************************************************/
 
 
 #ifndef _MAC_DRIVER_H_
@@ -40,10 +45,43 @@ extern "C" {
 #include "zb_section.h"
 #include "mac_data_type.h"
 
+/** @defgroup  MAC_API IEEE 802.15.4 MAC API
+  * @brief
+  * @{
+  */
+
+/*============================================================================*
+*                              Variables
+*============================================================================*/
+/** @defgroup MAC_API_Exported_Variables IEEE 802.15.4 MAC API Exported Variables
+  * @brief
+  * @{
+  */
 // Base address of extend addr
+
+
+/**
+  \brief  Base address of extend addr
+*/
 uint8_t *MAC_EADR_BASE_ADDR(void);
+
+/**
+  \brief  Base address of extend addr for PAN1
+*/
 uint8_t *MAC_EADR_BASE_ADDR_PAN1(void);
 
+/** End of MAC_API_Exported_Variables
+  * @}
+  */
+
+
+/*============================================================================*
+ *                              Types
+ *============================================================================*/
+/** @defgroup MAC_API_Exported_Types IEEE 802.15.4 MAC API Exported Types
+  * @brief
+  * @{
+  */
 /**
   \brief  Defines type for MAC 8-bits register retention list
 */
@@ -65,6 +103,9 @@ typedef void (*exit_critical_callback_t)(void);
 
 typedef uint8_t (*fast_chnl_switch_enable_t)(void);
 typedef uint8_t (*fast_chnl_switch_disable_t)(void);
+typedef void (*rx_gdma_done_handler_t)(void);
+typedef uint8_t (*modem_2symbol_sync_ctrl_t)(uint8_t enable);
+typedef uint8_t (*rfc_fast_chnl_set_t)(uint8_t chnl_sel, uint8_t offset_freq);
 
 /**
   \brief  Defines MAC Driver ROM code patch functions entry table
@@ -107,6 +148,11 @@ typedef struct mac_driver_rom_patch_s
 
     // rx
     uint8_t (*rx)(uint8_t *RxFIFO);
+
+    // new patch functions, 2024/12/19
+    void (*grant_phy_req)(uint8_t slot_offset);
+    void (*enter_dlps)(void *reg_retention_buf);
+    void (*exit_dlps)(void *reg_retention_buf);
 } mac_driver_rom_patch_t, *pmac_driver_rom_patch_t;
 
 /**
@@ -125,6 +171,9 @@ typedef union
     } b;                                        /*!< bit fields for MAC driver state flags */
 } mac_state_flag_t, *pmac_state_flag_t;
 
+/**
+  \brief   Interrupt Status Register
+*/
 typedef union
 {
     uint32_t w;
@@ -153,6 +202,9 @@ typedef union
     } b; /*!< bit fields for isrsts */
 } isrsts_t, *pisrsts_t;
 
+/**
+  \brief  Interrupt Mask Control Register
+*/
 typedef union
 {
     uint32_t w; /*!< Interrupt Mask Control Register */
@@ -181,6 +233,9 @@ typedef union
     } b; /*!< bit fields for mac_intmsk */
 } intmsk_t, *pintmsk_t;
 
+/**
+  \brief  Normal TX FIFO Trigger Control Register
+*/
 typedef union
 {
     uint8_t w; /*!< Normal TX FIFO Trigger Control Register */
@@ -196,6 +251,9 @@ typedef union
     } b; /*!< bit fields for mac_txn_trig */
 } txn_trig_t, *ptxn_trig_t;
 
+/**
+  \brief  BT Time Comparator for TX Trigger Time Control Register
+*/
 typedef union
 {
     uint32_t w; /*!< BT Time Comparator for TX Trigger Time Control Register */
@@ -210,6 +268,9 @@ typedef union
     } b; /*!< bit fields for mac_tx_given_time_set */
 } tx_given_time_set_t, *ptx_given_time_set_t;
 
+/**
+  \brief  MAC/PHY RX backup register 2
+*/
 typedef union
 {
     uint32_t w;  /*!< MAC/PHY RX backup register 2 */
@@ -225,6 +286,9 @@ typedef union
     } b; /*!< bit fields for mac_rx_prg_reg_2w */
 } rx_prg_reg_2w_t, *prx_prg_reg_2w_t;
 
+/**
+  \brief  PHY RX backup register 0
+*/
 typedef union
 {
     uint32_t w; /*!< PHY RX backup register 0 */
@@ -240,6 +304,9 @@ typedef union
     } b; /*!< bit fields for mac_rx_bkrpt0w */
 } rx_bkrpt0w_t, *prx_bkrpt0w_t;
 
+/**
+  \brief  PHY RX backup register 1
+*/
 typedef union
 {
     uint32_t w; /*!< PHY RX backup register 1 */
@@ -255,6 +322,9 @@ typedef union
     } b; /*!< bit fields for mac_rx_bkrpt1w */
 } rx_bkrpt1w_t, *prx_bkrpt1w_t;
 
+/**
+  \brief  Received Frame Header information and match filter hit status
+*/
 typedef union
 {
     uint32_t w; /*!< Received Frame Header information and match filter hit status */
@@ -278,6 +348,9 @@ typedef union
     } b; /*!< bit fields for RX frame header infomation */
 } rxf_hdr_t, *prxf_hdr_t;
 
+/**
+  \brief  Received Frame Security Aux Header Information
+*/
 typedef union
 {
     uint32_t w; /*!< Received Frame Security Aux Header Information */
@@ -293,6 +366,9 @@ typedef union
     } b; /*!< bit fields for Received Frame Security Aux Header */
 } rxf_sec_hdr_t, *prxf_sec_hdr_t;
 
+/**
+  \brief  multi-PAN scratch pad
+*/
 typedef union
 {
     uint32_t w;
@@ -306,6 +382,9 @@ typedef union
     } b;
 } mpan_scratch_pad_t, *pmpan_scratch_pad_t;
 
+/**
+  \brief  MAC driver attributes
+*/
 typedef struct mac_driver_s
 {
     volatile isrsts_t IntIn;
@@ -377,8 +456,10 @@ typedef struct mac_driver_s
     /* do not modify the members of this data struct listed above this line, in order to maintain
        the compatable with Bee4/Bee3plus/8852D ROM code !! */
 
-    enter_critical_callback_t enter_critical_cb;
-    exit_critical_callback_t exit_critical_cb;
+    enter_critical_callback_t mac_enter_critical; // disable 15.4 MAC driver IRQ
+    exit_critical_callback_t mac_exit_critical;
+    enter_critical_callback_t platform_enter_critical;  // disable platform all IRQ
+    exit_critical_callback_t platform_exit_critical;
 
 #if defined(MULTI_PAN_EN) && (MULTI_PAN_EN != 0)
     mac_intr_callback_t mpan_intr_cb;
@@ -386,6 +467,8 @@ typedef struct mac_driver_s
 #if defined(DUAL_CHNL_EN) && (DUAL_CHNL_EN != 0)
     fast_chnl_switch_enable_t fast_chnl_switch_enable;
     fast_chnl_switch_disable_t fast_chnl_switch_disable;
+    modem_2symbol_sync_ctrl_t modem_2symbol_sync_ctrl;
+    rfc_fast_chnl_set_t rf_fast_channel_set;
 #endif  /* #if defined(DUAL_CHNL_EN) && (DUAL_CHNL_EN != 0) */
 #endif  /* #if defined(MULTI_PAN_EN) && (MULTI_PAN_EN != 0) */
     uint32_t reserved1[3];
@@ -480,6 +563,66 @@ typedef struct pan_mac_comm_s
 } pan_mac_comm_t, *ppan_mac_comm_t;
 
 #endif  /* #if defined(MULTI_PAN_EN) && (MULTI_PAN_EN != 0) */
+
+typedef enum
+{
+    MAC_PARAM_PANID                = 0x0001, // Read/Write Size is uint16_t.
+    MAC_PARAM_CHANNEL              = 0x0002, // Read/Write Size is uint8_t.
+    MAC_PARAM_FREQ                 = 0x0003, // Read/Write Size is uint16_t.
+    MAC_PARAM_SHORT_ADDR           = 0x0004, // Read/Write Size is uint16_t.
+    MAC_PARAM_LONG_ADDR            = 0x0005, // Read/Write Size is (uint8_t * 8).
+} mac_param_t;
+
+typedef enum
+{
+    MAC_PARAM_TX_GAIN              = 0x0201, // Read/Write Size is uint8_t.
+    MAC_PARAM_CCA_MODE             = 0x0202, // Read/Write Size is uint8_t.
+    MAC_PARAM_ED_THRESHOLD         = 0x0203, // Read/Write Size is uint8_t.
+    MAC_PARAM_TXN_CSMA             = 0x0204, // Read/Write Size is uint8_t.
+    MAC_PARAM_TXN_RETRY            = 0x0205, // Read/Write Size is uint8_t.
+    MAC_PARAM_CSMA_MIN_BE          = 0x0206, // Read/Write Size is uint8_t.
+    MAC_PARAM_CSMA_MAX_BE          = 0x0207, // Read/Write Size is uint8_t.
+    MAC_PARAM_CSMA_MAX_BO          = 0x0208, // Read/Write Size is uint8_t.
+    MAC_PARAM_TX_NO_CRC            = 0x0209, // Read/Write Size is uint8_t.
+} mac_param_tx_t;
+
+typedef enum
+{
+    MAC_PARAM_RX_FLTR_FRM_TYPE_15     = 0x0301, // Read/Write Size is uint8_t.
+    MAC_PARAM_RX_FLTR_FRM_TYPE        = 0x0302, // Read/Write Size is uint8_t.
+    MAC_PARAM_RX_FLTR_ACCEPT_ERR_PKT  = 0x0303, // Read/Write Size is uint8_t.
+    MAC_PARAM_RX_FLTR_SCAN_MODE       = 0x0304, // Read/Write Size is uint8_t.
+    MAC_PARAM_RX_PROMISCUOUS          = 0x0305, // Read/Write Size is uint8_t.
+    MAC_PARAM_SRC_FLTR_ENH_FRM_PEND   = 0x0306, // Read/Write Size is uint8_t.
+} mac_param_rx_t;
+
+/** Little Endian array to uint16 */
+#define LE_ARRAY_TO_UINT16(u16, a)  {                   \
+        u16 = ((uint16_t)(*(a + 0)) << 0) +             \
+              ((uint16_t)(*(a + 1)) << 8);              \
+    }
+
+/** Little Endian array to uint32 */
+#define LE_ARRAY_TO_UINT32(u32, a) {                    \
+        u32 = ((uint32_t)(*(a + 0)) <<  0) +            \
+              ((uint32_t)(*(a + 1)) <<  8) +            \
+              ((uint32_t)(*(a + 2)) << 16) +            \
+              ((uint32_t)(*(a + 3)) << 24);             \
+    }
+
+/** Little Endian uint16 to array */
+#define LE_UINT16_TO_ARRAY(a, u16)  {                   \
+        *((uint8_t *)(a) + 0) = (uint8_t)((u16) >> 0);  \
+        *((uint8_t *)(a) + 1) = (uint8_t)((u16) >> 8);  \
+    }
+
+/** Little Endian uint32 to array */
+#define LE_UINT32_TO_ARRAY(a, u32) {                    \
+        *((uint8_t *)(a) + 0) = (uint8_t)((u32) >>  0); \
+        *((uint8_t *)(a) + 1) = (uint8_t)((u32) >>  8); \
+        *((uint8_t *)(a) + 2) = (uint8_t)((u32) >> 16); \
+        *((uint8_t *)(a) + 3) = (uint8_t)((u32) >> 24); \
+    }
 
 /**
   \brief  Defines MAC stubs function
@@ -628,12 +771,12 @@ typedef struct
     void (*SetKey)(uint8_t *key_buf, uint8_t *key);
     void (*LoadNonce)(uint8_t *nonce);
     void (*LoadTxNKey)(uint8_t *key);
-    void (*SetTxNChiper)(uint8_t level);
+    void (*SetTxNCipher)(uint8_t level);
     void (*LoadTxEnhAckKey)(uint8_t *key);
-    void (*SetTxEnhAckChiper)(uint8_t level);
+    void (*SetTxEnhAckCipher)(uint8_t level);
     uint8_t (*GetSecHLEN)(void);
     void (*SetSecHLEN)(uint8_t val);
-    void (*SetRxChiper)(uint8_t level);
+    void (*SetRxCipher)(uint8_t level);
     void (*TrigRxDecryption)(void);
     void (*IgnoreRxDec)(void);
     void (*PTA_Enable)(uint8_t enable);
@@ -678,6 +821,10 @@ typedef struct
 #endif  /* #if defined(DUAL_CHNL_EN) && (DUAL_CHNL_EN != 0) */
 #endif  /* #if defined(MULTI_PAN_EN) && (MULTI_PAN_EN != 0) */
 #endif  /* #if defined(MAC_HW_VER) && (MAC_HW_VER > 0x20200701) */
+#if defined(RX_GDMA_EN) && (RX_GDMA_EN != 0)
+    void (*RX_GDMA_Init)(void *rx_done_handler);
+    void (*RX_GDMA_Start)(uint32_t *prx_buf);
+#endif
 } mac_adapter_t;
 
 #if defined(MULTI_PAN_EN) && (MULTI_PAN_EN != 0)
@@ -720,6 +867,16 @@ typedef struct
 } mpan_stub_func_t;
 #endif  /* #if defined(MULTI_PAN_EN) && (MULTI_PAN_EN != 0) */
 
+/** End of MAC_API_Exported_Types
+  * @}
+  */
+
+/*============================================================================*
+ *                              Functions
+ *============================================================================*/
+/** @defgroup MAC_API_Exported_Functions IEEE 802.15.4 MAC API Exported Functions
+  * @{
+  */
 /*
   rom exported symbol
 */
@@ -731,11 +888,11 @@ extern const mac_adapter_t mac_adapter;
 */
 /**
 *
-* @fn void mac_InitAttribute(mac_attribute_t* attr)
+* @fn void mac_InitAttribute(mac_attribute_t* attribute)
 *
 * @brief Initialize mac_attribute_t structure with default value.
 *
-* @param attr the mac_attribute_t pointer to be initialized
+* @param attribute the mac_attribute_t pointer to be initialized
 *
 * @return None
 *
@@ -744,8 +901,8 @@ void mac_InitAttribute(mac_attribute_t *attribute);
 
 /**
 *
-* @fn void mac_RegisterCallback(mac_intr_callback_t intr_cb, mac_edscan_lv2dbm_callback_t lv2dbm_cb,
-*                               mac_gnt_entry_callback_t gnt_entry_cb)
+* @fn void mac_RegisterCallback(mac_intr_callback_t intr_cb, mac_edscan_lv2dbm_callback_t lv2dbm_cb, mac_gnt_entry_callback_t gnt_entry_cb,
+                                          modem_cca_comb_callback_t cca_comb_cb)
 *
 * @brief Register mac callback function
 *
@@ -754,6 +911,8 @@ void mac_InitAttribute(mac_attribute_t *attribute);
 * @param lv2dbm_cb translate EDScan level to dbm callback function
 *
 * @param gnt_entry_cb set gnt entry priority callback function
+*
+* @param cca_comb_cb modem CCA combine callback function
 *
 * @return None
 *
@@ -806,7 +965,7 @@ void mac_EnterDLPS(void *reg_retention_buf);
 
 /**
 *
-* @fn void mac_ExitDLSP(void *reg_retention_buf)
+* @fn void mac_ExitDLPS(void *reg_retention_buf)
 *
 * @brief Resume the MAC from deep sleep power saving mode
 *
@@ -836,7 +995,7 @@ void mac_EnterCritical(void);
 
 /**
 *
-* @fn void mac_EnterCritical (void)
+* @fn void mac_ExitCritical (void)
 *
 * @brief Leave MAC layer driver critical section (MAC interrupt resume)
 *
@@ -930,7 +1089,7 @@ void mac_GetCurrentBTClk(mac_bt_clk_t *pbt_clk);
 
 /**
 *
-* @fn uint32_t mac_BTClkToUs(mac_bt_clk_t bt_clk)
+* @fn uint32_t mac_BTClkToUS(mac_bt_clk_t bt_clk)
 *
 * @brief Convert a BT clock value to a time value with unit of 1us.
 *
@@ -1086,7 +1245,7 @@ void hal_delay_us(uint32_t delay_us);
 
 /**
 *
-* @fn uint8_t HAL_Is_Timeout(uint32_t timeout)
+* @fn uint8_t hal_is_timeout(uint32_t timeout)
 *
 * @brief check whether current MAC time (BT clock based) is later than the specified timeout time
 *
@@ -1115,7 +1274,7 @@ void *mac_memcpy(void *dest, const void *src, uint32_t len);
 */
 /**
 *
-* @fn mac_RstRF(Level)
+* @fn mac_RstRF(void)
 *
 * @brief Software reset RF part only then turns RF to RX mode
 *
@@ -1351,7 +1510,7 @@ void mac_SetPANId(uint16_t pid);
 
 /**
 *
-* @fn void mac_GetPANId(uint16_t  pid)
+* @fn void mac_GetPANId(void)
 *
 * @brief Get IEEE 802.15.4 destination PAN id
 *
@@ -1373,6 +1532,14 @@ uint16_t mac_GetPANId(void);
 */
 void mac_SetShortAddress(uint16_t sadr);
 
+/**
+ * @fn uint16_t mac_GetShortAddress(void)
+ *
+ * @brief Get IEEE 802.15.4 destination network(short) address
+ *
+ * @return 16 bits length network(short) address
+ *
+ */
 uint16_t mac_GetShortAddress(void);
 
 /**
@@ -1385,10 +1552,18 @@ uint16_t mac_GetShortAddress(void);
 *
 * @return None
 *
-
 */
 void mac_SetLongAddress(uint8_t  *ladr);
 
+/**
+ *
+ * @fn uint8_t *mac_GetLongAddress(void)
+ *
+ * @brief Get IEEE 802.15.4 destination extend(long) address
+ *
+ * @return 64 bits extend(long) address pointer
+ *
+ */
 uint8_t *mac_GetLongAddress(void);
 
 /**
@@ -1434,7 +1609,7 @@ void mac_SetGroupAddress(uint8_t *gpadr);
 
 /**
 *
-* @fn uint8_t mac_SetTXNMaxRetry(uint8_t max_retry)
+* @fn uint8_t mac_SetTxNMaxRetry(uint8_t max_retry)
 *
 * @brief Set the maximum retry count of the Normal FIFO transmission.
 *
@@ -1537,6 +1712,17 @@ void mac_SetPromiscuous(uint8_t en);
 */
 uint8_t mac_GetPromiscuous(void);
 
+/**
+ *
+ * @fn void mac_SetRxCrcErrPkt(uint8_t en)
+ *
+ * @brief Set Rx CRC error packet status
+ *
+ * @param en Disable 0/Enable 1
+ *
+ * @return None
+ *
+ */
 void mac_SetRxCrcErrPkt(uint8_t en);
 
 uint8_t mac_GetRxCrcErrPkt(void);
@@ -1917,6 +2103,8 @@ void mac_SetCSMAMaxBe(uint8_t macMaxBe);
 
 uint8_t mac_GetCSMAMaxBe(void);
 
+void mac_SetCSMABackoffGain(uint8_t nb_gain);
+
 /**
 *
 * @fn uint8_t mac_EDScanExt(uint32_t scan_duration, int8_t *ed_peak_lev, int8_t *ed_avrg_lev)
@@ -1990,7 +2178,7 @@ void mac_SoftwareTimer_Init(mac_timer_handle_t *ptmr_entities, uint8_t tmr_num);
 
 /**
 *
-* @fn uint8_t mac_SoftwareTimer_Alloc(void *pcallback, void *parg)
+* @fn uint8_t mac_SoftwareTimer_Alloc(void)
 *
 * @brief Allocate a MAC software handler from free timer handler pool.
 *
@@ -2014,11 +2202,11 @@ void mac_SoftwareTimer_Free(pmac_timer_handle_t pmac_tmr);
 
 /**
 *
-* @fn void mac_SoftwareTimer_Start(pmac_timer_handle_t pmac_tmr, mac_bt_clk_t bt_clk)
+* @fn void mac_SoftwareTimer_Start(pmac_timer_handle_t pstart_tmr, uint32_t timeout, void *pcallback, void *arg)
 *
 * @brief Start a MAC timer with a given time stamp (BT clock) of timeout event be triggered.
 *
-* @param pmac_tmr the MAC timer handler to be started
+* @param pstart_tmr the MAC timer handler to be started
 *
 * @param timeout the time stamp (base on BT clock) to trigger timeout
 *
@@ -2107,7 +2295,7 @@ uint8_t mac_GetImmAckPendingBit(void);
 void mac_UpdatePreTrigTime(void);
 
 /**
-* @fn uint8_t  mac_TrigTxNAtTime(bool_t AckReq, mac_bt_clk_t tx_time)
+* @fn uint8_t  mac_TrigTxNAtTime(uint8_t ackreq, uint8_t secreq, uint8_t docca, mac_bt_clk_t txtime)
 *
 * @brief Set if require ack, then enable normal FIFO TX with a specified
 *        trigger time.
@@ -2295,6 +2483,19 @@ uint8_t mac_GetSrcMatchStatus(void);
 */
 void mac_ClrSrcMatchStatus(void);
 
+/**
+ * @fn uint32_t mac_GetSrcExtMatch(uint8_t index, bool high_bytes)
+ *
+ * @brief Get the source address match entry of Source Address Match Filter.
+ *
+ * @param index the index of the source address match entry
+ *
+ * @param high_bytes true: get the high bytes of the source address match entry
+ *                  false: get the low bytes of the source address match entry
+ *
+ * @return the source address match entry
+ *
+ */
 uint32_t mac_GetSrcExtMatch(uint8_t index, bool high_bytes);
 
 /**
@@ -2311,6 +2512,14 @@ uint32_t mac_GetSrcExtMatch(uint8_t index, bool high_bytes);
 */
 void mac_SetAddrMatchMode(uint8_t mode);
 
+/**
+ * @fn uint8_t mac_GetAddrMatchMode(void)
+ *
+ * @brief Get the mode of auto set frame pending bit for Ack frame
+ *
+ * @return AUTO_ACK_PENDING_MODE_ZIGBEE: set the pending bit as IEEE802.15.4 Spec;
+ *        AUTO_ACK_PENDING_MODE_THREAD: set the pending bit as Thread Spec;
+*/
 uint8_t mac_GetAddrMatchMode(void);
 
 /**
@@ -2444,7 +2653,7 @@ void mac_SetNonce(uint8_t *nonce);
 
 /**
 *
-* @fn void mac_SetKey(uint8_t *key)
+* @fn void mac_SetKey(uint8_t *key_buf, uint8_t *key)
 *
 * @brief Load key into TxN key fifo.
 *
@@ -2485,7 +2694,7 @@ void mac_LoadTxNKey(uint8_t *key);
 
 /**
 *
-* @fn void mac_SetTxNChiper(uint8_t level)
+* @fn void mac_SetTxNCipher(uint8_t level)
 *
 * @brief config the security level of Normal FIFO cipher
 *
@@ -2494,7 +2703,7 @@ void mac_LoadTxNKey(uint8_t *key);
 * @return None
 *
 */
-void mac_SetTxNChiper(uint8_t level);
+void mac_SetTxNCipher(uint8_t level);
 
 /**
 *
@@ -2511,7 +2720,7 @@ void mac_LoadTxEnhAckKey(uint8_t *key);
 
 /**
 *
-* @fn void mac_SetTxEnhAckChiper(uint8_t level)
+* @fn void mac_SetTxEnhAckCipher(uint8_t level)
 *
 * @brief config the security level of GTS1 FIFO cipher
 *
@@ -2520,7 +2729,7 @@ void mac_LoadTxEnhAckKey(uint8_t *key);
 * @return None
 *
 */
-void mac_SetTxEnhAckChiper(uint8_t level);
+void mac_SetTxEnhAckCipher(uint8_t level);
 
 /**
 *
@@ -2561,7 +2770,7 @@ void mac_SetSecHLEN(uint8_t val);
 
 /**
 *
-* @fn void mac_SetRxChiper(uint8_t level)
+* @fn void mac_SetRxCipher(uint8_t level)
 *
 * @brief config the security level of RX FIFO cipher
 *
@@ -2570,7 +2779,7 @@ void mac_SetSecHLEN(uint8_t val);
 * @return None
 *
 */
-void mac_SetRxChiper(uint8_t level);
+void mac_SetRxCipher(uint8_t level);
 
 /**
 *
@@ -2627,7 +2836,7 @@ uint8_t mac_UpperCipher(uint8_t SecMode, uint8_t *SecKey, uint8_t *SecNonce);
 
 /**
 *
-* @fn uint8_t  mac_UpperDecipher(uint8_t  *TxFIFO, uint8_t  SecMode, uint8_t  *SecKey, uint8_t  *SecNonce)
+* @fn uint8_t  mac_UpperDecipher(uint8_t SecMode, uint8_t *SecKey, uint8_t *SecNonce)
 *
 * @brief Using TX normal FIFO to do upper cipher decryption. The data to be decrypted
 *        should be filled into the TX Normal FIFO before calling this function. It should follow
@@ -2635,7 +2844,7 @@ uint8_t mac_UpperCipher(uint8_t SecMode, uint8_t *SecKey, uint8_t *SecNonce);
 *        The decrypted data will be stored to the TX Normal FIFO and replace the origional data.
 *
 * @param SecMode Security mode.
-* @param *SecKey Security key pointer, security key is 16 bytes.
+* @param SecKey Security key pointer, security key is 16 bytes.
 * @param SecNonce Security nonce, nonce is 13 bytes
 *
 * @return Process status.
@@ -3082,10 +3291,184 @@ uint8_t mpan_TrigTxN(bool_t AckReq, bool_t SecReq, uint8_t pan_idx);
 uint8_t mpan_TrigTxNAtTime(bool_t AckReq, bool_t SecReq, bool_t DoCCA,
                            mac_bt_clk_t TxTime, uint8_t pan_idx);
 
+uint8_t mpan_TrigTxNAtUS(bool_t AckReq, bool_t SecReq, bool_t DoCCA,
+                         mac_bt_clk_t TxTime, uint8_t pan_idx);
+
 #endif  /* #if defined(MULTI_PAN_EN) && (MULTI_PAN_EN != 0) */
+
+#if defined(RX_GDMA_EN) && (RX_GDMA_EN != 0)
+/**
+*
+* @fn void mac_RX_GDMA_Init(void *rx_done_handler)
+*
+* @brief GDMA channel initialization for MAC RX FIFO data copy
+*
+* @param[in]  rx_done_handler the callback function from GDMA transfer completed interrupt
+*                             usually, we should submit a new GDMA transfer in this
+*                             callback function
+* @return None
+*
+*/
+void mac_RX_GDMA_Init(void *rx_done_handler);
+
+/**
+*
+* @fn void mac_RX_GDMA_Start(uint32_t *prx_buf)
+*
+* @brief Submit a new GDMA transfer for RX FIFO data read
+*
+* @param[in]  prx_buf the buffer for RX FIFO data reading
+*
+* @return None
+*
+*/
+void mac_RX_GDMA_Start(uint32_t *prx_buf);
+#endif
+
+/**
+*
+* @fn mac_status_t mac_param_set(mac_param_t param, uint8_t len, void *p_value)
+*
+* @brief Set a MAC common parameter.
+*
+*         NOTE: You can call this function with MAC common parameter type and it will set the
+*         MAC parameter.  MAC common parameter types are defined in (mac_driver.h).
+*         If the "len" field sets to the size of  "uint16_t" ,the
+*         "p_value" field must point to a "uint16_t".
+* @param[in]  param MAC parameter type: @ref mac_param_t
+* @param[in]  len Length of data to write
+* @param[in]  p_value Pointer to data to write.  This is dependent on
+*                  the parameter type and WILL be cast to the appropriate
+*                  data type (example: data type of uint16_t will be cast to
+*                  uint16_t pointer).
+* @return Set result
+* @retval MAC_STS_SUCCESS Set parameter success.
+* @retval other Set parameter failed.
+*
+*/
+mac_status_t mac_param_set(mac_param_t param, uint8_t len, void *p_value);
+
+/**
+*
+* @fn mac_status_t mac_param_get(mac_param_t param, void *p_value)
+* @brief  Get a MAC common parameter.
+*
+*         NOTE: You can call this function with MAC common parameter type and it will get a
+*         MAC common parameter.  MAC common parameter types are defined in (mac_driver.h).  Also, the
+*         "p_value" field must be suitable for the given type.
+*
+* @param[in]  param MAC parameter type: @ref mac_param_t
+* @param[out]  p_value Pointer to location to get the value.  This is dependent on
+*                  the parameter type and WILL be cast to the appropriate
+*                  data type (example: data type of uint16_t will be cast to
+*                  uint16_t pointer).
+*
+* @return Get result
+* @retval MAC_STS_SUCCESS Get parameter success.
+* @retval other Get parameter failed.
+*/
+mac_status_t mac_param_get(mac_param_t param, void *p_value);
+
+/**
+*
+* @fn mac_status_t mac_tx_param_set(mac_param_tx_t param, uint8_t len, void *p_value)
+*
+* @brief Set a MAC TX parameter.
+*
+*         NOTE: You can call this function with MAC TX parameter type and it will set the
+*         MAC parameter.  MAC TX parameter types are defined in (mac_driver.h).
+*         If the "len" field sets to the size of  "uint16_t" ,the
+*         "p_value" field must point to a "uint16_t".
+* @param[in]  param MAC TX parameter type: @ref mac_param_tx_t
+* @param[in]  len Length of data to write
+* @param[in]  p_value Pointer to data to write.  This is dependent on
+*                  the parameter type and WILL be cast to the appropriate
+*                  data type (example: data type of uint16_t will be cast to
+*                  uint16_t pointer).
+* @return Set result
+* @retval MAC_STS_SUCCESS Set parameter success.
+* @retval other Set parameter failed.
+*
+*/
+mac_status_t mac_tx_param_set(mac_param_tx_t param, uint8_t len, void *p_value);
+
+/**
+*
+* @fn mac_status_t mac_tx_param_get(mac_param_tx_t param, void *p_value)
+* @brief  Get a MAC TX parameter.
+*
+*         NOTE: You can call this function with MAC TX parameter type and it will get a
+*         MAC TX parameter.  MAC TX parameter types are defined in (mac_driver.h).  Also, the
+*         "p_value" field must be suitable for the given type.
+*
+* @param[in]  param MAC parameter type: @ref mac_param_tx_t
+* @param[out]  p_value Pointer to location to get the value.  This is dependent on
+*                  the parameter type and WILL be cast to the appropriate
+*                  data type (example: data type of uint16_t will be cast to
+*                  uint16_t pointer).
+*
+* @return Get result
+* @retval MAC_STS_SUCCESS Get parameter success.
+* @retval other Get parameter failed.
+*/
+mac_status_t mac_tx_param_get(mac_param_tx_t param, void *p_value);
+
+/**
+*
+* @fn mac_status_t mac_rx_param_set(mac_param_rx_t param, uint8_t len, void *p_value)
+*
+* @brief Set a MAC RX parameter.
+*
+*         NOTE: You can call this function with MAC RX parameter type and it will set the
+*         MAC parameter.  MAC RX parameter types are defined in (mac_driver.h).
+*         If the "len" field sets to the size of  "uint16_t" ,the
+*         "p_value" field must point to a "uint16_t".
+* @param[in]  param MAC RX parameter type: @ref mac_param_rx_t
+* @param[in]  len Length of data to write
+* @param[in]  p_value Pointer to data to write.  This is dependent on
+*                  the parameter type and WILL be cast to the appropriate
+*                  data type (example: data type of uint16_t will be cast to
+*                  uint16_t pointer).
+* @return Set result
+* @retval MAC_STS_SUCCESS Set parameter success.
+* @retval other Set parameter failed.
+*
+*/
+mac_status_t mac_rx_param_set(mac_param_rx_t param, uint8_t len, void *p_value);
+
+/**
+*
+* @fn mac_status_t mac_rx_param_get(mac_param_rx_t param, void *p_value)
+* @brief  Get a MAC RX parameter.
+*
+*         NOTE: You can call this function with MAC RX parameter type and it will get a
+*         MAC RX parameter.  MAC RX parameter types are defined in (mac_driver.h).  Also, the
+*         "p_value" field must be suitable for the given type.
+*
+* @param[in]  param MAC parameter type: @ref mac_param_rx_t
+* @param[out]  p_value Pointer to location to get the value.  This is dependent on
+*                  the parameter type and WILL be cast to the appropriate
+*                  data type (example: data type of uint16_t will be cast to
+*                  uint16_t pointer).
+*
+* @return Get result
+* @retval MAC_STS_SUCCESS Get parameter success.
+* @retval other Get parameter failed.
+*/
+mac_status_t mac_rx_param_get(mac_param_rx_t param, void *p_value);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif    // end of #ifndef _MAC_DRIVER_H_
+
+/** End of MAC_API_Exported_Functions
+  * @}
+  */
+
+
+/** End of MAC_API
+  * @}
+  */
+

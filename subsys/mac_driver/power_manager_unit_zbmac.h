@@ -102,7 +102,39 @@ typedef struct zbpm_adapter_s
     zbpm_callback_t exit_callback;  // call back function when in exit stage
     uint32_t enter_time_us;  // the time stamp of entering ZBMAC_PM_ENTER stage, in unit of us by BT clock
     void *pretain_buf;  // the MAC registers retainion buffer
+    uint8_t pm_unit_id; // unit ID to register to the power manager
+    uint8_t zb_pm_idx; // index of Zigbee power adapter
+    zbpm_callback_t enter_callback_app;  /* call application's back function when the entering
+                                           DLPS, i.e. the before the store function is called */
+    zbpm_callback_t exit_callback_app;  /* call application's back function when the wakeup process
+                                           is completed, i.e. the restore function is done */
 } zbpm_adapter_t, *pzbpm_adapter_t;
+
+// System Call OP code to Lower Stack, copy from lower stack for power manager adaption
+typedef enum
+{
+    LOWERSTACK_SYSCALL_OPCODE_READ_BT_CLK_INDEX = 1,
+    LOWERSTACK_SYSCALL_OPCODE_SET_ZB_ACTIVE = 10,
+    LOWERSTACK_SYSCALL_OPCODE_GET_ZB_ENTRY_WINDOW = 11,
+    LOWERSTACK_SYSCALL_OPCODE_REGISTER_MAC_LPS_CALLBACK = 14,
+} LOWERSTACK_SYSCALL_OPCODE;
+
+typedef enum
+{
+    DUAL_MAC_REGISTER_MAC0_CB = 0,
+    DUAL_MAC_REGISTER_MAC1_CB = 1,
+    DSM_MANAGER_REGISTER_CB = 2
+} LOWERSTACK_SYSCALL_REGISTER_MAC_LPS_CALLBACK_SUBCODE;
+
+typedef enum _MacPMCallbackStage
+{
+    MAC_PM_CALLBACK_CHECK = 0,
+    MAC_PM_CALLBACK_STORE = 1,
+    MAC_PM_CALLBACK_ENTER = 2,
+    MAC_PM_CALLBACK_EXIT = 3,
+    MAC_PM_CALLBACK_RESTORE = 4,
+    MAC_PM_CALLBACK_STAGE_NUM
+} MacPMCallbackStage;
 
 extern PMCheckResult(*zbmac_pm_check)(const uint32_t, const uint32_t, uint32_t *);
 extern void (*zbmac_pm_store)(void);
@@ -110,7 +142,7 @@ extern void (*zbmac_pm_restore)(void);
 extern void (*zbmac_pm_enter)(void);
 extern void (*zbmac_pm_exit)(void);
 extern void (*zbmac_pm_init)(zbpm_adapter_t *padapter);
-
+extern zbpm_adapter_t *pzbpm_adapter;
 #ifdef __cplusplus
 }
 #endif
