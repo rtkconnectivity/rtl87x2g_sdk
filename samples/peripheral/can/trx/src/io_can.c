@@ -368,7 +368,7 @@ void CAN_Handler(void)
 #if CAN_RX_FIFO_EN
                 if (index == CAN_MESSAGE_FIFO_START_ID)
                 {
-                    CAN_FifoStatusTypeDef fifo_status;
+                    CANFifoStatus_TypeDef fifo_status;
                     CAN_GetFifoStatus(&fifo_status);
 
                     while (fifo_status.fifo_msg_empty == RESET)

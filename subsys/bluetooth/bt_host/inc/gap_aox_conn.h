@@ -99,20 +99,20 @@ typedef enum
   */
 /**
  * @brief   Set Connection CTE Receive Parameters.
- *          Result will be returned by @ref app_gap_aox_callback with cb_type @ref GAP_MSG_LE_AOX_SET_CONN_CTE_RECEIVE_PARAMS.
+ *
+ * If sending request operation is successful, the setting result will be returned by the callback
+ * function registered by @ref le_register_aox_cb with msg type @ref GAP_MSG_LE_AOX_SET_CONN_CTE_RECEIVE_PARAMS.
  *
  * @param[in] conn_id  Connection ID.
- * @param[in] sampling_enable  Enable/disable Connection IQ sampling: @ref T_GAP_AOX_SAMPLING_ENABLE_TYPE.
- * @param[in] slot_durations  Switching and sampling slots: @ref T_GAP_SLOT_DUATIONS_TYPE.
+ * @param[in] sampling_enable  @ref T_GAP_AOX_SAMPLING_ENABLE_TYPE.
+ * @param[in] slot_durations   @ref T_GAP_SLOT_DUATIONS_TYPE.
  * @param[in] switching_pattern_length  The number of Antenna IDs in the pattern.
- *                                      Range: 0x02 to max_switching_pattern_length supported by controller returned by
- *                                             @ref le_aox_read_antenna_information.
+ *                                      - Range: 0x02 to max_switching_pattern_length supported by Controller returned by
+ *                                               @ref le_aox_read_antenna_information.
  * @param[in] p_antenna_ids  Antenna ID in the pattern.
- * @return  Result of sending request.
- * @retval  GAP_CAUSE_SUCCESS: Send request success.
- * @retval  GAP_CAUSE_SEND_REQ_FAILED: Send request sent fail.
- * @retval  GAP_CAUSE_NON_CONN: Failed. No connection.
- * @retval  GAP_CAUSE_INVALID_PARAM: Failed. Invalid parameter.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -135,15 +135,15 @@ typedef enum
 
       switch (cb_type)
       {
-      ......
+      ...
       case GAP_MSG_LE_AOX_SET_CONN_CTE_RECEIVE_PARAMS:
         APP_PRINT_INFO2("GAP_MSG_LE_AOX_SET_CONN_CTE_RECEIVE_PARAMS: cause 0x%x, conn_id %d",
                         p_data->p_le_aox_set_conn_cte_receive_params_rsp->cause,
                         p_data->p_le_aox_set_conn_cte_receive_params_rsp->conn_id);
         break;
-      ......
+      ...
       }
-    ......
+    ...
     }
  * \endcode
  */
@@ -155,22 +155,22 @@ T_GAP_CAUSE le_aox_set_conn_cte_receive_params(uint8_t conn_id,
 
 /**
  * @brief   Set Connection CTE Transmit Parameters.
- *          Result will be returned by @ref app_gap_aox_callback with cb_type @ref GAP_MSG_LE_AOX_SET_CONN_CTE_TRANSMIT_PARAMS.
+ *
+ * If sending request operation is successful, the setting result will be returned by the callback
+ * function registered by @ref le_register_aox_cb with msg type @ref GAP_MSG_LE_AOX_SET_CONN_CTE_TRANSMIT_PARAMS.
  *
  * @param[in] conn_id  Connection ID.
  * @param[in] cte_types   A bit field that indicates the type of Constant Tone Extension that the Controller supports
                           @ref GAP_AOX_CONN_CTE_TYPES_BITS.
  * @param[in] switching_pattern_length  The number of Antenna IDs in the pattern, and shall be ignored when cte_types does not
  *                                      have a bit set for an AoD Constant Tone Extension.
- *                                      Range: 0x02 to max_switching_pattern_length supported by controller returned by
- *                                             @ref le_aox_read_antenna_information.
+ *                                      - Range: 0x02 to max_switching_pattern_length supported by Controller returned by
+ *                                               @ref le_aox_read_antenna_information.
  * @param[in] p_antenna_ids  Antenna ID in the pattern, and shall be ignored when cte_types does not
                              have a bit set for an AoD Constant Tone Extension.
- * @return  Result of sending request.
- * @retval  GAP_CAUSE_SUCCESS: Send request success.
- * @retval  GAP_CAUSE_SEND_REQ_FAILED: Send request sent fail.
- * @retval  GAP_CAUSE_NON_CONN: Failed. No connection.
- * @retval  GAP_CAUSE_INVALID_PARAM: Failed. Invalid parameter.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -191,15 +191,15 @@ T_GAP_CAUSE le_aox_set_conn_cte_receive_params(uint8_t conn_id,
 
       switch (cb_type)
       {
-      ......
+      ...
       case GAP_MSG_LE_AOX_SET_CONN_CTE_TRANSMIT_PARAMS:
         APP_PRINT_INFO2("GAP_MSG_LE_AOX_SET_CONN_CTE_TRANSMIT_PARAMS: cause 0x%x, conn_id %d",
                         p_data->p_le_aox_set_conn_cte_transmit_params_rsp->cause,
                         p_data->p_le_aox_set_conn_cte_transmit_params_rsp->conn_id);
         break;
-      ......
+      ...
       }
-    ......
+    ...
     }
  * \endcode
  */
@@ -209,33 +209,33 @@ T_GAP_CAUSE le_aox_set_conn_cte_transmit_params(uint8_t conn_id, uint8_t cte_typ
 
 /**
  * @brief   Request the Controller to start or stop initiating the Constant Tone Extension Request procedure.
- *          Result will be returned by @ref app_gap_aox_callback with cb_type @ref GAP_MSG_LE_AOX_CONN_CTE_REQUEST_ENABLE.
  *
- * IQ samples will be returned by @ref app_gap_aox_callback with cb_type @ref GAP_MSG_LE_AOX_CONN_IQ_REPORT_INFO
- *          on Constant Tone Extensions received.
- *          Otherwise, request failed info will be returned by @ref app_gap_aox_callback with cb_type
- *          @ref GAP_MSG_LE_AOX_CTE_REQUEST_FAILED_INFO.
+ * If sending request operation is successful, the starting or stopping result will be returned by the callback
+ * function registered by @ref le_register_aox_cb with msg type @ref GAP_MSG_LE_AOX_CONN_CTE_REQUEST_ENABLE.
+ *
+ * IQ samples will be returned by the callback function registered by @ref le_register_aox_cb with
+ * msg type @ref GAP_MSG_LE_AOX_CONN_IQ_REPORT_INFO on Constant Tone Extensions received.
+ * Otherwise, request failed info will be returned by the callback function registered by @ref le_register_aox_cb
+ * with msg type @ref GAP_MSG_LE_AOX_CTE_REQUEST_FAILED_INFO.
  *
  * @param[in] conn_id  Connection ID.
- * @param[in] enable  Enable/disable Constant Tone Extension Request: @ref T_GAP_AOX_CTE_REQUEST_ENABLE_TYPE.
-                      If Enable is set to GAP_AOX_CTE_REQUEST_DISABLE, the remaining parameters shall be ignored.
+ * @param[in] enable  @ref T_GAP_AOX_CTE_REQUEST_ENABLE_TYPE.
+                      If Enable is set to @ref GAP_AOX_CTE_REQUEST_DISABLE, the remaining parameters shall be ignored.
  * @param[in] cte_request_interval  Defines whether the Constant Tone Extension Request procedure is initiated
                                     only once or periodically.
-                                    @arg 0x0000: Initiate the Constant Tone Extension Request procedure once, at the
+                                    - 0x0000: Initiate the Constant Tone Extension Request procedure once, at the
                                                  earliest practical opportunity.
-                                    @arg 0x0001 to 0xFFFF: Requested interval for initiating the Constant Tone Extension
+                                    - 0x0001 to 0xFFFF: Requested interval for initiating the Constant Tone Extension
                                                            Request procedure in number of connection events.
  * @param[in] requested_cte_length  The minimum length of the Constant Tone Extension that the Controller shall
                                     request from the remote device.
-                                    @arg Range: 0x02 to 0x14.
-                                    @arg Units: 8 us.
- * @param[in] requested_cte_type  The type of Constant Tone Extension that the Controller shall request from the remote device:
- *                                @ref T_GAP_CTE_TYPE.
- * @return  Result of sending request.
- * @retval  GAP_CAUSE_SUCCESS: Send request success.
- * @retval  GAP_CAUSE_SEND_REQ_FAILED: Send request sent fail.
- * @retval  GAP_CAUSE_NON_CONN: Failed. No connection.
- * @retval  GAP_CAUSE_INVALID_PARAM: Failed. Invalid parameter.
+                                    - Range: 0x02 to 0x14.
+                                    - Units: 8 us.
+ * @param[in] requested_cte_type  The type of Constant Tone Extension that the Controller shall request from the remote device.
+ *                                Value is @ref T_GAP_CTE_TYPE.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -258,14 +258,14 @@ T_GAP_CAUSE le_aox_set_conn_cte_transmit_params(uint8_t conn_id, uint8_t cte_typ
 
       switch (cb_type)
       {
-      ......
+      ...
       case GAP_MSG_LE_AOX_CONN_CTE_REQUEST_ENABLE:
         APP_PRINT_INFO2("GAP_MSG_LE_AOX_CONN_CTE_REQUEST_ENABLE: cause 0x%x, conn_id %d",
                         p_data->p_le_aox_conn_cte_request_enable_rsp->cause,
                         p_data->p_le_aox_conn_cte_request_enable_rsp->conn_id);
         break;
           case GAP_MSG_LE_AOX_CONN_IQ_REPORT_INFO:
-        APP_PRINT_INFO8("GAP_MSG_LE_AOX_CONN_IQ_REPORT_INFO: conn_id %d, rx_phy %d, data_chan_index %d, rssi %d, rssi_antenna_id %d, cte_type %d, slot_durations %d, packet_status %d",
+        APP_PRINT_INFO8("GAP_MSG_LE_AOX_CONN_IQ_REPORT_INFO: conn_id %d, rx_phy %d, data_chan_index %d, RSSI %d, rssi_antenna_id %d, cte_type %d, slot_durations %d, packet_status %d",
                         p_data->p_le_aox_conn_iq_report_info->conn_id,
                         p_data->p_le_aox_conn_iq_report_info->rx_phy,
                         p_data->p_le_aox_conn_iq_report_info->data_chan_index,
@@ -289,9 +289,9 @@ T_GAP_CAUSE le_aox_set_conn_cte_transmit_params(uint8_t conn_id, uint8_t cte_typ
                         p_data->p_le_aox_cte_request_failed_info->cause,
                         p_data->p_le_aox_cte_request_failed_info->conn_id);
         break;
-      ......
+      ...
       }
-    ......
+    ...
     }
  * \endcode
  */
@@ -302,15 +302,15 @@ T_GAP_CAUSE le_aox_conn_cte_request_enable(uint8_t conn_id,
 
 /**
  * @brief   Request the Controller to respond to Constant Tone Extension Request.
- *          Result will be returned by @ref app_gap_aox_callback with cb_type @ref GAP_MSG_LE_AOX_CONN_CTE_RESPONSE_ENABLE.
+ *
+ * If sending request operation is successful, result will be returned by the callback
+ * function registered by @ref le_register_aox_cb with msg type @ref GAP_MSG_LE_AOX_CONN_CTE_RESPONSE_ENABLE.
  *
  * @param[in] conn_id  Connection ID.
- * @param[in] enable  Enable/disable Constant Tone Extension Response: @ref T_GAP_AOX_CTE_RESPONSE_ENABLE_TYPE.
- * @return  Result of sending request.
- * @retval  GAP_CAUSE_SUCCESS: Send request success.
- * @retval  GAP_CAUSE_SEND_REQ_FAILED: Send request sent fail.
- * @retval  GAP_CAUSE_NON_CONN: Failed. No connection.
- * @retval  GAP_CAUSE_INVALID_PARAM: Failed. Invalid parameter.
+ * @param[in] enable  @ref T_GAP_AOX_CTE_RESPONSE_ENABLE_TYPE.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -329,15 +329,15 @@ T_GAP_CAUSE le_aox_conn_cte_request_enable(uint8_t conn_id,
 
       switch (cb_type)
       {
-      ......
+      ...
        case GAP_MSG_LE_AOX_CONN_CTE_RESPONSE_ENABLE:
         APP_PRINT_INFO2("GAP_MSG_LE_AOX_CONN_CTE_RESPONSE_ENABLE: cause 0x%x, conn_id %d",
                         p_data->p_le_aox_conn_cte_response_enable_rsp->cause,
                         p_data->p_le_aox_conn_cte_response_enable_rsp->conn_id);
         break;
-      ......
+      ...
       }
-    ......
+    ...
     }
  * \endcode
  */

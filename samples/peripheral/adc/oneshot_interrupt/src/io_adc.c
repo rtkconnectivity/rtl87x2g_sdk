@@ -43,7 +43,7 @@
 */
 void board_adc_init(void)
 {
-    Pad_Config(ADC_SAMPLE_PIN, PAD_SW_MODE, PAD_IS_PWRON, PAD_PULL_NONE, PAD_OUT_DISABLE,
+    Pad_Config(ADC_SAMPLE_PIN, PAD_SW_MODE, PAD_NOT_PWRON, PAD_PULL_NONE, PAD_OUT_DISABLE,
                PAD_OUT_LOW);
 }
 

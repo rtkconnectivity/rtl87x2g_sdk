@@ -49,9 +49,8 @@ extern "C" {
  */
 typedef enum
 {
-    CODEC_I2S_Rx_DataWidth_16Bits,
-    CODEC_I2S_Rx_DataWidth_8Bits = 0x3,
-    CODEC_I2S_Rx_DataWidth_MAX,
+    CODEC_I2S_Rx_DataWidth_16Bits,          //!< The I2S Rx data width is 16 bits.
+    CODEC_I2S_Rx_DataWidth_8Bits = 0x3,     //!< The I2S Rx data width is 8 bits.
 } CodecI2SRxDatalenSel_TypeDef;
 
 /** End of I2S_Rx_Data_Width
@@ -65,10 +64,9 @@ typedef enum
  */
 typedef enum
 {
-    CODEC_I2S_Tx_DataWidth_16Bits,
-    CODEC_I2S_Tx_DataWidth_24Bits = 0x2,
-    CODEC_I2S_Tx_DataWidth_8Bits = 0x3,
-    CODEC_I2S_Tx_DataWidth_MAX,
+    CODEC_I2S_Tx_DataWidth_16Bits,           //!< The I2S Tx data width is 16 bits.
+    CODEC_I2S_Tx_DataWidth_24Bits = 0x2,     //!< The I2S Tx data width is 24 bits.
+    CODEC_I2S_Tx_DataWidth_8Bits = 0x3,      //!< The I2S Tx data width is 8 bits.
 } CodecI2STxDatalenSel_TypeDef;
 
 /** End of I2S_Tx_Data_Width
@@ -82,11 +80,10 @@ typedef enum
  */
 typedef enum
 {
-    I2S_CHANNELLEN_16,
-    I2S_CHANNELLEN_32,
-    I2S_CHANNELLEN_24,
-    I2S_CHANNELLEN_8,
-    I2S_CHANNELLEN_MAX,
+    I2S_CHANNELLEN_16,     //!< The I2S channel lenth is 16 bits.
+    I2S_CHANNELLEN_32,     //!< The I2S channel lenth is 32 bits.
+    I2S_CHANNELLEN_24,     //!< The I2S channel lenth is 24 bits.
+    I2S_CHANNELLEN_8,      //!< The I2S channel lenth is 8 bits.
 } CodecI2SChannellenSel_TypeDef;
 
 /** End of I2S_Channel_Lenth
@@ -100,17 +97,16 @@ typedef enum
  */
 typedef enum
 {
-    CODEC_I2S_DataFormat_I2S,
-    CODEC_I2S_DataFormat_LeftJustified,
-    CODEC_I2S_DataFormat_PCM_A,
-    CODEC_I2S_DataFormat_PCM_B,
-    CODEC_I2S_DataFormat_MAX,
+    CODEC_I2S_DataFormat_I2S,            //!< The I2S data format is I2S.
+    CODEC_I2S_DataFormat_LeftJustified,  //!< The I2S data format is left justified.
+    CODEC_I2S_DataFormat_PCM_A,          //!< The I2S data format is PCM mode A.
+    CODEC_I2S_DataFormat_PCM_B,          //!< The I2S data format is PCM mode B.
 } CodecI2SFormatSel_TypeDef;
 
 #define IS_CODEC_I2S_DATA_FORMAT(FORMAT) (((FORMAT) == CODEC_I2S_DataFormat_I2S) || \
                                           ((FORMAT) == CODEC_I2S_DataFormat_LeftJustified) || \
                                           ((FORMAT) == CODEC_I2S_DataFormat_PCM_A) || \
-                                          ((FORMAT) == CODEC_I2S_DataFormat_PCM_B))
+                                          ((FORMAT) == CODEC_I2S_DataFormat_PCM_B)) //!< Check if the input parameter is valid.
 
 /** End of I2S_Data_Format
   * \}
@@ -123,10 +119,10 @@ typedef enum
  */
 typedef enum
 {
-    DAC_DA_DITHER_DISABLE = 0,
-    DAC_DA_DITHER_LSB = 1,
-    DAC_DA_DITHER_LSB_PLUS_1 = 2,
-    DAC_DA_DITHER_LSB_PLUS_2 = 3,
+    DAC_DA_DITHER_DISABLE = 0,    //!< The SDM dither in the DAC path of the audio channel is disabled.
+    DAC_DA_DITHER_LSB = 1,        //!< The SDM dither in the DAC path of the audio channel is set to LSB.
+    DAC_DA_DITHER_LSB_PLUS_1 = 2, //!< The SDM dither in the DAC path of the audio channel is set to LSB+1.
+    DAC_DA_DITHER_LSB_PLUS_2 = 3, //!< The SDM dither in the DAC path of the audio channel is set to LSB+2.
 } CodecDacDADitherSel_TypeDef;
 
 /** End of CODEC_DAC_Dither
@@ -134,23 +130,22 @@ typedef enum
   */
 
 /**
- * \defgroup    CODEC_I2S_CH CODEC I2S CH
+ * \defgroup    CODEC_I2S_Channel_Sequence CODEC I2S Channel Sequence
  * \{
  * \ingroup     CODEC_Exported_Constants
  */
 typedef enum
 {
-    CODEC_I2S_CH_L_R,
-    CODEC_I2S_CH_R_L,
-    CODEC_I2S_CH_L_L,
-    CODEC_I2S_CH_R_R,
-    CODEC_I2S_CH_SEL_MAX,
+    CODEC_I2S_CH_L_R,        //!< I2S channel sequence from left to right.
+    CODEC_I2S_CH_R_L,        //!< I2S channel sequence from right to left.
+    CODEC_I2S_CH_L_L,        //!< I2S channel sequence from left to left.
+    CODEC_I2S_CH_R_R,        //!< I2S channel sequence from right to right.
 } CodecI2SCHSequenceSel_TypeDef;
 
 #define IS_CODEC_I2S_CH(CH)             (((CH) == CODEC_I2S_CH_L_R) || \
                                          ((CH) == CODEC_I2S_CH_R_L) || \
                                          ((CH) == CODEC_I2S_CH_L_L) || \
-                                         ((CH) == CODEC_I2S_CH_R_R))
+                                         ((CH) == CODEC_I2S_CH_R_R)) //!< Check if the input parameter is valid.
 
 /** End of CODEC_I2S_CH
   * \}
@@ -163,21 +158,20 @@ typedef enum
  */
 typedef enum
 {
-    SAMPLE_RATE_48KHz,      // 0: 48KHz
-    SAMPLE_RATE_96KHz,      // 1: 96KHz
-    SAMPLE_RATE_192KHz,     // 2: 192KHz
-    SAMPLE_RATE_32KHz,      // 3: 32KHz
-    SAMPLE_RATE_176KHz,     // 4: 176.4KHz
-    SAMPLE_RATE_16KHz,      // 5: 16KHz
-    SAMPLE_RATE_RSV_1,
-    SAMPLE_RATE_8KHz,       // 7: 8KHz
-    SAMPLE_RATE_44100Hz,    // 8: 44.1KHz
-    SAMPLE_RATE_88200Hz,    // 9: 88.2KHz
-    SAMPLE_RATE_24KHz,      // 10: 24KHz
-    SAMPLE_RATE_12KHz,      // 11: 12KHz
-    SAMPLE_RATE_22050Hz,   // 12: 22.05KHz
-    SAMPLE_RATE_11025Hz,  // 13: 11.025KHz
-    SAMPLE_RATE_NUM,
+    SAMPLE_RATE_48KHz,      //!< CODEC sample rate is 48KHz.
+    SAMPLE_RATE_96KHz,      //!< CODEC sample rate is 96KHz.
+    SAMPLE_RATE_192KHz,     //!< CODEC sample rate is 192KHz.
+    SAMPLE_RATE_32KHz,      //!< CODEC sample rate is 32KHz.
+    SAMPLE_RATE_176KHz,     //!< CODEC sample rate is 176.4KHz.
+    SAMPLE_RATE_16KHz,      //!< CODEC sample rate is 16KHz.
+    SAMPLE_RATE_RSV_1,      //!< This parameter is meaningless.
+    SAMPLE_RATE_8KHz,       //!< CODEC sample rate is 8KHz.
+    SAMPLE_RATE_44100Hz,    //!< CODEC sample rate is 44.1KHz.
+    SAMPLE_RATE_88200Hz,    //!< CODEC sample rate is 88.2KHz.
+    SAMPLE_RATE_24KHz,      //!< CODEC sample rate is 24KHz.
+    SAMPLE_RATE_12KHz,      //!< CODEC sample rate is 12KHz.
+    SAMPLE_RATE_22050Hz,    //!< CODEC sample rate is 22.05KHz.
+    SAMPLE_RATE_11025Hz,    //!< CODEC sample rate is 11.025KHz.
 } CodecSampleRate_TypeDef;
 
 #define IS_SAMPLE_RATE(RATE) (((RATE) == SAMPLE_RATE_48KHz)   || ((RATE) == SAMPLE_RATE_96KHz)   || \
@@ -186,7 +180,7 @@ typedef enum
                               ((RATE) == SAMPLE_RATE_8KHz)    || ((RATE) == SAMPLE_RATE_44100Hz) || \
                               ((RATE) == SAMPLE_RATE_88200Hz) || ((RATE) == SAMPLE_RATE_24KHz)   || \
                               ((RATE) == SAMPLE_RATE_12KHz)   || ((RATE) == SAMPLE_RATE_22050Hz) || \
-                              ((RATE) == SAMPLE_RATE_11025Hz))
+                              ((RATE) == SAMPLE_RATE_11025Hz)) //!< Check if the input parameter is valid.
 
 /** End of Sample_Rate_Definition
   * \}
@@ -199,11 +193,10 @@ typedef enum
  */
 typedef enum
 {
-    SAMPLE_RATE_SRC0 = 0,
-    SAMPLE_RATE_SRC1 = 1,
-    SAMPLE_RATE_SRC2 = 2,
-    SAMPLE_RATE_SRC3_DA = 3,
-    SAMPLE_RATE_SRC_MAX = 4,
+    SAMPLE_RATE_SRC0 = 0,      //!< CODEC sample rate source is SRC0.
+    SAMPLE_RATE_SRC1 = 1,      //!< CODEC sample rate source is SRC1.
+    SAMPLE_RATE_SRC2 = 2,      //!< CODEC sample rate source is SRC2.
+    SAMPLE_RATE_SRC3_DA = 3,   //!< CODEC sample rate source is SRC3_DA.
 } CodecSampleRateSrc_TypeDef;
 
 /** End of CODEC_Sample_Rate_SRC
@@ -217,17 +210,16 @@ typedef enum
  */
 typedef enum
 {
-    DMIC_Clock_5MHz,
-    DMIC_Clock_2500KHz,
-    DMIC_Clock_1250KHz,
-    DMIC_Clock_625KHz,
-    DMIC_Clock_312500Hz,
-    DMIC_CLK_SEL_MAX,
+    DMIC_Clock_5MHz,         //!< CODEC DMIC clock source is 5MHz.
+    DMIC_Clock_2500KHz,      //!< CODEC DMIC clock source is 2500KHz.
+    DMIC_Clock_1250KHz,      //!< CODEC DMIC clock source is 1250KHz.
+    DMIC_Clock_625KHz,       //!< CODEC DMIC clock source is 625KHz.
+    DMIC_Clock_312500Hz,     //!< CODEC DMIC clock source is 312500Hz.
 } CodecDmicClkSel_TypeDef;
 
 #define IS_CODEC_DMIC_CLOCK(CLOCK) (((CLOCK) == DMIC_Clock_5MHz) || ((CLOCK) == DMIC_Clock_2500KHz) || \
                                     ((CLOCK) == DMIC_Clock_1250KHz) || ((CLOCK) == DMIC_Clock_625KHz) || \
-                                    ((CLOCK) == DMIC_Clock_312500Hz))
+                                    ((CLOCK) == DMIC_Clock_312500Hz)) //!< Check if the input parameter is valid.
 
 /** End of DMIC_Clock_Type_Definition
   * \}
@@ -240,20 +232,20 @@ typedef enum
  */
 typedef enum
 {
-    MICBIAS_VOLTAGE_1_507,
-    MICBIAS_VOLTAGE_1_62,
-    MICBIAS_VOLTAGE_1_705,
-    MICBIAS_VOLTAGE_1_8,
-    MICBIAS_VOLTAGE_1_906,
-    MICBIAS_VOLTAGE_2_025,
-    MICBIAS_VOLTAGE_2_16,
-    MICBIAS_VOLTAGE_2_314,
+    MICBIAS_VOLTAGE_1_507,     //!< Vref voltage is 1.507V.
+    MICBIAS_VOLTAGE_1_62,      //!< Vref voltage is 1.62V.
+    MICBIAS_VOLTAGE_1_705,     //!< Vref voltage is 1.705V.
+    MICBIAS_VOLTAGE_1_8,       //!< Vref voltage is 1.8V.
+    MICBIAS_VOLTAGE_1_906,     //!< Vref voltage is 1.906V.
+    MICBIAS_VOLTAGE_2_025,     //!< Vref voltage is 2.025V.
+    MICBIAS_VOLTAGE_2_16,      //!< Vref voltage is 2.16V.
+    MICBIAS_VOLTAGE_2_314,     //!< Vref voltage is 2.314V.
 } MicbiasVoltageSel_TypeDef;
 
 #define IS_MICBIAS_CONFIG(CONFIG) (((CONFIG) == MICBIAS_VOLTAGE_1_507) || ((CONFIG) == MICBIAS_VOLTAGE_1_62) || \
                                    ((CONFIG) == MICBIAS_VOLTAGE_1_705) || ((CONFIG) == MICBIAS_VOLTAGE_1_8) || \
                                    ((CONFIG) == MICBIAS_VOLTAGE_1_906) || ((CONFIG) == MICBIAS_VOLTAGE_2_025) || \
-                                   ((CONFIG) == MICBIAS_VOLTAGE_2_16) || ((CONFIG) == MICBIAS_VOLTAGE_2_314))
+                                   ((CONFIG) == MICBIAS_VOLTAGE_2_16) || ((CONFIG) == MICBIAS_VOLTAGE_2_314)) //!< Check if the input parameter is valid.
 
 /** End of CODEC_MIC_BIAS_Config
   * \}
@@ -266,16 +258,16 @@ typedef enum
  */
 typedef enum
 {
-    MICBST_Gain_0dB,
-    MICBST_Gain_20dB,
-    MICBST_Gain_30dB,
-    MICBST_Gain_40dB,
+    MICBST_Gain_0dB,     //!< MICBST Gain is 0dB.
+    MICBST_Gain_20dB,    //!< MICBST Gain is 20dB.
+    MICBST_Gain_30dB,    //!< MICBST Gain is 30dB.
+    MICBST_Gain_40dB,    //!< MICBST Gain is 40dB.
 } MicbiasGainSel_TypeDef;
 
 #define IS_MICBST_GAIN(GAIN)            (((GAIN) == MICBST_Gain_0dB) || \
                                          ((GAIN) == MICBST_Gain_20dB) || \
                                          ((GAIN) == MICBST_Gain_30dB) || \
-                                         ((GAIN) == MICBST_Gain_40dB))
+                                         ((GAIN) == MICBST_Gain_40dB)) //!< Check if the input parameter is valid.
 
 /** End of MICBST_Gain
   * \}
@@ -288,12 +280,12 @@ typedef enum
  */
 typedef enum
 {
-    MICBST_Mode_Single,
-    MICBST_Mode_Differential,
+    MICBST_Mode_Single,           //!< MICBST channel mode is single-ended mode.
+    MICBST_Mode_Differential,     //!< MICBST channel mode is differential mode.
 } MicbiasModeSel_TypeDef;
 
 #define IS_MICBST_MODE(MODE)            (((MODE) == MICBST_Mode_Single) || \
-                                         ((MODE) == MICBST_Mode_Differential))
+                                         ((MODE) == MICBST_Mode_Differential)) //!< Check if the input parameter is valid.
 
 /** End of MICBST_Mode
   * \}
@@ -306,30 +298,30 @@ typedef enum
  */
 typedef enum
 {
-    CODEC_UNMUTE,
-    CODEC_MUTE,
+    CODEC_UNMUTE,    //!< The codec channel is un-muted.
+    CODEC_MUTE,      //!< The codec channel is muted.
 } CodecMuteSel_TypeDef;
 
-#define IS_CODEC_MIC_MUTE(MUTE) (((MUTE) == CODEC_MUTE) || ((MUTE) == CODEC_UNMUTE))
+#define IS_CODEC_MIC_MUTE(MUTE) (((MUTE) == CODEC_MUTE) || ((MUTE) == CODEC_UNMUTE)) //!< Check if the input parameter is valid.
 
 /** End of CODEC_Mute_Type
   * \}
   */
 
 /**
- * \defgroup    CODEC_Ch_Mic_Type
+ * \defgroup    CODEC_Channel_Mic_Type CODEC Channel Mic Type
  * \{
  * \ingroup     CODEC_Exported_Constants
  */
 typedef enum
 {
-    CODEC_CH_DMIC,
-    CODEC_CH_AMIC,
+    CODEC_CH_DMIC,      //!< Select the Digital Microphone.
+    CODEC_CH_AMIC,      //!< Select the Analog Microphone.
 } CodecCHMicSel_TypeDef;
 
-#define IS_CODEC_CH_MIC_TYPE(TYPE) (((TYPE) == CODEC_CH_AMIC) || ((TYPE) == CODEC_CH_DMIC))
+#define IS_CODEC_CH_MIC_TYPE(TYPE) (((TYPE) == CODEC_CH_AMIC) || ((TYPE) == CODEC_CH_DMIC)) //!< Check if the input parameter is valid.
 
-/** End of CODEC_Ch_Mic_Type
+/** End of CODEC_Channel_Mic_Type
   * \}
   */
 
@@ -340,46 +332,24 @@ typedef enum
  */
 typedef enum
 {
-    DMIC_Ch_Rising_Latch,
-    DMIC_Ch_Falling_Latch,
+    DMIC_Ch_Rising_Latch,       //!< DMIC data latch is set to rising edge trigger.
+    DMIC_Ch_Falling_Latch,      //!< DMIC data latch is set to falling edge trigger.
 } CdecCHLatchEdgeSel_TypeDef;
 
-#define IS_DMIC_CH_LATCH_EDGE(EDGE) (((EDGE) == DMIC_Ch_Rising_Latch) || ((EDGE) == DMIC_Ch_Falling_Latch))
+#define IS_DMIC_CH_LATCH_EDGE(EDGE) (((EDGE) == DMIC_Ch_Rising_Latch) || ((EDGE) == DMIC_Ch_Falling_Latch)) //!< Check if the input parameter is valid.
 
 /** End of DMIC_Data_Latch_Edge
   * \}
   */
 
 /**
- * \defgroup    Ch_ADC_Zero_Detection_Timeout Ch ADC Zero Detection Timeout
+ * \defgroup    CODEC_Ad_Gain CODEC Ad Gain
  * \{
  * \ingroup     CODEC_Exported_Constants
  */
-typedef enum
-{
-    Ch_ADC_Zero_DetTimeout_1024_16_Sample,
-    Ch_ADC_Zero_DetTimeout_1024_32_Sample,
-    Ch_ADC_Zero_DetTimeout_1024_64_Sample,
-    Ch_ADC_Zero_DetTimeout_64_Sample,
-} CodecCHZDTSel_TypeDef;
+#define IS_AD_GAIN(GAIN)            (((GAIN)<= 0x10F))     //!< Codec Ad Gain. Ad Gain can be a value of 0x0 ~ 0x10f.
 
-#define IS_CH_ADC_ZERO_DET_TIMEOUT(TIMEOUT) (((TIMEOUT) == Ch_ADC_Zero_DetTimeout_1024_16_Sample) || \
-                                             ((TIMEOUT) == Ch_ADC_Zero_DetTimeout_1024_32_Sample) || \
-                                             ((TIMEOUT) == Ch_ADC_Zero_DetTimeout_1024_64_Sample) || \
-                                             ((TIMEOUT) == Ch_ADC_Zero_DetTimeout_64_Sample))
-
-/** End of Ch_ADC_Zero_Detection_Timeout
-  * \}
-  */
-
-/**
- * \defgroup    Codec_Ad_Gain Codec Ad Gain
- * \{
- * \ingroup     CODEC_Exported_Constants
- */
-#define IS_AD_GAIN(GAIN)            (((GAIN)<= 0x7F))
-
-/** End of Codec_Ad_Gain
+/** End of CODEC_Ad_Gain
   * \}
   */
 
@@ -403,51 +373,89 @@ typedef enum
 typedef struct
 {
     /* Basic parameters section */
-    CodecSampleRateSrc_TypeDef CODEC_AdSampleRateSrc; /*!< Specifies the ADC path sample rate source. */
-    CodecSampleRateSrc_TypeDef CODEC_DaSampleRateSrc; /*!< Specifies the DAC path sample rate source. */
-    CodecSampleRate_TypeDef CODEC_SampleRate0; /*!< Specifies the sample rate 0. */
-    CodecSampleRate_TypeDef CODEC_SampleRate1; /*!< Specifies the sample rate 1. */
-    CodecDmicClkSel_TypeDef CODEC_DmicClock; /*!< Specifies the dmic clock. */
+    CodecSampleRateSrc_TypeDef CODEC_AdSampleRateSrc; /*!< Specify the AD path sample rate source.
+                                                           This parameter can be a value of \ref CODEC_Sample_Rate_SRC. */
 
-    CodecI2SFormatSel_TypeDef CODEC_I2SFormat;  /*!< Specifies the I2S Tx/Rx format of codec port. */
+    CodecSampleRateSrc_TypeDef CODEC_DaSampleRateSrc; /*!< Specify the DA path sample rate source.
+                                                           This parameter can be a value of \ref CODEC_Sample_Rate_SRC. */
+
+    CodecSampleRate_TypeDef CODEC_SampleRate0;        /*!< Specify the sample rate 0.
+                                                           This parameter can be a value of \ref Sample_Rate_Definition. */
+
+    CodecSampleRate_TypeDef CODEC_SampleRate1;        /*!< Specify the sample rate 1.
+                                                           This parameter can be a value of \ref Sample_Rate_Definition. */
+
+    CodecDmicClkSel_TypeDef CODEC_DmicClock;          /*!< Specify the dmic clock.
+                                                           This parameter can be a value of \ref DMIC_Clock_Type_Definition. */
+
+    CodecI2SFormatSel_TypeDef CODEC_I2SFormat;        /*!< Specify the I2S Tx/Rx format of codec port.
+                                                           This parameter can be a value of \ref I2S_Data_Format. */
     CodecI2STxDatalenSel_TypeDef
-    CODEC_I2STxDataWidth;   /*!< Specifies the I2S Tx data width of codec port. */
+    CODEC_I2STxDataWidth;                             /*!< Specify the I2S Tx data width of codec port.
+                                                           This parameter can be a value of \ref I2S_Tx_Data_Width. */
+
     CodecI2SRxDatalenSel_TypeDef
-    CODEC_I2SRxDataWidth;   /*!< Specifies the I2S Rx data width of codec port. */
+    CODEC_I2SRxDataWidth;                             /*!< Specify the I2S Rx data width of codec port.
+                                                           This parameter can be a value of \ref I2S_Rx_Data_Width. */
 
     CodecI2SChannellenSel_TypeDef
-    CODEC_I2SChannelLen; /*!< Specifies the I2S Tx/Rx channel width of codec port. */
-    CodecI2SCHSequenceSel_TypeDef CODEC_I2SChSequence; /*!< Specifies the I2S Tx/Rx channel sequence. */
-    uint8_t CODEC_I2SSameLrcEn;
+    CODEC_I2SChannelLen;                              /*!< Specify the I2S Tx/Rx channel width of codec port.
+                                                           This parameter can be a value of \ref I2S_Channel_Lenth. */
 
-    MicbiasVoltageSel_TypeDef CODEC_MicBIAS; /*!< Specifies the MICBIAS voltage. */
-    MicbiasGainSel_TypeDef CODEC_MicBstGain; /*!< Specifies the MICBST gain. */
-    MicbiasModeSel_TypeDef CODEC_MicBstMode; /*!< Specifies the MICBST mode. */
+    CodecI2SCHSequenceSel_TypeDef CODEC_I2SChSequence;/*!< Specify the I2S Tx/Rx channel sequence.
+                                                           This parameter can be a value of \ref CODEC_I2S_Channel_Sequence. */
+
+    uint8_t CODEC_I2SSameLrcEn;                       /*!< Enable or disable Tx and Rx using the same transmission mode.
+                                                           This parameter can be a value of DISABLE or ENABLE. */
+
+    MicbiasVoltageSel_TypeDef CODEC_MicBIAS;          /*!< Specify the MICBIAS voltage.
+                                                           This parameter can be a value of \ref CODEC_MIC_BIAS_Config */
+
+    MicbiasGainSel_TypeDef CODEC_MicBstGain;          /*!< Specify the MICBST gain.
+                                                           This parameter can be a value of \ref MICBST_Gain. */
+
+    MicbiasModeSel_TypeDef CODEC_MicBstMode;          /*!< Specify the MICBST mode.
+                                                           This parameter can be a value of \ref MICBST_Mode. */
 
     /* MIC channel 0 initialization parameters section */
-    CodecMuteSel_TypeDef CODEC_Ch0Mute; /*!< Specifies the channel 0 dmic mute status. */
+    CodecMuteSel_TypeDef CODEC_Ch0Mute;               /*!< Specify the channel 0 dmic mute status.
+                                                           This parameter can be a value of \ref CODEC_Mute_Type. */
+
     CodecCHMicSel_TypeDef
-    CODEC_Ch0MicType; /*!< Specifies the channel 0 mic type, which can be dmic or amic. */
+    CODEC_Ch0MicType;                                 /*!< Specify the channel 0 mic type, which can be dmic or amic.
+                                                           This parameter can be a value of \ref CODEC_Channel_Mic_Type. */
+
     CdecCHLatchEdgeSel_TypeDef
-    CODEC_Ch0DmicDataLatch; /*!< Specifies the channel 0 dmic data latch type. */
-    uint32_t CODEC_Ch0AdGain;           /*!< Specifies the channel 0 ADC digital volume. */
-    CodecCHZDTSel_TypeDef
-    CODEC_Ch0ZeroDetTimeout;  /*!< Specifies the channel 0 zero detection timeout mode control. */
+    CODEC_Ch0DmicDataLatch;                           /*!< Specify the channel 0 dmic data latch type.
+                                                           This parameter can be a value of \ref DMIC_Data_Latch_Edge. */
+
+    uint32_t CODEC_Ch0AdGain;                         /*!< Specify the channel 0 AD gain control.
+                                                           This parameter can be a value of 0x0 ~ 0x10f. */
 
     /* MIC channel 1 initialization parameters section */
-    CodecMuteSel_TypeDef CODEC_Ch1Mute; /*!< Specifies the channel 1 dmic mute status. */
+    CodecMuteSel_TypeDef CODEC_Ch1Mute;               /*!< Specify the channel 1 mic mute status.
+                                                           This parameter can be a value of \ref CODEC_Mute_Type. */
     CodecCHMicSel_TypeDef
-    CODEC_Ch1MicType; /*!< Specifies the channel 1 mic type, which can be dmic or amic. */
+    CODEC_Ch1MicType;                                 /*!< Specify the channel 1 mic type, which can be dmic or amic.
+                                                           This parameter can be a value of \ref CODEC_Channel_Mic_Type. */
+
     CdecCHLatchEdgeSel_TypeDef
-    CODEC_Ch1DmicDataLatch; /*!< Specifies the channel 1 dmic data latch type. */
-    uint32_t CODEC_Ch1AdGain; /*!< Specifies the channel 1 ADC digital volume. */
-    CodecCHZDTSel_TypeDef
-    CODEC_Ch1ZeroDetTimeout;  /*!< Specifies the channel 0 zero detection timeout mode control. */
+    CODEC_Ch1DmicDataLatch;                           /*!< Specify the channel 1 dmic data latch type.
+                                                           This parameter can be a value of \ref DMIC_Data_Latch_Edge. */
+
+    uint32_t CODEC_Ch1AdGain;                         /*!< Specify the channel 1 AD gain control.
+                                                           This parameter can be a value of 0x0 ~ 0x10f. */
 
     /* PDM initialization parameters section */
-    CodecMuteSel_TypeDef CODEC_DaMute; /*!< Specifies the DAC mute status. */
-    uint32_t CODEC_DaGain; /*!< Specifies the DAC gain control. */
-    CodecDacDADitherSel_TypeDef CODEC_DaC_Dither;
+    CodecMuteSel_TypeDef CODEC_DaMute;                /*!< Specify the DA mute status.
+                                                           This parameter can be a value of \ref CODEC_Mute_Type. */
+
+    uint32_t CODEC_DaGain;                            /*!< Specify the DA gain control.
+                                                           This parameter can be a value of 0x0 ~ 0xAF. */
+
+    CodecDacDADitherSel_TypeDef
+    CODEC_DaC_Dither;     /*!< Specify the SDM dither in the DAC path of the audio channel.
+                                                           This parameter can be a value of \ref CODEC_DAC_Dither. */
 } CODEC_InitTypeDef;
 
 
@@ -458,17 +466,23 @@ typedef struct
  */
 typedef struct
 {
-    uint32_t CODEC_EQChCmd;             /*!< Specifies the EQ channel status */
-    uint32_t CODEC_EQCoefH0;            /*!< Specifies the EQ coef.h0. This value can be 0 to 0x7FFFF,
-                                                 whose physical meaning represents a range of-8 to 7.99 */
-    uint32_t CODEC_EQCoefB1;            /*!< Specifies the EQ coef.b1. This value can be 0 to 0x7FFFF,
-                                                 whose physical meaning represents a range of-8 to 7.99 */
-    uint32_t CODEC_EQCoefB2;            /*!< Specifies the EQ coef.b2. This value can be 0 to 0x7FFFF,
-                                                 whose physical meaning represents a range of-8 to 7.99 */
-    uint32_t CODEC_EQCoefA1;            /*!< Specifies the EQ coef.a1. This value can be 0 to 0x7FFFF,
-                                                 whose physical meaning represents a range of-8 to 7.99 */
-    uint32_t CODEC_EQCoefA2;            /*!< Specifies the EQ coef.a2. This value can be 0 to 0x7FFFF,
-                                                 whose physical meaning represents a range of-8 to 7.99 */
+    uint32_t CODEC_EQChCmd;             /*!< Specify the EQ channel status.
+                                             This parameter can be a value of DISABLE or ENABLE. */
+
+    uint32_t CODEC_EQCoefH0;            /*!< Specify the EQ coef.h0. This value can be 0 to 0x7FFFF,
+                                             whose physical meaning represents a range of-8 to 7.99. */
+
+    uint32_t CODEC_EQCoefB1;            /*!< Specify the EQ coef.b1. This value can be 0 to 0x7FFFF,
+                                             whose physical meaning represents a range of-8 to 7.99. */
+
+    uint32_t CODEC_EQCoefB2;            /*!< Specify the EQ coef.b2. This value can be 0 to 0x7FFFF,
+                                             whose physical meaning represents a range of-8 to 7.99. */
+
+    uint32_t CODEC_EQCoefA1;            /*!< Specify the EQ coef.a1. This value can be 0 to 0x7FFFF,
+                                             whose physical meaning represents a range of-8 to 7.99. */
+
+    uint32_t CODEC_EQCoefA2;            /*!< Specify the EQ coef.a2. This value can be 0 to 0x7FFFF,
+                                             whose physical meaning represents a range of-8 to 7.99. */
 } CODEC_EQInitTypeDef;
 
 /** End of CODEC_Exported_Types
@@ -484,9 +498,9 @@ typedef struct
   */
 
 /**
- * \brief   Deinitializes the CODEC peripheral registers to their default reset values(turn off CODEC clock).
- * \param[in] CODECx: CODEC peripheral selected .
- * \return None.
+ * \brief   Deinitialize the CODEC peripheral registers to their default reset values(turn off CODEC clock).
+ *
+ * \param[in] CODECx  CODEC peripheral selected. Refer to \ref CODEC_Declaration.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -499,10 +513,8 @@ typedef struct
  */
 void CODEC_DeInit(CODEC_TypeDef *CODECx);
 /**
-  * \brief    Initialize the CODEC analog registers in AON area.
-  * \param  None.
-  * \retval None
-*
+ * \brief    Initialize the CODEC analog registers in AON area.
+ *
  * <b>Example usage</b>
  * \code{.c}
  *
@@ -511,7 +523,6 @@ void CODEC_DeInit(CODEC_TypeDef *CODECx);
  *     RCC_PeriphClockCmd(APBPeriph_CODEC, APBPeriph_CODEC_CLOCK, ENABLE);
  *     CODEC_AnalogCircuitInit();
  *     CODEC_InitTypeDef CODEC_InitStruct;
-
  *     CODEC_StructInit(&CODEC_InitStruct);
  *     CODEC_InitStruct.CODEC_Ch0MicType       = CODEC_CH0_AMIC;
  *     CODEC_InitStruct.CODEC_MicBstMode       = MICBST_Mode_Differential;
@@ -524,12 +535,10 @@ void CODEC_DeInit(CODEC_TypeDef *CODECx);
  */
 void CODEC_AnalogCircuitInit(void);
 /**
- * \brief   Initializes the CODEC peripheral according to the specified
- *          parameters in the CODEC_InitStruct.
- * \param[in] CODECx: CODEC peripheral selected.
- * \param[in] CODEC_InitStruct: Pointer to a CODEC_InitTypeDef structure that
- *            contains the configuration information for the specified CODEC peripheral
- * \return None.
+ * \brief   Initialize the CODEC peripheral according to the specified parameters in the CODEC_InitStruct.
+ *
+ * \param[in] CODECx            CODEC peripheral selected. Refer to \ref CODEC_Declaration.
+ * \param[in] CODEC_InitStruct  Pointer to a CODEC_InitTypeDef structure which will be initialized.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -553,9 +562,38 @@ void CODEC_AnalogCircuitInit(void);
 void CODEC_Init(CODEC_TypeDef *CODECx, CODEC_InitTypeDef *CODEC_InitStruct);
 
 /**
- * \brief   Fills each CODEC_InitStruct member with its default value.
- * \param[in] CODEC_InitStruct: Pointer to a CODEC_InitTypeDef structure which will be initialized.
- * \return None.
+ * \brief   Fill each CODEC_InitStruct member with its default value.
+ *
+ * \note The default settings for the CODEC_InitTypeDef member are shown in the following table:
+ *       | CODEC_InitTypeDef member     | Default value                              |
+ *       |:----------------------------:|:------------------------------------------:|
+ *       | CODEC_AdSampleRateSrc        | \ref SAMPLE_RATE_SRC0                      |
+ *       | CODEC_DaSampleRateSrc        | \ref SAMPLE_RATE_SRC0                      |
+ *       | CODEC_SampleRate0            | \ref SAMPLE_RATE_16KHz                     |
+ *       | CODEC_SampleRate1            | \ref SAMPLE_RATE_16KHz                     |
+ *       | CODEC_I2SChSequence          | \ref CODEC_I2S_CH_L_R                      |
+ *       | CODEC_I2STxDataWidth         | \ref CODEC_I2S_Tx_DataWidth_16Bits         |
+ *       | CODEC_I2SRxDataWidth         | \ref CODEC_I2S_Rx_DataWidth_16Bits         |
+ *       | CODEC_I2SChannelLen          | \ref I2S_CHANNELLEN_32                     |
+ *       | CODEC_I2SFormat              | \ref CODEC_I2S_DataFormat_I2S              |
+ *       | CODEC_I2SSameLrcEn           | DISABLE                                    |
+ *       | CODEC_MicBIAS                | \ref MICBIAS_VOLTAGE_1_8                   |
+ *       | CODEC_MicBstMode             | \ref MICBST_Mode_Single                    |
+ *       | CODEC_MicBstGain             | \ref MICBST_Gain_20dB                      |
+ *       | CODEC_DmicClock              | \ref DMIC_Clock_2500KHz                    |
+ *       | CODEC_Ch0Mute                | \ref CODEC_UNMUTE                          |
+ *       | CODEC_Ch0MicType             | \ref CODEC_CH_AMIC                         |
+ *       | CODEC_Ch0DmicDataLatch       | \ref DMIC_Ch_Rising_Latch                  |
+ *       | CODEC_Ch0AdGain              | 0x2F                                       |
+ *       | CODEC_Ch1Mute                | \ref CODEC_MUTE                            |
+ *       | CODEC_Ch1MicType             | \ref CODEC_CH_DMIC                         |
+ *       | CODEC_Ch1DmicDataLatch       | \ref DMIC_Ch_Falling_Latch                 |
+ *       | CODEC_Ch1AdGain              | 0x2F                                       |
+ *       | CODEC_DaMute                 | \ref CODEC_MUTE                            |
+ *       | CODEC_DaGain                 | 0xAF                                       |
+ *       | CODEC_DaC_Dither             | \ref DAC_DA_DITHER_DISABLE                 |
+ *
+ * \param[in] CODEC_InitStruct  Pointer to a CODEC_InitTypeDef structure which will be initialized.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -579,12 +617,10 @@ void CODEC_Init(CODEC_TypeDef *CODECx, CODEC_InitTypeDef *CODEC_InitStruct);
 void CODEC_StructInit(CODEC_InitTypeDef *CODEC_InitStruct);
 
 /**
- * \brief   Initializes the CODEC EQ module according to the specified
- *          parameters in the CODEC_EQInitStruct.
- * \param[in] CODEC_EQx: CODEC EQ channel selected.
- * \param[in] CODEC_EQInitStruct: Pointer to a CODEC_EQInitTypeDef structure that
- *            contains the configuration information for the specified CODEC EQ channel.
- * \return None.
+ * \brief   Initialize the CODEC EQ module according to the specified parameters in the CODEC_EQInitStruct.
+ *
+ * \param[in] CODEC_EQx           CODEC EQ channel selected.
+ * \param[in] CODEC_EQInitStruct  Pointer to a CODEC_EQInitTypeDef structure which will be initialized.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -606,9 +642,19 @@ void CODEC_StructInit(CODEC_InitTypeDef *CODEC_InitStruct);
 void CODEC_EQInit(CODEC_EQTypeDef *CODEC_EQx, CODEC_EQInitTypeDef *CODEC_EQInitStruct);
 
 /**
- * \brief  Fills each CODEC_EQInitStruct member with its default value.
- * \param[in] CODEC_EQInitStruct: Pointer to a CODEC_EQInitTypeDef structure which will be initialized.
- * \return None.
+ * \brief  Fill each CODEC_EQInitStruct member with its default value.
+ *
+ * \note The default settings for the CODEC_EQInitStruct member are shown in the following table:
+ *       | CODEC_EQInitStruct member    | Default value                              |
+ *       |:----------------------------:|:------------------------------------------:|
+ *       | CODEC_EQChCmd                | DISABLE                                    |
+ *       | CODEC_EQCoefH0               | 0                                          |
+ *       | CODEC_EQCoefB1               | 0                                          |
+ *       | CODEC_EQCoefB2               | 0                                          |
+ *       | CODEC_EQCoefA1               | 0                                          |
+ *       | CODEC_EQCoefA2               | 0                                          |
+ *
+ * \param[in] CODEC_EQInitStruct  Pointer to a CODEC_EQInitTypeDef structure which will be initialized.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -630,11 +676,13 @@ void CODEC_EQInit(CODEC_EQTypeDef *CODEC_EQx, CODEC_EQInitTypeDef *CODEC_EQInitS
 void CODEC_EQStructInit(CODEC_EQInitTypeDef *CODEC_EQInitStruct);
 
 /**
- * \brief  Enable or disable mic_bias output.
- * \param[in] CODECx: CODEC peripheral selected.
- * \param[in] NewState: New state of MICBIAS.
- *      This parameter can be: ENABLE or DISABLE.
- * \return none.
+ * \brief  Enable or disable MIC BIAS output.
+ *
+ * \param[in] CODECx    CODEC peripheral selected. Refer to \ref CODEC_Declaration.
+ * \param[in] NewState  New state of MICBIAS.
+ *                      This parameter can be one of the following values:
+ *                      - ENABLE: Enable the MIC BIAS output.
+ *                      - DISABLE: Disable the MIC BIAS output.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -649,8 +697,8 @@ void CODEC_MICBIASCmd(CODEC_TypeDef *CODECx, FunctionalState NewState);
 
 /**
  * \brief  Reset CODEC.
- * \param[in] CODECx: CODEC peripheral selected.
- * \return None.
+ *
+ * \param[in] CODECx  CODEC peripheral selected. Refer to \ref CODEC_Declaration.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -676,18 +724,18 @@ __STATIC_INLINE void CODEC_Reset(CODEC_TypeDef *CODECx)
 
 /**
  * \brief   Config MIC BIAS Vref voltage.
- * \param[in] CODECx: CODEC peripheral selected.
- * \param[in] data: New value of MIC BIAS.
- *   This parameter can be one of the following values:
- *     \arg MICBIAS_VOLTAGE_1_507: Vref voltage is 1.507V.
- *     \arg MICBIAS_VOLTAGE_1_62:  Vref voltage is 1.62V.
- *     \arg MICBIAS_VOLTAGE_1_705: Vref voltage is 1.705V.
- *     \arg MICBIAS_VOLTAGE_1_8: Vref voltage is 1.8V.
- *     \arg MICBIAS_VOLTAGE_1_906: Vref voltage is 1.906V.
- *     \arg MICBIAS_VOLTAGE_2_025:  Vref voltage is 2.025V.
- *     \arg MICBIAS_VOLTAGE_2_16: Vref voltage is 2.16V.
- *     \arg MICBIAS_VOLTAGE_2_314: Vref voltage is 2.314V.
- * \return None.
+ *
+ * \param[in] CODECx  CODEC peripheral selected. Refer to \ref CODEC_Declaration.
+ * \param[in] data    New value of MIC BIAS.
+ *                    This parameter can be one of the following values, refer to \ref CODEC_MIC_BIAS_Config.
+ *                    - MICBIAS_VOLTAGE_1_507: Vref voltage is 1.507V.
+ *                    - MICBIAS_VOLTAGE_1_62:  Vref voltage is 1.62V.
+ *                    - MICBIAS_VOLTAGE_1_705: Vref voltage is 1.705V.
+ *                    - MICBIAS_VOLTAGE_1_8: Vref voltage is 1.8V.
+ *                    - MICBIAS_VOLTAGE_1_906: Vref voltage is 1.906V.
+ *                    - MICBIAS_VOLTAGE_2_025:  Vref voltage is 2.025V.
+ *                    - MICBIAS_VOLTAGE_2_16: Vref voltage is 2.16V.
+ *                    - MICBIAS_VOLTAGE_2_314: Vref voltage is 2.314V.
  *
  * <b>Example usage</b>
  * \code{.c}

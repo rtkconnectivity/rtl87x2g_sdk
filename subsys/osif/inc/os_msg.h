@@ -1,6 +1,15 @@
-/*
- * Copyright (c) 2015, Realtek Semiconductor Corporation. All rights reserved.
- */
+/**
+*********************************************************************************************************
+*               Copyright(c) 2024, Realtek Semiconductor Corporation. All rights reserved.
+*********************************************************************************************************
+* @file      os_msg.h
+* @brief     Header file for os message queue API.
+* @details   This file is used for message queue create, send and receive.
+* @author    rui_yu
+* @date      2024-12-30
+* @version   v1.0
+* *********************************************************************************************************
+*/
 
 #ifndef _OS_MSG_H_
 #define _OS_MSG_H_
@@ -20,7 +29,7 @@ extern "C" {
  *          Message transmission is a basic communication model between tasks where one task sends
  *          data explicitly while another task receives it. The operation is more like some
  *          kind of I/O rather than a direct access to information to be shared. The data to be
- *          passed can be any type.\n
+ *          passed can be any type.
  *
  * \image html OS-message-queue-overview.jpg "Message Queue Overview" width=50px height=26px
  *
@@ -54,26 +63,25 @@ extern bool (*os_msg_peek_intern)(void *p_handle, void *p_msg, uint32_t wait_ms,
   */
 
 /**
- * os_msg.h
  *
  * \brief   Creates a message queue instance. This allocates the storage required by the
  *          new queue and passes back a handle for the queue.
  *
- * \param  pp_handle   Pointer used to pass back a handle by which the message queue
+ * \param[out]  pp_handle   Pointer used to pass back a handle by which the message queue
  *                         can be referenced.
  *
- * \param   p_name     A descriptive name for the message queue.
+ * \param[in]   p_name     A descriptive name for the message queue.
  *
- * \param   msg_num    The maximum number of items that the queue can contain.
+ * \param[in]   msg_num    The maximum number of items that the queue can contain.
  *
- * \param   msg_size   The number of bytes each item in the queue will require. Items
- *                     are queued by copy, not by reference, so this is the number of
- *                     bytes that will be copied for each posted item. Each item on the
- *                     queue must be the same size.
+ * \param[in]   msg_size   The number of bytes each item in the queue will require. Items
+ *                         are queued by copy, not by reference, so this is the number of
+ *                         bytes that will be copied for each posted item. Each item on the
+ *                         queue must be the same size.
  *
  * \return           The status of the message queue creation.
  * \retval true      Message queue was created successfully.
- * \retval false     Message queue failed to create.
+ * \retval false     Message queue failed to create. The user needs to check if heap is not enough.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -112,16 +120,13 @@ extern bool (*os_msg_peek_intern)(void *p_handle, void *p_msg, uint32_t wait_ms,
     os_msg_queue_create_intern(pp_handle, p_name, msg_num, msg_size, __func__, __LINE__)
 
 /**
- * os_msg.h
  *
  * \brief   Delete the specified message queue and free all the memory allocated for
  *          storing items placed on the queue.
  *
- * \param   p_handle   The handle to the message queue being deleted.
+ * \param[in]   p_handle   The handle to the message queue being deleted.
  *
- * \return           The status of the message queue deletion.
- * \retval true      Message queue was deleted successfully.
- * \retval false     Message queue failed to delete.
+ * \return           The status of the message queue deletion. It will always return true.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -160,17 +165,14 @@ extern bool (*os_msg_peek_intern)(void *p_handle, void *p_msg, uint32_t wait_ms,
     os_msg_queue_delete_intern(p_handle, __func__, __LINE__)
 
 /**
- * os_msg.h
  *
  * \brief  Peek the number of items residing in the message queue.
  *
- * \param  p_handle   The handle of the message queue being peeked.
+ * \param[in]  p_handle   The handle of the message queue being peeked.
  *
- * \param  p_msg_num  Pointer used to pass back the number of items residing in the message queue.
+ * \param[in]  p_msg_num  Pointer used to pass back the number of items residing in the message queue.
  *
- * \return           The status of the message queue peek.
- * \retval true      Message queue was peeked successfully.
- * \retval false     Message queue failed to peek.
+ * \return           The status of the message queue peek. It will always return true.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -210,17 +212,16 @@ extern bool (*os_msg_peek_intern)(void *p_handle, void *p_msg, uint32_t wait_ms,
     os_msg_queue_peek_intern(p_handle, p_msg_num, __func__, __LINE__)
 
 /**
- * os_msg.h
  *
  * \brief   Send an item to the back of the specified message queue. The item is
  *          queued by copy, not by reference.
  *
- * \param   p_handle The handle to the message queue on which the item is to be sent.
+ * \param[in]   p_handle The handle to the message queue on which the item is to be sent.
  *
- * \param   p_msg    Pointer to the item that is to be sent on the queue. The referenced
+ * \param[in]   p_msg    Pointer to the item that is to be sent on the queue. The referenced
  *                       item rather than pointer itself will be copied on the queue.
  *
- * \param   wait_ms  The maximum amount of time in milliseconds that the task should
+ * \param[in]   wait_ms  The maximum amount of time in milliseconds that the task should
  *                       block waiting for the item to be sent on the queue.
  * \arg \c 0           No blocking and return immediately.
  * \arg \c 0xFFFFFFFF  Block infinitely until the item is sent.
@@ -228,7 +229,7 @@ extern bool (*os_msg_peek_intern)(void *p_handle, void *p_msg, uint32_t wait_ms,
  *
  * \return           The status of the message item sent.
  * \retval true      Message item was sent successfully.
- * \retval false     Message item failed to send.
+ * \retval false     Message item failed to send. It may happend when the queue was full and the block time has expired.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -270,17 +271,16 @@ extern bool (*os_msg_peek_intern)(void *p_handle, void *p_msg, uint32_t wait_ms,
     os_msg_send_intern(p_handle, p_msg, wait_ms, __func__, __LINE__)
 
 /**
- * os_msg.h
  *
  * \brief   Receive and remove an item from the specified message queue. The item is received by
  *          copy rather than by reference, so a buffer of adequate size must be provided.
  *
- * \param   p_handle The handle to the message queue from which the item is to be received.
+ * \param[in]   p_handle The handle to the message queue from which the item is to be received.
  *
- * \param  p_msg    Pointer to the buffer into which the received item will be copied.
+ * \param[out]  p_msg    Pointer to the buffer into which the received item will be copied.
  *                       Item rather than pointer itself will be copied on the queue.
  *
- * \param   wait_ms  The maximum amount of time in milliseconds that the task should
+ * \param[in]   wait_ms  The maximum amount of time in milliseconds that the task should
  *                       block waiting for an item to be received from the queue.
  * \arg \c 0           No blocking and return immediately.
  * \arg \c 0xFFFFFFFF  Block infinitely until the item is received.
@@ -288,7 +288,7 @@ extern bool (*os_msg_peek_intern)(void *p_handle, void *p_msg, uint32_t wait_ms,
  *
  * \return           The status of the message item received.
  * \retval true      Message item was received successfully.
- * \retval false     Message item failed to receive.
+ * \retval false     Message item failed to receive. It may happend when the queue was empty and the block time has expired.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -349,18 +349,17 @@ extern bool (*os_msg_peek_intern)(void *p_handle, void *p_msg, uint32_t wait_ms,
     os_msg_recv_intern(p_handle, p_msg, wait_ms, __func__, __LINE__)
 
 /**
- * os_msg.h
  *
  * \brief   Receive but not remove an item from the specified message queue. The item is
  *          received by copy rather than by reference, so a buffer of adequate size must
  *          be provided.
  *
- * \param  p_handle The handle of the message queue on which the item is to be peeked.
+ * \param[in]  p_handle The handle of the message queue on which the item is to be peeked.
  *
- * \param  p_msg    Pointer of the buffer into which the received item will be copied.
+ * \param[out]  p_msg    Pointer of the buffer into which the received item will be copied.
  *                       Item rather than pointer itself will be copied on the queue.
  *
- * \param   wait_ms  The maximum amount of time in milliseconds that the task should
+ * \param[in]   wait_ms  The maximum amount of time in milliseconds that the task should
  *                       block waiting for an item to be received from the queue.
  * \arg \c 0           No blocking and return immediately.
  * \arg \c 0xFFFFFFFF  Block infinitely until the item is received.
@@ -368,7 +367,7 @@ extern bool (*os_msg_peek_intern)(void *p_handle, void *p_msg, uint32_t wait_ms,
  *
  * \return           The status of the message item received.
  * \retval true      Message item was received successfully.
- * \retval false     Message item failed to receive.
+ * \retval false     Message item failed to receive. It may happend when the queue was empty and the block time has expired.
  *
  * <b>Example usage</b>
  * \code{.c}

@@ -18,7 +18,6 @@
 
 #include "rtl_tim.h"
 #include "rtl_gpio.h"
-#include "rtl_gpio.h"
 #include "io_timer.h"
 
 /* Private typedef -----------------------------------------------------------*/

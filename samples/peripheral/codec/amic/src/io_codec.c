@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include "io_codec.h"
 #include "trace.h"
-#include "os_sched.h"
+
 /* Defines ------------------------------------------------------------------*/
 /* Pin define of AMIC peripheral */
 #define AMIC_MSBC_CLK_PIN               P2_6

@@ -1,9 +1,9 @@
 /**
 *****************************************************************************************
-*     Copyright(c) 2017, Realtek Semiconductor Corporation. All rights reserved.
+*     Copyright (c) 2017, Realtek Semiconductor Corporation. All rights reserved.
 *****************************************************************************************
   * @file    wdt.h
-  * @brief   This file provides apis for watch dog timer.
+  * @brief   This file provides APIs for watch dog timer.
   * @author  Grace
   * @date    2022-04-27
   * @version v1.0
@@ -60,11 +60,11 @@ typedef enum
 
 /**
   * @brief       Watch Dog Mode structure definition.
-  * @note        Watch Dog Eeset reason introduction:
-  *              1.If you want to get reset reason from aon 0x15, deviding three types:
+  * @note        Watch Dog reset reason introduction:
+  *              1. If you want to get reset reason from aon 0x15, dividing three types:
   *              a) HW reset: aon reg 0x15 is cleared to 0, magic pattern on ram will change
-  *              b) SW RESET_ALL: aon reg 0x15 is cleared to 0,but magic pattern on ram not change
-  *              c) SW RESET_ALL_EXCEPT_AON: obtain reset reason by reading aon reg 0x15 .
+  *              b) SW RESET_ALL: aon reg 0x15 is cleared to 0, but magic pattern on ram not change
+  *              c) SW RESET_ALL_EXCEPT_AON: obtain reset reason by reading aon reg 0x15.
   *              2. Attention: don't use 0x1 as your reset reason when using RESET_ALL_EXCEPT_AON type! Because 0x1 is default value.
   * @ingroup     HAL_WDT_Exported_Types
   */
@@ -118,6 +118,7 @@ typedef enum
     SWITCH_TO_BLE_FAST_PAIR_TEST_MODE   = 0XDF,
     SWITCH_TO_PPT_FAST_PAIR_TEST_MODE   = 0xE0,
     SWITCH_TO_TEST_MODE_BY_UART     = 0xE1,
+    SWITCH_TO_PPTRF_TEST_MODE       = 0xE2,
     SW_RESET_APP_END                = 0xFF,
 } T_SW_RESET_REASON;
 
@@ -141,9 +142,8 @@ typedef bool (*BOOL_WDT_CB)(WDTMode_TypeDef wdt_mode, T_SW_RESET_REASON reset_re
 
 /**
   * @brief  Watch Dog System Reset.
-  * @param  wdt_mode @ref WDTMode_TypeDef
-  * @param  reset_reason @ref T_SW_RESET_REASON
-  * @return None.
+  * @param[in]  wdt_mode  Watchdog mode @ref WDTMode_TypeDef.
+  * @param[in]  reset_reason Reset reason @ref T_SW_RESET_REASON.
   */
 static inline void WDT_SystemReset(WDTMode_TypeDef wdt_mode, T_SW_RESET_REASON reset_reason)
 {
@@ -151,9 +151,8 @@ static inline void WDT_SystemReset(WDTMode_TypeDef wdt_mode, T_SW_RESET_REASON r
 }
 
 /**
-  * @brief  reset reason get
-  * @param  none
-  * @return reset reason.
+  * @brief  Get Reset Reason.
+  * @return Reset Reason.
   */
 static inline T_SW_RESET_REASON reset_reason_get()
 {
@@ -162,8 +161,8 @@ static inline T_SW_RESET_REASON reset_reason_get()
 }
 
 /**
-   * @brief  Watch Dog Reset System
-   * @param  type @ref T_WDT_TYPE
+   * @brief  Watch Dog Reset System.
+   * @param  wdt_mode  Watchdog mode @ref WDTMode_TypeDef.
    */
 void chip_reset(WDTMode_TypeDef wdt_mode);
 

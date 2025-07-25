@@ -19,7 +19,7 @@
 #include <gap_le.h>
 
 /** @addtogroup GAP_LE_VENDOR  GAP LE Vendor
-  * @brief GAP LE vendor command API provides extended function for controller.
+  * @brief GAP LE vendor command API provides extended function for Controller.
   * @{
   */
 
@@ -30,15 +30,16 @@
   * @{
   */
 
-/** @defgroup GAP_LE_MSG_Types GAP LE Msg Types
+/** @defgroup GAP_LE_Vendor_MSG_Types GAP LE Vendor Msg Types
   * @{
   */
-#define GAP_MSG_LE_VENDOR_ADV_3_DATA_ENABLE         0xA0 //!<Response msg type for le_vendor_adv_3_data_enable
-#define GAP_MSG_LE_VENDOR_ADV_3_DATA_SET            0xA1 //!<Response msg type for le_vendor_adv_3_data_set
-#define GAP_MSG_GAP_SW_RESET                        0xA5 //!<Response msg type for gap_sw_reset_req
-#define GAP_MSG_LE_AE_CODING_SCHEME                 0xA7 //!<Response msg type for le_ae_coding_scheme
-#define GAP_MSG_LE_VENDOR_SET_PRIORITY              0xA8 //!<Response msg type for le_vendor_set_priority
+#define GAP_MSG_LE_VENDOR_ADV_3_DATA_ENABLE         0xA0  /**< Response msg type for @ref le_vendor_adv_3_data_enable.
+                                                               The structure of callback data is @ref T_LE_CAUSE. */
+#define GAP_MSG_LE_VENDOR_ADV_3_DATA_SET            0xA1  /**< Response msg type for @ref le_vendor_adv_3_data_set.
+                                                               The structure of callback data is @ref T_LE_VENDOR_ADV_3_DATA_SET_RSP. */
 
+#define GAP_MSG_LE_AE_CODING_SCHEME                 0xA7  /**< Response msg type for @ref le_ae_coding_scheme.
+                                                               The structure of callback data is @ref T_LE_CAUSE. */
 /**
   * @}
   */
@@ -53,86 +54,12 @@
 /** @defgroup GAP_LE_Vendor_Exported_Types GAP LE Vendor Exported Types
   * @{
   */
-
-typedef enum
-{
-    GAP_SW_RESET_WHEN_ADV = 1,    //!< Software reset when advertising
-} T_GAP_SW_RESET_MODE;
-
 /** @brief Coding scheme of LE Coded PHY when device uses LE Advertising Extensions.*/
 typedef enum
 {
     GAP_AE_CODING_SCHEME_S8 = 2,  //!< Coding scheme S8
     GAP_AE_CODING_SCHEME_S2 = 3,  //!< Coding scheme S2
 } T_GAP_AE_CODING_SCHEME;
-
-/** @brief Mode of setting priority. */
-typedef enum
-{
-    GAP_VENDOR_UPDATE_PRIORITY, //!< Set priority without operation of resetting priority
-    GAP_VENDOR_SET_PRIORITY,    //!< Set priority after operation of resetting priority
-    GAP_VENDOR_RESET_PRIORITY,  //!< Reset priority
-} T_GAP_VENDOR_SET_PRIORITY_MODE;
-
-/** @brief Definition of priority level. */
-typedef enum
-{
-    GAP_VENDOR_PRIORITY_LEVEL_0,  //!< Level 0
-    GAP_VENDOR_PRIORITY_LEVEL_1,  //!< Level 1
-    GAP_VENDOR_PRIORITY_LEVEL_2,  //!< Level 2
-    GAP_VENDOR_PRIORITY_LEVEL_3,  //!< Level 3
-    GAP_VENDOR_PRIORITY_LEVEL_4,  //!< Level 4
-    GAP_VENDOR_PRIORITY_LEVEL_5,  //!< Level 5
-    GAP_VENDOR_PRIORITY_LEVEL_6,  //!< Level 6
-    GAP_VENDOR_PRIORITY_LEVEL_7,  //!< Level 7
-    GAP_VENDOR_PRIORITY_LEVEL_8,  //!< Level 8
-    GAP_VENDOR_PRIORITY_LEVEL_9,  //!< Level 9
-    GAP_VENDOR_PRIORITY_LEVEL_10, //!< Highest priority level 10
-    GAP_VENDOR_RESERVED_PRIORITY, //!< Reserved
-} T_GAP_VENDOR_PRIORITY_LEVEL;
-
-/** @brief Mode of setting link priority. */
-typedef enum
-{
-    GAP_VENDOR_NOT_SET_LINK_PRIORITY,       //!< Not set priority of link
-    GAP_VENDOR_SET_SPECIFIC_LINK_PRIORITY,  //!< Set priority of specific links
-    GAP_VENDOR_SET_ALL_LINK_PRIORITY,       //!< Set priority of all links
-} T_GAP_VENDOR_SET_LINK_PRIORITY_MODE;
-
-/** @brief Definition of common priority. */
-typedef struct
-{
-    bool set_priority_flag;
-    T_GAP_VENDOR_PRIORITY_LEVEL priority_level; /**< Priority is valid if set_priority_flag is true. */
-} T_GAP_VENDOR_COMMON_PRIORITY;
-
-/** @brief Definition of connection priority. */
-typedef struct
-{
-    uint8_t conn_id;
-    T_GAP_VENDOR_PRIORITY_LEVEL conn_priority_level;/**< Priority of specific connection. */
-} T_GAP_VENDOR_CONN_PRIORITY;
-
-/** @brief  Parameters of setting priority.*/
-typedef struct
-{
-    T_GAP_VENDOR_SET_PRIORITY_MODE set_priority_mode;/**< Mode of setting priority.
-                                                            (@ref T_GAP_VENDOR_SET_PRIORITY_MODE). */
-    T_GAP_VENDOR_COMMON_PRIORITY adv_priority;/**< Priority of advertising.
-                                                     (@ref T_GAP_VENDOR_COMMON_PRIORITY). */
-    T_GAP_VENDOR_COMMON_PRIORITY scan_priority;/**< Priority of scan.
-                                                      (@ref T_GAP_VENDOR_COMMON_PRIORITY). */
-    T_GAP_VENDOR_COMMON_PRIORITY initiate_priority;/**< Priority of initiating.
-                                                          (@ref T_GAP_VENDOR_COMMON_PRIORITY). */
-    T_GAP_VENDOR_SET_LINK_PRIORITY_MODE link_priority_mode;/**< Mode of setting link priority.
-                                                                  (@ref T_GAP_VENDOR_SET_LINK_PRIORITY_MODE). */
-    T_GAP_VENDOR_PRIORITY_LEVEL link_priority_level;/**< Priority of all links is valid
-                                                           if link_priority_mode is GAP_VENDOR_SET_ALL_LINK_PRIORITY. */
-    uint8_t num_conn_ids;/**< Number of specific links is valid if link_priority_mode is GAP_VENDOR_SET_SPECIFIC_LINK_PRIORITY. */
-    T_GAP_VENDOR_CONN_PRIORITY p_conn_id_list[1];/**< List of connection priority is valid
-                                                        if link_priority_mode is GAP_VENDOR_SET_SPECIFIC_LINK_PRIORITY.
-                                                        (@ref T_GAP_VENDOR_CONN_PRIORITY). */
-} T_GAP_VENDOR_PRIORITY_PARAM;
 
 typedef struct
 {
@@ -160,9 +87,8 @@ typedef union
 /**
  * @brief  Register callback to vendor command, when messages in @ref GAP_VENDOR_MSG_TYPE happens, it will callback to APP.
  * @param[in] vendor_callback Callback function provided by the APP to handle @ref GAP_VENDOR_MSG_TYPE messages sent from the GAP.
- *              @arg NULL -> Not send @ref GAP_VENDOR_MSG_TYPE messages to APP.
- *              @arg Other -> Use application defined callback function.
- * @return void.
+ *              - NULL -> Not send @ref GAP_VENDOR_MSG_TYPE messages to APP.
+ *              - Other -> Use application defined callback function.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -193,15 +119,18 @@ void gap_vendor_register_cb(P_FUN_GAP_APP_CB vendor_callback);
 
 /**
   * @brief  Enable 3 advertising channel advertising data.
-  *         Set 3 ADV data please refer to @ref le_vendor_adv_3_data_enable.
+  *         Set 3 adv data please refer to @ref le_vendor_adv_3_data_set.
+  *
+  * If sending request operation is successful, the enabling result will be returned by callback
+  * registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_VENDOR_ADV_3_DATA_ENABLE.
   *
   * @param[in] enable
-  * @arg true:  Enable each ADV channel with different data.
-  * @arg false: Disable.
+  * - true:  Enable each ADV channel with different data.
+  * - false: Disable each ADV channel with different data.
   *
-  * @return Operation result.
-  * @retval GAP_CAUSE_SUCCESS: Operation success.
-  * @retval GAP_CAUSE_SEND_REQ_FAILED: Operation fail.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -232,18 +161,22 @@ void gap_vendor_register_cb(P_FUN_GAP_APP_CB vendor_callback);
 T_GAP_CAUSE le_vendor_adv_3_data_enable(bool enable);
 
 /**
-  * @brief  Set different advertising date or scan response data in 3 advertising channels.
-  *         This command is used to set 38 / 39 channel data, set 37 channel data please use normal HCI command.
-  *         It is necessary to enable 3 ADV data with @ref le_vendor_adv_3_data_enable.
+  * @brief  Set different advertising data or scan response data in 3 advertising channels.
   *
-  * @param[in] type   LE  vendor advertising data type @ref T_GAP_ADV_VENDOR_DATA_TYPE.
+  * This API is used to set 38 or 39 channel data, set 37 channel data please use
+  * @ref le_adv_set_param with parameter @ref GAP_PARAM_ADV_DATA or @ref GAP_PARAM_SCAN_RSP_DATA.
+  * It is necessary to enable 3 ADV data with @ref le_vendor_adv_3_data_enable.
+  *
+  * If sending request operation is successful, the setting result will be returned by callback
+  * registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_VENDOR_ADV_3_DATA_SET.
+  *
+  * @param[in] type   LE vendor advertising data type @ref T_GAP_ADV_VENDOR_DATA_TYPE.
   * @param[in] len    The number of significant octets in the advertising data.
   * @param[in] p_data Pointer to data to write.
   *
-  * @return Operation result.
-  * @retval GAP_CAUSE_SUCCESS: Operation success.
-  * @retval GAP_CAUSE_SEND_REQ_FAILED: Operation fail.
-  * @retval GAP_CAUSE_INVALID_PARAM: Invalid parameter.
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -285,105 +218,31 @@ T_GAP_CAUSE le_vendor_adv_3_data_set(T_GAP_ADV_VENDOR_DATA_TYPE type,
                                      uint8_t len, uint8_t *p_data);
 
 /**
-  * @brief  LE Drop Acl Data.
-  *
-  * Drop pending LE acl packet that assigned by user except the acl packet which is currently waiting for ack.
-  * The packet-dropping rule is cleared if link is disconnected or HCI_RESET.
-  *
-  * @param[in] conn_id  Connection ID for this link.
-  * @param[in] mask     Assign the mask to compare with data.
-  * @param[in] pattern  Drop data that match pattern.
-  * @param[in] offset   The offset in bytes started from Data.
-  * @return Operation result.
-  * @retval GAP_CAUSE_SUCCESS: Operation success.
-  * @retval GAP_CAUSE_SEND_REQ_FAILED: Operation fail.
-  *
-  * <b>Example usage</b>
-  * \code{.c}
-    static T_USER_CMD_PARSE_RESULT cmd_vdropdata(T_USER_CMD_PARSED_VALUE *p_parse_value)
-    {
-        T_GAP_CAUSE cause;
-        uint8_t conn_id = p_parse_value->dw_param[0];
-
-        cause = le_vendor_drop_acl_data(conn_id, 0xffff, 0x0015, 5);
-        return (T_USER_CMD_PARSE_RESULT)cause;
-    }
-    T_APP_RESULT app_gap_callback(uint8_t cb_type, void *p_cb_data)
-    {
-        T_APP_RESULT result = APP_RESULT_SUCCESS;
-        T_LE_CB_DATA cb_data;
-        memcpy(&cb_data, p_cb_data, sizeof(T_LE_CB_DATA));
-        APP_PRINT_TRACE1("app_gap_callback: cb_type %d", cb_type);
-        switch (cb_type)
-        {
-        ...
-        case GAP_MSG_LE_VENDOR_DROP_ACL_DATA:
-            APP_PRINT_INFO1("GAP_MSG_LE_VENDOR_DROP_ACL_DATA: cause 0x%x",
-                            p_data->le_cause.cause);
-            break;
-        ...
-    }
-  * \endcode
-  */
-T_GAP_CAUSE le_vendor_drop_acl_data(uint8_t conn_id, uint16_t mask, uint16_t pattern,
-                                    uint8_t offset);
-
-/**
-  * @brief  Modify Bluetooth Host LE Fw Policy.
+  * @brief  Modify Bluetooth LE FW policy.
   *
   * @param[in] mask     Assign the mask to compare with data.
   * @param[in] value    Value to set with the mask.
-  * @return Operation result.
-  * @retval GAP_CAUSE_SUCCESS: Operation success.
-  * @retval GAP_CAUSE_SEND_REQ_FAILED: Operation fail.
+  *
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   */
 T_GAP_CAUSE le_vendor_modify_bt_le_fw_policy(uint32_t mask, uint32_t value);
-
-/**
-  * @brief  Reset Bluetooth Host Controller.
-  *
-  * @param[in] reset_mode  GAP software reset mode @ref T_GAP_SW_RESET_MODE.
-  * @return Operation result.
-  * @retval GAP_CAUSE_SUCCESS: Operation success.
-  * @retval GAP_CAUSE_SEND_REQ_FAILED: Operation fail.
-  *
-  * <b>Example usage</b>
-  * \code{.c}
-    static T_USER_CMD_PARSE_RESULT cmd_reset(T_USER_CMD_PARSED_VALUE *p_parse_value)
-    {
-        T_GAP_CAUSE cause;
-        T_GAP_SW_RESET_MODE reset_mode = (T_GAP_SW_RESET_MODE)p_parse_value->dw_param[0];
-        cause = gap_sw_reset_req(reset_mode);
-        return (T_USER_CMD_PARSE_RESULT)cause;
-    }
-    T_APP_RESULT app_gap_callback(uint8_t cb_type, void *p_cb_data)
-    {
-        T_APP_RESULT result = APP_RESULT_SUCCESS;
-        T_LE_CB_DATA cb_data;
-        memcpy(&cb_data, p_cb_data, sizeof(T_LE_CB_DATA));
-        APP_PRINT_TRACE1("app_gap_callback: cb_type %d", cb_type);
-        switch (cb_type)
-        {
-        ...
-        case GAP_MSG_GAP_SW_RESET:
-            APP_PRINT_INFO1("GAP_MSG_GAP_SW_RESET: cause 0x%x",
-                            p_data->le_cause.cause);
-            break;
-        ...
-    }
-  * \endcode
-  */
-T_GAP_CAUSE gap_sw_reset_req(T_GAP_SW_RESET_MODE reset_mode);
 
 /**
   * @brief  Configure coding scheme of LE Coded PHY when device uses LE Advertising Extensions.
   *
   * @note Advertiser should delete advertising set before changing coding scheme.
   *
-  * @param[in] coding_scheme  Coding scheme of LE Coded PHY when device uses LE Advertising Extensions, @ref T_GAP_AE_CODING_SCHEME.
-  * @return Operation result.
-  * @retval GAP_CAUSE_SUCCESS Send request success.
-  * @retval other             Send request failed.
+  * If sending request operation is successful, the setting result will be returned by callback
+  * registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_AE_CODING_SCHEME.
+  *
+  * @param[in] coding_scheme  Coding scheme of LE Coded PHY when device uses LE Advertising Extensions.
+  *                           Value is @ref T_GAP_AE_CODING_SCHEME.
+  *
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -413,20 +272,27 @@ T_GAP_CAUSE le_ae_coding_scheme(T_GAP_AE_CODING_SCHEME coding_scheme);
 /**
   * @brief  Set the advertising tx power for the device, or reset advertising tx power to default value.
   *
-  * Applications can only call this API after Bluetooth Host is ready. \n
-  *                Explanation: If Bluetooth Host is ready, the application will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE
-  *                             with new_state about gap_init_state which is configured as @ref GAP_INIT_STATE_STACK_READY.
+  * Applications can only call this API after Bluetooth Host is ready.
   *
-  * @note Different types of IC support different tx power levels. For the actual supported levels,
-  *               please refer to the IC manual and related documentation. \n
-  *               The resolution of tx power is 0.5 dBm, not 1 dBm. Therefore, when setting the tx_power_double
-  *               parameter, it should be set to twice the actual tx power.
+  * Explanation: If Bluetooth Host is ready, the application will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE
+  * with new_state about gap_init_state which is configured as @ref GAP_INIT_STATE_STACK_READY.
   *
-  * @param[in] type            ADV tx power type.
+  * @note @parblock Different types of IC support different tx power levels. For the actual supported levels,
+  * please refer to the IC manual and related documentation.
+  *
+  * The resolution of tx power is 0.5 dBm, not 1 dBm. Therefore, when setting the tx_power_double
+  * parameter, it should be set to twice the actual tx power.
+  * @endparblock
+  *
+  * If sending request operation is successful, the setting result will be returned by callback
+  * registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_ADV_SET_TX_POWER.
+  *
+  * @param[in] type            ADV tx power type @ref T_GAP_ADV_TX_POW_TYPE.
   * @param[in] tx_power_double Twice the actual tx power.
   *
-  * @retval GAP_CAUSE_SUCCESS Operation success.
-  * @retval GAP_CAUSE_SEND_REQ_FAILED Operation failure.
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -459,21 +325,28 @@ T_GAP_CAUSE le_ae_coding_scheme(T_GAP_AE_CODING_SCHEME coding_scheme);
 T_GAP_CAUSE le_adv_set_tx_power(T_GAP_ADV_TX_POW_TYPE type, uint8_t tx_power_double);
 
 /**
-  * @brief  Trigger One Shot Advertising.
+  * @brief  Trigger one shot advertising.
   *
-  * @note Trigger advertising after guard_slot * 625 + guard_usec + wait_usec(us). \n
-  *               This function cannot be used if advertising type is connectable high duty cycle directed advertising.
+  * @note @parblock Trigger advertising after guard_slot * 625 + guard_usec + wait_usec(us).
   *
-  * Applications can only call this API after Bluetooth Host is ready. \n
-  *                Explanation: If Bluetooth Host is ready, the application will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE
-  *                             with new_state about gap_init_state which is configured as @ref GAP_INIT_STATE_STACK_READY.
+  * This function cannot be used if advertising type is connectable high duty cycle directed advertising.
+  * @endparblock
+  *
+  * Applications can only call this API after Bluetooth Host is ready.
+  *
+  * Explanation: If Bluetooth Host is ready, the application will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE
+  * with new_state about gap_init_state which is configured as @ref GAP_INIT_STATE_STACK_READY.
+  *
+  * If sending request operation is successful, the setting result will be returned by callback
+  * registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_VENDOR_ONE_SHOT_ADV.
   *
   * @param[in] guard_slot The delay time to trigger advertising in units of 625us, range: 0~224.
   * @param[in] guard_usec The delay time to trigger advertising in units of us, range: 0~65535.
   * @param[in] wait_usec  The delay time to trigger advertising in units of us, range: 0~65535.
-  * @return Operation result.
-  * @retval GAP_CAUSE_SUCCESS: Operation success.
-  * @retval GAP_CAUSE_SEND_REQ_FAILED: Operation fail.
+  *
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -508,21 +381,26 @@ T_GAP_CAUSE le_adv_set_tx_power(T_GAP_ADV_TX_POW_TYPE type, uint8_t tx_power_dou
 T_GAP_CAUSE le_vendor_one_shot_adv(uint8_t guard_slot, uint16_t guard_usec, uint16_t wait_usec);
 
 /**
-  * @brief   Set Minimum Remote SCA.
+  * @brief   Set minimum remote SCA.
   *
-  * Applications can only call this API after Bluetooth Host is ready. \n
-  *                 Explanation: If Bluetooth Host is ready, the application will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE
-  *                              with new_state about gap_init_state which is configured as @ref GAP_INIT_STATE_STACK_READY.
+  * Applications can only call this API after Bluetooth Host is ready.
+  *
+  * Explanation: If Bluetooth Host is ready, the application will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE
+  * with new_state about gap_init_state which is configured as @ref GAP_INIT_STATE_STACK_READY.
   *
   * Set Min_sca to compare with M_sca sent by master (carried in CONNECT_REQ pdu).
-  * The finally used master sca is set to MIN(Min_sca, M_sca).
+  * The finally used master sca is set to minimum(Min_sca, M_sca).
   * The default Min_sca is 7.
   * The setting is used by all links in slave role, can set when boot up or link exist, and will reset to default value when HCI_RESET.
   *
-  * @param[in] index Minimum Remote SCA Index.
+  * If sending request operation is successful, the setting result will be returned by callback
+  * registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_VENDOR_SET_MIN_REM_SCA.
   *
-  * @retval GAP_CAUSE_SUCCESS: Operation success.
-  * @retval GAP_CAUSE_SEND_REQ_FAILED: Operation fail.
+  * @param[in] min_sca Minimum SCA @ref T_GAP_SCA_FIELD_ENCODING.
+  *
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -556,18 +434,25 @@ T_GAP_CAUSE le_vendor_set_rem_min_sca(T_GAP_SCA_FIELD_ENCODING min_sca);
   * @brief  Set the link tx power for the device.
   *
   * Set LE link tx power. Or reset link tx power to default value.
-  *         Tx power is set to default every time a link is connect. Use this command after the link is connected.
+  * Tx power is set to default every time a link is connect. Use this API after the link is connected.
   *
-  * @note Different types of IC support different tx power levels. For the actual supported levels,
-  *               please refer to the IC manual and related documentation. \n
-  *               The resolution of tx power is 0.5 dBm, not 1 dBm. Therefore, when setting the tx_power_double
-  *               parameter, it should be set to twice the actual tx power.
+  * @note @parblock Different types of IC support different tx power levels. For the actual supported levels,
+  * please refer to the IC manual and related documentation.
   *
-  * @param[in] conn_id          Connection ID for this link.
+  * The resolution of tx power is 0.5 dBm, not 1 dBm. Therefore, when setting the tx_power_double
+  * parameter, it should be set to twice the actual tx power.
+  * @endparblock
+  *
+  * If sending request operation is successful, the setting result will be returned by callback
+  * registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_SET_CONN_TX_PWR.
+  *
+  * @param[in] conn_id          Connection ID.
   * @param[in] reset            Whether to reset to default value.
   * @param[in] tx_power_double  Twice the actual tx power.
-  * @retval GAP_CAUSE_SUCCESS Operation success.
-  * @retval GAP_CAUSE_SEND_REQ_FAILED Operation failure.
+  *
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -603,12 +488,21 @@ T_GAP_CAUSE le_set_conn_tx_power(uint8_t conn_id, bool reset, uint8_t tx_power_d
 
 /**
  * @brief  Send vendor command.
+ *
+ * If sending request operation is successful, the setting result will be returned by callback
+ * registered by @ref gap_register_app_cb with msg type @ref GAP_MSG_VENDOR_CMD_RSP.
+ *
+ * A vendor command may trigger vendor-specific event (whether a vendor-specific event is generated
+ * depends on the specific vendor command). If cause in @ref T_GAP_VENDOR_CMD_RSP is 0 (success) and a
+ * vendor-specific event is generated, APP will be notified by callback with msg type @ref GAP_MSG_VENDOR_EVT_INFO.
+ *
  * @param[in] op       Opcode of command.
  * @param[in] len      Length of parameters.
  * @param[in] p_param  Pointer to parameters to write.
- * @return Operation result.
- * @retval GAP_CAUSE_SUCCESS Send request successfully.
- * @retval Others Failure.
+ *
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -654,15 +548,15 @@ T_GAP_CAUSE gap_vendor_cmd_req(uint16_t op, uint8_t len, uint8_t *p_param);
  * @brief  Set vendor feature of LE Host.
  *
  * @param[in]  bit_number
- * @arg    2  : Whether to skip reading remote features when the connection is established.
-                Disabled by default, the local device reads remote features when the connection is established.
+ * -    2  : Whether to skip reading remote features when the connection is established.
+             Disabled by default, the local device reads remote features when the connection is established.
  * @param[in]  bit_value
- * @arg    0  : Disable.
- * @arg    1  : Enable.
+ * -    0  : Disable.
+ * -    1  : Enable.
  *
- * @return         The result of set parameter request.
- * @retval true    Set parameter request is successful.
- * @retval false   Set parameter request is failed.
+ * @return The result of sending request.
+ * @retval true  Sending request operation is successful.
+ * @retval false Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}

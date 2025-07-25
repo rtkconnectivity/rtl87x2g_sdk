@@ -16,17 +16,19 @@
 #include "cdc.h"
 /**
  * \addtogroup USB_CDC_Driver
- * @{
- * The module mainly provide components to implement USB CDC Class.
+ * \brief The module mainly provide components to implement USB CDC Class.
  * This driver support virtual port com to communicate with computer.
- * @}
-  */
-/**
- * \addtogroup USB_CDC_Driver
  * @{
- * \section USB_CDC_DRIVER_USAGE How to implement USB CDC interface
+  */
+
+/**
+ * \defgroup USB_CDC_DRIVER_USAGE How to Implement USB CDC Interface
+ * @{
  *
- * \par Allocate Instance
+ * \brief This section provides a comprehensive guide on implementing a USB CDC interface,
+ *        complete with sample code for your reference.
+ *
+ * \section USB_CDC_DRIVER_ALLOCATE_INSTANCE Allocate Instance
  * Allocate two function instances by \ref usb_cdc_driver_inst_alloc.
  *
  * \par Example
@@ -35,10 +37,10 @@
  *      void *demo_instance1 = usb_cdc_driver_inst_alloc();
  * \endcode
  *
- * \par CDC Interfaces
+ * \section USB_CDC_DRIVER_CDC_INTERFACES CDC Interfaces
  * Implement CDC interfaces as follows:
- *    - Implement descriptor arrays.
- *    - Enqueue CDC requests to ensure that each request can be processed.
+ *    - Implement descriptor arrays, and register arrays to the CDC driver.
+ *    - Implement pipe operations.
  *
  * \par Example  -- USB CDC
  * \code
@@ -142,17 +144,15 @@
  *                                      (void *)demo_if1_descs_fs);
  * \endcode
  *
- * \par Initialize CDC Driver
+ * \section USB_CDC_DRIVER_INITIALIZE_CDC_DRIVER Initialize CDC Driver
  * Call \ref usb_cdc_driver_init to initialize USB CDC driver.
  */
 /** @}*/
-/**
- * \addtogroup USB_CDC_Driver
- * @{
- *
- * \section USB_CDC_Driver_Definitions Definitions
- *
-*/
+
+/** @defgroup USB_CDC_Driver_Exported_Constants USB CDC Driver Exported Constants
+  * @{
+  */
+
 /**
  * usb_cdc_driver.h
  *
@@ -172,11 +172,18 @@
  *
  * \details If CDC_DRIVER_CONGESTION_CTRL_DROP_FIRST is set, the first data in the queue will be dropped.
  *
- * \note    only effective for in endpoint.
+ * \note    Only effective for in endpoint.
  *
  */
 #define CDC_DRIVER_CONGESTION_CTRL_DROP_FIRST   USB_PIPE_CONGESTION_CTRL_DROP_FIRST
 
+/** End of group USB_CDC_Driver_Exported_Constants
+  * @}
+  */
+
+/** @defgroup USB_CDC_Driver_Exported_Types USB CDC Driver Exported Types
+  * @{
+  */
 
 /**
  * usb_cdc_driver.h
@@ -188,7 +195,7 @@
  * \param pfnSetControlLineStateCb: This API will be called when CDC SetControlLineState request is received.
  * \param pfnSetEthernetPacketFilterCb: This API will be called when CDC SetEthernetPacketFilter request is received.
  */
-typedef struct _usb_cdc_driver_cbs
+typedef struct
 {
     void (*pfnSetLineCondigCb)(void);
     void (*pfnGetLineCondigCb)(void);
@@ -196,20 +203,6 @@ typedef struct _usb_cdc_driver_cbs
     void (*pfnSetEthernetPacketFilterCb)(uint16_t wValue);
 } T_USB_CDC_DRIVER_CBS;
 
-/**
- * usb_cdc_driver.h
- *
- * \brief   Register CDC driver callbacks to process request
- *
- * \param  inst CDC instance returned by \ref usb_cdc_driver_inst_alloc
- * \param  cbs Refer to \ref T_CDC_DRIVER_CBS
- *
- * \return int result, refer to 'rtl_errno.h'
- *
- * @par Example
- * Please refer to \ref USB_CDC_DRIVER_USAGE
- */
-int usb_cdc_driver_cbs_register(void *inst, T_USB_CDC_DRIVER_CBS *cbs);
 
 /**
  * usb_cdc_driver.h
@@ -227,6 +220,14 @@ typedef T_USB_PIPE_ATTR T_USB_CDC_DRIVER_ATTR;
  */
 typedef USB_PIPE_CB USB_CDC_DRIVER_CB;
 
+/** End of group USB_CDC_Driver_Exported_Types
+  * @}
+  */
+
+/** @defgroup USB_CDC_Driver_Exported_Functions USB CDC Driver Exported Functions
+  * @{
+  */
+
 /**
  * \brief Allocate the CDC function instance, which possesses the independent function.
  * \return CDC function instance.
@@ -239,7 +240,7 @@ void *usb_cdc_driver_inst_alloc(void);
 /**
  * \brief Free the CDC function instance, alloacted by \ref usb_cdc_driver_inst_alloc.
  * \param inst The instance alloacted by \ref usb_cdc_driver_inst_alloc.
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  *
  * \par Example
  * Please refer to \ref USB_CDC_DRIVER_USAGE.
@@ -255,7 +256,7 @@ int usb_cdc_driver_inst_free(void *inst);
  * \param  hs_desc The CDC interface descriptor of high speed.
  * \param  fs_desc The CDC interface descriptor of full speed.
  *
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  *
  * \par Example
  * Please refer to \ref USB_CDC_DRIVER_USAGE.
@@ -265,12 +266,27 @@ int usb_cdc_driver_if_desc_register(void *inst, void *hs_desc, void *fs_desc);
 /**
  * usb_cdc_driver.h
  *
- * \brief   CDC Line Coding Setting
+ * \brief   Register CDC driver callbacks to process request
+ *
+ * \param  inst CDC instance returned by \ref usb_cdc_driver_inst_alloc
+ * \param  cbs Refer to \ref T_USB_CDC_DRIVER_CBS
+ *
+ * \return Refer to `rtl_errno.h`.
+ *
+ * @par Example
+ * Please refer to \ref USB_CDC_DRIVER_USAGE
+ */
+int usb_cdc_driver_cbs_register(void *inst, T_USB_CDC_DRIVER_CBS *cbs);
+
+/**
+ * usb_cdc_driver.h
+ *
+ * \brief   CDC line coding Setting
  *
  * \param  inst cdc instance returned in \ref usb_cdc_driver_inst_alloc.
  * \param  cdc line coding
  *
- * \return int result, refer to 'rtl_errno.h'.
+ * \return int result, refer to `rtl_errno.h`.
  *
  * @par Example
  * Please refer to \ref USB_CDC_DRIVER_USAGE
@@ -284,7 +300,7 @@ int usb_cdc_driver_linecoding(void *inst, T_LINE_CODING linecoding);
  *
  * \param inst The CDC instance returned in \ref usb_cdc_driver_inst_alloc.
  *
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  *
  * \par Example
  * Please refer to \ref USB_CDC_DRIVER_USAGE.
@@ -315,7 +331,7 @@ void *usb_cdc_driver_data_pipe_open(uint8_t ep_addr, T_USB_CDC_DRIVER_ATTR attr,
  *
  * \param  handle Return value of \ref usb_cdc_driver_data_pipe_open.
  *
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  *
  */
 int usb_cdc_driver_data_pipe_close(void *handle);
@@ -329,7 +345,7 @@ int usb_cdc_driver_data_pipe_close(void *handle);
  * \param  buf The data to be sent.
  * \param  len The length of data.
  *
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  *
  * \par Example
  * Please refer to \ref USB_CDC_DRIVER_USAGE.
@@ -341,7 +357,7 @@ int usb_cdc_driver_data_pipe_send(void *handle, void *buf, uint32_t len);
  *
  * \brief   Initalize USB CDC interfaces.
  *
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  *
  * \par Example
  * Please refer to \ref USB_CDC_DRIVER_USAGE.
@@ -352,9 +368,10 @@ int usb_cdc_driver_init(void);
  *
  * \brief   Deinit USB CDC interfaces.
  *
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  */
 int usb_cdc_driver_deinit(void);
 
+/** @} */ /* End of group USB_CDC_Driver_Exported_Functions */
 /** @}*/
 #endif

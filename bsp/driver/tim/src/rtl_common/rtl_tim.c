@@ -20,6 +20,8 @@
 /*============================================================================*
  *                          Private Functions
  *============================================================================*/
+#define TIM_0X08_TIMERENABLE      BIT0
+
 extern uint32_t TIM_GetTimerID(TIM_TypeDef *TIMx);
 
 #if TIM_SUPPORT_CLOCK_DEPEND
@@ -37,7 +39,7 @@ extern void TIM_PWMDeadzoneConfig(TIM_TypeDef *TIMx,
  *                           Public Functions
  *============================================================================*/
 /**
-  * \brief  Deinitializes the TIMx peripheral registers to their default reset values.
+  * \brief  Deinitialize the specified TIMx registers to their default reset values.
   * \param  TIMx: Select the TIM peripheral. \ref TIMER_Declaration
   * \return None
   */
@@ -68,12 +70,10 @@ void TIM_DeInit(TIM_TypeDef *TIMx)
 }
 
 /**
-  * \brief  Initializes the TIMx Time Base Unit peripheral according to
-  *         the specified parameters in the TIM_TimeBaseInitStruct.
+  * \brief  Initialize the TIMx according to the specified parameters
+  *         in TIM_TimeBaseInitStruct.
   * \param  TIMx: Select the TIM peripheral. \ref TIMER_Declaration
-  * \param  TIM_TimeBaseInitStruct: pointer to a TIM_TimeBaseInitTypeDef
-  *         structure that contains the configuration information for the
-  *         specified TIM peripheral.
+  * \param  TIM_TimeBaseInitStruct: Pointer to a TIM_TimeBaseInitTypeDef structure which will be initialized.
   * \return None
   */
 void TIM_TimeBaseInit(TIM_TypeDef *TIMx, TIM_TimeBaseInitTypeDef *TIM_TimeBaseInitStruct)
@@ -128,7 +128,7 @@ void TIM_TimeBaseInit(TIM_TypeDef *TIMx, TIM_TimeBaseInitTypeDef *TIM_TimeBaseIn
 }
 
 /**
-  * \brief  Fills each TIM_InitStruct member with its default value.
+  * \brief  Fill each TIM_InitStruct member with its default value.
   * \param  TIM_InitStruct : pointer to a TIM_InitTypeDef structure which will be initialized.
   * \return None
   */
@@ -154,7 +154,7 @@ void TIM_StructInit(TIM_TimeBaseInitTypeDef *TIM_TimeBaseInitStruct)
 }
 
 /**
-  * \brief  Enable or disable the specified TIM peripheral.
+  * \brief  Enable or disable the specified TIMx peripheral.
   * \param  TIMx: Select the TIM peripheral. \ref TIMER_Declaration
   * \param  NewState: new state of the TIMx peripheral.
   *   This parameter can be: ENABLE or DISABLE.
@@ -172,7 +172,7 @@ void TIM_Cmd(TIM_TypeDef *TIMx, FunctionalState NewState)
 }
 
 /**
-  * \brief  change TIM period value.
+  * \brief  Change the specified TIMx period value.
   * \param  TIMx: Select the TIM peripheral. \ref TIMER_Declaration
   * \return The new state of success or not  (SET or RESET).
   */
@@ -205,7 +205,7 @@ void TIM_INTConfig(TIM_TypeDef *TIMx, FunctionalState NewState)
 }
 
 /**
-  * \brief  Change PWM freq and duty according high_cnt and low_cnt
+  * \brief  Change the PWM frequency and duty cycle of the specified TIMx according to high_count and low_count.
   * \param  TIMx: Select the TIM peripheral. \ref TIMER_Declaration
   * \param  high_count: This parameter must range from 0x0000 to 0xFFFFFFFF
   * \param  low_count: This parameter must range from 0x0000 to 0xFFFFFFFF
@@ -222,7 +222,7 @@ void TIM_PWMChangeFreqAndDuty(TIM_TypeDef *TIMx, uint32_t high_count, uint32_t l
 }
 
 /**
- * \brief   Get TIMx current value when timer is running.
+ * \brief   Get the specified TIMx current value when timer is running.
  * \param   TIMx: Select the TIM peripheral. \ref TIMER_Declaration
  * \return  The counter value.
  */
@@ -235,9 +235,11 @@ uint32_t TIM_GetCurrentValue(TIM_TypeDef *TIMx)
 }
 
 /**
- * \brief   Check whether the TIM interrupt has occurred or not.
+ * \brief   Get the specified TIMx interrupt status.
  * \param   TIMx: Select the TIM peripheral. \ref TIMER_Declaration
- * \return  The new state of the TIM_IT(SET or RESET).
+ * \return  The NewState of the timer interrupt status.
+ *          \arg SET: The TIM interrupt has occurred.
+ *          \arg RESET: The TIM interrupt has not occurred.
  */
 ITStatus TIM_GetINTStatus(TIM_TypeDef *TIMx)
 {
@@ -253,9 +255,11 @@ ITStatus TIM_GetINTStatus(TIM_TypeDef *TIMx)
 }
 
 /**
- * \brief   Check whether the TIM is in operation or not.
+ * \brief   Get the specified TIMx operation status.
  * \param   TIMx: Select the TIM peripheral. \ref TIMER_Declaration
- * \return  The new state of the timer operation status (SET or RESET).
+ * \return  The NewState of the timer operation status.
+ *          \arg SET: The timer is running.
+ *          \arg RESET: The timer is not running.
  */
 ITStatus TIM_GetOperationStatus(TIM_TypeDef *TIMx)
 {
@@ -273,7 +277,7 @@ ITStatus TIM_GetOperationStatus(TIM_TypeDef *TIMx)
 }
 
 /**
- * \brief  Get TIMx elapsed value when timer is running.
+ * \brief  Get the specified TIMx elapsed value when timer is running.
  * \param  TIMx: Select the TIM peripheral. \ref TIMER_Declaration
  * \return The elapsed counter value.
  */
@@ -286,7 +290,7 @@ uint32_t TIM_GetElapsedValue(TIM_TypeDef *TIMx)
 }
 
 /**
- * \brief   Clear TIM interrupt.
+ * \brief   Clear the specified TIMx interrupts.
  * \param   TIMx: Select the TIM peripheral. \ref TIMER_Declaration
  * \return  None.
  */

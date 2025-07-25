@@ -21,16 +21,22 @@
 /* Private typedef -----------------------------------------------------------*/
 
 /* Private define ------------------------------------------------------------*/
-#define PWM_OUT_P_PIN        P0_0
-#define PWM_PINMUX_OUT_P     ENPWM0_P
-#define PWM_OUT_N_PIN        P0_1
-#define PWM_PINMUX_OUT_N     ENPWM0_N
+#define PWM_OUT_P_PIN                  P0_0
+#define PWM_PINMUX_OUT_P               ENPWM0_P
+#define PWM_OUT_N_PIN                  P0_1
+#define PWM_PINMUX_OUT_N               ENPWM0_N
 
 #define Enhance_Timer_Num              0
 #define Enhance_Timer                  ENH_TIM0
 
+#define PWM_PERIOD                     100
+#define PWM_DUTY_CYCLE                 50
+#define PWM_MAXCNT                     (PWM_PERIOD * 40)
+#define PWM_CCVALUE                    (((PWM_PERIOD)*(PWM_DUTY_CYCLE*40))/100)
+
 #define ENHTIM_PWM_MANUAL_MODE   0
 #define ENHTIM_PWM_AUTO_MODE     1
+
 /* Gloables define -----------------------------------------------------------*/
 
 /* Private function prototypes -----------------------------------------------*/
@@ -70,15 +76,15 @@ void enhance_timer_init(void)
     ENHTIM_InitStruct.ENHTIM_Mode               = ENHTIM_MODE_PWM_AUTO;
     ENHTIM_InitStruct.ENHTIM_PWMOutputEn        = ENABLE;
     ENHTIM_InitStruct.ENHTIM_PWMStartPolarity   = ENHTIM_PWM_START_WITH_HIGH;
-    ENHTIM_InitStruct.ENHTIM_MaxCount           = 100;
+    ENHTIM_InitStruct.ENHTIM_MaxCount           = PWM_MAXCNT;
 #endif
 
 #if ENHTIM_PWM_MANUAL_MODE
     ENHTIM_InitStruct.ENHTIM_Mode = ENHTIM_MODE_PWM_MANUAL;
     ENHTIM_InitStruct.ENHTIM_PWMOutputEn = ENABLE;
     ENHTIM_InitStruct.ENHTIM_PWMStartPolarity = ENHTIM_PWM_START_WITH_HIGH;
-    ENHTIM_InitStruct.ENHTIM_MaxCount = 4000;
-    ENHTIM_InitStruct.ENHTIM_CCValue = 2000;
+    ENHTIM_InitStruct.ENHTIM_MaxCount = PWM_MAXCNT;
+    ENHTIM_InitStruct.ENHTIM_CCValue = PWM_CCVALUE;
 #endif
 
     ENHTIM_InitStruct.ENHTIM_PWMDeadZoneClockSource = ENHTIM_PWM_DZCLKSRCE_32K;
@@ -93,13 +99,13 @@ void enhance_timer_init(void)
     /* After the waveform is transformed 8 times,
     the PWM maintains the last change and continues to output */
     ENHTIM_WriteCCFIFO(Enhance_Timer, 0); //Output high level with a duty cycle of 100%
-    ENHTIM_WriteCCFIFO(Enhance_Timer, 20); //Output high level with a duty cycle of 80%
-    ENHTIM_WriteCCFIFO(Enhance_Timer, 40); //Output high level with a duty cycle of 60%
-    ENHTIM_WriteCCFIFO(Enhance_Timer, 50); //Output high level with a duty cycle of 50%
-    ENHTIM_WriteCCFIFO(Enhance_Timer, 70); //Output high level with a duty cycle of 30%
-    ENHTIM_WriteCCFIFO(Enhance_Timer, 80); //Output high level with a duty cycle of 20%
-    ENHTIM_WriteCCFIFO(Enhance_Timer, 90); //Output high level with a duty cycle of 10%
-    ENHTIM_WriteCCFIFO(Enhance_Timer, 100); //Output low level with a duty cycle of 100%
+    ENHTIM_WriteCCFIFO(Enhance_Timer, 800); //Output high level with a duty cycle of 80%
+    ENHTIM_WriteCCFIFO(Enhance_Timer, 1600); //Output high level with a duty cycle of 60%
+    ENHTIM_WriteCCFIFO(Enhance_Timer, 2000); //Output high level with a duty cycle of 50%
+    ENHTIM_WriteCCFIFO(Enhance_Timer, 2800); //Output high level with a duty cycle of 30%
+    ENHTIM_WriteCCFIFO(Enhance_Timer, 3200); //Output high level with a duty cycle of 20%
+    ENHTIM_WriteCCFIFO(Enhance_Timer, 3600); //Output high level with a duty cycle of 10%
+    ENHTIM_WriteCCFIFO(Enhance_Timer, 4000); //Output low level with a duty cycle of 100%
 #endif
 
     ENHTIM_Cmd(Enhance_Timer, ENABLE);

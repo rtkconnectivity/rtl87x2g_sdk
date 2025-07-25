@@ -41,12 +41,12 @@ extern "C" {
  * \{
  * \ingroup  LPC_Exported_Constants
  */
-#define LPC_SUPPORT_POWER_OFF                          (1)
-#define LPC_SUPPORT_POWER_ON                           (1)
-#define LPC_SUPPORT_NOMAL_FLOW                         (0)
-#define LPC_SUPPORT_TRIGER_MODE                        (0)
-#define LPC_SUPPORT_INT_LPCOMP_AON                     (0)
-#define LPC_SUPPORT_DEBOUNCE_MODE                      (1)
+#define LPC_SUPPORT_POWER_OFF                          (1) //!< The definition supports power off sequence.
+#define LPC_SUPPORT_POWER_ON                           (1) //!< The definition supports power on sequence.
+#define LPC_SUPPORT_NOMAL_FLOW                         (0) //!< The function is not supported.
+#define LPC_SUPPORT_TRIGER_MODE                        (0) //!< The function is not supported.
+#define LPC_SUPPORT_INT_LPCOMP_AON                     (0) //!< The function is not supported.
+#define LPC_SUPPORT_DEBOUNCE_MODE                      (1) //!< The definition supports debounce function. 
 
 /** End of LPC_Defines
   * \}
@@ -87,7 +87,7 @@ typedef struct
   * \ingroup  LPC_Exported_Constants
   */
 
-#define LPC0               ((LPC_TypeDef *) LPC_REG_BASE)
+#define LPC0               ((LPC_TypeDef *) LPC_REG_BASE)   //!< LPC0 base address.
 
 /** End of LPC_Declaration
   * \}
@@ -97,73 +97,73 @@ typedef struct
   * \{
   * \ingroup  LPC_Exported_Constants
   */
-
-#define LPC_INPUT_RANGE \
-    LPC_80_mV =           0x0000, \
-                          LPC_160_mV =          0x0001, \
-                                                LPC_240_mV =          0x0002, \
-                                                                      LPC_320_mV =          0x0003, \
-                                                                              LPC_400_mV =          0x0004, \
-                                                                                      LPC_480_mV =          0x0005, \
-                                                                                              LPC_560_mV =          0x0006, \
-                                                                                                      LPC_640_mV =          0x0007, \
-                                                                                                              LPC_680_mV =          0x0008, \
-                                                                                                                      LPC_720_mV =          0x0009, \
-                                                                                                                              LPC_760_mV =          0x000a, \
-                                                                                                                                      LPC_800_mV =          0x000b, \
-                                                                                                                                              LPC_840_mV =          0x000c, \
-                                                                                                                                                      LPC_880_mV =          0x000d, \
-                                                                                                                                                              LPC_920_mV =          0x000e, \
-                                                                                                                                                                      LPC_960_mV =          0x000f, \
-                                                                                                                                                                              LPC_1000_mV =         0x0010, \
-                                                                                                                                                                                      LPC_1040_mV =         0x0011, \
-                                                                                                                                                                                              LPC_1080_mV =         0x0012, \
-                                                                                                                                                                                                      LPC_1120_mV =         0x0013, \
-                                                                                                                                                                                                              LPC_1160_mV =         0x0014, \
-                                                                                                                                                                                                                      LPC_1200_mV =         0x0015, \
-                                                                                                                                                                                                                              LPC_1240_mV =         0x0016, \
-                                                                                                                                                                                                                                      LPC_1280_mV =         0x0017, \
-                                                                                                                                                                                                                                              LPC_1320_mV =         0x0018, \
-                                                                                                                                                                                                                                                      LPC_1360_mV =         0x0019, \
-                                                                                                                                                                                                                                                              LPC_1400_mV =         0x001a, \
-                                                                                                                                                                                                                                                                      LPC_1440_mV =         0x001b, \
-                                                                                                                                                                                                                                                                              LPC_1480_mV =         0x001c, \
-                                                                                                                                                                                                                                                                                      LPC_1520_mV =         0x001d, \
-                                                                                                                                                                                                                                                                                              LPC_1560_mV =         0x001e, \
-                                                                                                                                                                                                                                                                                                      LPC_1600_mV =         0x001f, \
-                                                                                                                                                                                                                                                                                                              LPC_1640_mV =         0x0020, \
-                                                                                                                                                                                                                                                                                                                      LPC_1680_mV =         0x0021, \
-                                                                                                                                                                                                                                                                                                                              LPC_1720_mV =         0x0022, \
-                                                                                                                                                                                                                                                                                                                                      LPC_1760_mV =         0x0023, \
-                                                                                                                                                                                                                                                                                                                                              LPC_1800_mV =         0x0024, \
-                                                                                                                                                                                                                                                                                                                                                      LPC_1840_mV =         0x0025, \
-                                                                                                                                                                                                                                                                                                                                                              LPC_1880_mV =         0x0026, \
-                                                                                                                                                                                                                                                                                                                                                                      LPC_1920_mV =         0x0027, \
-                                                                                                                                                                                                                                                                                                                                                                              LPC_1960_mV =         0x0028, \
-                                                                                                                                                                                                                                                                                                                                                                                      LPC_2000_mV =         0x0029, \
-                                                                                                                                                                                                                                                                                                                                                                                              LPC_2040_mV =         0x002a, \
-                                                                                                                                                                                                                                                                                                                                                                                                      LPC_2080_mV =         0x002b, \
-                                                                                                                                                                                                                                                                                                                                                                                                              LPC_2120_mV =         0x002c, \
-                                                                                                                                                                                                                                                                                                                                                                                                                      LPC_2160_mV =         0x002d, \
-                                                                                                                                                                                                                                                                                                                                                                                                                              LPC_2200_mV =         0x002e, \
-                                                                                                                                                                                                                                                                                                                                                                                                                                      LPC_2240_mV =         0x002f, \
-                                                                                                                                                                                                                                                                                                                                                                                                                                              LPC_2280_mV =         0x0030, \
-                                                                                                                                                                                                                                                                                                                                                                                                                                                      LPC_2320_mV =         0x0031, \
-                                                                                                                                                                                                                                                                                                                                                                                                                                                              LPC_2360_mV =         0x0032, \
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                      LPC_2400_mV =         0x0033, \
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                              LPC_2440_mV =         0x0034, \
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      LPC_2480_mV =         0x0035, \
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              LPC_2520_mV =         0x0036, \
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      LPC_2560_mV =         0x0037, \
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              LPC_2640_mV =         0x0038, \
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      LPC_2720_mV =         0x0039, \
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              LPC_2800_mV =         0x003a, \
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      LPC_2880_mV =         0x003b, \
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              LPC_2960_mV =         0x003c, \
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      LPC_3040_mV =         0x003d, \
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              LPC_3120_mV =         0x003e, \
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      LPC_3200_mV =         0x003f, \
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              LPC_THRDSHOD_MAX =    0x0040,
+typedef enum
+{
+    LPC_80_mV = 0x0000,
+    LPC_160_mV = 0x0001,
+    LPC_240_mV = 0x0002,
+    LPC_320_mV = 0x0003,
+    LPC_400_mV = 0x0004,
+    LPC_480_mV = 0x0005,
+    LPC_560_mV = 0x0006,
+    LPC_640_mV = 0x0007,
+    LPC_680_mV = 0x0008,
+    LPC_720_mV = 0x0009,
+    LPC_760_mV = 0x000a,
+    LPC_800_mV = 0x000b,
+    LPC_840_mV = 0x000c,
+    LPC_880_mV = 0x000d,
+    LPC_920_mV = 0x000e,
+    LPC_960_mV = 0x000f,
+    LPC_1000_mV = 0x0010,
+    LPC_1040_mV = 0x0011,
+    LPC_1080_mV = 0x0012,
+    LPC_1120_mV = 0x0013,
+    LPC_1160_mV = 0x0014,
+    LPC_1200_mV = 0x0015,
+    LPC_1240_mV = 0x0016,
+    LPC_1280_mV = 0x0017,
+    LPC_1320_mV = 0x0018,
+    LPC_1360_mV = 0x0019,
+    LPC_1400_mV = 0x001a,
+    LPC_1440_mV = 0x001b,
+    LPC_1480_mV = 0x001c,
+    LPC_1520_mV = 0x001d,
+    LPC_1560_mV = 0x001e,
+    LPC_1600_mV = 0x001f,
+    LPC_1640_mV = 0x0020,
+    LPC_1680_mV = 0x0021,
+    LPC_1720_mV = 0x0022,
+    LPC_1760_mV = 0x0023,
+    LPC_1800_mV = 0x0024,
+    LPC_1840_mV = 0x0025,
+    LPC_1880_mV = 0x0026,
+    LPC_1920_mV = 0x0027,
+    LPC_1960_mV = 0x0028,
+    LPC_2000_mV = 0x0029,
+    LPC_2040_mV = 0x002a,
+    LPC_2080_mV = 0x002b,
+    LPC_2120_mV = 0x002c,
+    LPC_2160_mV = 0x002d,
+    LPC_2200_mV = 0x002e,
+    LPC_2240_mV = 0x002f,
+    LPC_2280_mV = 0x0030,
+    LPC_2320_mV = 0x0031,
+    LPC_2360_mV = 0x0032,
+    LPC_2400_mV = 0x0033,
+    LPC_2440_mV = 0x0034,
+    LPC_2480_mV = 0x0035,
+    LPC_2520_mV = 0x0036,
+    LPC_2560_mV = 0x0037,
+    LPC_2640_mV = 0x0038,
+    LPC_2720_mV = 0x0039,
+    LPC_2800_mV = 0x003a,
+    LPC_2880_mV = 0x003b,
+    LPC_2960_mV = 0x003c,
+    LPC_3040_mV = 0x003d,
+    LPC_3120_mV = 0x003e,
+    LPC_3200_mV = 0x003f,
+} LPCThreshold_TypeDef;
 
 /** End of LPC_Threshold
   * \}
@@ -174,12 +174,12 @@ typedef struct
  * \{
  * \ingroup     LPC_Exported_Constants
  */
-#define LPC_INT_LPCOMP                 (BIT17)
-#define LPC_INT_LPCOMP_AON             (BIT18)
+#define LPC_INT_LPCOMP                 (BIT17)  //!< Voltage detection interrupt.
+#define LPC_INT_LPCOMP_AON             (BIT18)  //!< Wakeup voltage detection interrupt.
 
-#define IS_LPC_CONFIG_INT(INT) ((INT) == LPC_INT_LPCOMP )
-#define IS_LPC_STATUS_INT(INT) ((INT) == LPC_INT_LPCOMP )
-#define IS_LPC_CLEAR_INT(INT) ((INT) ==  LPC_INT_LPCOMP )
+#define IS_LPC_CONFIG_INT(INT) ((INT) == LPC_INT_LPCOMP ) //!< Check if the input parameter is valid.
+#define IS_LPC_STATUS_INT(INT) ((INT) == LPC_INT_LPCOMP ) //!< Check if the input parameter is valid.
+#define IS_LPC_CLEAR_INT(INT) ((INT) ==  LPC_INT_LPCOMP ) //!< Check if the input parameter is valid.
 
 /** End of LPC_Interrupts_Definition
   * \}

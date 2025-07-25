@@ -14,13 +14,10 @@
 #include "stdlib.h"
 #include "app_section.h"
 #include "app_task.h"
-#include "board.h"
-
 #include "trace.h"
 #include "rtl_pinmux.h"
 #include "io_gpio.h"
 #include "io_wdt.h"
-
 
 /******************************************************************/
 

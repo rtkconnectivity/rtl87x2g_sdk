@@ -48,15 +48,15 @@ extern "C"
   */
 
 /**
- * @brief       Release the ISO Data buffer that GAP supplied.
+ * @brief       Release the ISO Data buffer that GAP supplied when receiving @ref BT_DIRECT_MSG_ISO_DATA_IND.
  *
  * @note This function is used for @ref ISOCH_ROLE_INITIATOR, @ref ISOCH_ROLE_ACCEPTOR and @ref BIG_MGR_ROLE_SYNC_RECEIVER.
  *
- * @param[in]   p_buf   Point the buffer that needs to release.
+ * @param[in]   p_buf   Pointer to the buffer that needs to release.
  *
- * @return Send request operation.
- * @retval GAP_CAUSE_SUCCESS  Operation success.
- * @retval Others             Operation failure.
+ * @return Operation result.
+ * @retval true   Operation success.
+ * @retval false  Operation failure.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -88,18 +88,18 @@ bool gap_iso_data_cfm(void *p_buf);
  *
  * @note This function is used for @ref ISOCH_ROLE_INITIATOR, @ref ISOCH_ROLE_ACCEPTOR and @ref BIG_MGR_ROLE_ISOC_BROADCASTER.
  *
- * @param[in]   p_data        Point to data to be sent.
+ * @param[in]   p_data        Pointer to data to be sent.
  * @param[in]   handle        Connection handle of the CIS or BIS.
  * @param[in]   iso_sdu_len   Length of the SDU to be sent.
  * @param[in]   ts_flag       Indicates whether it contains time_stamp.
- *                            True: contain time_stamp.
- *                            False: does not contain time_stamp.
- * @param[in]   time_stamp    A time in microseconds. The time_stamp is used when @ref ts_flag is True.
+ *                            true: contain time_stamp.
+ *                            false: does not contain time_stamp.
+ * @param[in]   time_stamp    A time in microseconds. The time_stamp is used when ts_flag is true.
  * @param[in]   pkt_seq_num   The sequence number of the SDU.
  *
- * @return Send request operation.
- * @retval GAP_CAUSE_SUCCESS  Send request operation success.
- * @retval Others             Send request operation failure.
+ * @return Operation result.
+ * @retval GAP_CAUSE_SUCCESS    Operation success.
+ * @retval Others   Operation failure.
  *
  * <b>Example usage</b>
  * \code{.c}

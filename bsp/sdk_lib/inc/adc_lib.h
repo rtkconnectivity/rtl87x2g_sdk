@@ -88,28 +88,27 @@ typedef enum
   */
 
 /**
-  * @brief  Initializes the ADC Calibration.
-  * @param  Void.
-  * @retval ADC Calibration result: (TRUE or FALSE).
+  * @brief  Initialize the ADC calibration process.
+  * @return A boolean value indicating the success of the calibration operation.
   */
 bool ADC_CalibrationInit(void);
 
 /**
-  * @brief  Get ADC voltage.
-  * @param  vSampleMode: Specifies the ADC mode.
-  * @param  vSampleData: Specifies the ADC rawdate.
-  * @param  pErrorStatus: pointer to a ADC error.
-  * @retval ADC volatge value.
+  * @brief  Retrieve the voltage value from an ADC conversion.
+  * @param[in]  vSampleMode  Specifies the mode of ADC operation.
+  * @param[in]  vSampleData  Represents the raw data obtained from the ADC.
+  * @param[in]  pErrorStatus Pointer to a variable where ADC error status will be stored.
+  * @return The voltage value calculated from the ADC data.
   */
 float ADC_GetVoltage(const ADC_SampleMode vSampleMode, int32_t vSampleData,
                      ADC_ErrorStatus *pErrorStatus);
 
 /**
-  * @brief  Get the ADC Resistance value.
-  * @param  Void.
-  * @retval ADC Resistance value.
+  * @brief  Retrieve the resistance value measured by the ADC.
+  * @return The ADC resistance value.
   */
 uint16_t ADC_GetResistance(void);
+
 /** End of ADC_LIB_ADC_Exported_Functions
   * \}
   */

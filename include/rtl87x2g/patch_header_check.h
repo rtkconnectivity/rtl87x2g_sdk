@@ -40,7 +40,7 @@
 #define OTA_HDR_IMG_INFO_DEFAULT_VALUE      0xFFFFFFFF
 #define UUID_SIZE                           16
 #define DEFAULT_HEADER_SIZE                 (0x400 + 256)
-/*IC Type refer to WIKI: https://wiki.realtek.com/display/Bee1/BT+SOC+IC+Type*/
+/* IC Type refer to WIKI: https://wiki.realtek.com/display/Bee1/BT+SOC+IC+Type */
 #define IMG_IC_TYPE                         0xF
 #define FLASH_NOR_TABLE_MAGIC_PATTERN       (0x5A5A12A5)
 
@@ -89,7 +89,7 @@
                                                (RSA_PUBLIC_KEY_BYTE_SIZE + 4))
 // *INDENT-ON*
 #define SYS_CFG_SIGNATURE           0x12345bb3
-/* Config Format: offset(2 bytes) + length(1 byte) + data(1 byte) + mask(1 byte)*/
+/* Config Format: offset( 2 bytes ) + length( 1 byte ) + data( 1 byte ) + mask( 1 byte )*/
 #define MIN_ENTRY_SIZE              5
 
 #define IMG_VER_TO_LITTLE_ENDIAN(git_ver)       (((git_ver & 0xf) << 28 ) + (((git_ver & 0xff0) >> 4) << 20) + (((git_ver & 0x07fff000) >> 12) << 5) + ((git_ver & 0xf8000000) >> 27))
@@ -109,44 +109,45 @@ typedef enum
 {
     IMG_SCCD             = 0x379D,
     IMG_OCCD             = 0x379E,
-    IMG_BOOTPATCH        = 0x379F,          /*!< KM4 boot patch */
+    IMG_BOOTPATCH        = 0x379F,          /*!< boot patch */
     IMG_DFU_FIRST        = IMG_BOOTPATCH,
     IMG_OTA              = 0x37A0,          /*!< OTA header */
-    IMG_SECUREMCUAPP     = 0x37A2,          /*!< KM4 secure app */
-    IMG_SECUREMCUAPPDATA = 0x37A3,          /*!< KM4 secure app data */
+    IMG_SECUREMCUAPP     = 0x37A2,          /*!< secure app */
+    IMG_SECUREMCUAPPDATA = 0x37A3,          /*!< secure app data */
     IMG_BT_STACKPATCH    = 0x37A6,          /*!< BT stack patch */
     IMG_BANK_FIRST       = IMG_BT_STACKPATCH,
-    IMG_MCUPATCH         = 0x37A7,          /*!< KM4 non-secure rom patch */
-    IMG_UPPERSTACK       = 0x37A8,          /*!< KM4 non-secure Upperstack */
-    IMG_MCUAPP           = 0x37A9,          /*!< KM4 non-secure app */
-    IMG_MCUCFGDATA       = 0x37AA,          /*!< KM4 MCUConfigData */
+    IMG_MCUPATCH         = 0x37A7,          /*!< non-secure rom patch */
+    IMG_UPPERSTACK       = 0x37A8,          /*!< non-secure Upperstack */
+    IMG_MCUAPP           = 0x37A9,          /*!< non-secure app */
+    IMG_MCUCFGDATA       = 0x37AA,          /*!< MCU config data */
     IMG_MCUAPPDATA1      = 0x37AE,
     IMG_MCUAPPDATA2      = 0x37AF,
     IMG_MCUAPPDATA3      = 0x37B0,
     IMG_MCUAPPDATA4      = 0x37B1,
     IMG_MCUAPPDATA5      = 0x37B2,
     IMG_MCUAPPDATA6      = 0x37B3,
-    IMG_ZIGBEESTACK      = 0x37B4,          /*!< KM4 Zigbee stack */
+    IMG_ZIGBEESTACK      = 0x37B4,          /*!< Zigbee stack */
     IMG_MAX              = 0x37B5,
     IMG_DFU_MAX          = IMG_MAX,
 
-    IMG_RO_DATA1         = 0x3A81,  /*!< FOR vp */
+    IMG_RO_DATA1         = 0x3A81,
     IMG_RO_DATA2         = 0x3A82,
     IMG_RO_DATA3         = 0x3A83,
     IMG_RO_DATA4         = 0x3A84,
     IMG_RO_DATA5         = 0x3A85,
     IMG_RO_DATA6         = 0x3A86,
 
-    IMG_USER_DATA8       = 0xFFF7,    /*!< the image data only support unsafe single bank ota */
+    /*!< The user data only supports direct overwrite OTA. If there is a power outage during the upgrade process, the data will be incomplete, and a re-upgrade will be required. */
+    IMG_USER_DATA8       = 0xFFF7,
     IMG_USER_DATA_FIRST  = IMG_USER_DATA8,
-    IMG_USER_DATA7       = 0xFFF8,    /*!< the image data only support unsafe single bank ota */
-    IMG_USER_DATA6       = 0xFFF9,    /*!< the image data only support unsafe single bank ota */
-    IMG_USER_DATA5       = 0xFFFA,    /*!< the image data only support unsafe single bank ota */
-    IMG_USER_DATA4       = 0xFFFB,    /*!< the image data only support unsafe single bank ota */
-    IMG_USER_DATA3       = 0xFFFC,    /*!< the image data only support unsafe single bank ota */
-    IMG_USER_DATA2       = 0xFFFD,    /*!< the image data only support unsafe single bank ota */
-    IMG_USER_DATA1       = 0xFFFE,    /*!< the image data only support unsafe single bank ota */
-    IMG_USER_DATA_MAX    = 0xFFFF,    /*!< the image data only support unsafe single bank ota */
+    IMG_USER_DATA7       = 0xFFF8,
+    IMG_USER_DATA6       = 0xFFF9,
+    IMG_USER_DATA5       = 0xFFFA,
+    IMG_USER_DATA4       = 0xFFFB,
+    IMG_USER_DATA3       = 0xFFFC,
+    IMG_USER_DATA2       = 0xFFFD,
+    IMG_USER_DATA1       = 0xFFFE,
+    IMG_USER_DATA_MAX    = 0xFFFF,
 } IMG_ID;
 
 
@@ -190,21 +191,21 @@ typedef struct _IMG_CTRL_HEADER_FORMAT
         uint16_t value;
         struct
         {
-            uint16_t xip: 1; // payload is executed on flash
-            uint16_t enc: 1; // all the payload is encrypted
-            uint16_t load_when_boot: 1; // load image when boot
-            uint16_t enc_load: 1; // encrypt load part or not
-            uint16_t enc_key_select: 3; // referenced to ENC_KEY_SELECT
-            uint16_t not_ready: 1; //for copy image in ota
-            uint16_t not_obsolete: 1; //for copy image in ota
-            uint16_t integrity_check_en_in_boot: 1; // enable image integrity check in boot flow
+            uint16_t xip: 1; // Payload is executed on flash.
+            uint16_t enc: 1; // All the payload is encrypted.
+            uint16_t load_when_boot: 1; // Load image when boot.
+            uint16_t enc_load: 1; // Encrypt load part or not.
+            uint16_t enc_key_select: 3; // Referenced to ENC_KEY_SELECT.
+            uint16_t not_ready: 1; // For copy image in ota.
+            uint16_t not_obsolete: 1; // For copy image in ota.
+            uint16_t integrity_check_en_in_boot: 1; // Enable image integrity check in boot flow.
 //            uint16_t header_size: 4; // unit:KB, set for tool
 //            uint16_t rsvd: 2;
             uint16_t compressed_not_ready: 1;
             uint16_t compressed_not_obsolete: 1;
             uint16_t rsvd: 1;
-            uint16_t image_type: 3; /*for app 000b: normal image, 001b:compressed image, other for more types
-            for patch in temp bank consist of 001b: patch+fsbl, 010b: patch+app, 011b: patch+fsbl+app*/
+            uint16_t image_type: 3; /* For app 000b: normal image, 001b: compressed image, other for more types.
+            For patch in temp bank consist of 001b: patch+fsbl, 010b: patch+app, 011b: patch+fsbl+app. */
         };
     } ctrl_flag;
     uint16_t image_id;
@@ -387,87 +388,79 @@ typedef enum
     * @{
     */
 /**
-    * @brief    check whether ota support bank switch
-    * @param    void
-    * @return   true: support bank switch, false: not support bank switch
+    * @brief    Determine if OTA supports bank switching.
+    * @return   True: support bank switch, false: not support bank switch.
     */
 bool is_ota_support_bank_switch(void);
 
 /**
-    * @brief    get image header format size
-    * @param    void
-    * @return   image header format size
+    * @brief    Get the size of the image header format.
+    * @return   The size of the image header format in bytes.
     */
 uint32_t get_img_header_format_size(void);
 
 /**
-    * @brief    get image header extra infomation
-    * @param    void
-    * @return   pointer to T_EXTRA_INFO_FORMAT
+    * @brief    Get additional information from the image header.
+    * @return   A pointer to an instance of \ref T_EXTRA_INFO_FORMAT` containing the extra information.
     */
 T_EXTRA_INFO_FORMAT *get_extra_info(void);
 
 /**
-    * @brief    get active boot patch address
-    * @param    void
-    * @return   active boot patch address
+    * @brief    Get the active boot patch address.
+    * @return   The address of the active boot patch.
     */
 uint32_t get_active_boot_patch_addr(void);
 
 /**
-    * @brief    get active secure app address
-    * @param    void
-    * @return   active secure app address
+    * @brief    Get the active secure application address.
+    * @return   The address of the active secure application.
     */
 uint32_t get_active_secure_app_addr(void);
 
 /**
-    * @brief    get active ota bank address
-    * @param    void
-    * @return   active ota bank address
+    * @brief    Get the address of the active OTA bank.
+    * @return   The address of the active OTA bank.
     */
 uint32_t get_active_ota_bank_addr(void);
 
 /**
-    * @brief    get header address by image id
-    * @param    image_id  image id
-    * @return   header address
+    * @brief    Get the header address for a given image ID.
+    * @param[in]    image_id  Identifier of the image.
+    * @return   The header address associated with the specified image ID.
     */
 uint32_t get_header_addr_by_img_id(IMG_ID image_id);
 
 /**
-    * @brief    get active bank image size by image id
-    * @param    image_id  image id
-    * @return   image size
+    * @brief    Get the size of the active bank image for a given image ID.
+    * @param[in]    image_id  Identifier of the image.
+    * @return   The size of the image in the active bank corresponding to the specified image ID.
     */
 uint32_t get_active_bank_image_size_by_img_id(IMG_ID image_id);
 
 /**
-    * @brief    get active ota bank size
-    * @param    void
-    * @return   active ota bank size
+    * @brief    Get the size of the active OTA bank.
+    * @return   The size of the active OTA bank.
     */
 uint32_t get_active_ota_bank_size(void);
 
 /**
-    * @brief    get inactive ota bank size
-    * @param    void
-    * @return   inactive ota bank address
+    * @brief    Get the size of the inactive OTA bank.
+    * @return   The size of the inactive OTA bank.
     */
 uint32_t get_temp_ota_bank_size(void);
 
 /**
-    * @brief    get inactive ota bank image address by image id
-    * @param    image_id  image id
-    * @return   inactive ota bank image address
+    * @brief    Get the image address in the inactive OTA bank for a given image ID.
+    * @param[in]    image_id  Identifier of the image.
+    * @return   The image address in the inactive OTA bank corresponding to the specified image ID.
     */
 uint32_t get_temp_ota_bank_img_addr_by_img_id(IMG_ID image_id);
 
 /**
-    * @brief    header valid check
-    * @param    header_addr  header address
-    * @param    image_id  image id
-    * @return   A @ref IMG_CHECK_ERR_TYPE type value
+    * @brief    Validate the integrity of the header for a given image ID.
+    * @param[in]    header_addr  Address of the header.
+    * @param[in]    image_id  Identifier of the image.
+    * @return   A value of type @ref IMG_CHECK_ERR_TYPE indicating the validation result.
     */
 static IMG_CHECK_ERR_TYPE check_header_valid(uint32_t header_addr, IMG_ID image_id)
 {
@@ -539,9 +532,9 @@ EXIT:
 }
 
 /**
-    * @brief    get inactive ota bank image size by image id
-    * @param    image_id  image id
-    * @return   inactive ota bank image size
+    * @brief    Get the size of the inactive OTA bank.
+    * @param[in]    image_id  Identifier of the image.
+    * @return   The size in bytes of the inactive OTA bank.
     */
 static __inline uint32_t get_temp_ota_bank_img_size_by_img_id(IMG_ID image_id)
 {
@@ -550,7 +543,7 @@ static __inline uint32_t get_temp_ota_bank_img_size_by_img_id(IMG_ID image_id)
     uint32_t temp_bank_size;
     uint32_t ota_bank0_addr = flash_nor_get_bank_addr(FLASH_OTA_BANK_0);
 
-    if (image_id < IMG_DFU_FIRST || ((image_id >= IMG_MAX)))
+    if (image_id < IMG_DFU_FIRST || (image_id >= IMG_MAX))
     {
         return image_size;
     }
@@ -565,7 +558,7 @@ static __inline uint32_t get_temp_ota_bank_img_size_by_img_id(IMG_ID image_id)
         }
         else if (get_active_boot_patch_addr() == boot_patch1_addr)
         {
-            return  flash_nor_get_bank_size(FLASH_BOOT_PATCH0);;
+            return  flash_nor_get_bank_size(FLASH_BOOT_PATCH0);
         }
         else
         {
@@ -655,37 +648,37 @@ static __inline uint32_t get_temp_ota_bank_img_size_by_img_id(IMG_ID image_id)
 }
 
 /**
-    * @brief    get ota bank image version
-    * @param    is_active_bank  whether active bank
-    * @param    image_id  image id
-    * @param    p_image_version  pointer to p_image_version
-    * @return   ture: success ; false: fail
+    * @brief    Get the image version from the OTA bank.
+    * @param[in]    is_active_bank  Indicates whether to access the active bank (true) or the inactive bank (false).
+    * @param[in]    image_id  Identifier of the image.
+    * @param[out]    p_image_version  Pointer to where the image version will be stored.
+    * @return   True if the operation is successful; false otherwise.
     */
 bool get_ota_bank_image_version(bool is_active_bank, IMG_ID image_id,
                                 T_IMAGE_VERSION *p_image_version);
 
 /**
-    * @brief    get ota header item
-    * @param    is_active_bank  whether active bank
-    * @param    offset  ota header offset
-    * @param    data  pointer to data
-    * @return   ture: success ; false: fail
+    * @brief    Get an item from the OTA header.
+    * @param[in]    is_active_bank  Indicates whether to access the active bank (true) or the inactive bank (false).
+    * @param[in]    offset  Offset of the item within the OTA header.
+    * @param[out]    data   Pointer to where the data will be stored.
+    * @return    True if the operation is successful; false otherwise.
     */
 bool get_ota_header_item(bool is_active_bank, uint32_t offset, uint32_t *data);
 
 /**
-    * @brief    image entry
-    * @param    image_id  image id
-    * @param    image_addr  image address
-    * @return   A @ref IMG_CHECK_ERR_TYPE type value
+    * @brief    Initialize or verify the entry point for a given image.
+    * @param[in]    image_id  Identifier of the image.
+    * @param[in]    image_addr   Address of the image.
+    * @return    A value of type @ref IMG_CHECK_ERR_TYPE indicating the result of the operation.
     */
 IMG_CHECK_ERR_TYPE image_entry(uint16_t image_id, uint32_t image_addr);
 
 /**
-    * @brief    image entry check
-    * @param    rom_header  pointer to rom_header
-    * @param    patch_header  pointer to patch_header
-    * @return   A @ref IMG_CHECK_ERR_TYPE type value
+    * @brief    Validate the entry for image headers.
+    * @param[in]    rom_header  Pointer to the ROM header structure.
+    * @param[in]    patch_header   Pointer to the patch header structure.
+    * @return    A value of type @ref IMG_CHECK_ERR_TYPE indicating the result of the operation.
     */
 IMG_CHECK_ERR_TYPE image_entry_check(T_ROM_HEADER_FORMAT *rom_header,
                                      T_ROM_HEADER_FORMAT *patch_header);

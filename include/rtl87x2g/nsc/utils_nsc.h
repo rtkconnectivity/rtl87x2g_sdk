@@ -1,6 +1,6 @@
 /**
 ************************************************************************************************************
-*               Copyright(c) 2017, Realtek Semiconductor Corporation. All rights reserved.
+*               Copyright (c) 2017, Realtek Semiconductor Corporation. All rights reserved.
 ************************************************************************************************************
 * @file     utils_nsc.h
 * @brief    utility helper function for user application

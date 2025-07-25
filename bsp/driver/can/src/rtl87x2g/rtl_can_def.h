@@ -24,28 +24,38 @@ extern "C" {
 /*============================================================================*
  *                          CAN Features
  *============================================================================*/
-#define CAN_SUPPORT_EXT_LOOPBACK                         (0)
-#define CAN_SUPPORT_INT_MSK_STS                          (0)
-#define CAN_SUPPORT_SLEEP_MODE                           (0)
+#define CAN_SUPPORT_EXT_LOOPBACK                         (0) //!< The function is not supported.
+#define CAN_SUPPORT_INT_MSK_STS                          (0) //!< The function is not supported.
+#define CAN_SUPPORT_SLEEP_MODE                           (0) //!< The function is not supported.
 
 /*============================================================================*
  *                         Types
  *============================================================================*/
+/**
+* \brief       CAN clock divider definition.
+*
+* \ingroup     CAN_Exported_Types
+*/
 typedef enum
 {
-    CAN_CLOCK_DIVIDER_1 = 0,      /* 40M / 1 */
-    CAN_CLOCK_DIVIDER_2 = 1,      /* 40M / 2 */
+    CAN_CLOCK_DIVIDER_1 = 0,      //!< DVI = 1 (40M / 1).
+    CAN_CLOCK_DIVIDER_2 = 1,      //!< DVI = 2 (40M / 2).
 } CANClockDiv_TypeDef;
 
 #define IS_CAN_CLK_DIV(DIV)              (((DIV) == CAN_CLOCK_DIVIDER_1) || \
-                                          ((DIV) == CAN_CLOCK_DIVIDER_2))
+                                          ((DIV) == CAN_CLOCK_DIVIDER_2)) //!< Check if the input parameter is valid.
 
+/**
+* \brief       CAN clock source definition.
+*
+* \ingroup     CAN_Exported_Types
+*/
 typedef enum
 {
-    CAN_CLOCK_SRC_40M,
+    CAN_CLOCK_SRC_40M,      //!< The clock source of can is 40MHz.
 } CANClockSrc_TypeDef;
 
-#define IS_SPI_CLK_SOURCE(PERIPH)     ((PERIPH) == CAN_CLOCK_SRC_40M)
+#define IS_SPI_CLK_SOURCE(PERIPH)     ((PERIPH) == CAN_CLOCK_SRC_40M) //!< Check if the input parameter is valid.
 
 /*============================================================================*
  *                          CAN Registers Memory Map
@@ -92,6 +102,7 @@ typedef struct            /*!< CAN Structure */
 /*============================================================================*
  *                          CAN Declaration
  *============================================================================*/
+
 #define CAN0                       ((CAN_TypeDef *) CAN_REG_BASE)
 #define CAN                         CAN0
 
@@ -115,8 +126,8 @@ typedef struct            /*!< CAN Structure */
 * \ingroup     CAN_Exported_Constants
 */
 
-#define CAN_CLK_DIV_1              CAN_CLOCK_DIVIDER_1
-#define CAN_CLK_DIV_2              CAN_CLOCK_DIVIDER_2
+#define CAN_CLK_DIV_1              CAN_CLOCK_DIVIDER_1  //!< The macro is a wrapper for CAN_CLOCK_DIVIDER_1.
+#define CAN_CLK_DIV_2              CAN_CLOCK_DIVIDER_2  //!< The macro is a wrapper for CAN_CLOCK_DIVIDER_2.
 
 /** End of CAN Constants Wrapper
   * \}

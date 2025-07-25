@@ -44,7 +44,7 @@ extern "C"
 /** @defgroup APP_BOND_MANAGER_MSG_Types APP Bond Manager Msg Types
   * @{
   */
-#define GAP_MSG_APP_BOND_MANAGER_INFO          0x80
+#define GAP_MSG_APP_BOND_MANAGER_INFO          0x80          //!< Information msg type for APP bond manager.
 /** End of APP_BOND_MANAGER_MSG_Types
   * @}
   */
@@ -52,19 +52,34 @@ extern "C"
 /** @defgroup APP_BOND_MANAGER_MSG_Opcodes APP Bond Manager Msg Opcodes
   * @{
   */
-#define APP_BOND_MGR_SIGN_COUNTER_RESULT_INFO                   0x0001   //!< No confirm.
-#define APP_BOND_MGR_SET_REMOTE_CLIENT_SUPPORTED_FEATURES_INFO  0x0002   //!< Return value of callback. @ref T_APP_RESULT.
-#define APP_BOND_MGR_SET_CCCD_DATA_PENDING_INFO                 0x0003   //!< Return value of callback. @ref T_APP_RESULT.
+#define APP_BOND_MGR_SIGN_COUNTER_RESULT_INFO                   0x0001   /**< Information for sign counter result. APP shall save data when receiving this opcode.
+                                                                              The structure of callback data is @ref T_SIGN_COUNTER_RESULT_INFO. */
 
-#define APP_BOND_MGR_GATT_SERVER_STORE_IND                      0x0020   //!< GATT_STORE_OP_GET_CCC_BITS: gap_update_cccd_info; GATT_STORE_OP_SET_CCC_BITS: no confirm.
+#define APP_BOND_MGR_SET_REMOTE_CLIENT_SUPPORTED_FEATURES_INFO  0x0002   /**< Information for setting remote client supported features. APP shall save data when receiving this opcode,
+                                                                              and the operation result is the return value of callback @ref T_APP_RESULT.
+                                                                              The structure of callback data is @ref T_SET_REMOTE_CLIENT_SUPPORTED_FEATURES_INFO. */
 
-#define APP_BOND_MGR_GET_REMOTE_CLIENT_SUPPORTED_FEATURES_IND   0x0040   //!< gap_acl_update_remote_client_supported_features.
+#define APP_BOND_MGR_SET_CCCD_DATA_PENDING_INFO                 0x0003   /**< Information for setting CCCD data pending. APP shall save data when receiving this opcode,
+                                                                              and the operation result is the return value of callback @ref T_APP_RESULT.
+                                                                              The structure of callback data is @ref T_SET_CCCD_DATA_PENDING_INFO. */
 
-#define APP_BOND_MGR_LE_ACL_STATUS_INFO                         0x0060   //!< No confirm.
+#define APP_BOND_MGR_GATT_SERVER_STORE_IND                      0x0020   /**< When receiving this opcode with @ref GATT_STORE_OP_GET_CCC_BITS, APP shall call @ref gap_update_cccd_info.
+                                                                              When receiving this opcode with @ref GATT_STORE_OP_SET_CCC_BITS, APP shall save data.
+                                                                              The structure of callback data is @ref T_GATT_SERVER_STORE_IND. */
 
-#define APP_BOND_MGR_LE_AUTHEN_RESULT_IND                       0x0080   //!< le_bond_authen_result_confirm.
+#define APP_BOND_MGR_GET_REMOTE_CLIENT_SUPPORTED_FEATURES_IND   0x0040   /**< Indication for getting remote client supported features.
+                                                                              APP shall call @ref gap_acl_update_remote_client_supported_features when receiving this opcode.
+                                                                              The structure of callback data is @ref T_GET_REMOTE_CLIENT_SUPPORTED_FEATURES_IND. */
 
-#define APP_BOND_MGR_LE_AUTHEN_KEY_REQ_IND                      0x00A0  //!< le_bond_authen_key_req_confirm.
+#define APP_BOND_MGR_LE_ACL_STATUS_INFO                         0x0060   /**< Information for LE ACL status. The structure of callback data is @ref T_LE_ACL_STATUS. */
+
+#define APP_BOND_MGR_LE_AUTHEN_RESULT_IND                       0x0080   /**< Indication for LE authentication result. APP shall save data and call @ref le_bond_authen_result_confirm
+                                                                              when receiving this opcode.
+                                                                              The structure of callback data is @ref T_LE_AUTHEN_RESULT_IND. */
+
+#define APP_BOND_MGR_LE_AUTHEN_KEY_REQ_IND                      0x00A0   /**< Indication for LE authentication key request. APP shall call @ref le_bond_authen_key_req_confirm
+                                                                              when receiving this opcode.
+                                                                              The structure of callback data is @ref T_LE_AUTHEN_KEY_REQ_IND. */
 /** End of APP_BOND_MANAGER_MSG_Opcodes
   * @}
   */
@@ -143,7 +158,7 @@ typedef struct
     T_GAP_KEY_TYPE      key_type;       /**< Key type of the link. */
     uint8_t             key_size;       /**< Key size of the link. */
     uint8_t             encrypt_type;   /**< Encryption type of the link. */
-    uint16_t            cause;          /**< Authentication result. */
+    uint16_t            cause;          /**< Authentication cause. */
 } T_LE_ACL_STATUS_PARAM_AUTHEN;
 
 typedef struct
@@ -171,7 +186,7 @@ typedef struct
     uint8_t                     bd_addr[6];
     T_GAP_REMOTE_ADDR_TYPE      remote_addr_type;
     uint8_t                     key_len;
-    T_GAP_KEY_TYPE              key_type;           /**< Key type. */
+    T_GAP_KEY_TYPE              key_type;
     uint8_t                     link_key[28];
     uint16_t                    cause;
 } T_LE_AUTHEN_RESULT_IND;
@@ -180,7 +195,7 @@ typedef struct
 {
     uint8_t                     bd_addr[6];
     T_GAP_REMOTE_ADDR_TYPE      remote_addr_type;
-    T_GAP_KEY_TYPE              key_type;           /**< Requested Key type. */
+    T_GAP_KEY_TYPE              key_type;
 } T_LE_AUTHEN_KEY_REQ_IND;
 
 typedef union
@@ -202,8 +217,8 @@ typedef union
 
 typedef struct
 {
-    uint16_t                   opcode;
-    T_APP_BOND_MGR_CB_DATA  data;
+    uint16_t                   opcode; /**< @ref APP_BOND_MANAGER_MSG_Opcodes. */
+    T_APP_BOND_MGR_CB_DATA     data;  /**< @ref T_APP_BOND_MGR_CB_DATA. */
 } T_APP_BOND_MGR_CB;
 /** End of GAP_BOND_MANAGER_Exported_Types
 * @}
@@ -236,7 +251,7 @@ bool gap_get_gap_bond_manager(void);
  * @param[in] cause            User confirm result.
  * @return Operation result.
  * @retval GAP_CAUSE_SUCCESS    Operation success.
- * @retval GAP_CAUSE_NON_CONN   Operation failure. No connection.
+ * @retval Others   Operation failure.
  */
 T_GAP_CAUSE le_bond_authen_result_confirm(uint8_t *bd_addr, T_GAP_REMOTE_ADDR_TYPE remote_addr_type,
                                           T_GAP_KEY_TYPE key_type, T_GAP_CFM_CAUSE cause);
@@ -253,7 +268,7 @@ T_GAP_CAUSE le_bond_authen_result_confirm(uint8_t *bd_addr, T_GAP_REMOTE_ADDR_TY
  * @param[in] cause            User confirm result.
  * @return Operation result.
  * @retval GAP_CAUSE_SUCCESS    Operation success.
- * @retval GAP_CAUSE_NON_CONN   Operation failure. No connection.
+ * @retval Others   Operation failure.
  */
 T_GAP_CAUSE le_bond_authen_key_req_confirm(uint8_t *bd_addr,
                                            T_GAP_REMOTE_ADDR_TYPE remote_addr_type,
@@ -267,12 +282,26 @@ T_GAP_CAUSE le_bond_authen_key_req_confirm(uint8_t *bd_addr,
  *
  * @param[in]  conn_handle   Connection handle of the ACL link.
  * @param[in]  data_len      The length of the updated CCCD data.
- * @param[in,out] data       Point to the updated CCCD data.
+ * @param[in]  data          Point to the updated CCCD data.
  * @return Operation result.
  * @retval true     Operation success.
  * @retval false    Operation failure.
  */
 bool gap_update_cccd_info(uint16_t conn_handle, uint8_t data_len, uint8_t *data);
+
+/**
+ * @brief   When receiving @ref APP_BOND_MGR_GET_REMOTE_CLIENT_SUPPORTED_FEATURES_IND,
+ *          APP shall call this API to update the client supported features.
+ *
+ * @param[in]  conn_handle                Connection handle of the ACL link.
+ * @param[in]  client_supp_feats_len      The length of the updated client supported features.
+ * @param[in]  p_client_supp_feats        Point to the updated client supported features.
+ * @return Operation result.
+ * @retval GAP_CAUSE_SUCCESS    Operation success.
+ * @retval Others   Operation failure.
+ */
+T_GAP_CAUSE gap_acl_update_remote_client_supported_features(uint16_t conn_handle,
+                                                            uint8_t client_supp_feats_len, uint8_t *p_client_supp_feats);
 /** End of GAP_BOND_MANAGER_Exported_Functions
   * @}
   */

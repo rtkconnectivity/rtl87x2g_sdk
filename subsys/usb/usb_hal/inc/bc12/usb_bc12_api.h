@@ -20,9 +20,6 @@ typedef enum
     BC12_TYPE_DCP_1P5A,                     /**< bc12 type is DCP, max charger current is 1.5A. */
     BC12_TYPE_CDP_1P5A,                     /**< bc12 type is CDP, max charger current is 1.5A. */
     BC12_TYPE_OTHERS_USER_DEFINED_0P5A,     /**< bc12 type is others, max charger current is user-defined. */
-    BC12_TYPE_APPLE_1P0A,                   /**< bc12 type is APPLE, max charger current is 1.0A. */
-    BC12_TYPE_APPLE_2P1A,                   /**< bc12 type is APPLE, max charger current is 2.1A. */
-    BC12_TYPE_APPLE_2P4A,                   /**< bc12 type is APPLE, max charger current is 2.4A. */
     BC12_TYPE_ADP_ERROR = 0xFF,             /**< error value. */
 } T_USB_BC12_TYPE;
 

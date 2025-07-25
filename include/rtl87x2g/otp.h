@@ -43,13 +43,13 @@ typedef union _HEAP_TYPE_MASK
 typedef struct otp_struct
 {
 
-    /*****************os_cfg *********************/
+    /***************** os_cfg *********************/
     /* start addr: 0x0013d79c, size:0x1f */
     uint8_t getStackHighWaterMark : 1;         /* 0 for release version, 1 for debug version */
     uint8_t checkForStackOverflow : 1;         /* 0 for release version, 1 for debug version */
     uint8_t dumpMemoryUsage : 1;               /* 0 for release version, 1 for debug version */
-    uint8_t enableASSERT: 1;                   /* 0 for release version, 1 for debug version */
-    uint8_t os_cfg_rsvd0: 4;
+    uint8_t enableASSERT : 1;                   /* 0 for release version, 1 for debug version */
+    uint8_t os_cfg_rsvd0 : 4;
 
     uint8_t  timerMaxNumber;                  /* default = 0x20 */
     uint8_t  timerQueueLength;                /* default = 0x20 */
@@ -64,11 +64,11 @@ typedef struct otp_struct
     uint16_t idle_task_stack_size;             /* measured in bytes, default 256 * 4 bytes */
     uint16_t timer_task_stack_size;            /* measured in bytes, default 256 * 4 bytes */
     uint16_t lower_task_stack_size;            /* measured in bytes, default 768 * 4 bytes */
-    /****************end os_cfg *******************/
+    /**************** end os_cfg *******************/
 
     uint8_t rsvd1[1353];
 
-    /****************platform config****************/
+    /**************** platform config ****************/
     /* start addr: 0x0013dd04, size: 0x154 */
     uint32_t stack_en : 1;
     uint32_t cpu_sleep_en : 1;
@@ -88,13 +88,13 @@ typedef struct otp_struct
 
     uint16_t ftl_app_start_addr;
     uint16_t flash_task_stack_depth : 2;
-    uint16_t use_ftl: 1;
+    uint16_t use_ftl : 1;
     uint16_t platform_cfg_rsvd3 : 13;
 
     uint32_t reboot_record_address; /* start address of reboot record */
-    /****************end platform config****************/
-}  __attribute__((packed))T_OTP_CFG;
-/*end otp, addr = 0x00138f80*/
+    /**************** end platform config ****************/
+}  __attribute__((packed)) T_OTP_CFG;
+/* end otp, addr = 0x00138f80 */
 
 #define OTP_STRUCT_BASE             0x0013d79c
 #define OTP                         ((T_OTP_CFG *) OTP_STRUCT_BASE)

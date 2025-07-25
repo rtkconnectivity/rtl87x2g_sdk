@@ -13,6 +13,8 @@
   * @brief
   * @{
   */
+
+/** @brief PSRAM low power mode. */
 typedef enum
 {
     PSRAM_LPM_STANDBY_MODE,
@@ -32,9 +34,10 @@ typedef enum
   */
 
 /**
-* @brief  psram init
-* @param  void
-* @return false if psram init fail
+* @brief  PSRAM init
+* @return PSRAM init result
+* @retval Ture PSRAM init successfully
+* @retval False PSRAM init fail
 */
 bool psram_winbond_opi_init(void);
 

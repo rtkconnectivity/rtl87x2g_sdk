@@ -24,7 +24,6 @@
 #include "dfu_service.h"
 #include "dfu_common.h"
 #include "gap_conn_le.h"
-#include "os_mem.h"
 #include "os_sync.h"
 #include "os_timer.h"
 #include "fmc_api.h"
@@ -1206,11 +1205,10 @@ static uint8_t ble_dfu_packet_handle(uint8_t *p_data, uint16_t length)
  *                              Public Functions
  *============================================================================*/
 /**
-    * @brief    Used to get device information
-    * @param    p_data    point of device info data
-    * @param    ota_mode  spp ota or ble ota
-    * @return   void
-    */
+ * @brief    Retrieves the device information for a specified connection.
+ * @param    conn_id       The ID of the connection for which device information is requested.
+ * @param    p_deviceinfo  Pointer to a \ref DEVICE_INFO structure where the device information will be stored.
+ */
 void ble_dfu_get_device_info(uint8_t conn_id, DEVICE_INFO *p_deviceinfo)
 {
     if (p_deviceinfo == NULL)
@@ -1254,11 +1252,10 @@ void ble_dfu_get_device_info(uint8_t conn_id, DEVICE_INFO *p_deviceinfo)
 }
 
 /**
-    * @brief    Used to get image version
-    * @param    *p_data   point of image version
-    * @param    bank   0:active bank    1:inactive bank
-    * @return   void
-    */
+ * @brief    Retrieve the image version.
+ * @param    p_data   Pointer to store the image version.
+ * @param    bank     Specifies the bank: 0 for active bank, 1 for inactive bank.
+ */
 void ble_dfu_get_img_version(uint8_t *p_data, uint8_t bank)
 {
     uint8_t num = 0;
@@ -1325,10 +1322,9 @@ void ble_dfu_get_img_version(uint8_t *p_data, uint8_t bank)
 }
 
 /**
-    * @brief    Used to get image section size
-    * @param    p_data  point of the section size
-    * @return   void
-    */
+ * @brief    Obtain the size of an image section.
+ * @param    p_data   Pointer to store the section size.
+ */
 void ble_dfu_get_section_size(uint8_t *p_data)
 {
     uint8_t num = 0;
@@ -1378,11 +1374,20 @@ void ble_dfu_get_section_size(uint8_t *p_data)
     DFU_PRINT_INFO1("<===ble_dfu_get_section_size, img_num:%x in active bank", num);
 }
 
+/**
+ * @brief    Check the OTA process status.
+ * @return   true if in OTA process, false otherwise.
+ */
 bool ble_dfu_get_ota_status(void)
 {
     return ota_struct.ota_flag.is_ota_process;
 }
 
+/**
+ * @brief    Notify about connection parameter update request during DFU.
+ * @param    conn_id     Identifier for the connection.
+ * @param    error_code  Error code for the connection parameter update request.
+ */
 void dfu_notify_conn_para_update_req(uint8_t conn_id, uint8_t error_code)
 {
     if (ota_struct.dfu_conn_para_update_in_progress == true)
@@ -1413,13 +1418,13 @@ void dfu_notify_conn_para_update_req(uint8_t conn_id, uint8_t error_code)
 
 
 /**
-    * @brief    Handle written request on DFU control point characteristic
-    * @param    conn_id     ID to identify the connection
-    * @param    length      Length of value to be written
-    * @param    p_value     Value to be written
-    * @return   T_APP_RESULT
-    * @retval   Handle result of this request
-    */
+ * @brief    Handle write requests for the DFU packet characteristic.
+ * @param    conn_id     Identifier for the connection.
+ * @param    length      Length of the value to be written.
+ * @param    p_value     Pointer to the value to be written.
+ * @return   \ref T_APP_RESULT
+ * @retval   Result of handling this request.
+ */
 T_APP_RESULT ble_dfu_service_handle_cp_req(uint8_t conn_id, uint16_t length, uint8_t *p_value)
 {
     T_APP_RESULT cause = APP_RESULT_INVALID_PDU;
@@ -1710,13 +1715,13 @@ T_APP_RESULT ble_dfu_service_handle_cp_req(uint8_t conn_id, uint16_t length, uin
 }
 
 /**
-    * @brief    Handle written request on DFU packet characteristic
-    * @param    conn_id     ID to identify the connection
-    * @param    length      Length of value to be written
-    * @param    p_value     Value to be written
-    * @return   T_APP_RESULT
-    * @retval   Handle result of this request
-    */
+ * @brief    Handle written request on DFU packet characteristic.
+ * @param    conn_id     ID to identify the connection
+ * @param    length      Length of value to be written
+ * @param    p_value     Value to be written
+ * @return   T_APP_RESULT
+ * @retval   Handle result of this request
+ */
 T_APP_RESULT ble_dfu_service_handle_packet(uint8_t conn_id, uint16_t length, uint8_t *p_value)
 {
     uint8_t result;

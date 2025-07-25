@@ -43,7 +43,6 @@ extern "C" {
 * @param  msg          pointer to the message data to be authenticated
 * @param  msg_len      length of the message data
 * @param  res          An array for storing the resulting 16-byte CMAC value
-* @return void
 */
 void aes_cmac(uint8_t key[16], uint8_t *msg,
               size_t msg_len, uint8_t res[16]);

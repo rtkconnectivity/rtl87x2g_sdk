@@ -42,8 +42,6 @@ typedef enum
 
 extern void *RamVectorTable[];
 
-extern void Default_Handler_rom(void);
-extern void BTMAC_Handler(void);
 
 /** End of VECTOR_TABLE_Exported_Types
   * @}
@@ -56,23 +54,24 @@ extern void BTMAC_Handler(void);
   * @brief
   * @{
   */
+/* @brief   Default interrupt handler used in ROM. */
+extern void Default_Handler_rom(void);
+
+/* @brief   Bluetooth MAC interrupt handler. */
+extern void BTMAC_Handler(void);
+
 /**
- * @brief  Initialize RAM vector table to a given RAM address.
- * @param  ram_vector_addr: RAM Vector Address.
- * @retval true: Success
- *         false: Fail
- * @note   When using vector table relocation, the base address of the new vector
- *         table must be aligned to the size of the vector table extended to the
- *         next larger power of 2. In RTL8763, the base address is aligned at 0x100.
+ * @brief  Initialize the RAM vector table at the specified RAM address.
+ * @param[in]  ram_vector_addr The desired RAM address for the vector table.
+ * @retval true if the initialization is successful, false otherwise.
  */
 bool RamVectorTableInit(uint32_t ram_vector_addr);
 
 /**
- * @brief  Update ISR Handler in RAM Vector Table.
- * @param  v_num: Vector number(index)
- * @param  isr_handler: User defined ISR Handler.
- * @retval true: Success
- *         false: Fail
+ * @brief  Update a specific Interrupt Service Routine (ISR) handler in the RAM vector table, should ensure that the ISR Handler runs RAM code.
+ * @param[in]  v_num        Vector number.
+ * @param[in]  isr_handler  User-defined ISR Handler.
+ * @retval true if the update is successful, false otherwise.
  */
 bool RamVectorTableUpdate(VECTORn_Type v_num, IRQ_Fun isr_handler);
 

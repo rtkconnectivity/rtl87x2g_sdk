@@ -1,9 +1,9 @@
 /**
 *****************************************************************************************
-*     Copyright(c) 2017, Realtek Semiconductor Corporation. All rights reserved.
+*     Copyright (c) 2017, Realtek Semiconductor Corporation. All rights reserved.
 *****************************************************************************************
   * @file    Mem_types.h
-  * @brief   define memory types for RAM
+  * @brief   Define memory types for RAM
   * @date    2017.6.6
   * @version v1.0
   * *************************************************************************************
@@ -36,12 +36,10 @@ extern "C" {
 
 typedef enum
 {
-    RAM_TYPE_DATA_ON,        //DTCM Heap
-    RAM_TYPE_DATA_OFF = RAM_TYPE_DATA_ON,
-    RAM_TYPE_BUFFER_ON,
-    RAM_TYPE_BUFFER_OFF = RAM_TYPE_BUFFER_ON,
-    RAM_TYPE_EXT_DATA_SRAM,  //Ext DATA SRAM heap
-    RAM_TYPE_NUM
+    RAM_TYPE_DATA_ON,                         /**< DTCM Heap.   */
+    RAM_TYPE_BUFFER_ON,                       /**< Buffer Heap. */
+    RAM_TYPE_EXT_DATA_SRAM,                   /**< Ext DATA SRAM Heap. */
+    RAM_TYPE_NUM                              /**< MAX RAM Type Number. */
 } RAM_TYPE;
 
 /** End of MEM_TYPES_Exported_Types

@@ -30,7 +30,6 @@
 #include "aon_reg.h"
 #include "wdt.h"
 #include "trace.h"
-#include "utils.h"
 #include "flash_map.h"
 
 
@@ -155,9 +154,8 @@ static bool dfu_check_sha256(T_IMG_HEADER_FORMAT *p_header)
  *                              Public Functions
  *============================================================================*/
 /**
- * @brief  AES256 decrypt
- * @param  input pointer to input data
- * @return None
+ * @brief  Decrypt 16 bytes of data using AES-256.
+ * @param  input   Pointer to the input data to be decrypted.
  */
 void dfu_aes256_decrypt_16byte(uint8_t *input)
 {
@@ -177,9 +175,9 @@ void dfu_aes256_decrypt_16byte(uint8_t *input)
 }
 
 /**
- * @brief  Get image size of bank area
- * @param  image_id  image ID
- * @return bank size
+ * @brief  Retrieve the size of the bank area for a given image.
+ * @param  image_id   The identifier of the image.
+ * @return Size of the bank area associated with the image.
  */
 uint32_t get_bank_size_by_img_id(IMG_ID image_id)
 {
@@ -192,10 +190,9 @@ uint32_t get_bank_size_by_img_id(IMG_ID image_id)
 }
 
 /**
- * @brief  Chip reset for dfu
- * @param  reset_mode  reset mode
- * @param  reason      reset reason
- * @return None
+ * @brief  Reset the chip for DFU operations.
+ * @param  reset_mode   The mode used for reset.
+ * @param  reason       The reason for the reset.
  */
 void dfu_fw_reboot(WDTMode_TypeDef reset_mode, T_SW_RESET_REASON reason)
 {
@@ -204,9 +201,8 @@ void dfu_fw_reboot(WDTMode_TypeDef reset_mode, T_SW_RESET_REASON reason)
 }
 
 /**
- * @brief  Check ota mode flag, if image need update
- * @param  None
- * @return Result: true: image need update, false: image don't need update
+ * @brief  Check the OTA mode flag to determine if an image update is needed.
+ * @return True if an image update is needed, false otherwise.
  */
 bool dfu_check_ota_mode_flag(void)
 {
@@ -215,9 +211,8 @@ bool dfu_check_ota_mode_flag(void)
 }
 
 /**
- * @brief  Set ota mode flag
- * @param  enable ota mode flag
- * @return None
+ * @brief  Set the OTA mode flag.
+ * @param  enable   True to enable, false to disable the OTA mode flag.
  */
 void dfu_set_ota_mode_flag(bool enable)
 {
@@ -234,9 +229,7 @@ void dfu_set_ota_mode_flag(bool enable)
 }
 
 /**
- * @brief  Switch to the OTA mode, if support normal ota app need call it.
- * @param  None
- * @return None
+ * @brief  Switch to OTA mode if supported, necessary for normal OTA applications.
  */
 void dfu_switch_to_ota_mode(void)
 {
@@ -247,9 +240,8 @@ void dfu_switch_to_ota_mode(void)
 }
 
 /**
- * @brief  Get the ic type of current firmware
- * @param  None
- * @return IC type
+ * @brief    Retrieve the IC type of the current firmware.
+ * @return   The IC type.
  */
 uint8_t dfu_get_ic_type(void)
 {
@@ -262,9 +254,8 @@ uint8_t dfu_get_ic_type(void)
 }
 
 /**
- * @brief  Get active bank number
- * @param  None
- * @return Active bank number
+ * @brief    Retrieve the active bank number.
+ * @return   The active bank number.
  */
 T_ACTIVE_BANK_NUM get_active_bank_num(void)
 {
@@ -291,9 +282,9 @@ T_ACTIVE_BANK_NUM get_active_bank_num(void)
 }
 
 /**
- * @brief  Get template ota bank image address by images id
- * @param  image_id  image ID
- * @return Image address
+ * @brief    Retrieve the image address of the inactive bank.
+ * @param    image_id   The identifier of the image.
+ * @return   The address of the image in the inactive bank.
  */
 uint32_t dfu_get_temp_ota_bank_img_addr_by_img_id(IMG_ID image_id)
 {
@@ -343,9 +334,9 @@ uint32_t dfu_get_temp_ota_bank_img_addr_by_img_id(IMG_ID image_id)
 }
 
 /**
- * @brief  Get template ota bank image size by images id
- * @param  image_id  image ID
- * @return Image size
+ * @brief    Retrieve the size of the image in the inactive bank.
+ * @param    image_id   The identifier of the image.
+ * @return   The size of the image in the inactive bank.
  */
 uint32_t dfu_get_temp_ota_bank_img_size_by_img_id(IMG_ID image_id)
 {
@@ -397,12 +388,12 @@ uint32_t dfu_get_temp_ota_bank_img_size_by_img_id(IMG_ID image_id)
 }
 
 /**
- * @brief Calculate the checksum of a buffer in flash.
+ * @brief Calculate the checksum of data within a buffer in flash.
  *
- * @param buf        Pointer to the buffer whose checksum is to be calculated
- * @param length     Length of the data in the buffer
- * @param mCrcVal    Calculated CRC value will be stored in this variable
- * @return 0 if the buffer's checksum is calculated successfully, error line number otherwise.
+ * @param buf        Pointer to the buffer containing the data.
+ * @param length     Length of the data in the buffer.
+ * @param mCrcVal    Variable to store the calculated CRC value.
+ * @return 0 if checksum calculation is successful, else error line number.
  */
 uint32_t dfu_check_bufcrc(uint8_t *buf, uint32_t length, uint16_t mCrcVal)
 {
@@ -430,10 +421,10 @@ uint32_t dfu_check_bufcrc(uint8_t *buf, uint32_t length, uint16_t mCrcVal)
 }
 
 /**
- * @brief  Erase a sector of the flash
- * @param  image_id  image ID
- * @param  offset    flash address offset
- * @return Result    0: success, others: fail
+ * @brief Erase a sector of the flash.
+ * @param  image_id    The identifier of the image.
+ * @param  offset      Flash address offset.
+ * @return  0 if erase is successful, else error line number.
  */
 uint32_t dfu_flash_erase(IMG_ID image_id, uint32_t offset)
 {
@@ -455,13 +446,13 @@ uint32_t dfu_flash_erase(IMG_ID image_id, uint32_t offset)
 }
 
 /**
-    * @brief    write data to flash
-    * @param    image_id  image id
-    * @param    offset  image offset
-    * @param    total_offset  total offset when ota temp mode
-    * @param    p_void  point of data
-    * @return   0: success; other: fail
-    */
+ * @brief    Write data to flash memory.
+ * @param    image_id  The identifier of the image.
+ * @param    offset    Offset of the current image.
+ * @param    total_offset  Total offset of the image in OTA TEMP area.
+ * @param    p_void    Pointer to the data to be written.
+ * @return   0 on success, non-zero on failure.
+ */
 uint32_t dfu_write_data_to_flash(uint16_t image_id, uint32_t offset, uint32_t total_offset,
                                  uint32_t length, void *p_void)
 {
@@ -495,11 +486,15 @@ uint32_t dfu_write_data_to_flash(uint16_t image_id, uint32_t offset, uint32_t to
     {
         dfu_base_addr += total_offset;
     }
-    if (offset == 0)
-    {
-        T_IMG_HEADER_FORMAT *p_header = (T_IMG_HEADER_FORMAT *)p_void;
 
-        p_header->ctrl_header.ctrl_flag.not_ready = 0x1;
+    uint16_t not_ready_offset = offsetof(T_IMG_HEADER_FORMAT, ctrl_header) +
+                                offsetof(T_IMG_CTRL_HEADER_FORMAT, ctrl_flag);
+
+    if (offset < not_ready_offset && (offset + length) >= not_ready_offset)
+    {
+        uint8_t *p_value = (p_src + (not_ready_offset - offset));
+        /*set not_ready(BIT7) to 0x1 */
+        *p_value |= BIT7;
     }
 
     dest_addr = dfu_base_addr + offset;
@@ -554,11 +549,11 @@ L_EXIT:
 }
 
 /**
-    * @brief    check the integrity of the image
-    * @param    img_id    image id
-    * @param    offset    address offset
-    * @return   ture:success ; false: fail
-    */
+ * @brief    Validate the integrity of a specified image.
+ * @param    image_id   The identifier of the image.
+ * @param    offset     Address offset to start the check.
+ * @return   True if image integrity is confirmed, false otherwise.
+ */
 bool dfu_checksum(IMG_ID img_id, uint32_t offset)
 {
     uint32_t base_addr = 0;
@@ -613,10 +608,9 @@ bool dfu_checksum(IMG_ID img_id, uint32_t offset)
 }
 
 /**
-    * @brief    clear not_ready flag of specific image
-    * @param    addr    address of the image
-    * @return   void
-    */
+ * @brief    Set the not_ready flag of a specific image.
+ * @param    p_header   Pointer to the image header structure.
+ */
 void dfu_set_ready(T_IMG_HEADER_FORMAT *p_header)
 {
     T_IMG_CTRL_HEADER_FORMAT ctrl_header;
@@ -638,9 +632,8 @@ void dfu_set_ready(T_IMG_HEADER_FORMAT *p_header)
 }
 
 /**
- * @brief  Clear not_obsolete flag of specific image
- * @param  p_header pointer to image header
- * @return None
+ * @brief    Set the not_obsolete flag of a specific image.
+ * @param    p_header   Pointer to the image header structure.
  */
 void dfu_set_obsolete(T_IMG_HEADER_FORMAT *p_header)
 {
@@ -653,7 +646,13 @@ void dfu_set_obsolete(T_IMG_HEADER_FORMAT *p_header)
     os_unlock(s);
 }
 
-
+/**
+ * @brief    Retrieve user data information for a specific image.
+ * @param    image_id   The identifier of the image.
+ * @param    img_info   Pointer to store the image information.
+ * @param    is_addr    Boolean indicating if the address is required.
+ * @return   A value of type \ref T_USER_DATA_ERROR_TYPE indicating the result.
+ */
 T_USER_DATA_ERROR_TYPE dfu_get_user_data_info(IMG_ID image_id,
                                               uint32_t *img_info, bool is_addr)
 {

@@ -17,17 +17,20 @@
 #include "usb_utils.h"
 /**
  * \addtogroup USB_Composite
- * @{
- * USB composite device consists of multiple configurations, and each configuration consists of multiple interfaces.
+ * \brief USB composite device consists of multiple configurations, and each configuration consists of multiple interfaces.
  * This module provides fundamental components for implementing USB composite devices, which include multiple USB
  * classes such as USB audio and HID.
- * @}
+ * @{
  */
+
 /**
- * \addtogroup USB_Composite
+ * \defgroup USB_Composite_Usage_Chapter_Device How to Setup USB Device
  * @{
  *
- * \section USB_Composite_Usage_Chapter_Device How to Initialize the USB Device and Configuration
+ * \brief This group provides a comprehensive guide on setting up a USB device,
+ *        complete with sample code for your reference.
+ *
+ * \section USB_Composite_Usage_Chapter_Device Initialize the USB Device and Configuration
  *
  * \par Example
  * \code
@@ -48,7 +51,7 @@
  *      usb_composite_dev_string_add(language, string index, string);
  * \endcode
  *
- * \section USB_Composite_Usage_Chapter_Interface How to Implement USB Interfaces
+ * \section USB_Composite_Usage_Chapter_Interface Implement USB Interfaces
  *
  * \details The core interface information is defined in \ref T_USB_INTERFACE. It is mainly used to initialize
  *          \ref T_USB_INTERFACE to implement an interface.
@@ -162,17 +165,15 @@
  *          .create = demo_if_create,
  *          .release = demo_if_release,
  *      };
- *      usb_composite_dev_interface_add(&usb_if, cfg val);
+ *      usb_composite_dev_interface_add(&usb_if, cfg_val);
  *\endcode
  * @}
  */
-/**
- * \addtogroup USB_Composite
- * @{
- *
- * \section USB_Composite_Definitions Definitions
- *
-*/
+
+/** @defgroup USB_Composite_Device_Exported_Types USB Composite Device Exported Types
+  * @{
+  */
+
 /**
  *
  * \brief The USB endpoint structure, which is an item of the \ref eps list in \ref T_USB_INTERFACE.
@@ -228,6 +229,14 @@ typedef struct _usb_interface
 
 } T_USB_INTERFACE;
 
+/** End of group USB_Composite_Device_Exported_Types
+  * @}
+  */
+
+/** @defgroup USB_Composite_Device_Exported_Functions USB Composite Device Exported Functions
+  * @{
+  */
+
 /**
  * \brief Get the maximum packet size of Endpoint 0.
  *
@@ -242,7 +251,7 @@ uint8_t usb_composite_dev_ep0_mps_get(void);
  * \param language The language of the target string.
  * \param id The ID of target string, which is the value of string index in the corresponding descriptor.
  * \param s The string.
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  * \par Example
  * Please refer to \ref USB_Composite_Usage_Chapter_Device.
  *
@@ -255,7 +264,7 @@ int usb_composite_dev_string_add(uint16_t language, uint8_t id, const char *s);
  * \param language The language of the target string.
  * \param id The ID of target string, which is the value of string index in the corresponding descriptor.
  * \param s The string.
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  *
  */
 int usb_composite_dev_string_remove(uint16_t language, uint8_t id, const char *s);
@@ -264,7 +273,7 @@ int usb_composite_dev_string_remove(uint16_t language, uint8_t id, const char *s
  * \brief Add a configuration to USB composite device.
  *
  * \param cfg_desc The configuration descriptor.
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  * \par Example
  * Please refer to \ref USB_Composite_Usage_Chapter_Device.
  *
@@ -275,7 +284,7 @@ int usb_composite_dev_cfg_add(T_USB_CONFIG_DESC *cfg_desc);
  * \brief Remove a configuration from USB composite device.
  *
  * \param cfg_desc The configuration descriptor.
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  * \par Example
  * Please refer to \ref USB_Composite_Usage_Chapter_Device.
  *
@@ -287,7 +296,7 @@ int usb_composite_dev_cfg_remove(T_USB_CONFIG_DESC *cfg_desc);
  *
  * \param interface Refer to \ref USB_Composite_Usage_Chapter_Interface.
  * \param cfg_val The configuration value that the interface belongs to.
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  * \par Example
  * Please refer to \ref USB_Composite_Usage_Chapter_Interface
  *
@@ -299,7 +308,7 @@ int usb_composite_dev_interface_add(T_USB_INTERFACE *interface, uint8_t cfg_val)
  *
  * \param interface Refer to \ref USB_Composite_Usage_Chapter_Interface.
  * \param cfg_val The configuration value that the interface belongs to.
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  *
  */
 int usb_composite_dev_interface_remove(T_USB_INTERFACE *interface, uint8_t cfg_val);
@@ -314,7 +323,7 @@ T_HAL_USB_SPEED usb_composite_dev_enum_speed_get(void);
 /**
  * \brief Remote wakeup.
  *
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  *
  */
 int usb_composite_dev_remote_wakeup(bool force);
@@ -323,7 +332,7 @@ int usb_composite_dev_remote_wakeup(bool force);
  * \brief Initialize USB composite device.
  *
  * \param dev_desc The device descriptor.
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  * \par Example
  * Please refer to \ref USB_Composite_Usage_Chapter_Device.
  *
@@ -336,5 +345,6 @@ int usb_composite_dev_init(T_USB_DEVICE_DESC *dev_desc);
  */
 int usb_composite_dev_deinit(void);
 
-/** @}*/
+/** @} */ /* End of group USB_Composite_Device_Exported_Functions */
+/** \}*/
 #endif

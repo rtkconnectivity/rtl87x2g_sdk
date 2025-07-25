@@ -1,6 +1,15 @@
-/*
- * Copyright (c) 2015, Realtek Semiconductor Corporation. All rights reserved.
- */
+/**
+*********************************************************************************************************
+*               Copyright(c) 2024, Realtek Semiconductor Corporation. All rights reserved.
+*********************************************************************************************************
+* @file      os_sync.h
+* @brief     Header file for os synchronization API.
+* @details   This file is used for semaphore and mutex.
+* @author    rui_yu
+* @date      2024-12-30
+* @version   v1.0
+* *********************************************************************************************************
+*/
 
 #ifndef _OS_SYNC_H_
 #define _OS_SYNC_H_
@@ -37,11 +46,14 @@ extern "C" {
   */
 
 /**
- * os_sync.h
  *
- * \brief   Enter the critical region. Disable preemptive context switch and interrupts.
+ * \brief   Enter the critical region. Disable preemptive context switch and interrupts:
  *
- * \return      Interrupt mask flag.
+ * 1), When called in task, irq mask flag will be ignored and always return 0. If uxCriticalNesting is 0, record current PRIMASK in variable uxPrimaskBackup. Then PRIMASK is set to 1, and uxCriticalNesting is added 1.
+ *
+ * 2), When called in isr, irq mask flag will record current PRIMASK before setting PRIMASK to 1.
+ *
+ * \return  Interrupt mask flag.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -62,11 +74,14 @@ extern "C" {
 extern uint32_t (*os_lock)(void);
 
 /**
- * os_sync.h
  *
- * \brief   Exit the critical region. Enable preemptive context switch and interrupts.
+ * \brief   Exit the critical region. Enable preemptive context switch and interrupts:
  *
- * \param   flag Interrupt mask flag to be restored.
+ * 1), When called in task, irq mask flag will be ignored. The uxCriticalNesting is subtracted 1. If uxCriticalNesting is subtracted to 0, set PRIMASK to the value of uxPrimaskBackup.
+ *
+ * 2), When called in isr, set PRIMASK to the value of isr mask flag.
+ *
+ * \param[in]   flag Interrupt mask flag to be restored.
  *
  *
  * <b>Example usage</b>
@@ -88,7 +103,6 @@ extern uint32_t (*os_lock)(void);
 extern void (*os_unlock)(uint32_t flag);
 
 /**
- * os_sync.h
  *
  * \brief   Create a counting semaphore.
  *
@@ -102,20 +116,20 @@ extern void (*os_unlock)(uint32_t flag);
  *          The task that tries to obtain the semaphore token needs to wait until the next token
  *          is free. Semaphores are released with os_sem_give(), incrementing the semaphore count.
  *
- * \image html OS-semaphore-overview.jpg "Semaphore Overview" width=496px height=346px
+ * \image html OS-semaphore-overview.jpg "Semaphore Overview" width=49px height=34px
  *
- * \param  pp_handle   Pointer used to pass back the created semaphore handle.
+ * \param[out]  pp_handle   Pointer used to pass back the created semaphore handle.
  *
- * \param  p_name  A descriptive name for the semaphore.
+ * \param[in]   p_name      The name assigned to the semaphore when created, only for debug.
  *
- * \param   init_count  The count value assigned to the semaphore when created.
+ * \param[in]   init_count  The count value assigned to the semaphore when created.
  *
- * \param   max_count   The maximum count value that can be reached. If the max_count is 1,
+ * \param[in]   max_count   The maximum count value that can be reached. If the max_count is 1,
  *                          a binary semaphore is being created.
  *
  * \return           The status of the semaphore creation.
  * \retval true      Semaphore was created successfully.
- * \retval false     Semaphore was failed to create.
+ * \retval false     Semaphore was failed to create. It happens when there is not enough heap to malloc.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -124,7 +138,7 @@ extern void (*os_unlock)(uint32_t flag);
  *     void *p_handle;
  *
  *     // Create a semaphore with initial value 0 and maximum value 10.
- *     if (os_sem_create(&p_handle, "sem name", 0, 10) == true)
+ *     if (os_sem_create(&p_handle, "sem", 0, 10) == true)
  *     {
  *         // Semaphore is created successfully.
  *     }
@@ -143,15 +157,12 @@ extern bool (*os_sem_create)(void **pp_handle, const char *p_name, uint32_t init
                              uint32_t max_count);
 
 /**
- * os_sync.h
  *
  * \brief   Delete a semaphore.
  *
- * \param   p_handle    The handle of the semaphore to be deleted.
+ * \param[in]   p_handle    The handle of the semaphore to be deleted.
  *
- * \return           The status of the semaphore deletion.
- * \retval true      Semaphore was deleted successfully.
- * \retval false     Semaphore failed to delete.
+ * \return           The status of the semaphore deletion. It will always return true.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -160,7 +171,7 @@ extern bool (*os_sem_create)(void **pp_handle, const char *p_name, uint32_t init
  *     void *p_handle;
  *
  *     // Create a semaphore with initial value 0 and maximum value 10.
- *     if (os_sem_create(&p_handle, "sem name", 0, 10) == true)
+ *     if (os_sem_create(&p_handle, "sem", 0, 10) == true)
  *     {
  *         // Semaphore is created successfully.
  *     }
@@ -181,13 +192,12 @@ extern bool (*os_sem_create)(void **pp_handle, const char *p_name, uint32_t init
 extern bool (*os_sem_delete)(void *p_handle);
 
 /**
- * os_sync.h
  *
  * \brief   Take a semaphore.
  *
- * \param   p_handle    The handle of the semaphore to be taken.
+ * \param[in]   p_handle    The handle of the semaphore to be taken.
  *
- * \param   wait_ms     The time in milliseconds to wait for the semaphore to become
+ * \param[in]   wait_ms     The time in milliseconds to wait for the semaphore to become
  *                          available.
  * \arg \c 0           No blocking and return immediately.
  * \arg \c 0xFFFFFFFF  Block infinitely until the semaphore is taken.
@@ -195,7 +205,7 @@ extern bool (*os_sem_delete)(void *p_handle);
  *
  * \return           The status of the semaphore taking.
  * \retval true      Semaphore was taken successfully.
- * \retval false     Semaphore failed to be taken.
+ * \retval false     Semaphore failed to be taken. It happens when semaphore count is 0 and wait time is expired.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -205,7 +215,7 @@ extern bool (*os_sem_delete)(void *p_handle);
  * void task1(void *p_param)
  * {
  *     // Create a full binary semaphore.
- *     os_sem_create(&p_handle, "sem name", 1, 1);
+ *     os_sem_create(&p_handle, "sem", 1, 1);
  * }
  *
  * // Another task uses the semaphore.
@@ -231,15 +241,14 @@ extern bool (*os_sem_delete)(void *p_handle);
 extern bool (*os_sem_take)(void *p_handle, uint32_t wait_ms);
 
 /**
- * os_sync.h
  *
  * \brief   Give a semaphore.
  *
- * \param   p_handle    The handle of the semaphore to be given.
+ * \param[in]   p_handle    The handle of the semaphore to be given.
  *
  * \return           The status of the semaphore giving.
  * \retval true      Semaphore was given successfully.
- * \retval false     Semaphore failed to be given.
+ * \retval false     Semaphore failed to be given. It happens when semaphore count has reached max.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -248,7 +257,7 @@ extern bool (*os_sem_take)(void *p_handle, uint32_t wait_ms);
  *     void *p_handle = NULL;
  *
  *     // Create an empty binary semaphore.
- *     os_sem_create(&p_handle, "sem name", 0, 1);
+ *     os_sem_create(&p_handle, "sem", 0, 1);
  *
  *     // Immediately obtaining the semaphore will fail.
  *     if (os_sem_take(p_handle, 0) == false)
@@ -272,7 +281,6 @@ extern bool (*os_sem_take)(void *p_handle, uint32_t wait_ms);
 extern bool (*os_sem_give)(void *p_handle);
 
 /**
- * os_sync.h
  *
  * \brief   Create a mutex.
  *
@@ -283,13 +291,13 @@ extern bool (*os_sem_give)(void *p_handle);
  *          owner, subsequent mutex acquires from that task will succeed immediately. Thus, mutex
  *          acquires/releases can be nested.
  *
- * \image html OS-mutex-overview.jpg "Mutex Overview" width=451px height=196px
+ * \image html OS-mutex-overview.jpg "Mutex Overview" width=45px height=19px
  *
- * \param  pp_handle   Used to pass back the created mutex handle.
+ * \param[out]  pp_handle   Used to pass back the created mutex handle.
  *
  * \return           The status of the mutex creation.
  * \retval true      Mutex was created successfully.
- * \retval false     Mutex failed to be created.
+ * \retval false     Mutex failed to be created. It happens when there is not enough heap to malloc.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -310,15 +318,14 @@ extern bool (*os_sem_give)(void *p_handle);
 extern bool (*os_mutex_create)(void **pp_handle);
 
 /**
- * os_sync.h
  *
  * \brief   Delete a mutex.
  *
- * \param   p_handle    The handle of the mutex to be deleted.
+ * \param[in]   p_handle    The handle of the mutex to be deleted.
  *
  * \return           The status of the mutex deletion.
  * \retval true      Mutex was deleted successfully.
- * \retval false     Mutex failed to be deleted.
+ * \retval false     Mutex failed to be deleted. It happens when the user try to delete the mutex held by a task.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -348,13 +355,12 @@ extern bool (*os_mutex_create)(void **pp_handle);
 extern bool (*os_mutex_delete)(void *p_handle);
 
 /**
- * os_sync.h
  *
  * \brief   Take a mutex.
  *
- * \param   p_handle    The handle of the mutex to be taken.
+ * \param[in]   p_handle    The handle of the mutex to be taken.
  *
- * \param   wait_ms     The time in milliseconds to wait for the mutex to become
+ * \param[in]   wait_ms     The time in milliseconds to wait for the mutex to become
  *                          available.
  * \arg \c 0           No blocking and return immediately.
  * \arg \c 0xFFFFFFFF  Block infinitely until the mutex is taken.
@@ -362,7 +368,7 @@ extern bool (*os_mutex_delete)(void *p_handle);
  *
  * \return           The status of the mutex taking.
  * \retval true      Mutex was taken successfully.
- * \retval false     Mutex failed to be taken.
+ * \retval false     Mutex failed to be taken. It happens when the mutex has been held by other tasks.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -409,15 +415,14 @@ extern bool (*os_mutex_delete)(void *p_handle);
 extern bool (*os_mutex_take)(void *p_handle, uint32_t wait_ms);
 
 /**
- * os_sync.h
  *
  * \brief   Give a mutex.
  *
- * \param   p_handle    The handle of the mutex to be given.
+ * \param[in]   p_handle    The handle of the mutex to be given.
  *
  * \return           The status of the mutex giving.
  * \retval true      Mutex was given successfully.
- * \retval false     Mutex failed to be given.
+ * \retval false     Mutex failed to be given. The mutex cannot be given when the calling task is not the holder.
  *
  * <b>Example usage</b>
  * \code{.c}

@@ -168,7 +168,15 @@ LDFLAGS = $(MCU) -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET)
 all : rm_app_bin version.h $(BUILD_DIR)/$(TARGET).elf $(BIN_DIR)/$(TARGET).bin $(BIN_DIR)/$(TARGET).trace 
 	"../../../../../../../tools/prepend_header/prepend_header.exe" -t app_code -b 15 -p bin/$(TARGET).bin -m 1 -i "../mp.ini" -r ../../../../../../../tools/keys/rtk_ecdsa.pem -a ../../../../../../../tools/keys/key.json --aesmode CTR
 	../../../../../../../tools/md5/md5.exe bin/$(TARGET)_MP.bin
-	$(OD) -D -S build/$(TARGET).elf > bin/$(TARGET).dis 
+# Default action: Build all targets.
+#
+# Optional: Generate a disassembly file for debugging.
+# To enable this feature, remove the leading '#' from the command: $(OD) -D -S build/$(TARGET).elf > bin/$(TARGET).dis
+# Note:
+#   The '-S' flag interleaves source code with disassembled output, which is useful
+#   for correlating the source with the corresponding machine code. However, since the
+#   output file will contain source code, ensure that you protect its confidentiality.
+    #	$(OD) -D -S build/$(TARGET).elf > bin/$(TARGET).dis 
 #	$(CC) -o all $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin
 mem_define.ld :
 	../../../../../../../tools/MemDefine/MemDefine.exe --flashmap ../../../../../../../include/rtl87x2g/config/flash_map.h --memconfig ../../../../../../../include/rtl87x2g/config/mem_config.h
@@ -193,7 +201,7 @@ $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
 	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
 
 $(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)
-	$(AS) -c $(CFLAGS) $< -o $@
+	$(AS) -c $(ASFLAGS) $< -o $@
 
 $(LDSCRIPT):
 	$(CC) -E -P -x c -I$(C_INCLUDES) $(basename $@) -o $@

@@ -35,34 +35,13 @@ extern "C"
   */
 
 /*============================================================================*
- *                         Macros
- *============================================================================*/
-/** @defgroup GAP_LE_CONNECTION_Exported_Macros GAP LE Connection Exported Macros
-  * @{
-  */
-
-/** @defgroup GAP_LE_CONNECTION_MSG_Opcodes GAP LE Connection Message Opcodes
-  * @{
-  */
-#define LE_CONN_INFO_OPCODE_LE_REMOTE_CONNECTION_PARAMETER_REQUEST_IND             0x0001  /**< * Indication that the remote device is requesting a change in the connection parameters.
-                                                                                                * @ref le_remote_connection_parameter_request_reply or
-                                                                                                * @ref le_remote_connection_parameter_request_negative_reply shall be used to reply. */
-/** End of GAP_LE_CONNECTION_MSG_Opcodes
-  * @}
-  */
-
-/** End of GAP_LE_CONNECTION_Exported_Macros
-  * @}
-  */
-
-/*============================================================================*
  *                         Types
  *============================================================================*/
 /** @defgroup GAP_LE_CONNECTION_Exported_Types GAP LE Connection Exported Types
   * @{
   */
 
-/** @brief GAP connection phy types*/
+/** @brief GAP connection PHY types*/
 typedef enum
 {
     GAP_CONN_PARAM_1M = 0,      //!< LE 1M PHY.
@@ -74,124 +53,90 @@ typedef enum
 typedef enum
 {
     GAP_LINK_ROLE_UNDEFINED,    //!< Unknown.
-    GAP_LINK_ROLE_MASTER,       //!< Role is master.
-    GAP_LINK_ROLE_SLAVE         //!< Role is slave.
+    GAP_LINK_ROLE_MASTER,       //!< Role is Central.
+    GAP_LINK_ROLE_SLAVE         //!< Role is Peripheral.
 } T_GAP_ROLE;
 
 /** @brief LE connection parameter types */
 typedef enum
 {
-    GAP_PARAM_CONN_BD_ADDR         = 0x270,//!< Address of connected device. Read only. Size is 6 bytes. Set to all zeros when not connected.
-    GAP_PARAM_CONN_BD_ADDR_TYPE    = 0x271,//!< Address type of connected device. Read only. Size is 1 byte. Set to zero when not connected.
-    GAP_PARAM_CONN_INTERVAL        = 0x272,//!< Current connection interval.  Read only. Size is 2 bytes.  Range is 7.5ms to 4 seconds (0x0006 to 0x0C80).  Default is 0 (no connection).
-    GAP_PARAM_CONN_LATENCY         = 0x273,//!< Current slave latency.  Read only.  Size is 2 bytes.  Range is 0 to 499. Default is 0 (no slave latency or no connection).
-    GAP_PARAM_CONN_TIMEOUT         = 0x274,//!< Current timeout value.  Read only.  Size is 2 bytes.  Range is 100ms to 32 seconds.  Default is 0 (no connection).
-    GAP_PARAM_CONN_MTU_SIZE        = 0x275,//!< MTU size.  Read only.  Size is 2 bytes.
-    GAP_PARAM_CONN_LOCAL_BD_TYPE   = 0x276,//!< Local Bluetooth address type.  Read only.  Size is 1 byte.
-    GAP_PARAM_CONN_RX_PHY_TYPE     = 0x277,//!< Rx phy type.  Read only.  Size is 1 byte.
-    GAP_PARAM_CONN_TX_PHY_TYPE     = 0x278,//!< Tx phy type.  Read only.  Size is 1 byte.
-    GAP_PARAM_CONN_REMOTE_FEATURES = 0x279,//!< Remote supported features.  Read only.
-    GAP_PARAM_CONN_CHANN_ALGORITHM = 0x27a,//!< LE Channel Selection Algorithm used.  Read only.
-    GAP_PARAM_CONN_HANDLE          = 0x27b,//!< LE link connection handle. Read only.
+    GAP_PARAM_CONN_BD_ADDR         = 0x270,/**< Remote Bluetooth address for the connection. Read only. Size is 6 octets @ref GAP_BD_ADDR_LEN. */
+    GAP_PARAM_CONN_BD_ADDR_TYPE    = 0x271,/**< Remote Bluetooth address type for the connection. Read only. Size is 1 octet.
+                                                Value is @ref T_GAP_REMOTE_ADDR_TYPE. */
+    GAP_PARAM_CONN_INTERVAL        = 0x272,/**< Connection interval. Read only. Size is 2 octets. Time = N * 1.25 ms. */
+    GAP_PARAM_CONN_LATENCY         = 0x273,/**< Maximum Peripheral latency for the connection in number of connection events.
+                                                Read only. Size is 2 octets. */
+    GAP_PARAM_CONN_TIMEOUT         = 0x274,/**< Supervision timeout for the connection. Read only. Size is 2 octets. Time = N * 10 ms. */
+    GAP_PARAM_CONN_MTU_SIZE        = 0x275,/**< MTU size for the connection. Read only. Size is 2 octets. */
+    GAP_PARAM_CONN_LOCAL_BD_TYPE   = 0x276,/**< Local Bluetooth address type for the connection. Read only. Size is 1 octet. Value is @ref T_GAP_LOCAL_ADDR_TYPE. */
+    GAP_PARAM_CONN_RX_PHY_TYPE     = 0x277,/**< Receiver PHY for the connection. Read only. Size is 1 octet. Value is @ref T_GAP_PHYS_TYPE. */
+    GAP_PARAM_CONN_TX_PHY_TYPE     = 0x278,/**< Transmitter PHY for the connection. Read only. Size is 1 octet. Value is @ref T_GAP_PHYS_TYPE. */
+    GAP_PARAM_CONN_REMOTE_FEATURES = 0x279,/**< Remote supported features for the connection. Read only. Size is @ref GAP_LE_SUPPORTED_FEATURES_LEN. */
+    GAP_PARAM_CONN_HANDLE          = 0x27B,/**< LE link connection handle. Read only. Size is 2 octets. */
 } T_LE_CONN_PARAM_TYPE;
 
 /** @brief  Connected device information.*/
 typedef struct
 {
-    T_GAP_CONN_STATE conn_state;             //!< Connection state
-    T_GAP_ROLE       role;                   //!< Device role
-    uint8_t          remote_bd[GAP_BD_ADDR_LEN];  //!< Remote address
-    uint8_t          remote_bd_type;         //!< Remote address type
+    T_GAP_CONN_STATE conn_state;             //!< Connection state.
+    T_GAP_ROLE       role;                   //!< GAP link role.
+    uint8_t          remote_bd[GAP_BD_ADDR_LEN];  //!< Remote address.
+    uint8_t          remote_bd_type;         //!< Remote address type.
 } T_GAP_CONN_INFO;
-
-/** @brief  Data for @ref LE_CONN_INFO_OPCODE_LE_REMOTE_CONNECTION_PARAMETER_REQUEST_IND */
-typedef struct
-{
-    uint16_t        conn_handle;
-    uint16_t        interval_min;  /**<
-                                        * Minimum value of the connection interval requested by the remote device.
-                                        * @arg Range: 0x0006 to 0x0C80.
-                                        * @arg Time = N * 1.25 ms.
-                                        * @arg Time Range: 7.5 ms to 4 s. */
-    uint16_t        interval_max; /**<
-                                        * Maximum value of the connection interval requested by the remote device.
-                                        * @arg Range: 0x0006 to 0x0C80.
-                                        * @arg Time = N * 1.25 ms.
-                                        * @arg Time Range: 7.5 ms to 4 s. */
-    uint16_t        max_latency; /**<
-                                        * Maximum allowed Peripheral latency for the connection specified as the
-                                        * number of connection events requested by the remote device.
-                                        * @arg Range: 0x0000 to 0x01F3. */
-    uint16_t        timeout;     /**<
-                                        * Supervision timeout for the connection requested by the remote device.
-                                        * @arg Range: 0x000A to 0x0C80.
-                                        * @arg Time = N * 10 ms.
-                                        * @arg Time Range: 100 ms to 32 s. */
-} T_LE_REMOTE_CONNECTION_PARAMETER_REQUEST_IND;
-
-typedef union
-{
-    T_LE_REMOTE_CONNECTION_PARAMETER_REQUEST_IND
-    *p_le_remote_connection_parameter_request_ind;
-} T_LE_CONN_INFO_CB_DATA;
-
-/** @brief  Data for @ref GAP_MSG_LE_CONN_INFO */
-typedef struct
-{
-    uint16_t                   opcode;   /**< @ref GAP_LE_CONNECTION_MSG_Opcodes. */
-    T_LE_CONN_INFO_CB_DATA     data;
-} T_LE_CONN_INFO_CB;
 
 /** @brief  Definition of LE connection request parameter.*/
 typedef struct
 {
     uint16_t scan_interval;/**< Time interval from when the Controller started its last scan
                                 until it begins the subsequent scan on the primary advertising channel.
+                                In default situation or @ref le_set_gap_param has been called to set
+                                @ref GAP_PARAM_USE_EXTENDED_ADV to false,
+                                - Range: 0x0004 to 0x4000.
+                                - Time = N * 0.625 ms.
+                                - Time Range: 2.5 ms to 10.24 s.
 
-                                By default @ref GAP_PARAM_USE_EXTENDED_ADV is false,
-                                @arg Range: 0x0004 to 0x4000.
-                                @arg Time = N * 0.625 ms.
-                                @arg Time Range: 2.5 ms to 10.24 s.
-
-                                If @ref GAP_PARAM_USE_EXTENDED_ADV is set as true,
-                                @arg Range: 0x0004 to 0xFFFF.
-                                @arg Time = N * 0.625 ms.
-                                @arg Time Range: 2.5 ms to 40.959375 s. */
+                                If @ref le_set_gap_param has been called to set
+                                @ref GAP_PARAM_USE_EXTENDED_ADV to true,
+                                - Range: 0x0004 to 0xFFFF.
+                                - Time = N * 0.625 ms.
+                                - Time Range: 2.5 ms to 40.959375 s. */
     uint16_t scan_window;/**< Duration of the scan on the primary advertising channel.
-                              By default @ref GAP_PARAM_USE_EXTENDED_ADV is false,
-                              @arg Range: 0x0004 to 0x4000.
-                              @arg Time = N * 0.625 ms.
-                              @arg Time Range: 2.5 ms to 10.24 s.
+                              In default situation or @ref le_set_gap_param has been called to set
+                              @ref GAP_PARAM_USE_EXTENDED_ADV to false,
+                              - Range: 0x0004 to 0x4000.
+                              - Time = N * 0.625 ms.
+                              - Time Range: 2.5 ms to 10.24 s.
 
-                              If @ref GAP_PARAM_USE_EXTENDED_ADV is set as true,
-                              @arg Range: 0x0004 to 0xFFFF.
-                              @arg Time = N * 0.625 ms.
-                              @arg Time Range: 2.5 ms to 40.959375 s. */
+                              If @ref le_set_gap_param has been called to set
+                              @ref GAP_PARAM_USE_EXTENDED_ADV to true,
+                              - Range: 0x0004 to 0xFFFF.
+                              - Time = N * 0.625 ms.
+                              - Time Range: 2.5 ms to 40.959375 s. */
     uint16_t conn_interval_min;/**< Minimum value for the connection interval. This shall be less
                                     than or equal to Conn_Interval_Max[i].
-                                    @arg Range: 0x0006 to 0x0C80.
-                                    @arg Time = N * 1.25 ms.
-                                    @arg Time Range: 7.5 ms to 4 s. */
+                                    - Range: 0x0006 to 0x0C80.
+                                    - Time = N * 1.25 ms.
+                                    - Time Range: 7.5 ms to 4 s. */
     uint16_t conn_interval_max;/**< Maximum value for the connection interval. This shall be greater
                                     than or equal to Conn_Interval_Max[i].
-                                    @arg Range: 0x0006 to 0x0C80.
-                                    @arg Time = N * 1.25 ms.
-                                    @arg Time Range: 7.5 ms to 4 s. */
-    uint16_t conn_latency;/**< Slave latency for the connection in number of connection events.
-                               @arg Range: 0x0000 to 0x01F3.
-                               @arg This shall be less than or equal to (((supv_tout * 10 ms) / (conn_interval_max * 1.25 ms * 2)) - 1) */
+                                    - Range: 0x0006 to 0x0C80.
+                                    - Time = N * 1.25 ms.
+                                    - Time Range: 7.5 ms to 4 s. */
+    uint16_t conn_latency;/**< Peripheral latency for the connection in number of connection events.
+                               - Range: 0x0000 to 0x01F3.
+                               - This shall be less than or equal to (((supv_tout * 10 ms) / (conn_interval_max * 1.25 ms * 2)) - 1) */
     uint16_t supv_tout;/**< Supervision timeout for the LE Link.
-                            @arg Range: 0x000A to 0x0C80.
-                            @arg Time = N * 10 ms.
-                            @arg Time Range: 100 ms to 32 s. */
+                            - Range: 0x000A to 0x0C80.
+                            - Time = N * 10 ms.
+                            - Time Range: 100 ms to 32 s. */
     uint16_t ce_len_min;/**< Informative parameter recommending the minimum length of connection
                              event needed for this LE connection.
-                             @arg Range: 0x0000 - 0xFFFF.
-                             @arg Time = N * 0.625 ms. */
+                             - Range: 0x0000 - 0xFFFF.
+                             - Time = N * 0.625 ms. */
     uint16_t ce_len_max;/**< Informative parameter recommending the maximum length of connection
                              event needed for this LE connection.
-                             @arg Range: 0x0000 - 0xFFFF.
-                             @arg Time = N * 0.625 ms. */
+                             - Range: 0x0000 - 0xFFFF.
+                             - Time = N * 0.625 ms. */
 } T_GAP_LE_CONN_REQ_PARAM;
 
 /** End of GAP_LE_CONNECTION_Exported_Types
@@ -210,82 +155,79 @@ typedef struct
 /**
   * @brief  Get a GAP connection parameter.
   *
-  * This function can be called with a GAP connection parameter type and it will get a
-  *         GAP connection parameter. GAP connection parameters are defined in @ref T_LE_CONN_PARAM_TYPE. Also, the
-  *         "p_value" field must point to data of type "uint16_t".
+  * This function can be called with a connection parameter type @ref T_LE_CONN_PARAM_TYPE and it will get the connection parameter.
+  * The 'p_value' field must point to an appropriate data type that meets the requirements for the corresponding parameter type.
+  * (For example: if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
   *
-  * @param[in]  param Connection parameter type: @ref T_LE_CONN_PARAM_TYPE
-  * @param[in,out] p_value Pointer to location to get the value. This is dependent on
-  *                  the parameter type and will be cast to the appropriate
-  *                  data type (For example: if data type param is uint16_t, p_value will be cast to
-  *                  pointer of uint16_t).
+  * @param[in]  param Connection parameter type @ref T_LE_CONN_PARAM_TYPE
+  * @param[in,out] p_value Pointer to location to get the value.
   * @param[in]  conn_id Connection ID.
   *
-  * @return Get result.
-  * @retval GAP_CAUSE_SUCCESS Get parameter success.
-  * @retval other Get parameter failed.
+  * @return Operation result.
+  * @retval GAP_CAUSE_SUCCESS    Operation success.
+  * @retval Others   Operation failure.
   */
 T_GAP_CAUSE le_get_conn_param(T_LE_CONN_PARAM_TYPE param, void *p_value, uint8_t conn_id);
 
 /**
   * @brief  Get connection information.
   * @param[in]  conn_id Connection ID.
-  * @param[in,out] p_conn_info Connection information @ref T_GAP_CONN_INFO.
-  * @return Get result.
-  * @retval true Success.
-  * @retval false Get failed.
+  * @param[in,out] p_conn_info Pointer to connection information @ref T_GAP_CONN_INFO.
+  * @return Operation result.
+  * @retval true    Operation success.
+  * @retval false   Operation failure.
   */
 bool        le_get_conn_info(uint8_t conn_id, T_GAP_CONN_INFO *p_conn_info);
 
 /**
   * @brief  Get connection address information.
   * @param[in]  conn_id Connection ID.
-  * @param[in,out] bd_addr Remote Bluetooth device address.
-  * @param[in,out] bd_type Remote Bluetooth device address type.
-  * @return Get result.
-  * @retval true Success.
-  * @retval false Get failed.
+  * @param[in,out] bd_addr Pointer to remote Bluetooth device address.
+  * @param[in,out] bd_type Pointer to remote Bluetooth device address type.
+  * @return Operation result.
+  * @retval true    Operation success.
+  * @retval false   Operation failure.
   */
 bool        le_get_conn_addr(uint8_t conn_id, uint8_t *bd_addr, uint8_t *bd_type);
 
 /**
   * @brief  Get connection ID.
-  * @param[in]  bd_addr Remote Bluetooth device address.
+  * @param[in]  bd_addr Pointer to remote Bluetooth device address.
   * @param[in]  bd_type Remote Bluetooth device address type.
-  * @param[in,out] p_conn_id Connection ID.
-  * @return Get result.
-  * @retval true Success.
-  * @retval false Get failed.
+  * @param[in,out] p_conn_id Pointer to connection ID.
+  * @return Operation result.
+  * @retval true    Operation success.
+  * @retval false   Operation failure.
   */
 bool        le_get_conn_id(uint8_t *bd_addr, uint8_t bd_type, uint8_t *p_conn_id);
 
 /**
   * @brief  Get connection handle.
   * @param[in]  conn_id Connection ID.
-  * @return connection handle.
-  * @retval 0xFFFF Get failed.
-  * @retval Other Success.
+  * @return Connection handle.
+  * @retval 0xFFFF Operation failure.
+  * @retval Others Connection handle.
   */
 uint16_t    le_get_conn_handle(uint8_t conn_id);
 
 /**
   * @brief  Get connection ID from connection handle.
   * @param[in]  conn_handle Connection handle.
-  * @param[in,out] p_conn_id Connection ID.
-  * @return Get result.
-  * @retval true Success.
-  * @retval false Get failed.
+  * @param[in,out] p_conn_id Pointer to connection ID.
+  * @return Operation result.
+  * @retval true    Operation success.
+  * @retval false   Operation failure.
   */
 bool        le_get_conn_id_by_handle(uint16_t conn_handle, uint8_t *p_conn_id);
 
 /**
   * @brief  Get connection local address by connection handle.
   * @param[in]  conn_handle Connection handle.
-  * @param[in, out] bd_addr Local bluetooth device address, size is 6 octets.
-  * @param[in, out] bd_type Local bluetooth device address type.
-  * @return Get result.
-  * @retval true Success.
-  * @retval false Get failed.
+  * @param[in, out] bd_addr Pointer to local Bluetooth device address.
+  * @param[in, out] bd_type Pointer to local Bluetooth device address type.
+  * @return Operation result.
+  * @retval true    Operation success.
+  * @retval false   Operation failure.
   */
 bool le_get_conn_local_addr(uint16_t conn_handle, uint8_t *bd_addr, uint8_t *bd_type);
 
@@ -294,7 +236,7 @@ bool le_get_conn_local_addr(uint16_t conn_handle, uint8_t *bd_addr, uint8_t *bd_
 *
 * @return  Active link number.
 * @retval 0 No connection created.
-* @retval other Connected links number.
+* @retval Others Connected links number.
 */
 uint8_t     le_get_active_link_num(void);
 
@@ -303,20 +245,30 @@ uint8_t     le_get_active_link_num(void);
 *
 * @return  Idle link number.
 * @retval 0 Can't create new connection.
-* @retval other Can create new connection.
+* @retval Others Can create new connection.
 */
 uint8_t     le_get_idle_link_num(void);
 
 /**
- * @brief   Terminates the existing connection. When link is disconnected, @ref app_handle_conn_state_evt will be
- *          called with new_state as @ref GAP_CONN_STATE_DISCONNECTED.
- *          The disconnection reason is HCI_ERR_REMOTE_USER_TERMINATE.
+ * @brief   Terminate connection.
  *
- * @param[in] conn_id connection ID to be disconnected.
- * @return  Operation result.
- * @retval GAP_CAUSE_SUCCESS Send request success.
- * @retval GAP_CAUSE_NON_CONN Failed. No connection.
- * @retval GAP_CAUSE_INVALID_PARAM Failed. Invalid parameter.
+ * If sending request operation is successful, the terminating result will be returned in one of the following ways:
+ * - In the default situation, or when @ref le_gap_msg_info_way (true) has been called, APP will be notified
+ *   by message @ref GAP_MSG_LE_CONN_STATE_CHANGE with new_state @ref T_GAP_CONN_STATE.
+ *   When calling the API, if state of connection identified by conn_id is @ref GAP_CONN_STATE_CONNECTING, and link role is @ref GAP_LINK_ROLE_MASTER,
+ *   APP will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE with new_state about gap_conn_state @ref GAP_CONN_STATE.
+ * - When @ref le_gap_msg_info_way (false) has been called, APP will be notified with the callback registered
+ *   by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_GAP_STATE_MSG about connection state.
+ *   When calling the API, if state of connection identified by conn_id is @ref GAP_CONN_STATE_CONNECTING, and link role is @ref GAP_LINK_ROLE_MASTER,
+ *   APP will be notified with the callback registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_GAP_STATE_MSG
+ *   about device state.
+ *
+ * The disconnection reason is @ref HCI_ERR_REMOTE_USER_TERMINATE.
+ *
+ * @param[in] conn_id Connection ID to be disconnected.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -372,20 +324,29 @@ uint8_t     le_get_idle_link_num(void);
 T_GAP_CAUSE le_disconnect(uint8_t conn_id);
 
 /**
- * @brief   Terminates the existing connection with reason. When link is disconnected, app_handle_conn_state_evt will be
- *          called with new_state as @ref GAP_CONN_STATE_DISCONNECTED.
+ * @brief   Terminate connection with reason.
  *
- * @param[in] conn_id connection ID to be disconnected.
- * @param[in] reason disconnection reason.
- *           @arg  HCI_ERR_REMOTE_USER_TERMINATE: 0x13.
- *           @arg  HCI_ERR_REMOTE_LOW_RESOURCE: 0x14.
- *           @arg  HCI_ERR_REMOTE_POWER_OFF: 0x15.
- *           @arg  HCI_ERR_UNSUPPORTED_REMOTE_FEAT: 0x1A.
- *           @arg  HCI_ERR_UNACCEPTABLE_CONN_PARAMS: 0x3B.
- * @return  Operation result.
- * @retval GAP_CAUSE_SUCCESS Send request success.
- * @retval GAP_CAUSE_NON_CONN Failed. No connection.
- * @retval GAP_CAUSE_INVALID_PARAM Failed. Invalid parameter.
+ * If sending request operation is successful, the terminating result will be returned in one of the following ways:
+ * - In the default situation, or when @ref le_gap_msg_info_way (true) has been called, APP will be notified
+ *   by message @ref GAP_MSG_LE_CONN_STATE_CHANGE with new_state @ref T_GAP_CONN_STATE.
+ *   When calling the API, if state of connection identified by conn_id is @ref GAP_CONN_STATE_CONNECTING, and link role is @ref GAP_LINK_ROLE_MASTER,
+ *   APP will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE with new_state about gap_conn_state @ref GAP_CONN_STATE.
+ * - When @ref le_gap_msg_info_way (false) has been called, APP will be notified with the callback registered
+ *   by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_GAP_STATE_MSG about connection state.
+ *   When calling the API, if state of connection identified by conn_id is @ref GAP_CONN_STATE_CONNECTING, and link role is @ref GAP_LINK_ROLE_MASTER,
+ *   APP will be notified with the callback registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_GAP_STATE_MSG
+ *   about device state.
+ *
+ * @param[in] conn_id Connection ID to be disconnected.
+ * @param[in] reason Disconnection reason.
+ *           - @ref HCI_ERR_REMOTE_USER_TERMINATE.
+ *           - @ref HCI_ERR_REMOTE_LOW_RESOURCE.
+ *           - @ref HCI_ERR_REMOTE_POWER_OFF.
+ *           - @ref HCI_ERR_UNSUPPORTED_REMOTE_FEAT.
+ *           - @ref HCI_ERR_UNACCEPTABLE_CONN_PARAMS.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -399,14 +360,15 @@ T_GAP_CAUSE le_disconnect(uint8_t conn_id);
 T_GAP_CAUSE le_disconnect_with_reason(uint8_t conn_id, uint8_t reason);
 
 /**
- * @brief   Obtain the values for the version information for the remote device identified by the conn_id parameter.
- *          Remote version information will be returned by @ref app_gap_callback with cb_type @ref GAP_MSG_LE_READ_REMOTE_VERSION.
+ * @brief   Read the values for the version information for the remote device identified by the conn_id parameter.
+ *
+ * If sending request operation is successful, the reading result will be returned by callback
+ * registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_READ_REMOTE_VERSION.
  *
  * @param[in] conn_id Connection ID.
- * @return  Read request result.
- * @retval  GAP_CAUSE_SUCCESS: Send request success.
- * @retval  GAP_CAUSE_SEND_REQ_FAILED: Send request sent fail.
- * @retval  GAP_CAUSE_NON_CONN: Failed. No connection.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -415,39 +377,20 @@ T_GAP_CAUSE le_disconnect_with_reason(uint8_t conn_id, uint8_t reason);
        uint8_t conn_id = 0;
        le_read_remote_version(conn_id);
    }
-
-   T_APP_RESULT app_gap_callback(uint8_t cb_type, void *p_cb_data)
-   {
-       T_APP_RESULT result = APP_RESULT_SUCCESS;
-       T_LE_CB_DATA cb_data;
-       memcpy(&cb_data, p_cb_data, sizeof(T_LE_CB_DATA));
-       APP_PRINT_TRACE1("app_gap_callback: cb_type is %d", cb_type);
-       switch (cb_type)
-       {
-       ...
-       case GAP_MSG_LE_READ_REMOTE_VERSION:
-           APP_PRINT_INFO5("GAP_MSG_LE_READ_REMOTE_VERSION: conn_id %d, cause 0x%x, version 0x%x, manufacturer_name 0x%x, subversion 0x%x",
-                           p_data->p_le_read_remote_version_rsp->conn_id,
-                           p_data->p_le_read_remote_version_rsp->cause,
-                           p_data->p_le_read_remote_version_rsp->version,
-                           p_data->p_le_read_remote_version_rsp->manufacturer_name,
-                           p_data->p_le_read_remote_version_rsp->subversion);
-        break;
-       }
-        ...
-   }
  * \endcode
  */
 T_GAP_CAUSE le_read_remote_version(uint8_t conn_id);
 
 /**
- * @brief   Read rssi value of the connection. RSSI value will be returned by
- *          @ref app_gap_callback with cb_type @ref GAP_MSG_LE_READ_RSSI.
+ * @brief   Read RSSI value of the connection.
+ *
+ * If sending request operation is successful, the reading result will be returned by callback
+ * registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_READ_RSSI.
  *
  * @param[in] conn_id Connection ID.
- * @return  Read request result.
- * @retval  GAP_CAUSE_SUCCESS: Read request sent success.<BR>
- * @retval  GAP_CAUSE_NON_CONN: Read request sent fail.<BR>
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -467,7 +410,7 @@ T_GAP_CAUSE le_read_remote_version(uint8_t conn_id);
         {
         ...
         case GAP_MSG_LE_READ_RSSI:
-          APP_PRINT_INFO3("GAP_MSG_LE_READ_RSSI: conn_id %d, cause 0x%x, rssi %d",
+          APP_PRINT_INFO3("GAP_MSG_LE_READ_RSSI: conn_id %d, cause 0x%x, RSSI %d",
                           cb_data.p_le_read_rssi_rsp->conn_id,
                           cb_data.p_le_read_rssi_rsp->cause,
                           cb_data.p_le_read_rssi_rsp->rssi);
@@ -480,13 +423,15 @@ T_GAP_CAUSE le_read_remote_version(uint8_t conn_id);
 T_GAP_CAUSE le_read_rssi(uint8_t conn_id);
 
 /**
-  * @brief   Read the used channel map of the connection. Channel map value will be returned by
-  *          @ref app_gap_callback with cb_type @ref GAP_MSG_LE_READ_CHANN_MAP.
+  * @brief   Read the used channel map of the connection.
+  *
+  * If sending request operation is successful, the reading result will be returned by callback
+  * registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_READ_CHANN_MAP.
   *
   * @param[in] conn_id Connection ID.
-  * @return  Read request result.
-  * @retval  GAP_CAUSE_SUCCESS: Read request sent successfully.<BR>
-  * @retval  GAP_CAUSE_NON_CONN: Read request sent failed.<BR>
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -523,20 +468,23 @@ T_GAP_CAUSE le_read_rssi(uint8_t conn_id);
 T_GAP_CAUSE le_read_chann_map(uint8_t conn_id);
 
 /**
-  * @brief   Set the data length used in LL for data length extension. LE set data length response will be returned by
-  *          @ref app_gap_callback with cb_type @ref GAP_MSG_LE_SET_DATA_LEN. And if data length was changed,
-  *          @ref app_gap_callback with cb_type @ref GAP_MSG_LE_DATA_LEN_CHANGE_INFO will be called.
+  * @brief   Set the data length used in Controller for data length extension.
+  *
+  * If sending request operation is successful, APP will be notified by callback registered
+  * by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_SET_DATA_LEN.
+  * If cause in @ref T_LE_DISABLE_SLAVE_LATENCY_RSP is 0 (success) and data length is changed,
+  * APP will be notified by callback with msg type @ref GAP_MSG_LE_DATA_LEN_CHANGE_INFO.
   *
   * @param[in] conn_id Connection ID.
   * @param[in] tx_octets    Preferred maximum number of payload octets that the local Controller
   *                         should include in a single Link Layer packet on this connection.
-                            @arg Range 0x001B-0x00FB (all other values reserved for future use).
+                            - Range 0x001B-0x00FB (all other values reserved for future use).
   * @param[in] tx_time      Preferred maximum number of microseconds that the local Controller
                             should use to transmit a single Link Layer packet on this connection.
-                            @arg Range 0x0148-0x4290 (all other values reserved for future use).
-  * @return  result.
-  * @retval  GAP_CAUSE_SUCCESS: Set request sent successfully.<BR>
-  * @retval  GAP_CAUSE_NON_CONN: Set request sent failed.<BR>
+                            - Range 0x0148-0x4290 (all other values reserved for future use).
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -582,7 +530,8 @@ T_GAP_CAUSE le_set_data_len(uint8_t conn_id, uint16_t tx_octets, uint16_t tx_tim
   * @brief   Set the PHY preferences for the connection identified by the Connection_Handle.
   *          The Controller might not be able to make the change (e.g. because the peer does
   *          not support the requested PHY) or may decide that the current PHY is preferable.
-  *          If the phy used was changed, @ref app_gap_callback with cb_type @ref GAP_MSG_LE_PHY_UPDATE_INFO will be called.
+  *
+  * If sending request operation is successful, APP will be notified by callback with msg type @ref GAP_MSG_LE_PHY_UPDATE_INFO.
   *
   * @param[in] conn_id Connection ID.
   * @param[in] all_phys A bit field that allows the Host to specify, for each direction,
@@ -598,12 +547,13 @@ T_GAP_CAUSE le_set_data_len(uint8_t conn_id, uint16_t tx_octets, uint16_t tx_tim
   *                    the Host has no preference, the RX_PHYS parameter is ignored; otherwise at
   *                    least one bit shall be set to 1.
   * @param[in] phy_options A bit field that allows the Host to specify options
-  *                        for PHYs. The default value for a new connection shall be all zero bits. The
+  *                        for PHYs. Value is @ref T_GAP_PHYS_OPTIONS.
+  *                        The default value for a new connection shall be all zero bits. The
   *                        Controller may override any preferred coding for transmitting on the LE Coded
   *                        PHY.
-  * @return  result.
-  * @retval  GAP_CAUSE_SUCCESS: Set request sent successfully.<BR>
-  * @retval  GAP_CAUSE_NON_CONN: Set request sent failed.<BR>
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -642,19 +592,21 @@ T_GAP_CAUSE le_set_phy(uint8_t conn_id, uint8_t all_phys, uint8_t tx_phys, uint8
                        T_GAP_PHYS_OPTIONS phy_options);
 
 /**
-  * @brief   Disable the slave latency used in slave role. LE disable slave latency response will be returned by
-  *          @ref app_gap_callback with cb_type @ref GAP_MSG_LE_DISABLE_SLAVE_LATENCY.
+  * @brief   Disable the Peripheral latency used in Peripheral role.
   *
-  * @note When slave latency is not 0, and user disable slave latency, the slave will listen to pkts in
-  *         every connection interval.
+  * If sending request operation is successful, the disabling result will be returned by callback
+  * registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_DISABLE_SLAVE_LATENCY.
+  *
+  * @note When Peripheral latency is non-zero, and APP disable Peripheral latency, the Peripheral will listen
+  * to every connection event.
   *
   * @param[in] conn_id Connection ID.
-  * @param[in] disable Disable/enable slave latency.
-  * \arg \c     true disable slave latency.
-  * \arg \c     false enable slave latency.
-  * @return  result.
-  * @retval  GAP_CAUSE_SUCCESS: Set request sent successfully.<BR>
-  * @retval  GAP_CAUSE_NON_CONN: Set request sent failed.<BR>
+  * @param[in] disable Disable or enable Peripheral latency.
+  *                    - true: Disable Peripheral latency.
+  *                    - false: Enable Peripheral latency.
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -686,18 +638,21 @@ T_GAP_CAUSE le_set_phy(uint8_t conn_id, uint8_t all_phys, uint8_t tx_phys, uint8
 T_GAP_CAUSE le_disable_slave_latency(uint8_t conn_id, bool disable);
 
 /**
-  * @brief  Update instant passed channel map. LE update passed channel map response will be returned by
-  *          @ref app_gap_callback with cb_type @ref GAP_MSG_LE_UPDATE_PASSED_CHANN_MAP.
+  * @brief  Update instant passed channel map.
   *
-  * When this feature is enabled, if we receive a instant passed channel map req, we will not disconnect
-  *         the link.
+  * When update instant passed channel map feature is enabled, if device receives an instant passed channel map,
+  * the device will not disconnect the link.
+  * The feature is enabled by default.
   *
-  * @param[in] enable Enable/disable instant update passed channel map feature.
-  * \arg \c     true enable instant update passed channel map feature.
-  * \arg \c     false disable instant update passed channel map feature.
-  * @return  result.
-  * @retval GAP_CAUSE_SUCCESS: Send request successfully.
-  * @retval GAP_CAUSE_NON_CONN: Failed. No connection.
+  * If sending request operation is successful, the updating result will be returned by callback
+  * registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_UPDATE_PASSED_CHANN_MAP.
+  *
+  * @param[in] enable Enable or disable update instant passed channel map feature.
+  *                   - true: Enable update instant passed channel map feature.
+  *                   - false: Disable update instant passed channel map feature.
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -729,13 +684,11 @@ T_GAP_CAUSE le_update_passed_chann_map(bool enable);
 /**
   * @brief  Set connection parameter.
   *
-  * APP can call this API to modify connection interval, latency and supervision timeout value.
-  *
-  * @param[in] type  Connection parameter type: @ref T_GAP_CONN_PARAM_TYPE.
-  * @param[in] p_conn_param  Connection parameters @ref T_GAP_LE_CONN_REQ_PARAM.
-  * @return  result.
-  * @retval GAP_CAUSE_SUCCESS Send request success.
-  * @retval GAP_CAUSE_NON_CONN Failed. No connection.
+  * @param[in] type  Connection parameter type @ref T_GAP_CONN_PARAM_TYPE.
+  * @param[in] p_conn_param  Pointer to connection parameters @ref T_GAP_LE_CONN_REQ_PARAM.
+  * @return Operation result.
+  * @retval GAP_CAUSE_SUCCESS    Operation success.
+  * @retval Others   Operation failure.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -765,20 +718,32 @@ T_GAP_CAUSE le_set_conn_param(T_GAP_CONN_PARAM_TYPE type,
                               T_GAP_LE_CONN_REQ_PARAM *p_conn_param);
 
 /**
- * @brief   Create a connection to a connectable advertiser. @ref le_set_conn_param shall be called first to set connection parameters.
+ * @brief   Create a connection as Central. @ref le_set_conn_param shall be called before calling this API.
+ *
+ * Applications can only call this API when gap_conn_state of @ref T_GAP_DEV_STATE is @ref GAP_CONN_DEV_STATE_IDLE.
+ *
+ * If sending request operation is successful, the creating result will be returned in one of the following ways:
+ * - In the default situation, or when @ref le_gap_msg_info_way (true) has been called, APP will be notified
+ *   by message @ref GAP_MSG_LE_CONN_STATE_CHANGE with new_state @ref T_GAP_CONN_STATE.
+ *   And APP will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE with new_state about gap_conn_state @ref GAP_CONN_STATE.
+ * - When @ref le_gap_msg_info_way (false) has been called, APP will be notified with the callback registered
+ *   by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_GAP_STATE_MSG about connection state.
+ *   And APP will be notified with the callback registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_GAP_STATE_MSG
+ *   about device state.
  *
  * @param[in] init_phys  A bit field that indicates the PHY(s) on which the advertising packets should be received on the primary
  *                       advertising channel and the PHYs for which connection parameters have been specified. @ref GAP_PHYS_CONN_INIT.
- * @param[in] remote_bd The Peer's Public Device Address, Random (static) Device Address, Non-Resolvable Private Address, or
-                        Resolvable Private Address depending on the Peer_Address_Type parameter.
- * @param[in] remote_bd_type The type of address used in the connectable advertisement sent by the peer.
- * @param[in] local_bd_type  The type of address being used in the connection request packets.
- * @param[in] scan_timeout  Scan timeout value. If time has expired before connection has been established, Bluetooth Host will
- *                          cancel create connection.
- *                          @arg Time = N * 10 ms, if time equals 0, Bluetooth Host will wait forever.
- * @return  result.
- * @retval GAP_CAUSE_SUCCESS Send request success.
- * @retval GAP_CAUSE_NON_CONN Failed. No connection.
+ * @param[in] remote_bd Pointer to Peer's Public Device Address, Random (static) Device Address, Non-Resolvable Private Address, or
+                        Resolvable Private Address depending on remote_bd_type parameter.
+ * @param[in] remote_bd_type Peer's device address type. Value is @ref T_GAP_REMOTE_ADDR_TYPE.
+ * @param[in] local_bd_type  Local device address type. Value is @ref T_GAP_LOCAL_ADDR_TYPE.
+ * @param[in] scan_timeout  Initiating timeout value. Time = N * 10 ms.
+ *                          - 0: Bluetooth Host will not cancel create connection.
+ *                          - Others: If time has expired before connection has been established, Bluetooth Host will
+ *                                    cancel create connection.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -879,12 +844,11 @@ T_GAP_CAUSE le_connect(uint8_t init_phys, uint8_t *remote_bd,
   *                   is @ref APP_RESULT_PENDING.
   *
   * @param[in] conn_id  Connection ID.
-  * @param[in] result   @ref APP_RESULT_SUCCESS: accept.
-  *                     @ref APP_RESULT_REJECT: reject.
-  * @return  result.
-  * @retval  GAP_CAUSE_SUCCESS Send request success.
-  * @retval  GAP_CAUSE_SEND_REQ_FAILED Send request sent fail.
-  * @retval  GAP_CAUSE_NON_CONN Failed. No connection.
+  * @param[in] result   @ref APP_RESULT_SUCCESS : accept.
+  *                     @ref APP_RESULT_REJECT : reject.
+  * @return Operation result.
+  * @retval GAP_CAUSE_SUCCESS    Operation success.
+  * @retval Others   Operation failure.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -898,22 +862,32 @@ T_GAP_CAUSE le_connect(uint8_t init_phys, uint8_t *remote_bd,
 T_GAP_CAUSE le_conn_update_cfm(uint8_t conn_id, uint16_t result);
 
 /**
-  * @brief      Send connection parameter update request msg to Bluetooth Host. Connection parameter update result will be returned
-  *             by @ref app_handle_conn_param_update_evt.
+  * @brief      Send connection parameter update request.
   *
-  * APP can call this API to modify connection interval, latency and supervision timeout value.
+  * If sending request operation is successful, the updating result will be returned in one of the following ways:
+  * - In the default situation, or when @ref le_gap_msg_info_way (true) has been called, APP will be notified
+  *   by message @ref GAP_MSG_LE_CONN_PARAM_UPDATE with status @ref GAP_CONN_PARAM_UPDATE_STATUS.
+  * - When @ref le_gap_msg_info_way (false) has been called, APP will be notified with the callback registered
+  *   by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_GAP_STATE_MSG.
   *
   * @param[in] conn_id  Connection ID for this link.
-  * @param[in] conn_interval_min  Value range: 0x0006 - 0x0C80 (7.5ms - 4000ms, 1.25ms/step).
-  * @param[in] conn_interval_max  Value range: 0x0006 - 0x0C80 (7.5ms - 4000ms, 1.25ms/step).
-  * @param[in] conn_latency  Value range: 0x0000 - 0x01F3.
+  * @param[in] conn_interval_min  Minimum value for the connection interval.
+  *                               Value range: 0x0006 - 0x0C80 (7.5ms - 4000ms, 1.25ms/step).
+  * @param[in] conn_interval_max  Maximum value for the connection interval.
+  *                               Value range: 0x0006 - 0x0C80 (7.5ms - 4000ms, 1.25ms/step).
+  * @param[in] conn_latency  Maximum Peripheral latency for the connection. Value range: 0x0000 - 0x01F3.
                This shall be less than or equal to (((supervision_timeout * 10ms) / (conn_interval_max * 1.25ms * 2)) - 1).
-  * @param[in] supervision_timeout  Value range: 0x000A - 0x0C80 (100ms - 32000ms, 10ms/step).
-  * @param[in] ce_length_min  Value range: 0x0006 - 0x0C80 (7.5ms - 4000ms, 1.25ms/step).
-  * @param[in] ce_length_max  Value range: 0x0006 - 0x0C80 (7.5ms - 4000ms, 1.25ms/step).
-  * @return  result.
-  * @retval GAP_CAUSE_SUCCESS Send request success.
-  * @retval GAP_CAUSE_NON_CONN Failed. No connection.
+  * @param[in] supervision_timeout  Supervision timeout for the LE Link.
+  *                                 Value range: 0x000A - 0x0C80 (100ms - 32000ms, 10ms/step).
+  * @param[in] ce_length_min  Information parameter about minimum length of connection event needed for this LE connection.
+  *                           - Range: 0x0000 to 0xFFFF
+  *                           - Time = N * 0.625 ms.
+  * @param[in] ce_length_max  Information parameter about maximum length of connection event needed for this LE connection.
+  *                           - Range: 0x0000 to 0xFFFF
+  *                           - Time = N * 0.625 ms.
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -1014,131 +988,6 @@ T_GAP_CAUSE le_update_conn_param(uint8_t   conn_id,
                                  uint16_t  supervision_timeout,
                                  uint16_t  ce_length_min,
                                  uint16_t  ce_length_max);
-
-/**
- * @brief       Accept the remote device's request to change connection parameters.
- *
- * @param[in] conn_handle    Connection handle.
- * @param[in] interval_min   Minimum value of the connection interval.
- *                           @arg Range: 0x0006 to 0x0C80.
- *                           @arg Time = N * 1.25 ms.
- *                           @arg Time Range: 7.5 ms to 4 s
- * @param[in] interval_max   Maximum value of the connection interval.
- *                           @arg Range: 0x0006 to 0x0C80.
- *                           @arg Time = N * 1.25 ms.
- *                           @arg Time Range: 7.5 ms to 4 s.
- * @param[in] max_latency    Maximum allowed Peripheral latency for the connection specified as the number of connection events.
- *                           @arg Range: 0x0000 to 0x01F3
- * @param[in] timeout        Supervision timeout for the connection.
- *                           The Timeout in milliseconds shall be larger than (1 + Max_Latency) * Interval_Max * 2, where Interval_Max
- *                           is given in milliseconds.
- *                           @arg Range: 0x000A to 0x0C80.
- *                           @arg Time = N * 10 ms.
- *                           @arg Time Range: 100 ms to 32 s.
- * @param[in] min_ce_length  Information parameter about the minimum length of connection event needed for this LE connection.
- *                           @arg Range: 0x0000 to 0xFFFF.
- *                           @arg Time = N * 0.625 ms.
- *                           @arg Time Range: 0 ms to 40.9 s.
- * @param[in] max_ce_length  Information parameter about the maximum length of connection event needed for this LE connection.
- *                           @arg Range: 0x0000 to 0xFFFF.
- *                           @arg Time = N * 0.625 ms.
- *                           @arg Time Range: 0 ms to 40.9 s.
- *
- * @return The result of sending request operation.
- * @retval GAP_CAUSE_SUCCESS  Sending request operation is successful.
- * @retval Others             Sending request operation is failed.
- *
- * <b>Example usage</b>
- * \code{.c}
-   void test(void)
-   {
-        // If value is true, APP shall handle @ref LE_CONN_INFO_OPCODE_LE_REMOTE_CONNECTION_PARAMETER_REQUEST_IND.
-        T_GAP_CAUSE ret = le_set_gap_param(GAP_PARAM_LE_CONN_PARAMS_REQ_PROC_INFO, len, p_value);
-   }
-
-   // Callback registered by @ref le_register_app_cb
-   T_APP_RESULT app_gap_callback(uint8_t cb_type, void *p_cb_data)
-   {
-       T_APP_RESULT result = APP_RESULT_SUCCESS;
-       T_LE_CB_DATA cb_data;
-
-       memcpy(&cb_data, p_cb_data, sizeof(T_LE_CB_DATA));
-
-       switch (cb_type)
-       {
-       ...
-        case GAP_MSG_LE_CONN_INFO:
-            {
-                T_LE_CONN_INFO_CB *p_le_conn_info = cb_data.p_le_cb_data;
-
-                switch (p_le_conn_info->opcode)
-                {
-                case LE_CONN_INFO_OPCODE_LE_REMOTE_CONNECTION_PARAMETER_REQUEST_IND:
-                    le_remote_connection_parameter_request_reply(p_le_conn_info->data.p_le_remote_connection_parameter_request_ind->conn_handle, interval_min, interval_max, max_latency, timeout, min_ce_length, max_ce_length);
-                    break;
-                ...
-                }
-            }
-            break;
-       }
-        ...
-   }
- * \endcode
- */
-T_GAP_CAUSE le_remote_connection_parameter_request_reply(uint16_t conn_handle,
-                                                         uint16_t interval_min, uint16_t interval_max, uint16_t max_latency, uint16_t timeout,
-                                                         uint16_t min_ce_length, uint16_t max_ce_length);
-
-/**
- * @brief       Reject the remote device's request to change connection parameters.
- *
- * @param[in] conn_handle   Connection handle.
- * @param[in] reason        Reason that the connection parameter request was rejected.
- *            @arg  HCI_ERR_UNACCEPTABLE_CONN_PARAMS: 0x3B.
- *
- * @return The result of sending request operation.
- * @retval GAP_CAUSE_SUCCESS  Sending request operation is successful.
- * @retval Others             Sending request operation is failed.
- *
- * <b>Example usage</b>
- * \code{.c}
-   void test(void)
-   {
-        // If value is true, APP shall handle @ref LE_CONN_INFO_OPCODE_LE_REMOTE_CONNECTION_PARAMETER_REQUEST_IND.
-        T_GAP_CAUSE ret = le_set_gap_param(GAP_PARAM_LE_CONN_PARAMS_REQ_PROC_INFO, len, p_value);
-   }
-
-   // Callback registered by @ref le_register_app_cb
-   T_APP_RESULT app_gap_callback(uint8_t cb_type, void *p_cb_data)
-   {
-       T_APP_RESULT result = APP_RESULT_SUCCESS;
-       T_LE_CB_DATA cb_data;
-
-       memcpy(&cb_data, p_cb_data, sizeof(T_LE_CB_DATA));
-
-       switch (cb_type)
-       {
-       ...
-        case GAP_MSG_LE_CONN_INFO:
-            {
-                T_LE_CONN_INFO_CB *p_le_conn_info = cb_data.p_le_cb_data;
-
-                switch (p_le_conn_info->opcode)
-                {
-                case LE_CONN_INFO_OPCODE_LE_REMOTE_CONNECTION_PARAMETER_REQUEST_IND:
-                    le_remote_connection_parameter_request_negative_reply(p_le_conn_info->data.p_le_remote_connection_parameter_request_ind->conn_handle, reason);
-                    break;
-                ...
-                }
-            }
-            break;
-       }
-        ...
-   }
- * \endcode
- */
-T_GAP_CAUSE le_remote_connection_parameter_request_negative_reply(uint16_t conn_handle,
-                                                                  uint8_t reason);
 
 /** @} */ /* End of group GAP_LE_CONNECTION_COMMON_EXPORT_Functions */
 /** @} */ /* End of group GAP_LE_CONNECTION_MODULE */

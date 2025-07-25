@@ -20,17 +20,13 @@
   * @{
   */
 
-/** @defgroup FMC_Exported_Constants  Flexible Memory Controller Exported Constants
-  * @brief
-  * @{
-  */
 /****************************************************************************************
  * Flexible Memory Controller Address Map
  ****************************************************************************************/
-/** @defgroup FMC_Exported_Address_Map  Flexible Memory Controller Exported Address Map
-  * @ingroup  FMC_Exported_Constants
-  * @brief
-  * @{
+/**
+  * \cond     private
+  * \defgroup FMC_Private_Macros
+  * \{
   */
 #define SPIC0_ADDR            0x04000000
 #define SPIC0_SIZE            (64*1024*1024)
@@ -38,43 +34,11 @@
 #define FMC_MAIN0_ADDR                                      (SPIC0_ADDR)
 #define FMC_MAIN0_SIZE                                      (SPIC0_SIZE)
 
-/** End of FMC_Exported_Address_Map
-  * @}
-  */
-
-/****************************************************************************************
- * Flexible Memory Controller Address Map Checking
- ****************************************************************************************/
-/** @defgroup FMC_Address_Map_Checking  Flexible Memory Controller Address Map Checking
-  * @ingroup  FMC_Exported_Constants
-  * @brief
-  * @{
-  */
-#define FMC_IS_SPIC0_ADDR(addr)                             ((addr >= FMC_MAIN0_ADDR) && (addr < FMC_MAIN0_ADDR + FMC_MAIN0_SIZE))
-
-/** End of FMC_Address_Map_Checking
-  * @}
-  */
-
-/****************************************************************************************
- * Flexible Memory Controller Calibration Definition
- ****************************************************************************************/
-/** @defgroup FMC_Calibration_Definition  Flexible Memory Controller Calibration Definition
-  * @ingroup  FMC_Exported_Constants
-  * @brief
-  * @{
-  */
-#define FMC_CAL_PATTERN                                     (0x5A5A12A5)
-
-/** End of FMC_Calibration_Definition
-  * @}
-  */
-
 /****************************************************************************************
  * SPIC Description
  ****************************************************************************************/
 /** @defgroup SPIC_Exported_Description  SPIC Exported Description
-  * @ingroup  FMC_Exported_Constants
+  * @ingroup  FMC_Private_Macros
   * @brief
   * @{
   */
@@ -89,7 +53,35 @@
 /** End of SPIC_Exported_Description
   * @}
   */
-/** End of FMC_Exported_Constants
+
+/**
+*  End of FMC_Private_Macros
+* \}
+* \endcond
+*/
+
+
+
+
+/** @defgroup FMC_Exported_Macros  FMC_Exported_Macros
+  * @brief
+  * @{
+  */
+
+/****************************************************************************************
+ * Flexible Memory Controller Address Map Checking
+ ****************************************************************************************/
+/** @brief Flexible Memory Controller address map checking. */
+#define FMC_IS_SPIC0_ADDR(addr)                             ((addr >= FMC_MAIN0_ADDR) && (addr < FMC_MAIN0_ADDR + FMC_MAIN0_SIZE))
+
+
+/****************************************************************************************
+ * Flexible Memory Controller Calibration Definition
+ ****************************************************************************************/
+/** @brief Flexible Memory Controller calibration definition. */
+#define FMC_CAL_PATTERN                                     (0x5A5A12A5)
+
+/** End of FMC_Exported_Macros
   * @}
   */
 
@@ -100,19 +92,23 @@
   * @brief
   * @{
   */
+
+/** @brief PSRAM interface type. */
 typedef enum
 {
     /* For SPIC1 PSRAM */
     PSRAM_OPI_TYPE,
 } PSRAM_INTERFACE_TYPE;
 
+/** @brief Nor flash erase mode. */
 typedef enum
 {
-    FLASH_NOR_ERASE_SECTOR  = 1,
-    FLASH_NOR_ERASE_BLOCK   = 2,
-    FLASH_NOR_ERASE_CHIP    = 4,
+    FLASH_NOR_ERASE_SECTOR  = 1, /**< sector erase */
+    FLASH_NOR_ERASE_BLOCK   = 2, /**< block erase */
+    FLASH_NOR_ERASE_CHIP    = 4, /**< chip erase */
 } FLASH_NOR_ERASE_MODE;
 
+/** @brief Nor flash return type. */
 typedef enum
 {
     FLASH_NOR_RET_UNKNOWN,
@@ -143,6 +139,7 @@ typedef enum
     FLASH_NOR_RET_SET_RD_DUMMY_LENGTH_FAIL
 } FLASH_NOR_RET_TYPE;
 
+/** @brief Nor flash channel. */
 typedef enum
 {
     FLASH_NOR_IDX_SPIC0,            /* Nor flash controlled by SPIC0 */
@@ -152,6 +149,7 @@ typedef enum
     FLASH_NOR_IDX_MAX
 } FLASH_NOR_IDX_TYPE;
 
+/** @brief PSRAM channel. */
 typedef enum
 {
     PSRAM_IDX_SPIC0,
@@ -161,6 +159,7 @@ typedef enum
     PSRAM_IDX_MAX
 } PSRAM_IDX_TYPE;
 
+/** @brief Nor flash bit mode. */
 typedef enum
 {
     FLASH_NOR_1_BIT_MODE,
@@ -169,6 +168,12 @@ typedef enum
     FLASH_NOR_DTR_4_BIT_MODE,
     FLASH_NOR_8_BIT_MODE,
 } FLASH_NOR_BIT_MODE;
+
+/**
+  * \cond     private
+  * \defgroup FMC_Private_type
+  * \{
+  */
 
 typedef enum
 {
@@ -200,15 +205,16 @@ typedef enum
 /****************************************************************************************
  * Nor Flash Callback Definition
  ****************************************************************************************/
-/** @defgroup FMC_Flash_Callback_Definition  FMC Flash Callback Definition
-  * @ingroup FMC_Exported_Types
-  * @brief
-  * @{
-  */
+
 typedef void (*FLASH_NOR_ASYNC_CB)(void);
-/** End of FMC_Flash_Callback_Definition
-  * @}
-  */
+
+/**
+*  End of FMC_Private_type
+* \}
+* \endcond
+*/
+
+
 /** End of FMC_Exported_Types
   * @}
   */

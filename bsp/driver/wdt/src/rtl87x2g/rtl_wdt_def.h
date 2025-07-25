@@ -48,6 +48,8 @@ typedef struct                              /*!< WDT Structure */
 /*============================================================================*
  *                         WDT Declaration
  *============================================================================*/
+#define WDT_REG_BASE       (SOC_VENDOR_REG_BASE + 0x100)
+
 /** \defgroup WDT         WDT
   * \brief
   * \{
@@ -62,9 +64,7 @@ typedef struct                              /*!< WDT Structure */
   * \brief
   * \{
   */
-
-#define WDT_REG_BASE                       (SOC_VENDOR_REG_BASE + 0x100)
-#define WDT                ((WDT_TypeDef *) WDT_REG_BASE)
+#define WDT                ((WDT_TypeDef *) WDT_REG_BASE)   //!< WDT base address.
 
 
 /** End of WDT_Declaration

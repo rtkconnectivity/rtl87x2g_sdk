@@ -75,10 +75,17 @@ typedef enum
 * @brief   Start a test where the DUT receives test reference packets at a fixed interval.
             The tester generates the test reference packets.
 *
-* @param[in]   rx_chann - Channel to receive packets.
+* If sending request operation is successful, the starting result will be returned by callback
+* registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_DTM_RECEIVER_TEST.
 *
-* @retval GAP_CAUSE_SUCCESS: Operation success.
-* @retval GAP_CAUSE_SEND_REQ_FAILED: Operation fail.
+* @param[in]   rx_chann   Channel to receive packets.
+*                         - N = (F-2402) / 2.
+*                         - Range: 0x00 to 0x27.
+*                         - Frequency Range: 2402 MHz to 2480 MHz.
+*
+* @return The result of sending request.
+* @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+* @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -122,12 +129,21 @@ T_GAP_CAUSE le_dtm_receiver_test(uint8_t rx_chann);
 * @brief   Start a test where the DUT generates test reference packets at a fixed interval.
             The Controller shall transmit at maximum power.
 *
-* @param[in]   tx_chann - Channel to transmit packets.
-* @param[in]   data_len - Length in bytes of payload data in each packet.
-* @param[in]   pkt_pl - The value of packet payload.
+* If sending request operation is successful, the starting result will be returned by callback
+* registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_DTM_TRANSMITTER_TEST.
 *
-* @retval GAP_CAUSE_SUCCESS: Operation success.
-* @retval GAP_CAUSE_SEND_REQ_FAILED: Operation fail.
+* @param[in]   tx_chann   Channel to transmit packets.
+*                         - N = (F-2402) / 2.
+*                         - Range: 0x00 to 0x27.
+*                         - Frequency Range: 2402 MHz to 2480 MHz.
+* @param[in]   data_len   Length in octets of payload data in each packet.
+*                         - Range: 0x00 to 0xFF.
+* @param[in]   pkt_pl    Contents of the payload of the test reference packets.
+*                        Value is @ref T_GAP_DTM_PACKET_PAYLOAD_TYPE.
+*
+* @return The result of sending request.
+* @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+* @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -173,8 +189,12 @@ T_GAP_CAUSE le_dtm_transmitter_test(uint8_t tx_chann, uint8_t data_len, uint8_t 
 /**
 * @brief   Stop any test which is in progress.
 *
-* @retval GAP_CAUSE_SUCCESS: Operation success.
-* @retval GAP_CAUSE_SEND_REQ_FAILED: Operation fail.
+* If sending request operation is successful, the stopping result will be returned by callback
+* registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_DTM_TEST_END.
+*
+* @return The result of sending request.
+* @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+* @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -220,12 +240,20 @@ T_GAP_CAUSE le_dtm_test_end(void);
 /**
 * @brief   Start a test where the DUT receives test reference packets at a fixed interval.
 *
-* @param[in]   rx_chann - Channel to receive packets.
-* @param[in]   phy - Physical to receive packets.
-* @param[in]   mod_idx - Modulation index to receive packets.
+* If sending request operation is successful, the starting result will be returned by callback
+* registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_DTM_ENHANCED_RECEIVER_TEST.
 *
-* @retval GAP_CAUSE_SUCCESS: Operation success.
-* @retval GAP_CAUSE_SEND_REQ_FAILED: Operation fail.
+* @param[in]   rx_chann   Channel to receive packets.
+*                         - N = (F-2402) / 2.
+*                         - Range: 0x00 to 0x27.
+*                         - Frequency Range: 2402 MHz to 2480 MHz.
+* @param[in]   phy   Physical to receive packets. Value is @ref T_GAP_PHYS_TYPE.
+* @param[in]   mod_idx   Modulation index to receive packets.
+*                        Value is @ref T_GAP_DTM_MODULATION_INDEX_TYPE.
+*
+* @return The result of sending request.
+* @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+* @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -273,13 +301,22 @@ T_GAP_CAUSE le_dtm_enhanced_receiver_test(uint8_t rx_chann, uint8_t phy, uint8_t
 /**
 * @brief   Start a test where the DUT generates test reference packets at a fixed interval.
 *
-* @param[in]   tx_chann - Channel to transmit packets.
-* @param[in]   data_len - Length in bytes of payload data in each packet.
-* @param[in]   pkt_pl - The value of packet payload.
-* @param[in]   phy - Physical to transmit packets.
+* If sending request operation is successful, the starting result will be returned by callback
+* registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_DTM_ENHANCED_TRANSMITTER_TEST.
 *
-* @retval GAP_CAUSE_SUCCESS: Operation success.
-* @retval GAP_CAUSE_SEND_REQ_FAILED: Operation fail.
+* @param[in]   tx_chann   Channel to transmit packets.
+*                         - N = (F-2402) / 2.
+*                         - Range: 0x00 to 0x27.
+*                         - Frequency Range: 2402 MHz to 2480 MHz.
+* @param[in]   data_len   Length in octets of payload data in each packet.
+*                         - Range: 0x00 to 0xFF.
+* @param[in]   pkt_pl    Contents of the payload of the test reference packets.
+*                        Value is @ref T_GAP_DTM_PACKET_PAYLOAD_TYPE.
+* @param[in]   phy   Physical to transmit packets. Value is @ref T_GAP_DTM_PHYS_TYPE.
+*
+* @return The result of sending request.
+* @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+* @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -331,27 +368,33 @@ T_GAP_CAUSE le_dtm_enhanced_transmitter_test(uint8_t tx_chann, uint8_t data_len,
 /**
 * @brief   Start a test where the DUT receives test reference packets at a fixed interval.
 *
-* @param[in]   rx_channel - Channel to receive packets.
-                            Range: 0x00 to 0x27.
-* @param[in]   phy - Physical to receive packets: @ref T_GAP_PHYS_TYPE.
-* @param[in]   modulation_index - Modulation index to receive packets: @ref T_GAP_DTM_MODULATION_INDEX_TYPE.
-* @param[in]   expected_cte_length - The expected length of the Constant Tone Extensions in received
-                                     test reference packets.
-                                     Range: 0x00 (No Constant Tone Extension expected (default)) or 0x02 to 0x14.
-                                     Units: 8 us.
-* @param[in]   expected_cte_type - The expected type of the Constant Tone Extensions in received
-                                   test reference packets: @ref T_GAP_CTE_TYPE.
-* @param[in]   slot_durations - Modulation index to receive packets and shall be ignored when expected_cte_type
-                                is not set to GAP_CTE_TYPE_AOA: @ref T_GAP_SLOT_DUATIONS_TYPE.
-* @param[in]   switching_pattern_length - The number of Antenna IDs in the pattern and shall be ignored when
-                                          expected_cte_type is not set to GAP_CTE_TYPE_AOA.
-                                          Range: 0x02 to max_switching_pattern_length supported by controller
-                                                 max_switching_pattern_length shall be less than or equal to 0x4B.
-* @param[in]   p_antenna_ids - Antenna ID in the pattern and shall be ignored when expected_cte_type
-                               is not set to GAP_CTE_TYPE_AOA.
+* If sending request operation is successful, the starting result will be returned by callback
+* registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_DTM_RECEIVER_TEST_V3.
 *
-* @retval GAP_CAUSE_SUCCESS: Send request success.
-* @retval GAP_CAUSE_SEND_REQ_FAILED: Send request fail.
+* @param[in]   rx_channel   Channel to receive packets.
+*                           - N = (F-2402) / 2.
+*                           - Range: 0x00 to 0x27.
+*                           - Frequency Range: 2402 MHz to 2480 MHz.
+* @param[in]   phy   Physical to receive packets. Value is @ref T_GAP_PHYS_TYPE.
+* @param[in]   modulation_index   Modulation index to receive packets. Value is @ref T_GAP_DTM_MODULATION_INDEX_TYPE.
+* @param[in]   expected_cte_length   The expected length of the Constant Tone Extensions in received
+                                     test reference packets.
+                                     - Range: 0x00 (No Constant Tone Extension expected (default)) or 0x02 to 0x14.
+                                     - Units: 8 us.
+* @param[in]   expected_cte_type   The expected type of the Constant Tone Extensions in received
+                                   test reference packets. Value is @ref T_GAP_CTE_TYPE.
+* @param[in]   slot_durations   Modulation index to receive packets and shall be ignored when expected_cte_type
+                                is not set to @ref GAP_CTE_TYPE_AOA. Value is @ref T_GAP_SLOT_DUATIONS_TYPE.
+* @param[in]   switching_pattern_length   The number of Antenna IDs in the pattern and shall be ignored when
+                                          expected_cte_type is not set to @ref GAP_CTE_TYPE_AOA.
+                                          - Range: 0x02 to max_switching_pattern_length supported by Controller
+                                                 max_switching_pattern_length shall be less than or equal to 0x4B.
+* @param[in]   p_antenna_ids   Pointer to antenna ID in the pattern and shall be ignored when expected_cte_type
+                               is not set to @ref GAP_CTE_TYPE_AOA.
+*
+* @return The result of sending request.
+* @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+* @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -398,27 +441,33 @@ T_GAP_CAUSE le_dtm_receiver_test_v3(uint8_t rx_channel, T_GAP_PHYS_TYPE phy,
 /**
 * @brief   Start a test where the DUT receives test reference packets at a fixed interval.
 *
-* @param[in]   tx_channel - Channel to transmit packets.
-                            Range: 0x00 to 0x27.
-* @param[in]   test_data_length - Length in bytes of payload data in each packet.
-                                  Range: 0x00 to 0xFF.
-* @param[in]   packet_payload - Contents of the payload of the test reference packets:
-*                               @ref T_GAP_DTM_PACKET_PAYLOAD_TYPE.
-* @param[in]   phy - Physical to transmit packets: @ref T_GAP_DTM_PHYS_TYPE.
-* @param[in]   cte_length - The length of the Constant Tone Extension in the test reference packets.
-                            Range: 0x00 (Do not transmit a Constant Tone Extension) or 0x02 to 0x14.
-                            Units: 8 us.
-* @param[in]   cte_type - The type of the Constant Tone Extension in the test reference packets.
-                          @ref T_GAP_CTE_TYPE.
-* @param[in]   switching_pattern_length - The number of Antenna IDs in the pattern and shall be ignored when
-                                          cte_type is set to GAP_CTE_TYPE_AOA.
-                                          Range: 0x02 to max_switching_pattern_length supported by controller
-                                                 max_switching_pattern_length shall be less than or equal to 0x4B.
-* @param[in]   p_antenna_ids - Antenna ID in the pattern and shall be ignored when expected_cte_type
-*                              is set to GAP_CTE_TYPE_AOA.
+* If sending request operation is successful, the starting result will be returned by callback
+* registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_DTM_TRANSMITTER_TEST_V3.
 *
-* @retval GAP_CAUSE_SUCCESS: Send request success.
-* @retval GAP_CAUSE_SEND_REQ_FAILED: Send request fail.
+* @param[in]   tx_channel   Channel to transmit packets.
+                            - N = (F-2402) / 2.
+                            - Range: 0x00 to 0x27.
+                            - Frequency Range: 2402 MHz to 2480 MHz.
+* @param[in]   test_data_length   Length in octets of payload data in each packet.
+                                  - Range: 0x00 to 0xFF.
+* @param[in]   packet_payload   Contents of the payload of the test reference packets.
+*                               Value is @ref T_GAP_DTM_PACKET_PAYLOAD_TYPE.
+* @param[in]   phy   Physical to transmit packets. Value is @ref T_GAP_DTM_PHYS_TYPE.
+* @param[in]   cte_length   The length of the Constant Tone Extension in the test reference packets.
+                            - Range: 0x00 (Do not transmit a Constant Tone Extension) or 0x02 to 0x14.
+                            - Units: 8 us.
+* @param[in]   cte_type   The type of the Constant Tone Extension in the test reference packets.
+                          @ref T_GAP_CTE_TYPE.
+* @param[in]   switching_pattern_length   The number of Antenna IDs in the pattern and shall be ignored when
+                                          cte_type is set to @ref GAP_CTE_TYPE_AOA.
+                                          - Range: 0x02 to max_switching_pattern_length supported by Controller
+                                                 max_switching_pattern_length shall be less than or equal to 0x4B.
+* @param[in]   p_antenna_ids   Pointer to antenna ID in the pattern and shall be ignored when expected_cte_type
+*                              is set to @ref GAP_CTE_TYPE_AOA.
+*
+* @return The result of sending request.
+* @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+* @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -464,34 +513,38 @@ T_GAP_CAUSE le_dtm_transmitter_test_v3(uint8_t tx_channel, uint8_t test_data_len
 /**
 * @brief   Start a test where the DUT transmits test reference packets at a fixed interval.
 *
-* @param[in]   tx_channel - Channel to transmit packets.
-                            @arg N = (F-2402) / 2.
-                            @arg Range: 0x00 to 0x27.
-                            @arg Frequency Range: 2402 MHz to 2480 MHz.
-* @param[in]   test_data_length - Length in bytes of payload data in each packet.
-                                  Range: 0x00 to 0xFF.
-* @param[in]   packet_payload - Contents of the payload of the test reference packets:
-*                               @ref T_GAP_DTM_PACKET_PAYLOAD_TYPE.
-* @param[in]   phy - Physical to transmit packets: @ref T_GAP_DTM_PHYS_TYPE.
-* @param[in]   cte_length - The length of the Constant Tone Extension in the test reference packets.
-                            @arg 0x00: Do not transmit a Constant Tone Extension.
-                            @arg 0x02 to 0x14: Length of the Constant Tone Extension in 8 us units.
-* @param[in]   cte_type - The type of the Constant Tone Extension in the test reference packets.
-                          @ref T_GAP_CTE_TYPE.
-* @param[in]   switching_pattern_length - The number of Antenna IDs in the pattern and shall be ignored when
-                                          cte_type is set to GAP_CTE_TYPE_AOA.
-                                          @arg Range: 0x02 to max_switching_pattern_length supported by controller
-                                                      max_switching_pattern_length shall be less than or equal to 0x4B.
-* @param[in]   p_antenna_ids - Antenna ID in the pattern and shall be ignored when expected_cte_type
-*                              is set to GAP_CTE_TYPE_AOA.
-* @param[in]   tx_power_level - Set transmitter to the specified or the nearest transmit power level.
-                                @arg Range: -127 to +20.
-                                @arg Units: dBm.
-                                @arg 0x7E Set transmitter to minimum transmit power level. \n
-                                     0x7F Set transmitter to maximum transmit power level.
+* If sending request operation is successful, the starting result will be returned by callback
+* registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_DTM_TRANSMITTER_TEST_V4.
 *
-* @retval GAP_CAUSE_SUCCESS: Send request success.
-* @retval GAP_CAUSE_SEND_REQ_FAILED: Send request fail.
+* @param[in]   tx_channel   Channel to transmit packets.
+                            - N = (F-2402) / 2.
+                            - Range: 0x00 to 0x27.
+                            - Frequency Range: 2402 MHz to 2480 MHz.
+* @param[in]   test_data_length   Length in octets of payload data in each packet.
+                                  - Range: 0x00 to 0xFF.
+* @param[in]   packet_payload   Contents of the payload of the test reference packets.
+*                               Value is @ref T_GAP_DTM_PACKET_PAYLOAD_TYPE.
+* @param[in]   phy   Physical to transmit packets. Value is @ref T_GAP_DTM_PHYS_TYPE.
+* @param[in]   cte_length   The length of the Constant Tone Extension in the test reference packets.
+                            - 0x00: Do not transmit a Constant Tone Extension.
+                            - 0x02 to 0x14: Length of the Constant Tone Extension in 8 us units.
+* @param[in]   cte_type   The type of the Constant Tone Extension in the test reference packets.
+                          @ref T_GAP_CTE_TYPE.
+* @param[in]   switching_pattern_length   The number of Antenna IDs in the pattern and shall be ignored when
+                                          cte_type is set to @ref GAP_CTE_TYPE_AOA.
+                                          - Range: 0x02 to max_switching_pattern_length supported by Controller
+                                                   max_switching_pattern_length shall be less than or equal to 0x4B.
+* @param[in]   p_antenna_ids   Pointer to antenna ID in the pattern and shall be ignored when expected_cte_type
+*                              is set to @ref GAP_CTE_TYPE_AOA.
+* @param[in]   tx_power_level   Set transmitter to the specified or the nearest transmit power level.
+                                - Range: -127 to +20.
+                                - Units: dBm.
+                                - 0x7E: Set transmitter to minimum transmit power level.
+                                - 0x7F: Set transmitter to maximum transmit power level.
+*
+* @return The result of sending request.
+* @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+* @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}

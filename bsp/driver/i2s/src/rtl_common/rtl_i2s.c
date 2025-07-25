@@ -561,24 +561,41 @@ void I2S_SwapLRChDataForRead(I2S_TypeDef *I2Sx, FunctionalState NewState)
  *      This parameter can be: ENABLE or DISABLE.
  * \return  None.
  */
-void I2S_MCLKOutputSelectCmd(I2S_TypeDef *I2Sx)
+void I2S_MCLKOutputSelectCmd(I2S_TypeDef *I2Sx, FunctionalState NewState)
 {
     /* Check the parameters */
     assert_param(IS_I2S_ALL_PERIPH(I2Sx));
 
     if (I2Sx == I2S0)
     {
-        /*Enable mclk mux */
-        PERIBLKCTRL_AUDIO->u_708.BITS_708.r_SPORT0_MCLK_OUT = 0x1;
-        PERIBLKCTRL_AUDIO->u_70C.BITS_70C.mclk2_pmux_sel = 0x1;
+        if (NewState == ENABLE)
+        {
+            /*Enable mclk mux */
+            PERIBLKCTRL_AUDIO->u_708.BITS_708.r_SPORT0_MCLK_OUT = 0x1;
+            PERIBLKCTRL_AUDIO->u_70C.BITS_70C.mclk2_pmux_sel = 0x1;
+        }
+        else
+        {
+            PERIBLKCTRL_AUDIO->u_708.BITS_708.r_SPORT0_MCLK_OUT = 0x0;
+            PERIBLKCTRL_AUDIO->u_70C.BITS_70C.mclk2_pmux_sel = 0x0;
+        }
     }
     else
     {
         if (I2Sx == I2S1)
         {
-            /*Enable mclk mux */
-            PERIBLKCTRL_AUDIO->u_708.BITS_708.r_SPORT1_MCLK_OUT = 0x1;
-            PERIBLKCTRL_AUDIO->u_70C.BITS_70C.mclk2_pmux_sel = 0x1;
+            if (NewState == ENABLE)
+            {
+                /*Enable mclk mux */
+                PERIBLKCTRL_AUDIO->u_708.BITS_708.r_SPORT1_MCLK_OUT = 0x1;
+                PERIBLKCTRL_AUDIO->u_70C.BITS_70C.mclk2_pmux_sel = 0x1;
+            }
+            else
+            {
+                /*Enable mclk mux */
+                PERIBLKCTRL_AUDIO->u_708.BITS_708.r_SPORT1_MCLK_OUT = 0x0;
+                PERIBLKCTRL_AUDIO->u_70C.BITS_70C.mclk2_pmux_sel = 0x0;
+            }
         }
     }
 }

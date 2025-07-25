@@ -43,7 +43,14 @@ extern "C"
   * @{
   */
 
+/** @defgroup EXT_SCAN_DEFs Extended Scan Definitions
+  * @brief Extended scan related definitions.
+  * @{
+  */
 #define GAP_EXT_SCAN_MAX_PHYS_NUM               2     /**< Maximum number of scan PHYs. */
+/** End of EXT_SCAN_DEFs
+  * @}
+  */
 
 /** @defgroup EXT_SCAN_PHY Extended Scan PHY
   * @brief Indicate the PHY(s) on which the advertising packets should be received
@@ -94,23 +101,56 @@ typedef enum
 /** @brief Extended scan parameter. */
 typedef struct
 {
-    T_GAP_SCAN_MODE
-    scan_type;      /**< Scan type. Write only. Default is GAP_SCAN_MODE_ACTIVE, @ref T_GAP_SCAN_MODE. */
-    uint16_t
-    scan_interval;  /**< Scan Interval. Write only. In units of 0.625ms, range: 0x0004 to 0xFFFF. Default is 0x40. */
-    uint16_t
-    scan_window;    /**< Scan Window. Write only. In units of 0.625ms, range: 0x0004 to 0xFFFF. Default is 0x20. */
+    T_GAP_SCAN_MODE scan_type;      /**< Scan type. Value is @ref T_GAP_SCAN_MODE.
+                                         Default value is @ref GAP_SCAN_MODE_ACTIVE. */
+    uint16_t scan_interval;  /**< Time interval from when the Controller started its last scan until
+                                  it begins the subsequent scan on the primary advertising physical channel.
+                                  - Range: 0x0004 to 0xFFFF.
+                                  - Time = N * 0.625 ms.
+                                  - Time Range: 2.5 ms to 40.959375 s. */
+    uint16_t scan_window;    /**< Duration of the scan on the primary advertising physical channel.
+                                  - Range: 0x0004 to 0xFFFF.
+                                  - Time = N * 0.625 ms.
+                                  - Time Range: 2.5 ms to 40.959375 s. */
 } T_GAP_LE_EXT_SCAN_PARAM;
 
 /** @brief Extended scan parameter type. */
 typedef enum
 {
-    GAP_PARAM_EXT_SCAN_LOCAL_ADDR_TYPE   = 0x340,  /**< The type of address being used in the scan request packets. Read/Write. Size is uint8_t. Default is GAP_LOCAL_ADDR_LE_PUBLIC (@ref T_GAP_LOCAL_ADDR_TYPE). */
-    GAP_PARAM_EXT_SCAN_FILTER_POLICY     = 0x341,  /**< Scanning filter policy. Read/Write. Size is uint8_t. Default is GAP_SCAN_FILTER_ANY (@ref T_GAP_SCAN_FILTER_POLICY). */
-    GAP_PARAM_EXT_SCAN_PHYS              = 0x342,  /**< Scanning PHYs.  window. Read/Write. Size is uint8_t. Default is GAP_EXT_SCAN_PHYS_1M_BIT (@ref EXT_SCAN_PHY). */
-    GAP_PARAM_EXT_SCAN_FILTER_DUPLICATES = 0x343,  /**< Scan Filter Duplicates. Read/Write. Size is uint8_t. Default is GAP_SCAN_FILTER_DUPLICATE_ENABLE (@ref T_GAP_SCAN_FILTER_DUPLICATE). */
-    GAP_PARAM_EXT_SCAN_DURATION          = 0x344,  /**< Scan duration. Read/Write. Size is uint16_t. In units of 10ms, range: 0x0000~0xFFFF. Default is zero. */
-    GAP_PARAM_EXT_SCAN_PERIOD            = 0x345,  /**< Scan period. Read/Write. Size is uint16_t. In units of 1.28sec, range: 0x0000~0xFFFF. Default is zero. */
+    GAP_PARAM_EXT_SCAN_LOCAL_ADDR_TYPE   = 0x340,  /**< The type of address being used in the scan request packets. Read/Write. Size is 1 octet.
+                                                        Value is @ref T_GAP_LOCAL_ADDR_TYPE. Default value is @ref GAP_LOCAL_ADDR_LE_PUBLIC. */
+    GAP_PARAM_EXT_SCAN_FILTER_POLICY     = 0x341,  /**< Scanning filter policy. Read/Write. Size is 1 octet.
+                                                        Value is @ref T_GAP_SCAN_FILTER_POLICY. Default value is @ref GAP_SCAN_FILTER_ANY. */
+    GAP_PARAM_EXT_SCAN_PHYS              = 0x342,  /**< A bit field indicates scanning PHYs. Read/Write. Size is 1 octet.
+                                                        Value is @ref EXT_SCAN_PHY. Default value is @ref GAP_EXT_SCAN_PHYS_1M_BIT. */
+    GAP_PARAM_EXT_SCAN_FILTER_DUPLICATES = 0x343,  /**< Scan Filter Duplicates. Read/Write. Size is 1 octet. Value is @ref T_GAP_SCAN_FILTER_DUPLICATE.
+                                                        Default value is @ref GAP_SCAN_FILTER_DUPLICATE_ENABLE. */
+    GAP_PARAM_EXT_SCAN_DURATION          = 0x344,  /**< Read/Write. Size is 2 octets.
+                                                        Value range:
+                                                        - 0: Scan continuously until explicitly disable.
+                                                        - 0x0001 to 0xFFFF: Scan duration. Time = N * 10 ms. Time Range: 10 ms to 655.35 s.
+
+                                                        Please refer to @ref GAP_PARAM_EXT_SCAN_PERIOD for details on usage.
+                                                        Default value is zero. */
+    GAP_PARAM_EXT_SCAN_PERIOD            = 0x345,  /**< Read/Write. Size is 2 octets.
+                                                        Value range:
+                                                        - 0: Scan continuously.
+                                                        - 0x0001 to 0xFFFF: Time interval from when Controller started its last Duration
+                                                          @ref GAP_PARAM_EXT_SCAN_DURATION until it begins the subsequent Duration.
+                                                          Time = N * 1.28 sec. Time Range: 1.28 s to 83,884.8 s.
+
+                                                        Usage:
+                                                        - If Duration parameter is zero, Period parameter shall be ignored. Continue scanning
+                                                          until scanning is disabled by calling @ref le_ext_scan_stop.
+                                                        - If Duration and Period parameters are non-zero, Duration shall be less than Period
+                                                          (comparing the times, not how they are represented).
+                                                          Scan for the duration within a scan period. After the scan period has expired, a new
+                                                          scan period shall begin and scanning shall begin again for the duration specified.
+                                                          Continue scanning until scanning is disabled by calling @ref le_ext_scan_stop.
+                                                        - If Duration parameter is non-zero and Period parameter is zero, continue scanning
+                                                          until duration has expired.
+
+                                                        Default value is zero. */
 } T_LE_EXT_SCAN_PARAM_TYPE;
 
 /** End of GAP_LE_EXTENDED_SCAN_Exported_Types
@@ -124,55 +164,27 @@ typedef enum
   * @brief
   * @{
   */
-#if F_BT_LE_GAP_SCAN_FILTER_SUPPORT
-/**
-  * @brief   Set extended scan information filter.
-  *
-  * This function can be called before @ref gap_start_bt_stack is invoked.
-  *
-  * @param[in]  enable      Whether to open the extend scan info filter function.
-  * @param[in]  report_type A logical OR of the bit values that provide the list of report type to receive.
-  * @param[in]  legacy_adv  Whether to receive the legacy scan info.
-  * @return  Operation result.
-  * @retval  TRUE  Operation success.
-  * @retval  FALSE Operation Failure.
-  *
-  * <b>Example usage</b>
-  * \code{.c}
-    void test(void)
-    {
-        le_ext_scan_report_filter(true,
-            GAP_EXT_ADV_REPORT_BIT_CONNECTABLE_ADV|GAP_EXT_ADV_REPORT_BIT_SCANNABLE_ADV, false);
-    }
-  * \endcode
-  */
-bool le_ext_scan_report_filter(bool enable, uint16_t report_type, bool legacy_adv);
-#endif
-
 /**
  * @brief       Set a GAP extended scan parameter.
  *
- * This function can be called with an extended scan parameter type and it will set the
- *              extended scan parameter. Extended scan parameters are defined in @ref T_LE_EXT_SCAN_PARAM_TYPE.
- *              If the "len" field sets to the size of a "uint16_t", the "p_value" field must
- *              point to a data with type "uint16". \n
- *              Combination of Duration parameter (@ref GAP_PARAM_EXT_SCAN_DURATION) and
- *              Period parameter(@ref GAP_PARAM_EXT_SCAN_PERIOD) determines scan mode,
- *              please refer to below code about scan_mode.
+ * This function can be called with an extended scan parameter type @ref T_LE_EXT_SCAN_PARAM_TYPE and it will set the extended scan parameter.
+ * The 'p_value' field must point to an appropriate data type that meets the requirements for the corresponding parameter type.
+ * (For example: if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
  *
- * @param[in]   param    Extended scan parameter type: @ref T_LE_EXT_SCAN_PARAM_TYPE.
+ * Combination of Duration parameter (@ref GAP_PARAM_EXT_SCAN_DURATION) and Period
+ * parameter (@ref GAP_PARAM_EXT_SCAN_PERIOD) determines scan mode, please refer to below code about scan_mode.
+ *
+ * @param[in]   param    Extended scan parameter type @ref T_LE_EXT_SCAN_PARAM_TYPE.
  * @param[in]   len      Length of data to write.
- * @param[in]   p_value  Pointer to data to write. This is dependent on the parameter type and will
-                         be cast to the appropriate data type (For example: if data type param is uint16,
-                         p_value will be cast to pointer of uint16_t).
+ * @param[in]   p_value  Pointer to data to write.
  *
- * @return Set result.
- * @retval GAP_CAUSE_SUCCESS Set parameter success.
- * @retval other Set parameter failed.
+ * @return Operation result.
+ * @retval GAP_CAUSE_SUCCESS    Operation success.
+ * @retval Others   Operation failure.
   *
   * <b>Example usage</b>
   * \code{.c}
-  static T_USER_CMD_PARSE_RESULT cmd_escan(T_USER_CMD_PARSED_VALUE *p_parse_value)
+  void test(void)
   {
     T_GAP_CAUSE cause;
     T_GAP_LOCAL_ADDR_TYPE  own_address_type = GAP_LOCAL_ADDR_LE_PUBLIC;
@@ -181,7 +193,7 @@ bool le_ext_scan_report_filter(bool enable, uint16_t report_type, bool legacy_ad
     uint16_t ext_scan_duration;
     uint16_t ext_scan_period;
     uint8_t  scan_phys = GAP_EXT_SCAN_PHYS_1M_BIT | GAP_EXT_SCAN_PHYS_CODED_BIT;
-    T_EXT_SCAN_MODE  scan_mode = (T_EXT_SCAN_MODE)p_parse_value->dw_param[0];
+    T_EXT_SCAN_MODE  scan_mode;
 
     link_mgr_clear_device_list();
     if (scan_mode == SCAN_UNTIL_DISABLED)
@@ -204,10 +216,6 @@ bool le_ext_scan_report_filter(bool enable, uint16_t report_type, bool legacy_ad
         ext_scan_duration = 500;
         ext_scan_period = 0;
     }
-    if (p_parse_value->param_count > 1)
-    {
-        scan_phys = p_parse_value->dw_param[1];
-    }
 
     le_ext_scan_set_param(GAP_PARAM_EXT_SCAN_LOCAL_ADDR_TYPE, sizeof(own_address_type), &own_address_type);
     le_ext_scan_set_param(GAP_PARAM_EXT_SCAN_PHYS, sizeof(scan_phys), &scan_phys);
@@ -217,7 +225,6 @@ bool le_ext_scan_report_filter(bool enable, uint16_t report_type, bool legacy_ad
     le_ext_scan_set_param(GAP_PARAM_EXT_SCAN_FILTER_DUPLICATES, sizeof(ext_scan_filter_duplicate), &ext_scan_filter_duplicate);
 
     cause = le_ext_scan_start();
-    return (T_USER_CMD_PARSE_RESULT)cause;
   }
   * \endcode
   */
@@ -226,18 +233,16 @@ T_GAP_CAUSE le_ext_scan_set_param(T_LE_EXT_SCAN_PARAM_TYPE param, uint8_t len, v
 /**
  * @brief       Get an extended scan parameter.
  *
- * This function can be called with an extended scan parameter type and it will get an
- *              extended scan parameter. Extended scan parameters are defined in @ref T_LE_EXT_SCAN_PARAM_TYPE.
+ * This function can be called with an extended scan parameter type @ref T_LE_EXT_SCAN_PARAM_TYPE and it will get the extended scan parameter.
+ * The 'p_value' field must point to an appropriate data type that meets the requirements for the corresponding parameter type.
+ * (For example: if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
  *
- * @param[in]      param   Extended scan parameter type: @ref T_LE_EXT_SCAN_PARAM_TYPE.
- * @param[in,out]  p_value Pointer to location to get the parameter value. This is dependent on
- *                         the parameter type and will be cast to the appropriate
- *                         data type (For example: if the data type of param is uint16_t, p_value will be cast to
- *                         a pointer of uint16_t).
+ * @param[in]      param   Extended scan parameter type @ref T_LE_EXT_SCAN_PARAM_TYPE.
+ * @param[in,out]  p_value Pointer to location to get the parameter value.
  *
- * @return  Get result.
- * @retval  GAP_CAUSE_SUCCESS Get parameter success.
- * @retval  GAP_CAUSE_INVALID_PARAM Get parameter failed, invalid parameter.
+ * @return Operation result.
+ * @retval GAP_CAUSE_SUCCESS    Operation success.
+ * @retval Others               Operation failure.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -251,16 +256,11 @@ T_GAP_CAUSE le_ext_scan_set_param(T_LE_EXT_SCAN_PARAM_TYPE param, uint8_t len, v
 T_GAP_CAUSE le_ext_scan_get_param(T_LE_EXT_SCAN_PARAM_TYPE param, void *p_value);
 
 /**
- * @brief       Set an extended scan phy parameter including scan type, scan interval and scan window
+ * @brief       Set an extended scan PHY parameter including scan type, scan interval and scan window
                 for scan advertisements on LE 1M PHY or/and LE Coded PHY.
  *
- * @param[in]   type    Scan PHY type: @ref T_LE_EXT_SCAN_PHY_TYPE.
- * @param[in]   p_param Pointer to data to write, @ref T_GAP_LE_EXT_SCAN_PARAM.
-                        scan_type: Passive scanning or active scanning, @ref T_GAP_SCAN_MODE.
-                        scan_interval: The frequency of scan, in units of 0.625ms, range: 0x0004 to 0xFFFF.
-                        scan_window: The length of scan, in units of 0.625ms, range: 0x0004 to 0xFFFF.
- *
- * @return void.
+ * @param[in]   type    Scan PHY type @ref T_LE_EXT_SCAN_PHY_TYPE.
+ * @param[in]   p_param Pointer to data to write @ref T_GAP_LE_EXT_SCAN_PARAM.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -287,14 +287,20 @@ T_GAP_CAUSE le_ext_scan_get_param(T_LE_EXT_SCAN_PARAM_TYPE param, void *p_value)
 void le_ext_scan_set_phy_param(T_LE_EXT_SCAN_PHY_TYPE type, T_GAP_LE_EXT_SCAN_PARAM *p_param);
 
 /**
- * @brief   Start a device discovery extended scan.
-            If the device changes to the scanning state, @ref app_handle_dev_state_evt will be called. And the
-            advertising data or scan response data will be returned by @ref app_gap_callback with
-            cb_type @ref GAP_MSG_LE_EXT_ADV_REPORT_INFO.
+ * @brief   Start extended scan.
  *
- * @return  Operation result.
- * @retval  GAP_CAUSE_SUCCESS: Start request success.
- * @retval  GAP_CAUSE_INVALID_STATE: Start request failed, invalid device state.
+ * If sending request operation is successful, the starting result will be returned in one of the following ways:
+ * - In the default situation, or when @ref le_ext_scan_gap_msg_info_way (true) has been called, APP will be notified
+ *   by message @ref GAP_MSG_LE_DEV_STATE_CHANGE with new_state about gap_scan_state @ref GAP_SCAN_STATE.
+ * - When @ref le_ext_scan_gap_msg_info_way (false) has been called, APP will be notified with the callback registered
+ *   by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_EXT_SCAN_STATE_CHANGE_INFO.
+ *
+ * If the device is in the scanning state @ref GAP_SCAN_STATE_SCANNING, the advertising data or scan response data will be returned by
+ * the callback registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_EXT_ADV_REPORT_INFO.
+ *
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -343,7 +349,7 @@ void le_ext_scan_set_phy_param(T_LE_EXT_SCAN_PHY_TYPE type, T_GAP_LE_EXT_SCAN_PA
                         p_data->p_le_ext_adv_report_info->event_type & GAP_EXT_ADV_REPORT_BIT_SCAN_RESPONSE,
                         p_data->p_le_ext_adv_report_info->event_type & GAP_EXT_ADV_REPORT_BIT_USE_LEGACY_ADV,
                         p_data->p_le_ext_adv_report_info->data_status);
-        APP_PRINT_INFO5("GAP_MSG_LE_EXT_ADV_REPORT_INFO: event_type 0x%x, bd_addr %s, addr_type %d, rssi %d, data_len %d",
+        APP_PRINT_INFO5("GAP_MSG_LE_EXT_ADV_REPORT_INFO: event_type 0x%x, bd_addr %s, addr_type %d, RSSI %d, data_len %d",
                         p_data->p_le_ext_adv_report_info->event_type,
                         TRACE_BDADDR(p_data->p_le_ext_adv_report_info->bd_addr),
                         p_data->p_le_ext_adv_report_info->addr_type,
@@ -358,18 +364,14 @@ void le_ext_scan_set_phy_param(T_LE_EXT_SCAN_PHY_TYPE type, T_GAP_LE_EXT_SCAN_PA
         APP_PRINT_INFO2("GAP_MSG_LE_EXT_ADV_REPORT_INFO: direct_addr_type 0x%x, direct_addr %s",
                         p_data->p_le_ext_adv_report_info->direct_addr_type,
                         TRACE_BDADDR(p_data->p_le_ext_adv_report_info->direct_addr));
-
-        link_mgr_add_device(p_data->p_le_ext_adv_report_info->bd_addr,
-                            p_data->p_le_ext_adv_report_info->addr_type);
-
-        #if APP_RECOMBINE_ADV_DATA
         if (!(p_data->p_le_ext_adv_report_info->event_type & GAP_EXT_ADV_REPORT_BIT_USE_LEGACY_ADV))
         {
+            // Recombine adv data
             app_handle_ext_adv_report(p_data->p_le_ext_adv_report_info->event_type,
                                       p_data->p_le_ext_adv_report_info->data_status, p_data->p_le_ext_adv_report_info->bd_addr,
                                       p_data->p_le_ext_adv_report_info->data_len, p_data->p_le_ext_adv_report_info->p_data);
         }
-        #endif
+
         break;
         }
     }
@@ -378,12 +380,17 @@ void le_ext_scan_set_phy_param(T_LE_EXT_SCAN_PHY_TYPE type, T_GAP_LE_EXT_SCAN_PA
 T_GAP_CAUSE le_ext_scan_start(void);
 
 /**
-  * @brief   Stop a device discovery extended scan.
-             If device changes to idle state, @ref app_handle_dev_state_evt will be called.
+  * @brief   Stop extended scan.
   *
-  * @return  Operation result.
-  * @retval  GAP_CAUSE_SUCCESS: Stop request success.
-  * @retval  GAP_CAUSE_INVALID_STATE: Stop request failed. Invalid state, not in scan state.
+  * If sending request operation is successful, the stopping result will be returned in one of the following ways:
+  * - In the default situation, or when @ref le_ext_scan_gap_msg_info_way (true) has been called, APP will be notified
+  *   by message @ref GAP_MSG_LE_DEV_STATE_CHANGE with new_state about gap_scan_state @ref GAP_SCAN_STATE.
+  * - When @ref le_ext_scan_gap_msg_info_way (false) has been called, APP will be notified with the callback registered
+  *   by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_EXT_SCAN_STATE_CHANGE_INFO.
+  *
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -419,17 +426,17 @@ T_GAP_CAUSE le_ext_scan_start(void);
 T_GAP_CAUSE le_ext_scan_stop(void);
 
 /**
-* @brief  Set extended scanning gap message inform way.
+* @brief  Set extended scanning GAP message inform way.
 *
 * Default value is true.
-*         If use_msg is true, gap will send the extended scanning gap message to io_queue registered by
-*         gap_start_bt_stack. Message type is @ref GAP_MSG_LE_DEV_STATE_CHANGE.
-*         If use_msg is false, gap will send the extended scanning gap message using callback function registered by
-*         @ref app_gap_callback. Message type is @ref GAP_MSG_LE_EXT_SCAN_STATE_CHANGE_INFO.
+*
+* If extended scanning state changes, the state infomation will be returned in one of the following ways:
+* - In the default situation, or when @ref le_ext_scan_gap_msg_info_way (true) has been called, APP will be notified
+*   by message @ref GAP_MSG_LE_DEV_STATE_CHANGE with new_state about gap_scan_state @ref GAP_SCAN_STATE.
+* - When @ref le_ext_scan_gap_msg_info_way (false) has been called, APP will be notified with the callback registered
+*   by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_EXT_SCAN_STATE_CHANGE_INFO.
 *
 * @param[in] use_msg Whether to use message.
-*
-* @return void.
 *
 * <b>Example usage</b>
 * \code{.c}

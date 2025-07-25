@@ -2,7 +2,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include "os_queue.h"
-#include "os_sync.h"
 #include "usb_hid_driver.h"
 #include "usb_hid_desc.h"
 #include "usb_spec20.h"
@@ -11,7 +10,6 @@
 #include "usb_hid.h"
 #include "usb_pipe.h"
 #include "rtl_gpio.h"
-#include "rtl_pinmux.h"
 #if F_APP_CFU_FEATURE_SUPPORT
 #include "app_hid_descriptor.h"
 #endif
@@ -219,11 +217,7 @@ APP_RAM_TEXT_SECTION
 bool usb_hid_data_pipe_send2(void *handle, void *buf, uint32_t len)
 {
 
-    GPIO_SetBits(GPIO_GetPort(P3_1), GPIO_GetPin(P3_1));
-
-    usb_hid_driver_data_pipe_send(handle, buf, len);
-    GPIO_ResetBits(GPIO_GetPort(P3_1), GPIO_GetPin(P3_1));
-    return true;
+    return usb_hid_driver_data_pipe_send(handle, buf, len);
 }
 
 int usb_hid_data_pipe_close2(void *handle)

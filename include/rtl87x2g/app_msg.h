@@ -1,5 +1,5 @@
 /*
- * Copyright(c) 2018, Realtek Semiconductor Corporation. All rights reserved.
+ * Copyright (c) 2018, Realtek Semiconductor Corporation. All rights reserved.
  */
 
 #ifndef _APP_MSG_H_
@@ -14,7 +14,7 @@ extern "C" {
 
 /**
   * @defgroup APP_MSG APP Message
-  * @brief message definition for user application task.
+  * @brief Message definition for user application task.
   * @{
   */
 
@@ -25,13 +25,13 @@ extern "C" {
 
 /**
  * @brief     Event group definitions.
- * @details   event code is 1 byte code to define messages type exchanging from/to different layers.
- *            first half byte is for group define, and second harf byte is for code define
- *            group code:
+ * @details   Event code is 1 byte code to define messages type exchanging from/to different layers.
+ *            First half byte is for group define, and second half byte is for code define.
+ *            Group code:
  *            0: from stack layer
  *            0x1: from peripheral layer
  *            0x2: from audio lib
- *            0xA: from instructment
+ *            0xA: from instrument
  */
 typedef enum
 {
@@ -39,15 +39,15 @@ typedef enum
     EVENT_GROUP_IO = 0x01,          /**< message group from IO layer */
     EVENT_GROUP_FRAMEWORK = 0x02,   /**< message group from Framework layer */
     EVENT_GROUP_APP = 0x03,         /**< message group from APP layer */
-    EVENT_GROUP_INSTRUMENT = 0x0A,  /**< message group from instructment layer */
+    EVENT_GROUP_INSTRUMENT = 0x0A,  /**< message group from instrument layer */
 } T_EVENT_GROUP;
 
 /**  @brief     Event type definitions.
 */
 typedef enum
 {
-    EVENT_GAP_MSG = 0x01,  /**< message from gap layer for stack */
-    EVENT_GAP_TIMER = 0x02, /**< message from gap layer for timer */
+    EVENT_GAP_MSG = 0x01,  /**< message from GAP layer for stack */
+    EVENT_GAP_TIMER = 0x02, /**< message from GAP layer for timer */
     EVENT_HCI_MSG   = 0x03, /**< message from HCI layer for test */
 
     EVENT_IO_TO_APP = 0x11, /**< message from IO to user application */
@@ -64,10 +64,10 @@ typedef enum
     EVENT_CMD_FROM_8852B = 0xA1,    /**< message from 8852B to user application */
 } T_EVENT_TYPE;
 
-/** @brief get event code group definition */
+/** @brief Get event code group definition */
 #define EVENT_GROUP(event_code) (event_code >> 4)
 
-/**  @brief IO type definitions for IO message, may extend as requested */
+/**  @brief IO type definitions for IO message, may extend as requested. */
 typedef enum
 {
     IO_MSG_TYPE_BT_STATUS,  /**< BT status change with subtype @ref GAP_MSG_TYPE */
@@ -81,25 +81,28 @@ typedef enum
     IO_MSG_TYPE_D3DG,       /**< subtype to be defined */
     IO_MSG_TYPE_SPI,        /**< subtype to be defined */
     IO_MSG_TYPE_MOUSE_BUTTON,   /**< subtype to be defined */
-    IO_MSG_TYPE_GPIO,       /**< Gpio message with subtype @ref T_IO_MSG_GPIO*/
+    IO_MSG_TYPE_GPIO,       /**< Gpio message with subtype @ref T_IO_MSG_GPIO */
     IO_MSG_TYPE_MOUSE_SENSOR,   /**< subtype to be defined */
+    IO_MSG_TYPE_PPT_DFU,
     IO_MSG_TYPE_TIMER,      /**< App timer message with subtype @ref T_IO_MSG_TIMER */
-    IO_MSG_TYPE_RESET_WDG_TIMER, /**< reset watch dog timer*/
-    IO_MSG_TYPE_RESET_AON_WDG_TIMER, /**< reset aon watch dog timer*/
+    IO_MSG_TYPE_RESET_WDG_TIMER, /**< reset watchdog timer */
+    IO_MSG_TYPE_RESET_AON_WDG_TIMER, /**< reset AON watchdog timer */
     IO_MSG_TYPE_WRISTBNAD,  /**< wristband message with subtype @ref T_IO_MSG_WRISTBAND */
     IO_MSG_TYPE_MESH_STATUS,    /**< subtype to be defined */
     IO_MSG_TYPE_KEYBOARD_BUTTON, /**< subtype to be defined */
-    IO_MSG_TYPE_ANCS,            /**< ANCS message*/
+    IO_MSG_TYPE_ANCS,            /**< ANCS message */
     IO_MSG_TYPE_CONSOLE,    /**< Console message with subtype @ref T_IO_CONSOLE */
     IO_MSG_TYPE_LE_MGR,
     IO_MSG_TYPE_GAP_TOUCH,/**< Cap Touch message with subtype @ref T_IO_MSG_GAP_TOUCH */
     IO_MSG_TYPE_LATENCY,
     IO_MSG_TYPE_WORK_MODE_MONITOR,
+    IO_MSG_TYPE_OS_MONITOR,
     IO_MSG_TYPE_BAT_DETECT,
     IO_MSG_TYPE_USB_DEV,
     IO_MSG_TYPE_USB_UAC,
     IO_MSG_TYPE_USB_HID,
-    IO_MSG_TYPE_BAT_LPC,        /**< lpc send low power message*/
+    IO_MSG_TYPE_USB_CDC,
+    IO_MSG_TYPE_BAT_LPC,        /**< LPC send low power message */
     IO_MSG_TYPE_LE_AUDIO,
     IO_MSG_TYPE_REPORT_RATE_CHANGE,
     IO_MSG_TYPE_LED_ON,
@@ -109,18 +112,20 @@ typedef enum
     IO_MSG_TYPE_MESH_LIGHT,    /**< mesh light message */
     IO_MSG_TYPE_DPI,
     IO_MSG_TYPE_PPT_RECEIVE,
-    IO_MSG_TYPE_FMNA,           /**< Findmy specific message with subtype @ref T_IO_MSG_TYPE_FMNA*/
+    IO_MSG_TYPE_FMNA,           /**< Findmy specific message with subtype @ref T_IO_MSG_TYPE_FMNA */
     IO_MSG_TYPE_DRIVER_DATA,
-    IO_MSG_TYPE_IR_START_SEND_REPEAT_CODE, /**< ir send repeat code message*/
-    IO_MSG_TYPE_IR_SEND_COMPLETE,    /**< ir send complete message*/
-    IO_MSG_TYPE_IR_LEARN_DATA,       /**< ir learn data message*/
-    IO_MSG_TYPE_IR_LEARN_STOP,       /**< ir learn stop message*/
+    IO_MSG_TYPE_IR_START_SEND_REPEAT_CODE, /**< IR send repeat code message */
+    IO_MSG_TYPE_IR_SEND_COMPLETE,    /**< IR send complete message */
+    IO_MSG_TYPE_IR_LEARN_DATA,       /**< IR learn data message */
+    IO_MSG_TYPE_IR_LEARN_STOP,       /**< IR learn stop message */
     IO_MSG_TYPE_START_PPT_RECONNECT,
+    IO_MSG_TYPE_DFU,
     IO_MSG_TYPE_DFU_VALID_FW,
     IO_MSG_TYPE_USB_WAKEUP,     /**< USB remote wakeup event with subtype @ref T_IO_MSG_USB_WAKEUP_EVENT */
-    IO_MSG_TYPE_OTHERS,         /**< other message for general purpose*/
+    IO_MSG_TYPE_OTHERS,         /**< other message for general purpose */
     IO_MSG_TYPE_CAN_SEND,
     IO_MSG_TYPE_CAN_RECEIVE,
+    IO_MSG_TYPE_ELECTRIC_METER,
 } T_IO_MSG_TYPE;
 
 /**  @brief IO subtype definitions for @ref T_IO_CONSOLE type */
@@ -138,7 +143,7 @@ typedef enum
     IO_MSG_KEYSCAN_RX_PKT        = 1, /**< Keyscan RX data event */
     IO_MSG_KEYSCAN_MAX           = 2, /**<  */
     IO_MSG_KEYSCAN_ALLKEYRELEASE = 3, /**< All keys are released event */
-    IO_MSG_KEYSCAN_STUCK         = 4, /**<  key stuck message */
+    IO_MSG_KEYSCAN_STUCK         = 4, /**< key stuck message */
 } T_IO_MSG_KEYSCAN;
 
 /**  @brief IO subtype definitions for @ref IO_MSG_TYPE_UART type */
@@ -158,19 +163,19 @@ typedef enum
     IO_MSG_GPIO_NFC,               /**< NFC event */
     IO_MSG_GPIO_USB_AUDIO_PLUG,    /**< USB PLUG IN event */
     IO_MSG_GPIO_USB_AUDIO_UNPLUG,  /**< USB PLUG OUT event */
-    IO_MSG_GPIO_ADAPTOR_PLUG,         /**< ADAPTOR PLUG IN event */
-    IO_MSG_GPIO_ADAPTOR_UNPLUG,       /**< ADAPTOR PLUG OUT event */
-    IO_MSG_GPIO_CHARGERBOX_DETECT,     /**< CHARGERBOX DETECT event*/
-    IO_MSG_GPIO_CASE_DETECT,                   /**< CASE DETECT event*/
-    IO_MSG_GPIO_USB_AUDIO_CHECK,    /**< USB CHECK event*/
-    IO_MSG_GPIO_GSENSOR,            /**< Gsensor detect event*/
-    IO_MSG_GPIO_SENSOR_LD,            /**< sensor light detect event*/
-    IO_MSG_GPIO_SENSOR_LD_IO_DETECT,  /**< sensor light io detect event*/
-    IO_MSG_GPIO_ADAPTOR_DAT,      /**< ADAPTOR DATA event*/
-    IO_MSG_GPIO_RTK_CHARGERBOX_DETECT,    /**< CHARGERBOX COMMAND event*/
-    IO_MSG_GPIO_FMNA_TRIG_PRESS,        /**< Findmy TRIG PIN press event */
-    IO_MSG_GPIO_FMNA_TRIG_RELEASE,      /**< Findmy TRIG PIN release event */
-    IO_MSG_GPIO_FMNA_CUST_ADV_PIN,      /**< Findmy customized PIN event */
+    IO_MSG_GPIO_ADAPTOR_PLUG,      /**< ADAPTOR PLUG IN event */
+    IO_MSG_GPIO_ADAPTOR_UNPLUG,    /**< ADAPTOR PLUG OUT event */
+    IO_MSG_GPIO_CHARGERBOX_DETECT, /**< CHARGERBOX DETECT event */
+    IO_MSG_GPIO_CASE_DETECT,       /**< CASE DETECT event */
+    IO_MSG_GPIO_USB_AUDIO_CHECK,   /**< USB CHECK event */
+    IO_MSG_GPIO_GSENSOR,           /**< Gsensor detect event */
+    IO_MSG_GPIO_SENSOR_LD,         /**< sensor light detect event */
+    IO_MSG_GPIO_SENSOR_LD_IO_DETECT,/**< sensor light IO detect event */
+    IO_MSG_GPIO_ADAPTOR_DAT,       /**< ADAPTOR DATA event */
+    IO_MSG_GPIO_RTK_CHARGERBOX_DETECT, /**< CHARGERBOX COMMAND event */
+    IO_MSG_GPIO_FMNA_TRIG_PRESS,   /**< Findmy TRIG PIN press event */
+    IO_MSG_GPIO_FMNA_TRIG_RELEASE, /**< Findmy TRIG PIN release event */
+    IO_MSG_GPIO_FMNA_CUST_ADV_PIN, /**< Findmy customized PIN event */
 } T_IO_MSG_GPIO;
 
 /**  @brief IO subtype definitions for @ref IO_MSG_TYPE_GAP_TOUCH type */
@@ -203,7 +208,7 @@ typedef enum
 typedef enum
 {
     IO_MSG_MESH_LIGHT_OFF_GUI,        /**< MESH LIGHT TURN OFF FROM UI event */
-    IO_MSG_MESH_LIGHT_ON_GUI,         /**< MESH LIGHT TURN OFF FROM UI event*/
+    IO_MSG_MESH_LIGHT_ON_GUI,         /**< MESH LIGHT TURN ON FROM UI event */
 } T_IO_MSG_MESH_LIGHT;
 
 /**  @brief IO subtype definitions for @ref IO_MSG_TYPE_USB_WAKEUP type */

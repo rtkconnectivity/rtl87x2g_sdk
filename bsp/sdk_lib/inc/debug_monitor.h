@@ -89,33 +89,29 @@ typedef enum
   */
 
 /**
- * @brief  enable debug monitor
- * @param  none
- * @return none
-*/
+ * @brief  Enable the debug monitor to track code execution and detect anomalies.
+ */
 void enable_debug_monitor(void);
 
 /**
- * @brief  watch point 0 setting
- * @param  watch_address the ram address to be detected
- * @param  watch_size    the ram size to be detected
- * @param  action_type
- * @param  read_write_func: watch function type
- * @return none
-*/
+ * @brief  Configure settings for watchpoint 0 to monitor specified memory transactions.
+ * @param[in]  watch_address Specifies the RAM address to monitor.
+ * @param[in]  watch_size    Specifies the size of the RAM segment to monitor.
+ * @param[in]  action_type   Specifies the type of action to trigger on watchpoint event.
+ * @param[in]  read_write_func Specifies the function type for read/write access detection.
+ */
 void watch_point_0_setting(uint32_t watch_address,
                            DWT_WATCH_SIZE watch_size,
                            DWT_ACTION_TYPE action_type,
                            DWT_FUNCTION_TYPE read_write_func);
 
 /**
- * @brief  watch point 1 setting
- * @param  watch_address the ram address to be detected
- * @param  watch_size    the ram size to be detected
- * @param  action_type
- * @param  read_write_func: watch function type
- * @return none
-*/
+ * @brief  Configure settings for watchpoint 1 to monitor specified memory transactions.
+ * @param[in]  watch_address Specifies the RAM address to monitor.
+ * @param[in]  watch_size    Specifies the size of the RAM segment to monitor.
+ * @param[in]  action_type   Specifies the type of action to trigger on watchpoint event.
+ * @param[in]  read_write_func Specifies the function type for read/write access detection.
+ */
 void watch_point_1_setting(uint32_t watch_address,
                            DWT_WATCH_SIZE watch_size,
                            DWT_ACTION_TYPE action_type,

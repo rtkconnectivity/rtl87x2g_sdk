@@ -25,7 +25,7 @@
 #include <stdint.h>
 
 /** @defgroup CRC_FCS CRC Implementation
-  * @brief CRC implementation for specified polynomial:X**0 + X**2 + X**15 + X16
+  * @brief CRC implementation for specified polynomial: X**0 + X**2 + X**15 + X16
   * @{
   */
 
@@ -49,14 +49,14 @@
   * @{
   */
 /**
-* @brief  Calculate a new fcs given the current fcs and the new data.
+* @brief  Calculate a new FCS given the current FCS and the new data.
 *       Polynomial: X**0 + X**2 + X**15 + X16
 *
 * @param  fcs: init or good final
 * @param  cp: data point
 * @param  len: length
 *
-* @return fcs value
+* @return FCS value
 *
 */
 uint16_t btxfcs(uint16_t fcs,
@@ -67,17 +67,17 @@ uint16_t btxfcs(uint16_t fcs,
 * @brief Calculate the CRC16 IBM checksum for the given data and compare it to an expected checksum.
 * @param  buf: data point
 * @param  size: data size
-* @param  compared_crc16: expected crc16 result
-* @return true: the same as compared_crc16, false: has differnet value
+* @param  compared_crc16: expected CRC16 result
+* @return true: the same as compared_crc16, false: has different value
 *
 */
 bool crc16_ibm(uint8_t *buf, uint32_t size, uint16_t compared_crc16);
 
 /**
-* @brief  proprietary inteface for Realtek internal handshake API .
+* @brief  Proprietary interface for Realtek internal handshake API.
 * @param  data: input data buffer
 * @param  len: input data buffer length
-* @return true if handshare pass, false othewise
+* @return true if handshake pass, false otherwise
 *
 */
 extern bool btx_vendor_get_response(uint8_t *data, uint8_t len);

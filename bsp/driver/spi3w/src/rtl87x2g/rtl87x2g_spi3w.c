@@ -30,7 +30,7 @@
 RAM_FUNCTION
 void SPI3W_DLPSEnter(void *PeriReg, void *StoreBuf)
 {
-    SPI3WStoreReg_TypeDef *store_buf = (SPI3WStoreReg_TypeDef *)StoreBuf;
+    SPI3WStoreReg_Typedef *store_buf = (SPI3WStoreReg_Typedef *)StoreBuf;
 
     RCC_PeriphClockCmd(APBPeriph_SPI3W, APBPeriph_SPI3W_CLOCK, ENABLE);
 
@@ -44,9 +44,9 @@ void SPI3W_DLPSEnter(void *PeriReg, void *StoreBuf)
   * \return None
   */
 RAM_FUNCTION
-void SPI_DLPSExit(void *PeriReg, void *StoreBuf)
+void SPI3W_DLPSExit(void *PeriReg, void *StoreBuf)
 {
-    SPI3WStoreReg_TypeDef *store_buf = (SPI3WStoreReg_TypeDef *)StoreBuf;
+    SPI3WStoreReg_Typedef *store_buf = (SPI3WStoreReg_Typedef *)StoreBuf;
 
     RCC_PeriphClockCmd(APBPeriph_SPI3W, APBPeriph_SPI3W_CLOCK, ENABLE);
 

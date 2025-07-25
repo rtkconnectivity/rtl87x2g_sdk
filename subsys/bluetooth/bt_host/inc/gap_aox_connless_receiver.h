@@ -72,30 +72,30 @@ extern "C"
  * @brief       Request the Controller to enable or disable capturing IQ samples from the Constant Tone Extensions
  *              of periodic advertising packets in the periodic advertising train.
  *
- * If sending request operation is successful, the result of enabling or disabling will be returned by
- *              @ref app_gap_aox_callback with cb_type @ref GAP_MSG_LE_AOX_CONNLESS_RECEIVER_SET_IQ_SAMPLING_ENABLE.
+ * If sending request operation is successful, the result of enabling or disabling will be returned by the callback function
+ * registered by @ref le_register_aox_cb with msg type @ref GAP_MSG_LE_AOX_CONNLESS_RECEIVER_SET_IQ_SAMPLING_ENABLE.
  *
  * IQ information from the Constant Tone Extension of a received advertising packet forming part of
- *              the periodic advertising train will be reported by @ref app_gap_aox_callback with cb_type
- *              @ref GAP_MSG_LE_AOX_CONNLESS_RECEIVER_CONNLESS_IQ_REPORT_INFO.
+ * the periodic advertising train will be reported by the callback function registered by @ref le_register_aox_cb with
+ * msg type @ref GAP_MSG_LE_AOX_CONNLESS_RECEIVER_CONNLESS_IQ_REPORT_INFO.
  *
  * @param[in]   sync_id                    Identify the periodic advertising train.
  * @param[in]   sampling_enable            @ref AOX_CONNLESS_RECEIVER_SAMPLING_ENABLE.
  * @param[in]   slot_durations             @ref T_GAP_SLOT_DUATIONS_TYPE.
  * @param[in]   max_sampled_ctes           Specify the maximum number of Constant Tone Extensions in each periodic advertising
  *                                         event that the Controller should collect and report IQ samples from.
- *                                         @arg 0x00: Sample and report all available Constant Tone Extensions.
- *                                         @arg 0xXX: The maximum number of Constant Tone Extensions to sample and
- *                                                    report in each periodic advertising interval.
- *                                         @arg Range: 0x01 to 0x10.
+ *                                         - 0x00: Sample and report all available Constant Tone Extensions.
+ *                                         - 0xXX: The maximum number of Constant Tone Extensions to sample and
+ *                                                 report in each periodic advertising interval.
+ *                                         - Range: 0x01 to 0x10.
  * @param[in]   switching_pattern_length   The number of Antenna IDs in the pattern.
- *                                         Range: 0x02 to max_switching_pattern_length supported by controller returned by
- *                                                @ref le_aox_read_antenna_information.
+ *                                         - Range: 0x02 to max_switching_pattern_length supported by Controller returned by
+ *                                                  @ref le_aox_read_antenna_information.
  * @param[in]   p_antenna_ids              Antenna ID in the pattern.
  *
- * @return Send request operation.
- * @retval GAP_CAUSE_SUCCESS  Send request operation success.
- * @retval Others             Send request operation failure.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -109,7 +109,7 @@ extern "C"
         T_APP_RESULT result = APP_RESULT_SUCCESS;
         T_LE_AOX_CB_DATA *p_data = (T_LE_AOX_CB_DATA *)p_cb_data;
 
-        ......
+        ...
         switch (cb_type)
         {
         case GAP_MSG_LE_AOX_CONNLESS_RECEIVER_SET_IQ_SAMPLING_ENABLE:
@@ -126,7 +126,7 @@ extern "C"
 
         case GAP_MSG_LE_AOX_CONNLESS_RECEIVER_CONNLESS_IQ_REPORT_INFO:
             {
-                APP_PRINT_INFO8("GAP_MSG_LE_AOX_CONNLESS_RECEIVER_CONNLESS_IQ_REPORT_INFO: sync_id %d, sync_handle 0x%x, channel_index %d, rssi %d, rssi_antenna_id %d, cte_type %d, slot_durations %d, packet_status %d",
+                APP_PRINT_INFO8("GAP_MSG_LE_AOX_CONNLESS_RECEIVER_CONNLESS_IQ_REPORT_INFO: sync_id %d, sync_handle 0x%x, channel_index %d, RSSI %d, rssi_antenna_id %d, cte_type %d, slot_durations %d, packet_status %d",
                                 p_data->p_le_aox_connless_receiver_connectionless_iq_report_info->sync_id,
                                 p_data->p_le_aox_connless_receiver_connectionless_iq_report_info->sync_handle,
                                 p_data->p_le_aox_connless_receiver_connectionless_iq_report_info->channel_index,
@@ -140,10 +140,10 @@ extern "C"
                                 p_data->p_le_aox_connless_receiver_connectionless_iq_report_info->sync_handle,
                                 p_data->p_le_aox_connless_receiver_connectionless_iq_report_info->periodic_event_counter,
                                 p_data->p_le_aox_connless_receiver_connectionless_iq_report_info->sample_count);
-                ......
+                ...
             }
             break;
-        ......
+        ...
     }
  * \endcode
  */

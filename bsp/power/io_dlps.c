@@ -460,6 +460,11 @@ void DLPS_IO_EnterDlpsCb(void)
     UART_DLPSEnter(UART5, (void *)&UART5_StoreReg);
 #endif
 
+#if USE_TRNG_DLPS
+    extern void deinit_true_random_generator(bool enter_lpm);
+    deinit_true_random_generator(true);
+#endif
+
 #if USE_PSRAM
 #if USE_PSRAM_DEEP_POWER_HALF_SLEEP_MODE
     fmc_psram_wb_set_partial_refresh(FMC_FLASH_NOR_IDX1, FMC_PSRAM_WB_REFRESH_TOP_1_2);
@@ -594,6 +599,18 @@ void DLPS_IO_ExitDlpsCb(void)
 #else
     fmc_psram_exit_lpm(FMC_FLASH_NOR_IDX1, FMC_PSRAM_LPM_DEEP_POWER_DOWN_MODE);
 #endif
+#endif
+
+#if USE_PKE_DLPS
+    extern void hw_pke_clock(bool enable);
+    hw_pke_clock(true);
+    extern void hw_pke_init(bool byte_swap_en, bool word_swap_en, uint32_t word_swap_base);
+    hw_pke_init(false, false, 0);
+#endif
+
+#if USE_SHA256_DLPS
+    extern void hw_sha256_init(void);
+    hw_sha256_init();
 #endif
 
 #if USE_USER_DEFINE_DLPS_EXIT_CB

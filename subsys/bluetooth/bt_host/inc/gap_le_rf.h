@@ -60,24 +60,33 @@ extern "C"
 /** @defgroup GAP_LE_RF_MSG_Opcodes GAP LE RF Msg Opcodes
  * @{
  */
-#define GAP_LE_RF_READ_RF_PATH_COMPENSATION                0x0000 //!<Response msg opcode for le_rf_read_rf_path_compensation
-#define GAP_LE_RF_WRITE_RF_PATH_COMPENSATION               0x0001 //!<Response msg opcode for le_rf_write_rf_path_compensation
-
-#define GAP_LE_RF_ENHANCED_READ_TRANSMIT_POWER_LEVEL       0x0010 //!<Response msg opcode for le_rf_enhanced_read_transmit_power_level
-#define GAP_LE_RF_READ_REMOTE_TRANSMIT_POWER_LEVEL         0x0011 //!<Response msg opcode for le_rf_read_remote_transmit_power_level
-#define GAP_LE_RF_SET_TRANSMIT_POWER_REPORTING_ENABLE      0x0012 //!<Response msg opcode for le_rf_set_transmit_power_reporting_enable
-#define GAP_LE_RF_TRANSMIT_POWER_REPORTING_INFO            0x0013 //!<Notification msg opcode for LE transmit power reporting
-
-#define GAP_LE_RF_SET_PATH_LOSS_REPORTING_PARAMS           0x0020 //!<Response msg opcode for le_rf_set_path_loss_reporting_params
-#define GAP_LE_RF_SET_PATH_LOSS_REPORTING_ENABLE           0x0021 //!<Response msg opcode for le_rf_set_path_loss_reporting_enable
-#define GAP_LE_RF_PATH_LOSS_THRESHOLD_INFO                 0x0022 //!<Notification msg opcode for LE path loss threshold
+#define GAP_LE_RF_READ_RF_PATH_COMPENSATION                0x0000 /**< Response msg opcode for @ref le_rf_read_rf_path_compensation.
+                                                                       The structure of callback data is @ref T_LE_RF_READ_RF_PATH_COMPENSATION_RSP. */
+#define GAP_LE_RF_WRITE_RF_PATH_COMPENSATION               0x0001 /**< Response msg opcode for @ref le_rf_write_rf_path_compensation.
+                                                                       The structure of callback data is @ref T_LE_RF_CAUSE. */
+#define GAP_LE_RF_ENHANCED_READ_TRANSMIT_POWER_LEVEL       0x0010 /**< Response msg opcode for @ref le_rf_enhanced_read_transmit_power_level.
+                                                                       The structure of callback data is @ref T_LE_RF_ENHANCED_READ_TRANSMIT_POWER_LEVEL_RSP. */
+#define GAP_LE_RF_READ_REMOTE_TRANSMIT_POWER_LEVEL         0x0011 /**< Response msg opcode for @ref le_rf_read_remote_transmit_power_level.
+                                                                       The structure of callback data is @ref T_LE_RF_READ_REMOTE_TRANSMIT_POWER_LEVEL_RSP. */
+#define GAP_LE_RF_SET_TRANSMIT_POWER_REPORTING_ENABLE      0x0012 /**< Response msg opcode for @ref le_rf_set_transmit_power_reporting_enable.
+                                                                       The structure of callback data is @ref T_LE_RF_SET_TRANSMIT_POWER_REPORTING_ENABLE_RSP. */
+#define GAP_LE_RF_TRANSMIT_POWER_REPORTING_INFO            0x0013 /**< Information msg opcode for LE transmit power reporting.
+                                                                       The structure of callback data is @ref T_LE_RF_TRANSMIT_POWER_REPORTING_INFO. */
+#define GAP_LE_RF_SET_PATH_LOSS_REPORTING_PARAMS           0x0020 /**< Response msg opcode for @ref le_rf_set_path_loss_reporting_params.
+                                                                       The structure of callback data is @ref T_LE_RF_SET_PATH_LOSS_REPORTING_PARAMS_RSP. */
+#define GAP_LE_RF_SET_PATH_LOSS_REPORTING_ENABLE           0x0021 /**< Response msg opcode for @ref le_rf_set_path_loss_reporting_enable.
+                                                                       The structure of callback data is @ref T_LE_RF_SET_PATH_LOSS_REPORTING_ENABLE_RSP. */
+#define GAP_LE_RF_PATH_LOSS_THRESHOLD_INFO                 0x0022 /**< Information msg opcode for LE path loss threshold.
+                                                                       The structure of callback data is @ref T_LE_RF_PATH_LOSS_THRESHOLD_INFO. */
 /**
   * @}
   */
 
 /** @defgroup GAP_LE_RF_TRANSMIT_POWER_LEVEL_FLAG_BITS LE Transmit Power Level Flag Bits
-* @{
- */
+  * @brief Use the combination of macro definitions to indicate whether the transmit power level
+  * that is being reported has reached its minimum and/or maximum level.
+  * @{
+  */
 #define GAP_LE_RF_TRANSMIT_POWER_LEVEL_FLAG_MIN_BIT       0x01     /**< Transmit power level is at minimum level. */
 #define GAP_LE_RF_TRANSMIT_POWER_LEVEL_FLAG_MAX_BIT       0x02     /**< Transmit power level is at maximum level. */
 /**
@@ -114,24 +123,27 @@ typedef struct
 /** @brief  Response for read rf path compensation.*/
 typedef struct
 {
-    uint16_t        cause;
+    uint16_t        cause; /**< Cause. */
     int16_t         rf_tx_path_comp_value;
-    /**<  Range: -128.0 dB (0xFB00) to 128.0 dB (0x0500) Units: 0.1 dB. */
+    /**<  Range: -128.0 dB (0xFB00) to 128.0 dB (0x0500). Units: 0.1 dB. */
     int16_t         rf_rx_path_comp_value;
-    /**<  Range: -128.0 dB (0xFB00) to 128.0 dB (0x0500) Units: 0.1 dB. */
+    /**<  Range: -128.0 dB (0xFB00) to 128.0 dB (0x0500). Units: 0.1 dB. */
 } T_LE_RF_READ_RF_PATH_COMPENSATION_RSP;
 
 /** @brief  Response for enhanced read transmit power level.*/
 typedef struct
 {
-    uint8_t                               conn_id;
-    uint16_t                              cause;
-    T_GAP_LE_RF_POWER_CONTROL_PHYS_TYPE   phy;
+    uint8_t                               conn_id; /*< Connection ID. */
+    uint16_t                              cause; /**< Cause. */
+    T_GAP_LE_RF_POWER_CONTROL_PHYS_TYPE   phy; /**< @ref T_GAP_LE_RF_POWER_CONTROL_PHYS_TYPE. */
     int8_t                                cur_tx_power_level;
-    /**<  Current transmit power level Range: -127 to 20 Units: dBm. \n
-          0x7F Current transmit power level is unavailable. */
+    /**< Value:
+         - 0xXX: Current transmit power level. Range: -127 to 20. Units: dBm.
+         - 0x7F: Current transmit power level is unavailable. */
     int8_t                                max_tx_power_level;
-    /**<  Maximum transmit power level Range: -127 to 20 Units: dBm. */
+    /**<  Maximum transmit power level.
+          - Range: -127 to 20.
+          - Units: dBm. */
 } T_LE_RF_ENHANCED_READ_TRANSMIT_POWER_LEVEL_RSP;
 
 typedef struct
@@ -150,22 +162,32 @@ typedef struct
 /** @brief  Information for transmit power reporting.*/
 typedef struct
 {
-    uint8_t                               conn_id;
-    uint16_t                              cause;
+    uint8_t                               conn_id; /**< Connection ID. */
+    uint16_t                              cause; /**< Cause. */
     uint8_t                               reason;
-    /**<  @arg 0x00: Local transmit power changed.
-          @arg 0x01: Remote transmit power changed.
-          @arg 0x02: LE read remote transmit power level command completed. */
-    T_GAP_LE_RF_POWER_CONTROL_PHYS_TYPE   phy;
+    /**<  Indicates why the infomation was sent and the device whose transmit power level is being reported.
+
+          Value:
+          - 0x00: Local transmit power changed. The phy, tx_power_level, tx_power_level_flag and delta parameters
+                  shall refer to the local device and the cause parameter shall be ignored.
+          - 0x01: Remote transmit power changed. The phy, tx_power_level, tx_power_level_flag and delta parameters
+                  shall refer to the remote device and the cause parameter shall be ignored.
+          - 0x02: @ref le_rf_read_remote_transmit_power_level completed. The phy, tx_power_level,
+                  tx_power_level_flag and delta parameters shall refer to the remote device.
+      */
+    T_GAP_LE_RF_POWER_CONTROL_PHYS_TYPE   phy; /**< @ref T_GAP_LE_RF_POWER_CONTROL_PHYS_TYPE. */
     int8_t                                tx_power_level;
-    /**<  Transmit power level Range: -127 to 20 Units: dBm. \n
-          0x7E Remote device is not managing power levels on this PHY. \n
-          0x7F Transmit power level is not available. */
+    /**<  Value:
+          - 0xXX: Transmit power level. Range: -127 to 20. Units: dBm.
+          - 0x7E: Remote device is not managing power levels on this PHY.
+          - 0x7F: Transmit power level is not available. */
     uint8_t                               tx_power_level_flag;
-    /**<  @ref  GAP_LE_RF_TRANSMIT_POWER_LEVEL_FLAG_BITS.*/
-    int8_t                                delta;/**<  Change in transmit power level Units: dB,
-                                                      positive indicates increased power, negative indicates
-                                                      decreased power, zero indicates unchanged.*/
+    /**<  @ref GAP_LE_RF_TRANSMIT_POWER_LEVEL_FLAG_BITS.*/
+    int8_t                                delta;
+    /**<  Value:
+          - 0xXX: Change in transmit power level (positive indicates increased power,
+                  negative indicates decreased power, zero indicates unchanged). Units: dB.
+          - 0x7F: Change is not available or is out of range. */
 } T_LE_RF_TRANSMIT_POWER_REPORTING_INFO;
 
 /** @brief  Response for set path loss reporting params rsp.*/
@@ -185,16 +207,22 @@ typedef struct
 /** @brief  Information for path loss threshold.*/
 typedef struct
 {
-    uint8_t        conn_id;
-    uint8_t        current_path_loss; /**<  Current path loss Units: dB,
-                                            always zero or positive.
-                                            @arg  0xFF Unavailable. */
-    uint8_t        zone_entered;/**<  @arg 0x00: Entered low zone.
-                                      @arg 0x01: Entered middle zone.
-                                      @arg 0x02: Entered high zone. */
+    uint8_t        conn_id; /**< Connection ID. */
+    uint8_t        current_path_loss; /**<  Value:
+                                            - 0xXX: Current path loss
+                                                    (always zero or positive).
+                                                    Units: dB.
+                                            - 0xFF: Unavailable. */
+    uint8_t        zone_entered;/**<  If current_path_loss is set to 0xFF
+                                      then zone_entered shall be ignored.
+
+                                      Value:
+                                      - 0x00: Entered low zone.
+                                      - 0x01: Entered middle zone.
+                                      - 0x02: Entered high zone. */
 } T_LE_RF_PATH_LOSS_THRESHOLD_INFO;
 
-/** @brief  GAP RF Callback Data*/
+/** @brief  GAP RF callback data*/
 typedef union
 {
     T_LE_RF_CAUSE                                     le_rf_cause;
@@ -232,12 +260,15 @@ typedef struct
   * @{
   */
 /**
-* @brief   Read the RF path compensation values parameter used in the Tx power level and RSSI calculation.
-*          Read result will be returned by @ref app_gap_callback with cb_type @ref GAP_MSG_LE_RF_INFO with
-*          opcode @ref GAP_LE_RF_READ_RF_PATH_COMPENSATION.
-*
-* @retval GAP_CAUSE_SUCCESS: Send request success.
-* @retval GAP_CAUSE_SEND_REQ_FAILED: Send request fail.
+  * @brief   Read the RF path compensation values parameter used in the Tx power level and RSSI calculation.
+  *
+  * If sending request operation is successful, the reading result will be returned by callback
+  * registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_RF_INFO with
+  * opcode @ref GAP_LE_RF_READ_RF_PATH_COMPENSATION.
+  *
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -278,17 +309,22 @@ typedef struct
 T_GAP_CAUSE le_rf_read_rf_path_compensation(void);
 
 /**
-* @brief   Indicate the RF path gain or loss between the RF transceiver and the antenna contributed
-*          by intermediate components.
-*
-* @param[in] rf_tx_path_comp_value RF Tx Path Compensation.
-                                   @arg Range: -128.0 dB (0xFB00) to 128.0 dB (0x0500).
-                                   @arg Units: 0.1 dB.
-* @param[in] rf_rx_path_comp_value RF Rx Path Compensation.
-                                   @arg Range: -128.0 dB (0xFB00) to 128.0 dB (0x0500).
-                                   @arg Units: 0.1 dB.
-* @retval GAP_CAUSE_SUCCESS: Send request success.
-* @retval GAP_CAUSE_SEND_REQ_FAILED: Send request fail.
+  * @brief   Indicate the RF path gain or loss between the RF transceiver and the antenna contributed
+  *          by intermediate components.
+  *
+  * If sending request operation is successful, the writing result will be returned by callback
+  * registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_RF_INFO with
+  * opcode @ref GAP_LE_RF_WRITE_RF_PATH_COMPENSATION.
+  *
+  * @param[in] rf_tx_path_comp_value RF Tx Path Compensation.
+                                   - Range: -128.0 dB (0xFB00) to 128.0 dB (0x0500).
+                                   - Units: 0.1 dB.
+  * @param[in] rf_rx_path_comp_value RF Rx Path Compensation.
+                                   - Range: -128.0 dB (0xFB00) to 128.0 dB (0x0500).
+                                   - Units: 0.1 dB.
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -330,15 +366,17 @@ T_GAP_CAUSE le_rf_write_rf_path_compensation(int16_t rf_tx_path_comp_value,
                                              int16_t rf_rx_path_comp_value);
 
 /**
-* @brief   Read the current and maximum transmit power levels of the local Controller on the ACL connection and the PHY.
-*          Read result will be returned by @ref app_gap_callback with cb_type @ref GAP_MSG_LE_RF_INFO with
-*          opcode @ref GAP_LE_RF_ENHANCED_READ_TRANSMIT_POWER_LEVEL.
-*
-* @param[in] conn_id Connection ID.
-* @param[in] phy The PHY involved: @ref T_GAP_LE_RF_POWER_CONTROL_PHYS_TYPE.
-* @retval GAP_CAUSE_SUCCESS: Send request success.
-* @retval GAP_CAUSE_SEND_REQ_FAILED: Send request fail.
-* @retval GAP_CAUSE_NON_CONN: Set request sent fail.
+  * @brief   Read the current and maximum transmit power levels of the local Controller on the ACL connection and the PHY.
+  *
+  * If sending request operation is successful, the reading result will be returned by callback
+  * registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_RF_INFO with
+  * opcode @ref GAP_LE_RF_ENHANCED_READ_TRANSMIT_POWER_LEVEL.
+  *
+  * @param[in] conn_id Connection ID.
+  * @param[in] phy The PHY involved @ref T_GAP_LE_RF_POWER_CONTROL_PHYS_TYPE.
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -367,7 +405,7 @@ T_GAP_CAUSE le_rf_write_rf_path_compensation(int16_t rf_tx_path_comp_value,
               {
                 ...
                 case GAP_LE_RF_ENHANCED_READ_TRANSMIT_POWER_LEVEL:
-                    APP_PRINT_INFO5("GAP_LE_RF_ENHANCED_READ_TRANSMIT_POWER_LEVEL: conn id %d, cause 0x%x, phy %d, cur trans power level %d, max trans power level %d",
+                    APP_PRINT_INFO5("GAP_LE_RF_ENHANCED_READ_TRANSMIT_POWER_LEVEL: conn id %d, cause 0x%x, phy %d, cur trans power level %d, maximum trans power level %d",
                                     p_le_rf_cb->data.p_le_rf_enhanced_read_transmit_power_level_rsp->conn_id,
                                     p_le_rf_cb->data.p_le_rf_enhanced_read_transmit_power_level_rsp->cause,
                                     p_le_rf_cb->data.p_le_rf_enhanced_read_transmit_power_level_rsp->phy,
@@ -384,15 +422,22 @@ T_GAP_CAUSE le_rf_enhanced_read_transmit_power_level(uint8_t conn_id,
                                                      T_GAP_LE_RF_POWER_CONTROL_PHYS_TYPE phy);
 
 /**
-* @brief   Read the transmit power level used by the remote Controller on the ACL connection and the PHY.
-*          Read result will be returned by @ref app_gap_callback with cb_type @ref GAP_MSG_LE_RF_INFO with
-*          opcode @ref GAP_LE_RF_TRANSMIT_POWER_REPORTING_INFO.
-*
-* @param[in] conn_id Connection ID.
-* @param[in] phy The PHY involved: @ref T_GAP_LE_RF_POWER_CONTROL_PHYS_TYPE.
-* @retval GAP_CAUSE_SUCCESS: Send request success.
-* @retval GAP_CAUSE_SEND_REQ_FAILED: Send request fail.
-* @retval GAP_CAUSE_NON_CONN: Set request sent fail.
+  * @brief   Read the transmit power level used by the remote Controller on the ACL connection and the PHY.
+  *
+  * If sending request operation is successful, APP will be notified by callback registered
+  * by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_RF_INFO with
+  * opcode @ref GAP_LE_RF_READ_REMOTE_TRANSMIT_POWER_LEVEL.
+  *
+  * If cause in @ref T_LE_RF_ENHANCED_READ_TRANSMIT_POWER_LEVEL_RSP is 0 (success) and remote transmit power
+  * is determined, APP will be notified by callback with msg type @ref GAP_MSG_LE_RF_INFO with
+  * opcode @ref GAP_LE_RF_TRANSMIT_POWER_REPORTING_INFO and reason in @T_LE_RF_TRANSMIT_POWER_REPORTING_INFO
+  * is set to 0x02.
+  *
+  * @param[in] conn_id Connection ID.
+  * @param[in] phy The PHY involved @ref T_GAP_LE_RF_POWER_CONTROL_PHYS_TYPE.
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -446,15 +491,33 @@ T_GAP_CAUSE le_rf_read_remote_transmit_power_level(uint8_t conn_id,
                                                    T_GAP_LE_RF_POWER_CONTROL_PHYS_TYPE phy);
 
 /**
-* @brief   Enable or disable the reporting to the local Host of transmit power level changes
-*          in the local and remote Controllers for the ACL connection.
-*
-* @param[in] conn_id Connection ID.
-* @param[in] local_enable Enable or disable local transmit power reports.
-* @param[in] remote_enable Enable or disable remote transmit power reports.
-* @retval GAP_CAUSE_SUCCESS: Send request success.
-* @retval GAP_CAUSE_SEND_REQ_FAILED: Send request fail.
-* @retval GAP_CAUSE_NON_CONN: Set request sent fail.
+  * @brief   Enable or disable the reporting to the local Host of transmit power level changes
+  *          in the local and remote Controllers for the ACL connection.
+  *
+  * If sending request operation is successful, the enabling or disabling result will be returned by
+  * callback registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_RF_INFO with
+  * opcode @ref GAP_LE_RF_SET_TRANSMIT_POWER_REPORTING_ENABLE.
+  *
+  * When local_enable is set to 1 and cause in @ref T_LE_RF_SET_TRANSMIT_POWER_REPORTING_ENABLE_RSP
+  * is 0 (success), APP will be notified by callback with msg type @ref GAP_MSG_LE_RF_INFO with
+  * opcode @ref GAP_LE_RF_TRANSMIT_POWER_REPORTING_INFO and reason in @T_LE_RF_TRANSMIT_POWER_REPORTING_INFO
+  * is set to 0x00 each time the local transmit power level is changed.
+  *
+  * When remote_enable is set to 1 and cause in @ref T_LE_RF_SET_TRANSMIT_POWER_REPORTING_ENABLE_RSP
+  * is 0 (success), APP will be notified by callback with msg type @ref GAP_MSG_LE_RF_INFO with
+  * opcode @ref GAP_LE_RF_TRANSMIT_POWER_REPORTING_INFO and reason in @T_LE_RF_TRANSMIT_POWER_REPORTING_INFO
+  * is set to 0x01 each time the remote transmit power level is changed.
+  *
+  * @param[in] conn_id Connection ID.
+  * @param[in] local_enable Enable or disable local transmit power reports.
+  *                         - 0: Disable local transmit power reports.
+  *                         - 1: Enable local transmit power reports.
+  * @param[in] remote_enable Enable or disable remote transmit power reports.
+  *                          - 0: Disable remote transmit power reports.
+  *                          - 1: Enable remote transmit power reports.
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -508,23 +571,27 @@ T_GAP_CAUSE le_rf_set_transmit_power_reporting_enable(uint8_t conn_id, uint8_t l
                                                       uint8_t remote_enable);
 
 /**
-* @brief   Set the path loss threshold reporting parameters for the ACL connection.
-*
-* @param[in] conn_id Connection ID.
-* @param[in] high_threshold High threshold for the path loss.
-                            @arg Units: dB.
-                            @arg 0xFF: High Threshold unused.
-* @param[in] high_hysteresis Hysteresis value for the high threshold.
-                             @arg Units: dB.
-* @param[in] low_threshold Low threshold for the path loss.
-                           @arg Units: dB.
-* @param[in] low_hysteresis Hysteresis value for the low threshold.
-                            @arg Units: dB.
-* @param[in] min_time_spent Minimum time in number of connection events to be observed once the
+  * @brief   Set the path loss threshold reporting parameters for the ACL connection.
+  *
+  * If sending request operation is successful, the setting result will be returned by callback
+  * registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_RF_INFO with
+  * opcode @ref GAP_LE_RF_SET_PATH_LOSS_REPORTING_PARAMS.
+  *
+  * @param[in] conn_id Connection ID.
+  * @param[in] high_threshold Value:
+                            - 0xXX: High threshold for the path loss. Units: dB.
+                            - 0xFF: High Threshold unused.
+  * @param[in] high_hysteresis Hysteresis value for the high threshold.
+                             - Units: dB.
+  * @param[in] low_threshold Low threshold for the path loss.
+                           - Units: dB.
+  * @param[in] low_hysteresis Hysteresis value for the low threshold.
+                            - Units: dB.
+  * @param[in] min_time_spent Minimum time in number of connection events to be observed once the
                             path crosses the threshold before an event is generated.
-* @retval GAP_CAUSE_SUCCESS: Send request success.
-* @retval GAP_CAUSE_SEND_REQ_FAILED: Send request fail.
-* @retval GAP_CAUSE_NON_CONN: Set request sent fail.
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -569,13 +636,26 @@ T_GAP_CAUSE le_rf_set_path_loss_reporting_params(uint8_t conn_id, uint8_t high_t
                                                  uint8_t low_hysteresis, uint16_t min_time_spent);
 
 /**
-* @brief   Enable or disable path loss reporting.
-*
-* @param[in] conn_id Connection ID.
-* @param[in] enable Enable or disable path loss reporting.
-* @retval GAP_CAUSE_SUCCESS: Send request success.
-* @retval GAP_CAUSE_SEND_REQ_FAILED: Send request fail.
-* @retval GAP_CAUSE_NON_CONN: Set request sent fail.
+  * @brief   Enable or disable path loss reporting.
+  *
+  * If sending request operation is successful, the enabling or disabling result will be returned by
+  * callback registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_RF_INFO with
+  * opcode @ref GAP_LE_RF_SET_PATH_LOSS_REPORTING_ENABLE.
+  *
+  * APP will be notified by callback registered by @ref le_register_app_cb with msg type
+  * @ref GAP_MSG_LE_RF_INFO with opcode @ref GAP_LE_RF_PATH_LOSS_THRESHOLD_INFO in the
+  * following situations:
+  * - Path loss reporting is enabled and was previously disabled.
+  * - Path loss reporting is enabled and loss has moved to a different zone and stayed
+  *   in that zone for min_time_spent set by @ref le_rf_set_path_loss_reporting_params.
+  *
+  * @param[in] conn_id Connection ID.
+  * @param[in] enable Enable or disable path loss reporting.
+  *                   - 0: Disable path loss reporting.
+  *                   - 1: Enable path loss reporting.
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}

@@ -25,14 +25,20 @@
 /****************************************************************************************
  * Nor Flash Enumeration
  ****************************************************************************************/
+/**
+  * \cond     private
+  * \defgroup Nor_Flash_Private_Types
+  * \{
+  */
+
 /** @defgroup Nor_Flash_Exported_Types  Nor Flash Exported Types
-  * @ingroup  FLASH
+  * @ingroup  Nor_Flash_Private_Types
   * @brief
   * @{
   */
 
 /** @defgroup FLASH_NOR_IOCTL_TYPE  FLASH NOR IOCTL TYPE
-  * @ingroup  Nor_Flash_Exported_Types
+  * @ingroup  Nor_Flash_Private_Types
   * @brief
   * @{
   */
@@ -73,10 +79,11 @@ typedef enum _FLASH_NOR_IOCTL_TYPE
   */
 
 /** @defgroup FLASH_LAYOUT_NAME  FLASH LAYOUT NAME
-  * @ingroup  Nor_Flash_Exported_Types
+  * @ingroup  Nor_Flash_Private_Types
   * @brief
   * @{
   */
+
 typedef enum
 {
     FLASH_OCCD,
@@ -114,6 +121,12 @@ typedef enum
   * @}
   */
 
+/**
+  *  End of Nor_Flash_Private_Types
+  * \}
+  * \endcond
+  */
+
 /****************************************************************************************
  * Nor Flash Function Prototype
  ****************************************************************************************/
@@ -123,84 +136,102 @@ typedef enum
   */
 
 /**
- * @brief           task-safe nor flash read
- * @param addr      the ram address mapping of nor flash going to be read
- * @param data      data buffer to be read into
- * @param len       read data length
- * @return          @ref FLASH_NOR_RET_TYPE result
+ * @brief             Task-safe nor flash read
+ * @param[in] addr     The ram address mapping of nor flash going to be read
+ * @param[in] data    Data buffer to be read into
+ * @param[in] len     Read data length
+ * @return            Read result
+ * @retval 24 Success.
+ * @retval Others Failed, Check @ref FLASH_NOR_RET_TYPE to obtain the reason for the failure
  */
 extern FLASH_NOR_RET_TYPE flash_nor_read_locked(uint32_t addr, uint8_t *data, uint32_t len);
 
 /**
- * @brief           task-safe nor flash write
- * @param addr      the ram address mapping of nor flash going to be written
- * @param data      data buffer to be written into
- * @param len       write data length
- * @return          @ref FLASH_NOR_RET_TYPE result
+ * @brief               Task-safe nor flash write
+ * @param[in] addr      The ram address mapping of nor flash going to be written
+ * @param[in] data      Data buffer to be written into
+ * @param[in] len       Write data length
+ * @return              Write result
+ * @retval 24 Success.
+ * @retval Others Failed, Check @ref FLASH_NOR_RET_TYPE to obtain the reason for the failure
  */
 extern FLASH_NOR_RET_TYPE flash_nor_write_locked(uint32_t addr, uint8_t *data, uint32_t len);
 
 /**
- * @brief           task-safe nor flash erase
- * @param addr      the ram address mapping of nor flash going to be erased
- * @param mode      erase mode defined as @ref FLASH_NOR_ERASE_MODE
- * @return          @ref FLASH_NOR_RET_TYPE result
+ * @brief               Task-safe nor flash erase
+ * @param[in] addr      The ram address mapping of nor flash going to be erased
+ * @param[in] mode      Erase mode defined as @ref FLASH_NOR_ERASE_MODE
+ * @return              Erasure result
+ * @retval 24 Success.
+ * @retval Others Failed, Check @ref FLASH_NOR_RET_TYPE to obtain the reason for the failure
  */
 extern FLASH_NOR_RET_TYPE flash_nor_erase_locked(uint32_t addr, FLASH_NOR_ERASE_MODE mode);
 
 
 /**
- * @brief           nor flash try high speed mode with bit mode configuration
- * @param idx       specific nor flash
- * @param bit_mode  nor flash bit mode to be set
- * @return          @ref FLASH_NOR_RET_TYPE result
+ * @brief               Nor flash try high speed mode with bit mode configuration
+ * @param[in] idx       Specific nor flash
+ * @param[in] bit_mode  Nor flash bit mode to be set
+ * @return              The result of switching bit mode
+ * @retval 24 Success.
+ * @retval Others Failed, Check @ref FLASH_NOR_RET_TYPE to obtain the reason for the failure
  */
 extern FLASH_NOR_RET_TYPE flash_nor_try_high_speed_mode(FLASH_NOR_IDX_TYPE idx,
                                                         FLASH_NOR_BIT_MODE bit_mode);
 
 /**
- * @brief           nor flash check busy status
- * @param idx       specific nor flash
- * @return          @ref FLASH_NOR_RET_TYPE result
+ * @brief               Nor flash check busy status
+ * @param[in] idx       Specific nor flash
+ * @return              The result of checking busy status
+ * @retval 24 Success.
+ * @retval Others Failed, Check @ref FLASH_NOR_RET_TYPE to obtain the reason for the failure
  */
 extern FLASH_NOR_RET_TYPE flash_nor_wait_busy(FLASH_NOR_IDX_TYPE idx);
 
 /**
- * @brief           set block protect level with lock
- * @param idx       specific nor flash
- * @param bp_lv     nor flash BP level to be set
- * @return          @ref FLASH_NOR_RET_TYPE result
+ * @brief               Set block protect level with lock
+ * @param[in] idx       Specific nor flash
+ * @param[in] bp_lv     Nor flash BP level to be set
+ * @return              Setting result
+ * @retval 24 Success.
+ * @retval Others Failed, Check @ref FLASH_NOR_RET_TYPE to obtain the reason for the failure
  */
 FLASH_NOR_RET_TYPE flash_nor_set_bp_lv_locked(FLASH_NOR_IDX_TYPE idx, uint8_t bp_lv);
 
 /**
- * @brief           get block protect level with lock
- * @param idx       specific nor flash
- * @param bp_lv     nor flash BP level to be retrieved.
- * @return          @ref FLASH_NOR_RET_TYPE result
+ * @brief               Get block protect level with lock
+ * @param[in] idx       Specific nor flash
+ * @param[in] bp_lv     Nor flash BP level to be retrieved.
+ * @return              The result of getting block protect level
+ * @retval 24 Success.
+ * @retval Others Failed, Check @ref FLASH_NOR_RET_TYPE to obtain the reason for the failure
  */
 FLASH_NOR_RET_TYPE flash_nor_get_bp_lv_locked(FLASH_NOR_IDX_TYPE idx, uint8_t *bp_lv);
 
 /**
- * @brief           set nor flash sequential transfer
- * @param idx       specific nor flash
- * @param enable    true if enable
- * @return          @ref FLASH_NOR_RET_TYPE result
+ * @brief               Set nor flash sequential transfer
+ * @param[in] idx       Specific nor flash
+ * @param[in] enable    True if enable
+ * @return              The result of setting nor flash sequential transfer
+ * @retval 24 Success.
+ * @retval Others Failed, Check @ref FLASH_NOR_RET_TYPE to obtain the reason for the failure
  */
 FLASH_NOR_RET_TYPE flash_nor_set_seq_trans_enable(FLASH_NOR_IDX_TYPE idx, bool enable);
 
 /**
- * @brief                 set address mode for flash >= 32M byte
- * @param idx             specific nor flash
- * @param is_4_byte_mode  true if set to 4-byte address mode; otherwise, set to 3-byte address mode
- * @return                @ref FLASH_NOR_RET_TYPE result
+ * @brief                    Set address mode for flash >= 32M byte
+ * @param[in] idx            Specific nor flash
+ * @param[in] is_4_byte_mode  True if set to 4-byte address mode; otherwise, set to 3-byte address mode
+ * @return                    The result of setting address mode
+ * @retval 24 Success.
+ * @retval Others Failed, Check @ref FLASH_NOR_RET_TYPE to obtain the reason for the failure
  */
 FLASH_NOR_RET_TYPE flash_nor_set_addr_mode(FLASH_NOR_IDX_TYPE idx, bool is_4_byte_mode);
 
 /**
- * @brief           get flash ID
- * @param idx       specific nor flash
- * @return          return flash ID
+ * @brief           Get flash ID
+ * @param[in] idx   Specific nor flash
+ * @return          Return flash ID
  */
 uint32_t flash_nor_get_id(FLASH_NOR_IDX_TYPE idx);
 /** End of Nor_Flash_Exported_Functions

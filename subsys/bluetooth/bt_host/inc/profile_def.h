@@ -46,7 +46,8 @@ extern "C"
 /** @defgroup GATT_COMMON_MSG_TYPE GATT Common Message Types
   * @{
   */
-#define GATT_COMMON_MSG_CREDIT_INFO                                   0x0001   /**< * Inform APP about credit. */
+#define GATT_COMMON_MSG_CREDIT_INFO    0x0001   /**< Information msg type to notify APP about credit.
+                                                     The structure of callback data is @ref T_GATT_COMMON_CB_DATA_CREDIT_INFO */
 
 /** End of GATT_COMMON_MSG_TYPE
   * @}
@@ -90,9 +91,11 @@ typedef union
  * @brief       Callback for common of GATT Server and Client.
  *
  * @param[in] cb_type    Callback message type @ref GATT_COMMON_MSG_TYPE.
- * @param[in] p_cb_data  Point to callback data @ref T_GATT_COMMON_CB_DATA.
+ * @param[in] p_cb_data  Pointer to callback data @ref T_GATT_COMMON_CB_DATA.
  *
- * @return Result.
+ * @return APP return result.
+ * @retval 0 APP return success.
+ * @retval Others APP return failure.
  */
 typedef uint16_t(*P_FUN_GATT_COMMON_CB)(uint16_t cb_type, void *p_cb_data);
 
@@ -101,9 +104,9 @@ typedef uint16_t(*P_FUN_GATT_COMMON_CB)(uint16_t cb_type, void *p_cb_data);
  *
  * @param[in] callback   Callback function.
  *
- * @return The result of operation.
- * @retval true  Operation is successful.
- * @retval false Operation is failed.
+ * @return Operation result.
+ * @retval true  Operation success.
+ * @retval false Operation failure.
  *
  * <b>Example usage</b>
  * \code{.c}

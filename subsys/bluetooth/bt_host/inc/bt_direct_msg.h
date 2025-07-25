@@ -47,7 +47,9 @@ extern "C"
 /** @defgroup BT_DIRECT_MSG_CALLBACK_TYPE Bluetooth Direct Message Callback Type
  * @{
  */
-#define BT_DIRECT_MSG_ISO_DATA_IND         0x01 //!<Notification msg type about ISO Data for @ref ISOCH_ROLE_INITIATOR, @ref ISOCH_ROLE_ACCEPTOR and @ref BIG_MGR_ROLE_SYNC_RECEIVER
+#define BT_DIRECT_MSG_ISO_DATA_IND         0x01 /**< Indication msg type about ISO Data for @ref ISOCH_ROLE_INITIATOR, @ref ISOCH_ROLE_ACCEPTOR and @ref BIG_MGR_ROLE_SYNC_RECEIVER.
+                                                     APP shall call @ref gap_iso_data_cfm when receiving this message.
+                                                     The structure of callback data is @ref T_BT_DIRECT_ISO_DATA_IND. */
 /** End of BT_DIRECT_MSG_CALLBACK_TYPE
   * @}
   */
@@ -68,26 +70,26 @@ typedef enum
     ISOCH_DATA_PKT_STATUS_VALID_DATA = 0,             /**< Valid data. The complete SDU was received correctly. */
     ISOCH_DATA_PKT_STATUS_POSSIBLE_ERROR_DATA = 1,    /**< Possibly invalid data. The contents of the SDU may
                                                            contain errors or part of the SDU may be missing.
-                                                           This is reported as "data with possible errors". */
+                                                           This is reported as 'data with possible errors'. */
     ISOCH_DATA_PKT_STATUS_LOST_DATA = 2,              /**< Part(s) of the SDU were not received correctly.
-                                                           This is reported as "lost data". */
+                                                           This is reported as 'lost data'. */
 } T_ISOCH_DATA_PKT_STATUS;
 
-/** @brief Indication of ISO Data packet with cb_type @ref BT_DIRECT_MSG_ISO_DATA_IND. */
+/** @brief Indication of ISO Data packet with msg type @ref BT_DIRECT_MSG_ISO_DATA_IND. */
 typedef struct
 {
     uint16_t conn_handle;                     /**< Connection handle of the CIS or BIS. */
     T_ISOCH_DATA_PKT_STATUS pkt_status_flag;  /**< @ref T_ISOCH_DATA_PKT_STATUS. */
-    uint8_t   *p_buf;                         /**< Points to the buffer that needs to be released. */
+    uint8_t   *p_buf;                         /**< Pointer to the buffer that needs to be released. */
     uint16_t  offset;                         /**< Offset from start of the SDU to @ref p_buf.
-                                                   e.g. p_data->p_bt_direct_iso->p_buf + p_data->p_bt_direct_iso->offset indicates
+                                                   - p_data->p_bt_direct_iso->p_buf + p_data->p_bt_direct_iso->offset indicates
                                                         the start of the SDU. */
     uint16_t  iso_sdu_len;                    /**< Length of the SDU. */
     uint16_t  pkt_seq_num;                    /**< The sequence number of the SDU. */
     bool      ts_flag;                        /**< Indicates whether it contains time_stamp.
-                                                   True: contains time_stamp.
-                                                   False: does not contain time_stamp. */
-    uint32_t  time_stamp;                     /**< A time in microseconds. time_stamp is valid when @ref ts_flag is True. */
+                                                   - true: contains time_stamp.
+                                                   - false: does not contain time_stamp. */
+    uint32_t  time_stamp;                     /**< A time in microseconds. time_stamp is valid when @ref ts_flag is true. */
 } T_BT_DIRECT_ISO_DATA_IND;
 
 typedef union
@@ -108,11 +110,10 @@ typedef union
  */
 
 /**
-  * @brief      Callback for Bluetooth Direct Message to notify APP.
+  * @brief      Callback for Bluetooth direct message to notify APP.
   *
   * @param[in] cb_type    Callback msg type @ref BT_DIRECT_MSG_CALLBACK_TYPE.
-  * @param[in] p_cb_data  Points to callback data @ref T_BT_DIRECT_CB_DATA.
-  * @return void.
+  * @param[in] p_cb_data  Pointer to callback data @ref T_BT_DIRECT_CB_DATA.
   */
 typedef void(*P_FUN_BT_DIRECT_CB)(uint8_t cb_type, void *p_cb_data);
 
@@ -120,9 +121,8 @@ typedef void(*P_FUN_BT_DIRECT_CB)(uint8_t cb_type, void *p_cb_data);
  * @brief         Register callback to gap, when messages in @ref BT_DIRECT_MSG_CALLBACK_TYPE happens, it will callback to APP.
  *
  * @param[in]     app_callback    Callback function provided by the APP to handle Bluetooth direct messages.
- *                @arg NULL   -> Do not send Bluetooth direct messages to APP.
- *                @arg Others -> Use application-defined callback function.
- * @return void.
+ *                - NULL   -> Do not send Bluetooth direct messages to APP.
+ *                - Others -> Use application-defined callback function.
  *
  * <b>Example usage</b>
  * \code{.c}

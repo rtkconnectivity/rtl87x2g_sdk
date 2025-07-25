@@ -74,7 +74,7 @@
 #define BT_VENDOR_REG_BASE                 0x40058000UL
 #define ZIGBEE_REG_BASE                    0x4005C000UL
 #define SPI0_HS_REG_BASE                   0x40060000UL
-#define IMDC_REG_BASE                      0x40070000UL
+#define IDU_REG_BASE                      0x40070000UL
 
 
 #endif //#define ADDRESS_MAP_H 

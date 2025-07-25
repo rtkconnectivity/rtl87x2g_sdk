@@ -1,6 +1,15 @@
-/*
- * Copyright (c) 2015, Realtek Semiconductor Corporation. All rights reserved.
- */
+/**
+*********************************************************************************************************
+*               Copyright(c) 2024, Realtek Semiconductor Corporation. All rights reserved.
+*********************************************************************************************************
+* @file      os_sched.h
+* @brief     Header file for os scheduler API.
+* @details   This file is used for scheduler start, suspend and resume.
+* @author    rui_yu
+* @date      2024-12-30
+* @version   v1.0
+* *********************************************************************************************************
+*/
 
 #ifndef _OS_SCHED_H_
 #define _OS_SCHED_H_
@@ -30,11 +39,10 @@ extern "C" {
 
 
 /**
- * os_sched.h
  *
  * \brief       Delay current task for a given period in milliseconds.
  *
- * \param       ms  The amount of time in milliseconds that the current task
+ * \param[in]       ms  The amount of time in milliseconds that the current task
  *                  should block.
  *
  * <b>Example usage</b>
@@ -56,12 +64,10 @@ extern "C" {
 extern void (*os_delay)(uint32_t ms);
 
 /**
- * os_sched.h
  *
- * \brief   Get the time in milliseconds since os_sched_start() API function was called.
+ * \brief   Get the time in milliseconds since os_sched_start() API function was called. The precision of time is affected by the precision of the OS tick.
  *
- * \return  The time in milliseconds. Note the time represented by a 64-bit integer
- *          may be overflowed.
+ * \return  The time in milliseconds.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -87,12 +93,10 @@ extern void (*os_delay)(uint32_t ms);
 extern uint64_t (*os_sys_time_get)(void);
 
 /**
- * os_sched.h
  *
  * \brief   Get the time in OS tick counts (default 1 tick = 10ms) since os_sched_start() API function was called.
  *
- * \return  The time in OS tick counts. Note the time represented by a 64-bit integer
- *          may be overflowed.
+ * \return  The time in OS tick counts.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -118,13 +122,10 @@ extern uint64_t (*os_sys_time_get)(void);
 extern uint64_t (*os_sys_tick_get)(void);
 
 /**
- * os_sched.h
  *
  * \brief   Start the RTOS kernel scheduler.
  *
- * \return  The status of starting kernel scheduler.
- * \retval  true      Scheduler was started successfully.
- * \retval  false     Scheduler failed to start.
+ * \return  The status of starting kernel scheduler. It will always return true.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -153,14 +154,11 @@ extern uint64_t (*os_sys_tick_get)(void);
 extern bool (*os_sched_start)(void);
 
 /**
- * os_sched.h
  *
  * \brief   Stop the RTOS kernel scheduler. All created tasks will be automatically
  *          deleted and multitasking (either preemptive or cooperative) stops.
  *
- * \return  The status of stopping kernel scheduler.
- * \retval  true      Scheduler was stopped successfully.
- * \retval  false     Scheduler failed to stop.
+ * \return  The status of stopping kernel scheduler. It will always return true.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -197,21 +195,17 @@ extern bool (*os_sched_start)(void);
  * }
  * \endcode
  *
- * \ingroup  Schedule
  */
 extern bool (*os_sched_stop)(void);
 
 /**
- * os_sched.h
  *
  * \brief   Suspends the kernel scheduler without disabling interrupts. Context
  *          switches will not occur while the scheduler is suspended. After calling
  *          os_sched_suspend(), the calling task will continue to execute without
  *          risk of being swapped out until a call to os_sched_resume() has been made.
  *
- * \return  The status of suspending kernel scheduler.
- * \retval  true      Scheduler was suspended successfully.
- * \retval  false     Scheduler failed to suspend.
+ * \return  The status of suspending kernel scheduler. It will always return true.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -238,14 +232,10 @@ extern bool (*os_sched_stop)(void);
 extern bool (*os_sched_suspend)(void);
 
 /**
- * os_sched.h
  *
- * \brief   Resume the kernel scheduler after it was suspended by a call
- *          to os_sched_suspend().
+ * \brief   Resume the kernel scheduler after it was suspended by a call to os_sched_suspend().
  *
- * \return  The status of resuming kernel scheduler.
- * \retval  true      Scheduler was resumed successfully.
- * \retval  false     Scheduler failed to resume.
+ * \return  The status of resuming kernel scheduler. It will always return true.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -281,10 +271,10 @@ extern bool (*os_sched_is_start)(void);
 
 /**
   * @brief  Get state of OS scheduler.
-  * @param  p_state Current state of OS scheduler, 0: suspended; 1: not started; 2: running.
+  * @param[out]  p_state Current state of OS scheduler, 0: suspended; 1: not started; 2: running.
   * @return The result of OS scheduler state get.
   * \retval  true      Scheduler state get success.
-  * \retval  false     Scheduler state get fail.
+  * \retval  false     Scheduler state get fail. It happens when p_state is NULL.
   */
 extern bool (*os_sched_state_get)(long *p_state);
 

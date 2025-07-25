@@ -17,7 +17,6 @@
 #include <string.h>
 #include "mem_config.h"
 #include "rtl876x.h"
-#include "system_rtl876x.h"
 #include "trace.h"
 #include "utils.h"
 #include "vector_table.h"
@@ -116,7 +115,7 @@ void Flash_SEC_Handler(void) __attribute__((weak, alias("Default_Handler")));
 void SegCom_CTL_Handler(void) __attribute__((weak, alias("Default_Handler")));
 void CAN_Handler(void) __attribute__((weak, alias("Default_Handler")));
 void ETH_Handler(void) __attribute__((weak, alias("Default_Handler")));
-void IMDC_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void IDU_Handler(void) __attribute__((weak, alias("Default_Handler")));
 void Slave_Port_Monitor_Handler(void) __attribute__((weak, alias("Default_Handler")));
 void PTA_Mailbox_Handler(void) __attribute__((weak, alias("Default_Handler")));
 void USB_Handler(void) __attribute__((weak, alias("Default_Handler")));
@@ -213,7 +212,8 @@ void GPIOB31_Handler(void) __attribute__((weak, alias("Default_Handler")));
 #endif
 
 
-const IRQ_Fun RamVectorTable_app[] __attribute__((section(".vectors_table"))) =
+__attribute__((used)) const IRQ_Fun RamVectorTable_app[] __attribute__((
+                                                                           section(".vectors_table"))) =
 {
 #if (FEATURE_TRUSTZONE_ENABLE == 1)
     (IRQ_Fun)(NS_RAM_MAIN_STACK_START_ADDR + NS_RAM_MAIN_STACK_SIZE),
@@ -310,7 +310,7 @@ const IRQ_Fun RamVectorTable_app[] __attribute__((section(".vectors_table"))) =
     SegCom_CTL_Handler,
     CAN_Handler,
     ETH_Handler,
-    IMDC_Handler,
+    IDU_Handler,
     Slave_Port_Monitor_Handler,
     PTA_Mailbox_Handler,
     USB_Handler,

@@ -13,12 +13,9 @@
 /* Includes ------------------------------------------------------------------*/
 #include <stdlib.h>
 #include "trace.h"
-
 #include "io_timer.h"
-
 #include "rtl_gpio.h"
-#include "rtl_tim.h"
-#include "os_sync.h"
+
 /* Private typedef -----------------------------------------------------------*/
 
 /* Private define ------------------------------------------------------------*/

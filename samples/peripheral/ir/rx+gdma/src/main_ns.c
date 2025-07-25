@@ -32,8 +32,11 @@
 void ir_demo(void)
 {
     board_ir_init();
+    board_pwm_init();
     driver_ir_init();
+    driver_pwm_init();
     driver_ir_gdma_init();
+
 }
 
 /**
@@ -47,7 +50,6 @@ int main(void)
     __enable_irq();
 
     ir_demo();
-
 
 
     while (1)

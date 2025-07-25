@@ -43,16 +43,20 @@ extern "C"
 /** @defgroup GAP_LE_STORAGE_BITS LE Key Storage Bits
 * @{
  */
-#define LE_KEY_STORE_REMOTE_BD_BIT   0x01
-#define LE_KEY_STORE_LOCAL_LTK_BIT   0x02
-#define LE_KEY_STORE_REMOTE_LTK_BIT  0x04
-#define LE_KEY_STORE_REMOTE_IRK_BIT  0x08
-#define LE_KEY_STORE_LOCAL_CSRK_BIT  0x10
-#define LE_KEY_STORE_REMOTE_CSRK_BIT 0x20
-#define LE_KEY_STORE_CCCD_DATA_BIT   0x40
-#define LE_KEY_STORE_LOCAL_IRK_BIT   0x80
-#define LE_KEY_STORE_REMOTE_CLIENT_SUPPORTED_FEATURES_BIT  0x0100
-#define LE_KEY_STORE_LOCAL_BD_BIT    0x8000
+#define LE_KEY_STORE_REMOTE_BD_BIT   0x01   /**< Save remote device address to flash.
+                                                 The data structure is @ref T_LE_REMOTE_BD. */
+#define LE_KEY_STORE_LOCAL_LTK_BIT   0x02   /**< Save local device Long Term Key to flash.
+                                                 The data structure is @ref T_LE_LTK. */
+#define LE_KEY_STORE_REMOTE_LTK_BIT  0x04   /**< Save remote device Long Term Key to flash.
+                                                 The data structure is @ref T_LE_LTK. */
+#define LE_KEY_STORE_REMOTE_IRK_BIT  0x08   /**< Save remote device Identity Resolving Key to flash. */
+#define LE_KEY_STORE_LOCAL_CSRK_BIT  0x10   /**< Save local device Connection Signature Resolving Key to flash. */
+#define LE_KEY_STORE_REMOTE_CSRK_BIT 0x20   /**< Save remote device Connection Signature Resolving Key to flash. */
+#define LE_KEY_STORE_CCCD_DATA_BIT   0x40   /**< Save local device CCCD data to flash.
+                                                 The data structure is @ref T_CCCD_DATA. */
+#define LE_KEY_STORE_LOCAL_IRK_BIT   0x80   /**< Save local device Identity Resolving Key to flash.
+                                                 The data structure is @ref T_LOCAL_IRK. */
+#define LE_KEY_STORE_LOCAL_BD_BIT    0x8000 /**< Save local device address to flash. */
 /**
   * @}
   */
@@ -175,7 +179,7 @@ typedef struct
 
 /**
  * @brief  Save local device name to flash.
- * @param[in] p_data pointer to local device name.
+ * @param[in] p_data Pointer to local device name @ref T_LOCAL_NAME.
  * @return Operation result.
  * @retval 0 Operation success.
  * @retval Others Operation failure.
@@ -231,7 +235,7 @@ uint32_t flash_save_local_name(T_LOCAL_NAME *p_data);
 
 /**
  * @brief  Load local device name from flash.
- * @param[in] p_data pointer to local device name.
+ * @param[in,out] p_data Pointer to location to get local device name @ref T_LOCAL_NAME.
  * @return Operation result.
  * @retval 0 Operation success.
  * @retval Others Operation failure.
@@ -256,7 +260,7 @@ uint32_t flash_save_local_name(T_LOCAL_NAME *p_data);
 
         if (flash_load_local_name(&local_device_name) == 0)
         {
-            if (local_device_name.local_name[0] != 0xff)
+            if (local_device_name.local_name[0] != 0xFF)
             {
                 memcpy(device_name, local_device_name.local_name, GAP_DEVICE_NAME_LEN);
             }
@@ -268,7 +272,7 @@ uint32_t flash_load_local_name(T_LOCAL_NAME *p_data);
 
 /**
  * @brief  Save local device appearance to flash.
- * @param[in] p_data Pointer to local device name.
+ * @param[in] p_data Pointer to local appearance @ref T_LOCAL_APPEARANCE.
  * @return Operation result.
  * @retval 0 Operation success.
  * @retval Others Operation failure.
@@ -324,7 +328,7 @@ uint32_t flash_save_local_appearance(T_LOCAL_APPEARANCE *p_data);
 
 /**
  * @brief  Load local device appearance from flash.
- * @param[in] p_data Pointer to local device name.
+ * @param[in,out] p_data Pointer to location to get local appearance @ref T_LOCAL_APPEARANCE.
  * @return Operation result.
  * @retval 0 Operation success.
  * @retval Others Operation failure.
@@ -349,7 +353,7 @@ uint32_t flash_save_local_appearance(T_LOCAL_APPEARANCE *p_data);
 
         if (flash_load_local_name(&local_device_name) == 0)
         {
-            if (local_device_name.local_name[0] != 0xff)
+            if (local_device_name.local_name[0] != 0xFF)
             {
                 memcpy(device_name, local_device_name.local_name, GAP_DEVICE_NAME_LEN);
             }
@@ -361,7 +365,7 @@ uint32_t flash_load_local_appearance(T_LOCAL_APPEARANCE *p_data);
 
 /**
  * @brief  Save local IRK to flash.
- * @param[in] p_data Pointer to local device name.
+ * @param[in] p_data Pointer to local IRK @ref T_LOCAL_IRK.
  * @return Operation result.
  * @retval 0 Operation success.
  * @retval Others Operation failure.
@@ -379,7 +383,7 @@ uint32_t flash_save_local_irk(T_LOCAL_IRK *p_data);
 
 /**
  * @brief  Load local IRK from flash.
- * @param[in] p_data Pointer to local device name.
+ * @param[in,out] p_data Pointer to location to get local IRK @ref T_LOCAL_IRK.
  * @return Operation result.
  * @retval 0 Operation success.
  * @retval Others Operation failure.
@@ -399,24 +403,24 @@ uint32_t flash_load_local_irk(T_LOCAL_IRK *p_data);
 /**
  * @brief      Find key entry by bluetooth device address and address type.
  *
- * @param[in] bd_addr Remote bluetooth device address.
- * @param[in] bd_type Remote bluetooth device address type.
- * @return p_entry Pointer to the found key entry.
- * @retval null No entry found.
- * @retval others Pointer to the found key entry.
+ * @param[in] bd_addr Pointer to remote bluetooth device address.
+ * @param[in] bd_type Remote bluetooth device address type @ref T_GAP_REMOTE_ADDR_TYPE.
+ * @return Pointer to the found key entry @ref T_LE_KEY_ENTRY.
+ * @retval NULL No entry found.
+ * @retval Others Pointer to the found key entry.
  */
 T_LE_KEY_ENTRY *le_find_key_entry(uint8_t *bd_addr, T_GAP_REMOTE_ADDR_TYPE bd_type);
 
 /**
  * @brief      Find key entry by bluetooth device address and address type.
  *
- * @param[in] remote_bd_addr Remote bluetooth device address.
- * @param[in] remote_bd_type Remote bluetooth device address type.
- * @param[in] local_bd_addr  Local bluetooth device address.
+ * @param[in] remote_bd_addr Pointer to remote bluetooth device address.
+ * @param[in] remote_bd_type Remote bluetooth device address type @ref T_GAP_REMOTE_ADDR_TYPE.
+ * @param[in] local_bd_addr  Pointer to local bluetooth device address.
  * @param[in] local_bd_type  Local bluetooth device address type.
- * @return p_entry Pointer to the found key entry.
- * @retval null No entry found.
- * @retval others Pointer to the found key entry.
+ * @return Pointer to the found key entry @ref T_LE_KEY_ENTRY.
+ * @retval NULL No entry found.
+ * @retval Others Pointer to the found key entry.
  */
 T_LE_KEY_ENTRY *le_find_key_entry_v2(uint8_t *remote_bd_addr, T_GAP_REMOTE_ADDR_TYPE remote_bd_type,
                                      uint8_t *local_bd_addr, uint8_t local_bd_type);
@@ -425,8 +429,8 @@ T_LE_KEY_ENTRY *le_find_key_entry_v2(uint8_t *remote_bd_addr, T_GAP_REMOTE_ADDR_
  * @brief      Find key entry by index.
  *
  * @param[in] idx Key entry index.
- * @return p_entry Pointer to the found key entry.
- * @retval null No entry found.
+ * @return Pointer to the found key entry @ref T_LE_KEY_ENTRY.
+ * @retval NULL No entry found.
  * @retval Others Pointer to the found key entry.
  */
 T_LE_KEY_ENTRY *le_find_key_entry_by_idx(uint8_t idx);
@@ -436,7 +440,7 @@ T_LE_KEY_ENTRY *le_find_key_entry_by_idx(uint8_t idx);
  *
  * @note This function can be called after @ref le_gap_init is invoked.
  *
- * @return num Bonded device count.
+ * @return Bonded device count.
  */
 uint8_t le_get_bond_dev_num(void);
 
@@ -445,8 +449,8 @@ uint8_t le_get_bond_dev_num(void);
  *
  * @note This function can be called after @ref le_gap_init is invoked.
  *
- * @return p_entry Pointer to the found key entry.
- * @retval null No entry found.
+ * @return Pointer to the found key entry @ref T_LE_KEY_ENTRY.
+ * @retval NULL No entry found.
  * @retval Others Pointer to the found key entry.
  */
 T_LE_KEY_ENTRY *le_get_low_priority_bond(void);
@@ -456,21 +460,21 @@ T_LE_KEY_ENTRY *le_get_low_priority_bond(void);
  *
  * @note This function can be called after @ref le_gap_init is invoked.
  *
- * @return p_entry Pointer to the found key entry.
- * @retval null No entry found.
- * @retval others Pointer to the found key entry.
+ * @return Pointer to the found key entry @ref T_LE_KEY_ENTRY.
+ * @retval NULL No entry found.
+ * @retval Others Pointer to the found key entry.
  */
 T_LE_KEY_ENTRY *le_get_high_priority_bond(void);
 
 /**
  * @brief   Make the specified bonded device with high priority.
  *
- *@note This function cannot be used if local device uses different local
+ * @note This function cannot be used if local device uses different local
  *               addresses to bond with the same remote device. In this situation,
  *               @ref le_set_high_priority_bond_v2 shall be called.
  *
- * @param[in] bd_addr Remote bluetooth device address.
- * @param[in] bd_type Remote bluetooth device address type.
+ * @param[in] bd_addr Pointer to remote bluetooth device address.
+ * @param[in] bd_type Remote bluetooth device address type @ref T_GAP_REMOTE_ADDR_TYPE.
  * @return Operation result.
  * @retval true     Operation success.
  * @retval false    Operation failure.
@@ -480,7 +484,7 @@ bool le_set_high_priority_bond(uint8_t *bd_addr, T_GAP_REMOTE_ADDR_TYPE bd_type)
 /**
  * @brief   Make the specified bonded device with the high priority.
  *
- * @param[in]       p_entry       Pointer the key entry of the bonded device.
+ * @param[in]       p_entry       Pointer the key entry of the bonded device @ref T_LE_KEY_ENTRY.
  * @return Operation result.
  * @retval true     Operation success.
  * @retval false    Operation failure.
@@ -490,9 +494,10 @@ bool le_set_high_priority_bond_v2(T_LE_KEY_ENTRY *p_entry);
 /**
  * @brief   Resolve the specified bonded device.
  *
- * @param[in]       unresolved_addr       Unresolved remote bluetooth device address.
- * @param[in,out]   resolved_addr         Resolved remote bluetooth device address.
- * @param[in,out]   resolved_addr_type    Resolved remote bluetooth device address type.
+ * @param[in]       unresolved_addr       Pointer to unresolved remote bluetooth device address.
+ * @param[in,out]   resolved_addr         Pointer to location to get resolved remote bluetooth device address.
+ * @param[in,out]   resolved_addr_type    Pointer to to location to get resolved remote bluetooth device
+ *                                        address type @ref T_GAP_IDENT_ADDR_TYPE.
  * @return Operation result.
  * @retval true     Operation success.
  * @retval false    Operation failure.
@@ -549,13 +554,14 @@ bool le_resolve_random_address(uint8_t *unresolved_addr, uint8_t *resolved_addr,
 /**
  * @brief   Generate new bonded device information by APP.
  *
- * @param[in] remote_bd_addr    Remote bluetooth device address.
- * @param[in] remote_bd_type    Remote bluetooth device address type.
- * @param[in] local_bd_addr     Local bluetooth device address.
- * @param[in] local_bd_type     Local bluetooth device address type.
+ * @param[in] remote_bd_addr    Pointer to remote bluetooth device address.
+ * @param[in] remote_bd_type    Remote bluetooth device address type @ref T_GAP_REMOTE_ADDR_TYPE.
+ * @param[in] local_bd_addr     Pointer to local bluetooth device address.
+ * @param[in] local_bd_type     Local bluetooth device address type @ref T_GAP_LOCAL_ADDR_TYPE.
  * @param[in] ltk_length        LTK length.
  * @param[in] p_ltk             Pointer to LTK to write.
- * @param[in] p_cccd            Pointer to cccd data to write.
+ * @param[in] key_type          Key type @ref T_LE_KEY_TYPE.
+ * @param[in] p_cccd            Pointer to CCCD data to write @ref T_CCCD_DATA.
  * @return Operation result.
  * @retval true     Operation success.
  * @retval false    Operation failure.
@@ -596,8 +602,8 @@ bool le_gen_bond_dev_v2(uint8_t *remote_bd_addr, T_GAP_REMOTE_ADDR_TYPE remote_b
 /**
  * @brief   Save privacy information.
  *
- * @param[in] p_entry        Pointer to the key entry of bonded device.
- * @param[in] p_privacy_info Pointer to privacy information to write.
+ * @param[in]  p_entry        Pointer to the key entry of bonded device @ref T_LE_KEY_ENTRY.
+ * @param[in]  p_privacy_info Pointer to privacy information to write @ref T_LE_PRIVACY_INFO.
  * @return Operation result.
  * @retval true     Operation success.
  * @retval false    Operation failure.
@@ -607,8 +613,8 @@ bool le_set_privacy_info(T_LE_KEY_ENTRY *p_entry, T_LE_PRIVACY_INFO *p_privacy_i
 /**
  * @brief   Get privacy information.
  *
- * @param[in]  p_entry        Pointer to the key entry of bonded device.
- * @param[out] p_privacy_info Pointer to privacy information to read.
+ * @param[in]  p_entry        Pointer to the key entry of bonded device @ref T_LE_KEY_ENTRY.
+ * @param[in,out] p_privacy_info Pointer to location to get privacy information @ref T_LE_PRIVACY_INFO.
  * @return Operation result.
  * @retval true     Operation success.
  * @retval false    Operation failure.
@@ -618,7 +624,7 @@ bool le_get_privacy_info(T_LE_KEY_ENTRY *p_entry, T_LE_PRIVACY_INFO *p_privacy_i
 /**
  * @brief   Check if the bonded device is a privacy device.
  *
- * @param[in] p_entry         Pointer to the key entry of the bonded device.
+ * @param[in] p_entry         Pointer to the key entry of the bonded device @ref T_LE_KEY_ENTRY.
  * @return Operation result.
  * @retval true     This bonded device is a privacy device.
  * @retval false    This bonded device is not a privacy device.
@@ -636,7 +642,7 @@ uint16_t le_get_dev_bond_info_len(void);
  * @brief   Get device bond information.
  *
  * @param[in] p_entry        Pointer to the key entry of the bonded device.
- * @param[in] p_data        Pointer to bond information to read.
+ * @param[in,out] p_data     Pointer to location to get bond information.
  * @return Operation result.
  * @retval true     Operation success.
  * @retval false    Operation failure.
@@ -647,11 +653,14 @@ bool le_get_dev_bond_info(T_LE_KEY_ENTRY *p_entry, uint8_t *p_data);
  * @brief   Set device bond information.
  *
  * @param[in] length         Length of device bond information.
- * @param[in] p_data        Pointer to bond information to write.
- * @param[in,out] exist       Indicate whether bond information of the device exists.
- * @return p_entry Pointer to the key entry.
- * @retval null No entry, operation failure.
- * @retval others Pointer to the key entry. If parameter exist is false, operation success. If parameter exist is true, bond information of the device exists.
+ * @param[in] p_data         Pointer to bond information to write.
+ * @param[in,out] exist      Pointer to location to get value that
+ *                           indicates whether bond information of the device exists.
+ * @return Pointer to the key entry @ref T_LE_KEY_ENTRY.
+ * @retval NULL No entry, operation failure.
+ * @retval Others Pointer to the key entry.
+ *         - If parameter exist is false, operation success.
+ *         - If parameter exist is true, bond information of the device exists.
  */
 T_LE_KEY_ENTRY *le_set_dev_bond_info(uint16_t length, uint8_t *p_data, bool *exist);
 
@@ -667,8 +676,8 @@ uint8_t le_get_max_le_paired_device_num(void);
 /**
  * @brief   Get device information.
  *
- * @param[in] p_entry        Pointer to the key entry of the bonded device.
- * @param[out] p_info        Pointer to bond information to read.
+ * @param[in] p_entry        Pointer to the key entry of the bonded device @ref T_LE_KEY_ENTRY.
+ * @param[in,out] p_info     Pointer to location to get bond information @ref T_LE_DEV_INFO.
  * @return Operation result.
  * @retval true     Operation success.
  * @retval false    Operation failure.
@@ -678,10 +687,10 @@ bool le_get_dev_info(T_LE_KEY_ENTRY *p_entry, T_LE_DEV_INFO *p_info);
 /**
  * @brief   Get device LTK information.
  *
- * @param[in] p_entry        Pointer to the key entry of the bonded device.
+ * @param[in] p_entry        Pointer to the key entry of the bonded device @ref T_LE_KEY_ENTRY.
  * @param[in] remote         Read the remote LTK or the local LTK.
- * @param[out] p_key_len     Pointer to LTK key length to read.
- * @param[out] p_ltk         Pointer to LTK to read.
+ * @param[in,out] p_key_len     Pointer to location to get LTK key length.
+ * @param[in,out] p_ltk         Pointer to location to get LTK.
  * @return Operation result.
  * @retval true     Operation success.
  * @retval false    Operation failure.
@@ -691,9 +700,9 @@ bool le_get_dev_ltk(T_LE_KEY_ENTRY *p_entry, bool remote, uint8_t *p_key_len, ui
 /**
  * @brief   Get remote device IRK information.
  *
- * @param[in] p_entry        Pointer to the key entry of the bonded device.
+ * @param[in] p_entry        Pointer to the key entry of the bonded device @ref T_LE_KEY_ENTRY.
  * @param[in] remote         Read the remote IRK or the local IRK.
- * @param[out] p_irk         Pointer to IRK to read.
+ * @param[in,out] p_irk         Pointer to location to get IRK.
  * @return Operation result.
  * @retval true     Operation success.
  * @retval false    Operation failure.
@@ -703,8 +712,8 @@ bool le_get_dev_irk(T_LE_KEY_ENTRY *p_entry, bool remote, uint8_t *p_irk);
 /**
  * @brief   Get device priority information.
  *
- * @param[out] p_bond_num        Pointer to the bonded device number to read.
- * @param[out] p_pri_table        Pointer to priority information to read.
+ * @param[in,out] p_bond_num        Pointer to location to get the bonded device number.
+ * @param[in,out] p_pri_table        Pointer to location to get priority information.
  * @return Operation result.
  * @retval true     Operation success.
  * @retval false    Operation failure.

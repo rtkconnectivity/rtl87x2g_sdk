@@ -42,7 +42,7 @@ extern "C" {
   * @brief Service ID for general profile events.
   * @{
   */
-#define SERVICE_PROFILE_GENERAL_ID  0xff
+#define SERVICE_PROFILE_GENERAL_ID  0xFF
 /** @} */
 
 /** End of GATT_SERVER_COMMON_Exported_Macros
@@ -58,7 +58,7 @@ extern "C" {
   * @{
   */
 
-typedef uint8_t T_SERVER_ID;    //!< Service ID
+typedef uint8_t T_SERVER_ID;    //!< Service ID.
 
 /** @brief  GATT write data type*/
 typedef enum
@@ -81,8 +81,8 @@ typedef enum
 typedef enum
 {
     SERVICE_CALLBACK_TYPE_INDIFICATION_NOTIFICATION = 1,    /**< CCCD update event. */
-    SERVICE_CALLBACK_TYPE_READ_CHAR_VALUE = 2,              /**< client read event. */
-    SERVICE_CALLBACK_TYPE_WRITE_CHAR_VALUE = 3,             /**< client write event. */
+    SERVICE_CALLBACK_TYPE_READ_CHAR_VALUE = 2,              /**< Client read event. */
+    SERVICE_CALLBACK_TYPE_WRITE_CHAR_VALUE = 3,             /**< Client write event. */
 } T_SERVICE_CALLBACK_TYPE;
 
 /** @defgroup GATT_SERVER_COMMON_CB_DATA Server Common Callback Data
@@ -93,7 +93,7 @@ typedef enum
 typedef enum
 {
     PROFILE_EVT_SRV_REG_COMPLETE,              /**< Services register complete event
-    when application calls server_add_service before calling gap_start_bt_stack. */
+    when application calls server_add_service before calling @ref gap_start_bt_stack. */
     PROFILE_EVT_SEND_DATA_COMPLETE,            /**< Notification or indication data send complete event. */
     PROFILE_EVT_SRV_REG_AFTER_INIT_COMPLETE,   /**< Services register complete event
     when application calls server_add_service after receiving @ref GAP_INIT_STATE_STACK_READY. */
@@ -105,20 +105,20 @@ typedef enum
 /** @brief Service reg mode, only be used when: @ref GAP_INIT_STATE_STACK_READY. */
 typedef enum
 {
-    SERVICE_REG_MODE_ADD_TO_STACK = 0,    /**< Default mode. Add service to stack.
-    When transition from SERVICE_REG_MODE_ADD_TO_TABLE to SERVICE_REG_MODE_ADD_TO_STACK, services in table have not been registered will be registered to stack.
+    SERVICE_REG_MODE_ADD_TO_STACK = 0,    /**< Default mode. Add service to the Bluetooth Host.
+    When transition from @ref SERVICE_REG_MODE_ADD_TO_TABLE to @ref SERVICE_REG_MODE_ADD_TO_STACK, services in table have not been registered will be registered to the Bluetooth Host.
     When in this mode, only one new service can be added to table and registered to Bluetooth Host at one time. */
     SERVICE_REG_MODE_ADD_TO_TABLE = 1,    /**< Add services to table. */
 } T_SERVICE_REG_MODE;
 
-/** @brief  The callback data of PROFILE_EVT_SRV_REG_COMPLETE. */
+/** @brief  The callback data of @ref PROFILE_EVT_SRV_REG_COMPLETE. */
 typedef enum
 {
     GATT_SERVER_SUCCESS,  /**< Success. */
     GATT_SERVER_FAIL      /**< Fail. */
 } T_SERVER_RESULT;
 
-/** @brief  The callback data of PROFILE_EVT_SRV_REG_AFTER_INIT_COMPLETE. */
+/** @brief  The callback data of @ref PROFILE_EVT_SRV_REG_AFTER_INIT_COMPLETE. */
 typedef struct
 {
     T_SERVER_RESULT result;
@@ -126,21 +126,21 @@ typedef struct
     uint16_t        cause;
 } T_SERVER_REG_AFTER_INIT_RESULT;
 
-/** @brief  The callback data of PROFILE_EVT_SRV_CLEAR_AFTER_INIT_COMPLETE */
+/** @brief  The callback data of @ref PROFILE_EVT_SRV_CLEAR_AFTER_INIT_COMPLETE */
 typedef struct
 {
-    uint16_t        cause;
+    uint16_t        cause; /**< Cause. */
     uint16_t        svc_changed_char_cccd_handle; /**< 0x0000: Invalid handle. */
 } T_SERVER_CLEAR_SERVICE_AFTER_INIT_RESULT;
 
-/** @brief  The callback data of PROFILE_EVT_SERVICE_CHANGE_STATE. */
+/** @brief  The callback data of @ref PROFILE_EVT_SERVICE_CHANGE_STATE. */
 typedef struct
 {
     uint8_t service_change;             /**< Whether service is changed.
-                                          * \arg 0 : Service is not changed.
-                                          * \arg 1 : Service is changed. */
+                                          *  - 0:  Service is not changed.
+                                          *  - 1:  Service is changed. */
     uint8_t service_change_state;       /**< @ref GATT_SERVER_SERVICE_CHANGE_STATE_BIT_Def. */
-    uint16_t conn_handle;               /**< Ignore if @ref service_change is 1. */
+    uint16_t conn_handle;               /**< Ignore if service_change is 1. */
 } T_SERVER_SERVICE_CHANGE_STATE;
 
 /** @} End of GATT_SERVER_COMMON_CB_DATA */
@@ -161,7 +161,6 @@ typedef struct
  * @brief Initialize parameters of GATT Server.
  *
  * @param[in] service_num Set the number of services that need to register.
- * @return void.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -177,10 +176,9 @@ void server_init(uint8_t service_num);
  * @brief Register built-in services including GAP and GATT services.
  *
  * If the application does not need to register GAP and GATT services,
- * the application shall call server_builtin_service_reg(false) before server_init().
+ * the application shall call @ref server_builtin_service_reg (false) before @ref server_init.
  *
  * @param[in] reg Whether to register built-in services. The default value is true.
- * @return void.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -200,8 +198,8 @@ void server_builtin_service_reg(bool reg);
  *
  * @param[in] service_id Service ID.
  * @return Start handle.
- * @retval 0 Failed.
- * @retval other Success.
+ * @retval 0 Operation failure.
+ * @retval Others Start handle.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -217,11 +215,11 @@ uint16_t server_get_start_handle(T_SERVER_ID service_id);
  * @brief Configure the server interface.
  *
  * @param[in] use_ext Whether to use the extension API. The default value is false.
- *                    @arg true Use the API in profile_server_ext.h.
- *                    @arg false Use the API in profile_server.h.
- * @return Configure result.
- * @retval true Success.
- * @retval false Failed.
+ *                    - true: Use the API in @ref GATT_SERVER_EXT_API.
+ *                    - false: Use the API in @ref GATT_SERVER_LEGACY_API.
+ * @return Operation result.
+ * @retval true  Operation success.
+ * @retval false Operation failure.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -239,19 +237,19 @@ bool server_cfg_use_ext_api(bool use_ext);
  * @note This function can only be used when:
  *                  standby state (i.e., no link, not initiating, etc.), and @ref GAP_INIT_STATE_STACK_READY, and not add service.
  *
- * If sending request operation is success, the result of clear service will be returned by callback depends on APP: \n
- *                   Default or APP use server_cfg_use_ext_api(false):
- *                         callback registered by @ref server_register_app_cb with eventId @ref PROFILE_EVT_SRV_CLEAR_AFTER_INIT_COMPLETE. \n
- *                   APP use server_cfg_use_ext_api(true):
- *                         callback registered by @ref server_ext_register_app_cb with eventId @ref PROFILE_EVT_SRV_CLEAR_AFTER_INIT_COMPLETE.
+ * If sending request operation is successful, the result of clear service will be returned by callback depends on APP:
+ * - Default or APP use @ref server_cfg_use_ext_api (false):
+ *   callback registered by @ref server_register_app_cb with eventId @ref PROFILE_EVT_SRV_CLEAR_AFTER_INIT_COMPLETE.
+ * - APP use @ref server_cfg_use_ext_api (true):
+ *   callback registered by @ref server_ext_register_app_cb with eventId @ref PROFILE_EVT_SRV_CLEAR_AFTER_INIT_COMPLETE.
  *
- * If clear service operation is success and APP not clear bond info: \n
- *                   APP clear CCCD except CCCD of Service Changed characteristic. \n
- *                   APP send Indication of Service Changed after reconnection.
+ * If clear service operation is successful and APP not clear bond info:
+ * - APP clear CCCD except CCCD of Service Changed characteristic.
+ * - APP send Indication of Service Changed after reconnection.
  *
- * @return Send request operation.
- * @retval true  Send request operation success.
- * @retval false Send request operation failure.
+ * @return The result of sending request.
+ * @retval true Sending request operation is successful.
+ * @retval false Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -307,14 +305,14 @@ bool server_clear_service(void);
  *
  * If mode is @ref SERVICE_REG_MODE_ADD_TO_TABLE, setting operation result will be returned.
  *
- * If mode is @ref SERVICE_REG_MODE_ADD_TO_STACK, setting operation result will be returned. \n
- *               If result is true, and p_num is not zero, the result of registering services
- *               will be returned by callback depends on APP:
- *                   callback registered by @ref server_register_app_cb with eventId @ref PROFILE_EVT_SRV_REG_AFTER_INIT_COMPLETE,
- *                   when register single or multi services complete, return the last service ID.
+ * If mode is @ref SERVICE_REG_MODE_ADD_TO_STACK, setting operation result will be returned.
+ *
+ * If result is true, and p_num is not zero, the result of registering services will be returned by callback depends on APP:
+ * - callback registered by @ref server_register_app_cb with eventId @ref PROFILE_EVT_SRV_REG_AFTER_INIT_COMPLETE,
+ *   when register single or multiple services complete, return the last service ID.
  *
  * @param[in]     mode  Service reg mode, @ref T_SERVICE_REG_MODE.
- * @param[in,out] p_num Pointer to the num of services in table have not been registered to stack.
+ * @param[in,out] p_num Pointer to the num of services in table have not been registered to the Bluetooth Host.
                         Only when mode is @ref SERVICE_REG_MODE_ADD_TO_STACK and result is true, the value is valid.
  * @return Set mode result.
  * @retval true  Set mode success.
@@ -346,7 +344,7 @@ bool server_clear_service(void);
             case PROFILE_EVT_SRV_REG_AFTER_INIT_COMPLETE:
             APP_PRINT_INFO3("app_profile_callback: PROFILE_EVT_SRV_REG_AFTER_INIT_COMPLETE: result %d, service id 0x%x, cause 0x%x",
                             p_param->event_data.server_reg_after_init_result.result,
-                            //When register multi services complete, return the last service id.
+                            //When register multiple services complete, return the last service id.
                             p_param->event_data.server_reg_after_init_result.service_id,
                             p_param->event_data.server_reg_after_init_result.cause);
               ......

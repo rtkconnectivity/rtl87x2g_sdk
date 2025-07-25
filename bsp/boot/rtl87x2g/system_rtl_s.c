@@ -22,7 +22,6 @@
 #include "version.h"
 #include "mem_config.h"
 #include "secure_rom_cfg.h"
-#include "system_rtl876x.h"
 #include "flash_nor_device.h"
 #include "tzm_config.h"
 #include "rxi300_idau.h"
@@ -139,11 +138,8 @@ void ram_init(void)
     unsigned int ro_image_length = (unsigned int)& __enter_iram_s_ro_length__;
 #endif
 
-    for (unsigned int i = 0; i < ro_image_length / sizeof(unsigned int); i ++)
-    {
-        //cppcheck-suppress objectIndex
-        ro_image_base[i] = ro_load_base[i];
-    }
+    // cppcheck-suppress nullPointer; objectIndex
+    memcpy(ro_image_base, ro_load_base, ro_image_length);
 
     DBG_DIRECT("Secure APP copy ro: src 0x%x, dest 0x%x, len %d",
                (uint32_t)ro_image_base, (uint32_t)ro_load_base, ro_image_length);
@@ -167,11 +163,8 @@ void ram_init(void)
     unsigned int data_image_length = (unsigned int)& __enter_iram_s_rw_length__;
 #endif
 
-    for (unsigned int i = 0; i < data_image_length / sizeof(unsigned int); i ++)
-    {
-        //cppcheck-suppress objectIndex
-        data_image_base[i] = data_load_base[i];
-    }
+    // cppcheck-suppress nullPointer; objectIndex
+    memcpy(data_image_base, data_load_base, data_image_length);
 
     DBG_DIRECT("Secure APP copy rw: src 0x%x, dest 0x%x, len %d",
                (uint32_t)data_load_base, (uint32_t)data_image_base, data_image_length);
@@ -190,11 +183,9 @@ void ram_init(void)
     unsigned int bss_image_length = (unsigned int)& __enter_iram_s_zi_length__;
 #endif
 
-    for (unsigned int i = 0; i < bss_image_length / sizeof(unsigned int); i ++)
-    {
-        //cppcheck-suppress objectIndex
-        bss_image_base[i] = 0;
-    }
+    // cppcheck-suppress nullPointer; objectIndex
+    memset(bss_image_base, 0, bss_image_length);
+
     DBG_DIRECT("Secure APP clear zi: addr 0x%x, len %d", (uint32_t)bss_image_base, bss_image_length);
 
 }
@@ -279,6 +270,11 @@ void hal_setup_trustzone(void)
     }
 }
 
+void update_ram_layout(void)
+{
+    boot_cfg.secure_heap_addr = S_HEAP_ADDR;
+    boot_cfg.secure_heap_size = S_HEAP_SIZE;
+}
 
 #if (FEATURE_RAM_CODE == 1)
 bool system_init(void) APP_RAM_START_SECTION;
@@ -291,6 +287,8 @@ bool system_init(void)
 
     DBG_DIRECT("Secure APP version: %s, GCID: 0x%x, active bank%d",
                VERSION_BUILD_STR, VERSION_GCID, secure_app_num);
+
+    update_ram_layout();
 
     ram_init();
 

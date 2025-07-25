@@ -21,7 +21,7 @@
 
 
 /** @defgroup APP_SECTION APP Section
-  * @brief memory section definition for user application.
+  * @brief Memory section definition for user application.
   * @{
   */
 
@@ -32,7 +32,7 @@
   * @{
   */
 /** @defgroup APP_FLASH_SECTION APP Flash Section
-  *@brief  const data or flash function
+  *@brief  Const data or flash function.
   * @{
   */
 #define APP_FLASH_HEADER           __attribute__((section(".app.flash.header")))     __attribute__((used))
@@ -49,7 +49,7 @@
   */
 
 /** @defgroup APP_RAM_SECTION RAM Data Section
-    *@brief  global variable or ram function,  data on (default)
+    *@brief  Global variable or RAM function.
     * @{
     */
 #define APP_RAM_DATA_SECTION       __attribute__((section(".app.ram.data")))
@@ -64,7 +64,7 @@
 
 
 /** @defgroup APP_FUNCTION_SECTION RAM Function Section Sets
-  *@brief  ram code
+  *@brief  RAM code Section
   * @{
   */
 #define APP_RAM_START_SECTION      __attribute__((section(".app.ram.start")))

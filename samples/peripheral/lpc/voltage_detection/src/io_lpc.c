@@ -30,9 +30,9 @@
 */
 void board_lpc_init(void)
 {
-    Pad_Config(P2_2, PAD_SW_MODE, PAD_IS_PWRON, PAD_PULL_NONE, PAD_OUT_DISABLE,
+    Pad_Config(LPC_TEST_PIN, PAD_SW_MODE, PAD_IS_PWRON, PAD_PULL_NONE, PAD_OUT_DISABLE,
                PAD_OUT_HIGH);
-    Pinmux_Config(P2_2, IDLE_MODE);
+    Pinmux_Config(LPC_TEST_PIN, IDLE_MODE);
 }
 
 /**

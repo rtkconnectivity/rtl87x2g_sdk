@@ -41,34 +41,50 @@ extern "C"
   * @brief
   * @{
   */
-/** @brief  GAP LE Parameter Types List.*/
+/** @brief  GAP LE Parameter Types.*/
 typedef enum
 {
-    GAP_PARAM_DEV_STATE                = 0x220, //!< Device's current GAP device state. Read/Write. Size is sizeof(TGapDevState).
-    GAP_PARAM_APPEARANCE               = 0x221, //!< Local Device's Appearance. Read/Write. size is uint16. Appearance value please refer to GAP Appearance Values.(@ref GAP_LE_APPEARANCE_VALUES).
-    GAP_PARAM_DEVICE_NAME              = 0x222, //!< Local Device's Name. Write Only. Name string length is GAP_DEVICE_NAME_LEN.
-    GAP_PARAM_SLAVE_INIT_GATT_MTU_REQ  = 0x223, //!< Slave initiates the GATT exchange MTU procedure. Write Only.
-    GAP_PARAM_RANDOM_ADDR              = 0x224, //!< Random address. Write Only.
-    GAP_PARAM_LATEST_CONN_BD_ADDR      = 0x226, //!< Latest connected Bluetooth device address. Read Only.
-    GAP_PARAM_LATEST_CONN_BD_ADDR_TYPE = 0x227, //!< Latest connected Bluetooth device address type. Read Only.
-    GAP_PARAM_HANDLE_CREATE_CONN_IND   = 0x228, //!< APP handles the create connection indication message.
-    GAP_PARAM_DEFAULT_PHYS_PREFER      = 0x229, //!< Preferred values for the transmitter PHY and receiver PHY to be used for all subsequent connections over the LE transport.
-    GAP_PARAM_DEFAULT_TX_PHYS_PREFER   = 0x22a, //!< The transmitter PHYs that the Host prefers the Controller to use.
-    GAP_PARAM_DEFAULT_RX_PHYS_PREFER   = 0x22b, //!< The receiver PHYs that the Host prefers the Controller to use.
-    GAP_PARAM_USE_EXTENDED_ADV         = 0x22c, //!< Use LE Advertising Extensions.
-    GAP_PARAM_DEFAULT_DATA_LEN_MAX_TX_OCTETS = 0x22e, //!< The Host's suggested value for the Controller's maximum transmitted number of payload octets in LL Data PDUs to be used for new connections. Range: 0x001B to 0x00FB.
-    GAP_PARAM_DEFAULT_DATA_LEN_MAX_TX_TIME   = 0x22f, //!< The Host's suggested value for the Controller's maximum packet transmission time in microseconds for packets containing LL Data PDUs to be used for new connections. Range: 0x0148 to 0x4290.
+    GAP_PARAM_DEV_STATE                = 0x220, /**< GAP device state. Read only. Size is 1 octet. Value is @ref T_GAP_DEV_STATE. */
+    GAP_PARAM_APPEARANCE               = 0x221, /**< Local Device's Appearance. Read/Write. Size is 2 octets.
+                                                     Value is @ref GAP_LE_APPEARANCE_VALUES. Default value is @ref GAP_GATT_APPEARANCE_UNKNOWN. */
+    GAP_PARAM_DEVICE_NAME              = 0x222, /**< Local Device's Name. Write only. Maximum name string length is @ref GAP_DEVICE_NAME_LEN.
+                                                     Default value is 'GAP'. */
+    GAP_PARAM_SLAVE_INIT_GATT_MTU_REQ  = 0x223, /**< Whether to initiate the GATT exchange MTU procedure once a connection is established when
+                                                     link role is Peripheral.
+                                                     Write only. Size is 1 octet. Default value is 0 (disabled). */
+    GAP_PARAM_RANDOM_ADDR              = 0x224, /**< Random address. Write only. Size is 6 octets @ref GAP_BD_ADDR_LEN. */
+    GAP_PARAM_LATEST_CONN_BD_ADDR      = 0x226, /**< Latest remote connected Bluetooth device address. Read only. Size is 6 octets @ref GAP_BD_ADDR_LEN. */
+    GAP_PARAM_LATEST_CONN_BD_ADDR_TYPE = 0x227, /**< Latest remote connected Bluetooth device address type. Read only. Size is 1 octet.
+                                                     Value is @ref T_GAP_REMOTE_ADDR_TYPE. */
+    GAP_PARAM_HANDLE_CREATE_CONN_IND   = 0x228, /**< Whether to enable APP to handle create connection indication message when link role is Peripheral.
+                                                     Write only. Size is 1 octet. Default value is 0 (disabled). */
+    GAP_PARAM_DEFAULT_PHYS_PREFER      = 0x229, /**< Preferred values for the transmitter PHY and receiver PHY to be used for all connections over the LE transport.
+                                                     Write only. Size is 1 octet. Value is @ref GAP_PHYS_PREFER. Default value is @ref GAP_PHYS_PREFER_ALL. */
+    GAP_PARAM_DEFAULT_TX_PHYS_PREFER   = 0x22A, /**< The transmitter PHYs that the Host prefers the Controller to use. Write only. Size is 1 octet.
+                                                     Value is @ref GAP_PHYS_PREFER. Default value is @ref GAP_PHYS_PREFER_ALL. */
+    GAP_PARAM_DEFAULT_RX_PHYS_PREFER   = 0x22B, /**< The receiver PHYs that the Host prefers the Controller to use. Write only. Size is 1 octet.
+                                                     Value is @ref GAP_PHYS_PREFER. Default value is @ref GAP_PHYS_PREFER_ALL. */
+    GAP_PARAM_USE_EXTENDED_ADV         = 0x22C, /**< Whether to use LE Advertising Extensions. Write only. Size is 1 octet.
+                                                     Default value is 0 (disabled). */
+    GAP_PARAM_DEFAULT_DATA_LEN_MAX_TX_OCTETS = 0x22E, /**< The Host's suggested value for the Controller's maximum transmitted number of payload octets in LL Data PDUs.
+                                                           Write only. Size is 2 octets. Value range: 0x001B to 0x00FB. */
+    GAP_PARAM_DEFAULT_DATA_LEN_MAX_TX_TIME   = 0x22F, /**< The Host's suggested value for the Controller's maximum packet transmission time in microseconds for packets
+                                                           containing LL Data PDUs. Write only. Size is 2 octets. Value range: 0x0148 to 0x4290. Units: microsecond. */
 
-    GAP_PARAM_LOCAL_FEATURES           = 0x230, //!< Local supported features.
-    GAP_PARAM_DS_POOL_ID               = 0x231, //!< Downstream PoolID.  Read only.  size is uint16.
-    GAP_PARAM_DS_DATA_OFFSET           = 0x232, //!< Downstream pool buffer data offset.  Read only.  size is uint16.
-    GAP_PARAM_LE_REMAIN_CREDITS        = 0x233, //!< Remaining credits available for TX.  Read only.  size is uint16.
-    GAP_PARAM_MAX_WL_SIZE              = 0x234, //!< Max white list size.  Read only.  size is uint16.
-    GAP_PARAM_MIN_TX_POWER             = 0x235, //!< The minimum transmit powers supported by the Controller.
-    GAP_PARAM_MAX_TX_POWER             = 0x236, //!< The maximum transmit powers supported by the Controller.
-    GAP_PARAM_CIS_HOST_SUPPORT         = 0x237, //!< Host supports creating CISes.
-    GAP_PARAM_MASTER_INIT_GATT_MTU_REQ = 0x238, //!< Master initiates the GATT exchange MTU procedure. Write Only. Size is uint8. Default value is true.
-    GAP_PARAM_LE_CONN_PARAMS_REQ_PROC_INFO = 0x239, //!< Whether to send information about the LE Connection Parameters Request procedure to the APP. Write Only. Size is uint8. Default value is false. If the value is true, APP shall handle @ref LE_CONN_INFO_OPCODE_LE_REMOTE_CONNECTION_PARAMETER_REQUEST_IND.
+    GAP_PARAM_LOCAL_FEATURES           = 0x230, /**< Local supported features. Read only. Size is 8 octets @ref GAP_LE_SUPPORTED_FEATURES_LEN. */
+    GAP_PARAM_DS_POOL_ID               = 0x231, /**< Downstream Pool ID. Read only. Size is 2 octets. */
+    GAP_PARAM_DS_DATA_OFFSET           = 0x232, /**< Downstream pool buffer data offset. Read only. Size is 2 octets. */
+    GAP_PARAM_LE_REMAIN_CREDITS        = 0x233, /**< Remaining credits available for TX. Read only. Size is 1 octet. */
+    GAP_PARAM_MAX_WL_SIZE              = 0x234, /**< Maximum Filter Accept List size. Read only. Size is 1 octet. */
+    GAP_PARAM_MIN_TX_POWER             = 0x235, /**< The minimum transmit powers supported by the Controller. Read only. Size is 1 octet.
+                                                     Range: -127 to +20. Units: dBm. */
+    GAP_PARAM_MAX_TX_POWER             = 0x236, /**< The maximum transmit powers supported by the Controller. Read only. Size is 1 octet.
+                                                     Range: -127 to +20. Units: dBm. */
+    GAP_PARAM_CIS_HOST_SUPPORT         = 0x237, /**< Whether to use CIS of LE Isochronous Channels. Write only. Size is 1 octet.
+                                                     Default value is 0 (disabled). */
+    GAP_PARAM_MASTER_INIT_GATT_MTU_REQ = 0x238, /**< Whether to initiate the GATT exchange MTU procedure once a connection is established when
+                                                     link role is Central.
+                                                     Write only. Size is 1 octet. Default value is 1 (enabled). */
 } T_GAP_LE_PARAM_TYPE;
 
 /** End of GAP_LE_Exported_Types
@@ -86,19 +102,20 @@ typedef enum
  */
 
 /**
-  * @brief Callback for gap LE to notify APP.
+  * @brief Callback for GAP LE to notify APP.
   * @param[in] cb_type Callback msg type @ref GAP_LE_MSG_Types.
-  * @param[in] p_cb_data Point to callback data @ref T_LE_CB_DATA.
+  * @param[in] p_cb_data Pointer to callback data @ref T_LE_CB_DATA.
   * @return    Result.
   * @retval    result @ref T_APP_RESULT.
   */
 typedef T_APP_RESULT(*P_FUN_LE_APP_CB)(uint8_t cb_type, void *p_cb_data);
 
 /**
-  * @brief  Initialize parameters of GAP.
-  * @param[in] link_num Initialize link number.
-  * @retval true Success.
-  * @retval false Failed because of invalid parameter.
+ * @brief  Initialize parameters of GAP.
+ * @param[in] link_num Initialize link number.
+ * @return Operation result.
+ * @retval true    Operation success.
+ * @retval false   Operation failure.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -120,16 +137,15 @@ typedef T_APP_RESULT(*P_FUN_LE_APP_CB)(uint8_t cb_type, void *p_cb_data);
 bool        le_gap_init(uint8_t link_num);
 
 /**
-  * @brief  Set gap message inform way.
-  *
-  * Default value is true.
-  * 1. When use_msg is true, gap will send the gap message to io_queue registered by gap_start_bt_stack.
-  *    Message type is @ref GAP_MSG_TYPE.
-  * 2. When use_msg is false, gap will send the gap message using callback function registered by le_register_app_cb.
-  *    Message type is @ref GAP_MSG_LE_GAP_STATE_MSG.
-  *
-  * @param[in] use_msg Whether to use message.
-  * @return void.
+ * @brief  Set GAP message inform way.
+ *
+ * Default value is true.
+ * - When use_msg is true, GAP will send the GAP message to io_queue registered by gap_start_bt_stack.
+ *   Message type is @ref GAP_MSG_TYPE.
+ * - When use_msg is false, GAP will send the GAP message using callback function registered by le_register_app_cb.
+ *   Message type is @ref GAP_MSG_LE_GAP_STATE_MSG.
+ *
+ * @param[in] use_msg Whether to use message.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -159,8 +175,8 @@ bool        le_gap_init(uint8_t link_num);
 void        le_gap_msg_info_way(bool use_msg);
 
 /**
-  * @brief  Get max supported LE link count.
-  * @retval max_link_num Max supported LE link count.
+  * @brief  Get maximum supported LE link count.
+  * @retval max_link_num Maximum supported LE link count.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -175,8 +191,7 @@ uint8_t     le_get_max_link_num(void);
 
 /**
   * @brief  Register APP callback from GAP LE.
-  * @param[in]  app_callback callback.
-  * @return void.
+  * @param[in]  app_callback Callback function defined by APP.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -192,22 +207,18 @@ uint8_t     le_get_max_link_num(void);
 void        le_register_app_cb(P_FUN_LE_APP_CB app_callback);
 
 /**
-  * @brief  Set a GAP Common parameter.
+  * @brief  Set a GAP LE parameter.
   *
-  * This function can be called with a GAP Common Parameter ID and it will set the
-  *         GAP Parameter.  GAP Peripheral Parameters are defined in (gap.h).
-  *         If the "len" field sets to the size of a "uint16_t", the
-  *         "p_value" field must point to a data with type of "uint16_t".
+  * This function can be called with a GAP LE Parameter type @ref T_GAP_LE_PARAM_TYPE and it will set the GAP LE parameter.
+  * The 'p_value' field must point to an appropriate data type that meets the requirements for the corresponding parameter type.
+  * (For example: if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
   *
-  * @param[in]  param Profile parameter ID: @ref T_GAP_LE_PARAM_TYPE.
+  * @param[in]  param GAP LE parameter type @ref T_GAP_LE_PARAM_TYPE.
   * @param[in]  len Length of data to write.
-  * @param[in]  p_value Pointer to data to write.  This is dependent on
-  *                  the parameter ID and WILL be cast to the appropriate
-  *                  data type (For example: if data type param is uint16, p_value will be cast to
-  *                  pointer of uint16_t).
-  * @return Set result.
-  * @retval GAP_CAUSE_SUCCESS Set parameter success.
-  * @retval other Set parameter failed.
+  * @param[in]  p_value Pointer to data to write.
+  * @return Operation result.
+  * @retval GAP_CAUSE_SUCCESS    Operation success.
+  * @retval Others   Operation failure.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -215,7 +226,7 @@ void        le_register_app_cb(P_FUN_LE_APP_CB app_callback);
     {
         ...
         //device name and device appearance
-        uint8_t  device_name[GAP_DEVICE_NAME_LEN] = "BLE_PERIP";
+        uint8_t  device_name[GAP_DEVICE_NAME_LEN] = "BLE_PERIPHERAL";
         uint16_t appearance = GAP_GATT_APPEARANCE_UNKNOWN;
 
         //Set device name and device appearance
@@ -228,51 +239,48 @@ void        le_register_app_cb(P_FUN_LE_APP_CB app_callback);
 T_GAP_CAUSE le_set_gap_param(T_GAP_LE_PARAM_TYPE param, uint8_t len, void *p_value);
 
 /**
-  * @brief  Get a GAP Common parameter.
+  * @brief  Get a GAP LE parameter.
   *
-  * This function can be called with a GAP Common Parameter ID and it will get a
-  *         GAP Common Parameter.  GAP Common Parameters are defined in (gap.h).  Also, the
-  *         "p_value" field must point to a "uint16".
+  * This function can be called with a GAP LE Parameter type @ref T_GAP_LE_PARAM_TYPE and it will get the GAP LE parameter.
+  * The 'p_value' field must point to an appropriate data type that meets the requirements for the corresponding parameter type.
+  * (For example: if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
   *
-  * @param[in]  param Profile parameter ID: @ref T_GAP_LE_PARAM_TYPE.
-  * @param[in,out] p_value Pointer to location to get the parameter value.  This is dependent on
-  *                  the parameter ID and will be cast to the appropriate
-  *                  data type (For example: if data type of param is uint16_t, p_value will be cast to
- *                   pointer of uint16_t).
+  * @param[in]  param GAP LE parameter type @ref T_GAP_LE_PARAM_TYPE.
+  * @param[in,out] p_value Pointer to location to get the parameter value.
   *
-  * @return Get result.
-  * @retval GAP_CAUSE_SUCCESS Get parameter success.
-  * @retval other Get parameter failed.
+  * @return Operation result.
+  * @retval GAP_CAUSE_SUCCESS    Operation success.
+  * @retval Others   Operation failure.
   *
   * <b>Example usage</b>
   * \code{.c}
     void test(void)
     {
-        uint8_t  addr_type = GAP_REMOTE_ADDR_LE_PUBLIC;
-        uint8_t  addr[GAP_BD_ADDR_LEN] = {0};
+        uint8_t gap_link_credits;
 
-        //get connected device address and address type
-        le_get_gap_param(GAP_PARAM_LATEST_CONN_BD_ADDR_TYPE, &addr_type);
-        le_get_gap_param(GAP_PARAM_LATEST_CONN_BD_ADDR, &addr);
+        T_GAP_CAUSE cause = le_get_gap_param(GAP_PARAM_LE_REMAIN_CREDITS, &gap_link_credits);
     }
   * \endcode
   */
 T_GAP_CAUSE le_get_gap_param(T_GAP_LE_PARAM_TYPE param, void *p_value);
 
 /**
-  * @brief  Modify local white list.
+  * @brief  Modify local Filter Accept List.
   *
-  * @note This function can be called to add, remove, or clear the white list.
+  * If sending request operation is successful, the modifying result will be returned by callback
+  * registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_MODIFY_WHITE_LIST.
   *
-  * Applications can only call this API after the Bluetooth Host is ready. \n
-  *                Explanation: If the Bluetooth Host is ready, the application will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE
-  *                             with new_state about gap_init_state, which is configured as @ref GAP_INIT_STATE_STACK_READY.
+  * Applications can only call this API after the Bluetooth Host is ready.
   *
-  * @param[in] operation add, remove, or clear the white list, @ref T_GAP_WHITE_LIST_OP.
-  * @param[in] bd_addr Bluetooth Device Address.
-  * @param[in] bd_type Bluetooth Device Address type.
-  * @retval GAP_CAUSE_SUCCESS Operation success.
-  * @retval GAP_CAUSE_SEND_REQ_FAILED Operation failure.
+  * Explanation: If the Bluetooth Host is ready, the application will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE
+  * with new_state about gap_init_state, which is configured as @ref GAP_INIT_STATE_STACK_READY.
+  *
+  * @param[in] operation @ref T_GAP_WHITE_LIST_OP.
+  * @param[in] bd_addr Pointer to Bluetooth Device Address.
+  * @param[in] bd_type Bluetooth Device Address type. Value is @ref T_GAP_REMOTE_ADDR_TYPE.
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -307,10 +315,11 @@ T_GAP_CAUSE le_modify_white_list(T_GAP_WHITE_LIST_OP operation, uint8_t *bd_addr
 
 /**
   * @brief    Generate a local random address.
-  * @param[in] rand_addr_type Bluetooth Device Random Address type, @ref T_GAP_RAND_ADDR_TYPE.
-  * @param[in,out] random_bd pointer to Bluetooth Device Address.
-  * @retval GAP_CAUSE_SUCCESS Operation success.
-  * @retval GAP_CAUSE_SEND_REQ_FAILED Operation failure.
+  * @param[in] rand_addr_type Bluetooth Device Random Address type. Value is @ref T_GAP_RAND_ADDR_TYPE.
+  * @param[in,out] random_bd Pointer to Bluetooth Device Address.
+  * @return Operation result.
+  * @retval GAP_CAUSE_SUCCESS    Operation success.
+  * @retval Others   Operation failure.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -328,13 +337,18 @@ T_GAP_CAUSE le_gen_rand_addr(T_GAP_RAND_ADDR_TYPE rand_addr_type, uint8_t *rando
 /**
   * @brief    Set local random address.
   *
-  * Applications can only call this API after the Bluetooth Host is ready. \n
-  *                  Explanation: If the Bluetooth Host is ready, the application will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE
-  *                               with new_state about gap_init_state, which is configured as @ref GAP_INIT_STATE_STACK_READY.
+  * If sending request operation is successful, the setting result will be returned by callback
+  * registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_SET_RAND_ADDR.
   *
-  * @param[in] random_bd Bluetooth Device Address.
-  * @retval GAP_CAUSE_SUCCESS Operation success.
-  * @retval GAP_CAUSE_SEND_REQ_FAILED Operation failure.
+  * Applications can only call this API after the Bluetooth Host is ready.
+  *
+  * Explanation: If the Bluetooth Host is ready, the application will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE
+  * with new_state about gap_init_state, which is configured as @ref GAP_INIT_STATE_STACK_READY.
+  *
+  * @param[in] random_bd Pointer to local random address.
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -368,9 +382,10 @@ T_GAP_CAUSE le_set_rand_addr(uint8_t *random_bd);
   *
   * This function can be called before @ref gap_start_bt_stack is invoked.
   *
-  * @param[in] addr Bluetooth Device Address.
-  * @param[in] type Bluetooth Device Address type.
-  * @retval GAP_CAUSE_SUCCESS Operation success.
+  * @param[in] addr Pointer to local identity address.
+  * @param[in] type Local identity address type. Value is @ref T_GAP_IDENT_ADDR_TYPE.
+  * @return Operation result.
+  * @retval GAP_CAUSE_SUCCESS    Operation success.
   * @retval GAP_CAUSE_SEND_REQ_FAILED Operation failure.
   *
   * <b>Example usage</b>
@@ -388,14 +403,16 @@ T_GAP_CAUSE le_cfg_local_identity_address(uint8_t *addr, T_GAP_IDENT_ADDR_TYPE t
 /**
   * @brief   Set Host channel classification.
   *
-  * If the request to send the operation is successful, the setting result will be returned by the callback
-  *          registered by @ref le_register_app_cb with cb_type @ref GAP_MSG_LE_SET_HOST_CHANN_CLASSIF.
+  * If the request to send the operation is successful, the setting result will be returned by the callback function
+  *          registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_SET_HOST_CHANN_CLASSIF.
   *
-  * Applications can only call this API after the Bluetooth Host is ready. \n
-  *                 Explanation: If the Bluetooth Host is ready, the application will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE
-  *                              with new_state about gap_init_state, which is configured as @ref GAP_INIT_STATE_STACK_READY.
+  * Applications can only call this API after the Bluetooth Host is ready.
   *
-  * @param[in]   p_channel_map Size: 5 octets (37 bits meaningful).
+  * Explanation: If the Bluetooth Host is ready, the application will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE
+  * with new_state about gap_init_state, which is configured as @ref GAP_INIT_STATE_STACK_READY.
+  *
+  * @param[in]   p_channel_map Pointer to channel map.
+  *                            Size: 5 octets (37 bits meaningful).
   *                            This parameter contains 37 1-bit fields.
   *                            The nth such field (in the range 0 to 36) contains the value for the
   *                            Link Layer channel index n.
@@ -438,15 +455,22 @@ T_GAP_CAUSE le_set_host_chann_classif(uint8_t *p_channel_map);
   * @brief   Specify suggested values for the maximum transmission number of payload
              octets and maximum packet transmission time for new connections.
   *
-  * Applications can only call this API after the Bluetooth Host is ready. \n
-  *                 Explanation: If the Bluetooth Host is ready, the application will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE
-  *                              with new_state about gap_init_state, which is configured as @ref GAP_INIT_STATE_STACK_READY.
+  * If sending request operation is successful, the writing result will be returned by callback
+  * registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_WRITE_DEFAULT_DATA_LEN.
   *
-  * @param[in]   tx_octets maximum transmission number of payload octets, range: 0x001B-0x00FB.
-  * @param[in]   tx_time   maximum packet transmission time, range: 0x0148-0x4290.
+  * Applications can only call this API after the Bluetooth Host is ready.
   *
-  * @retval GAP_CAUSE_SUCCESS: Operation success.
-  * @retval GAP_CAUSE_SEND_REQ_FAILED: Operation failure.
+  * Explanation: If the Bluetooth Host is ready, the application will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE
+  * with new_state about gap_init_state, which is configured as @ref GAP_INIT_STATE_STACK_READY.
+  *
+  * @param[in]   tx_octets Maximum transmission number of payload octets.
+  *                        - Range: 0x001B-0x00FB.
+  * @param[in]   tx_time   Maximum packet transmission time in microseconds.
+  *                        - Range: 0x0148-0x4290.
+  *
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -479,11 +503,12 @@ T_GAP_CAUSE le_write_default_data_len(uint16_t tx_octets, uint16_t tx_time);
 /**
   * @brief   Check local supported features.
   *
-  * @param[in]   array_index supported features mask array index.
-  * @param[in]   feature_mask   supported features mask.
+  * @param[in]   array_index Supported features mask array index.
+  * @param[in]   feature_mask   Supported features mask.
   *
-  * @retval true: Operation success.
-  * @retval false: Operation failure.
+  * @return Operation result.
+  * @retval true  Operation success.
+  * @retval false Operation failure.
   *
   * <b>Example usage</b>
   * \code{.c}

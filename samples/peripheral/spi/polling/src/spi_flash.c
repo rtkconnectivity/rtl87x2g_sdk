@@ -13,7 +13,6 @@
 #include "spi_flash.h"
 #include "io_spi.h"
 #include "rtl_gpio.h"
-#include "trace.h"
 #include <string.h>
 
 

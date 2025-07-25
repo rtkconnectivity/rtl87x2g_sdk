@@ -38,7 +38,7 @@ extern "C" {
 /** @defgroup GATT_Client_Common_Exported_Macros GATT Client Exported Macros
   * @{
   */
-#define CLIENT_PROFILE_GENERAL_ID   0xff        //!< General Client ID used by application, when directly calls the APIs of profile client layer. Distinguish with other specific client module.
+#define CLIENT_PROFILE_GENERAL_ID   0xFF        //!< General Client ID used by application, when directly calls the APIs of profile client layer. Distinguish with other specific client module.
 
 /** End of GATT_Client_Common_Exported_Macros
 * @}
@@ -50,47 +50,47 @@ extern "C" {
   * @{
   */
 
-typedef uint8_t T_CLIENT_ID; //!< Client ID
+typedef uint8_t T_CLIENT_ID; //!< Client ID.
 
 /** @brief  Discovery state during discovery procedure.*/
 typedef enum
 {
-    DISC_STATE_IDLE,                    //!< Discovery state idle
-    DISC_STATE_SRV,                     //!< Discovery services
-    DISC_STATE_SRV_DONE,                //!< Discovery services done
-    DISC_STATE_RELATION,                //!< Discovery relation
-    DISC_STATE_RELATION_DONE,           //!< Discovery relation done
-    DISC_STATE_CHAR,                    //!< Discovery characteristics
-    DISC_STATE_CHAR_DONE,               //!< Discovery characteristics done
-    DISC_STATE_CHAR_UUID16_DONE,        //!< Discovery 16 bit UUID characteristics done
-    DISC_STATE_CHAR_UUID128_DONE,       //!< Discovery 128 bit UUID characteristics done
-    DISC_STATE_CHAR_DESCRIPTOR,         //!< Discovery characteristic descriptors
-    DISC_STATE_CHAR_DESCRIPTOR_DONE,    //!< Discovery characteristic descriptors done
-    DISC_STATE_FAILED                   //!< Discovery failed
+    DISC_STATE_IDLE,                    //!< Discovery state idle.
+    DISC_STATE_SRV,                     //!< Discovery services.
+    DISC_STATE_SRV_DONE,                //!< Discovery services done.
+    DISC_STATE_RELATION,                //!< Discovery relation.
+    DISC_STATE_RELATION_DONE,           //!< Discovery relation done.
+    DISC_STATE_CHAR,                    //!< Discovery characteristics.
+    DISC_STATE_CHAR_DONE,               //!< Discovery characteristics done.
+    DISC_STATE_CHAR_UUID16_DONE,        //!< Discovery 16 bit UUID characteristics done.
+    DISC_STATE_CHAR_UUID128_DONE,       //!< Discovery 128 bit UUID characteristics done.
+    DISC_STATE_CHAR_DESCRIPTOR,         //!< Discovery characteristic descriptors.
+    DISC_STATE_CHAR_DESCRIPTOR_DONE,    //!< Discovery characteristic descriptors done.
+    DISC_STATE_FAILED                   //!< Discovery failed.
 } T_DISCOVERY_STATE;
 
 /** @brief  Discovery result type*/
 typedef enum
 {
-    DISC_RESULT_ALL_SRV_UUID16,         //!< Discovery all 16 bit UUID services
-    DISC_RESULT_ALL_SRV_UUID128,        //!< Discovery all 128 bit UUID services
-    DISC_RESULT_SRV_DATA,               //!< Discovery service data
-    DISC_RESULT_CHAR_UUID16,            //!< Discovery 16 bit UUID characteristics
-    DISC_RESULT_CHAR_UUID128,           //!< Discovery 128 bit UUID characteristics
-    DISC_RESULT_CHAR_DESC_UUID16,       //!< Discovery 16 bit UUID characteristic descriptors
-    DISC_RESULT_CHAR_DESC_UUID128,      //!< Discovery 128 bit UUID characteristic descriptors
-    DISC_RESULT_RELATION_UUID16,        //!< Discovery 16 bit UUID relations
-    DISC_RESULT_RELATION_UUID128,       //!< Discovery 128 bit UUID relations
-    DISC_RESULT_BY_UUID16_CHAR,         //!< Discovery characteristics by 16 bit UUID
-    DISC_RESULT_BY_UUID128_CHAR,        //!< Discovery characteristics by 128 bit UUID
+    DISC_RESULT_ALL_SRV_UUID16,         //!< Discovery all 16 bit UUID services.
+    DISC_RESULT_ALL_SRV_UUID128,        //!< Discovery all 128 bit UUID services.
+    DISC_RESULT_SRV_DATA,               //!< Discovery service data.
+    DISC_RESULT_CHAR_UUID16,            //!< Discovery 16 bit UUID characteristics.
+    DISC_RESULT_CHAR_UUID128,           //!< Discovery 128 bit UUID characteristics.
+    DISC_RESULT_CHAR_DESC_UUID16,       //!< Discovery 16 bit UUID characteristic descriptors.
+    DISC_RESULT_CHAR_DESC_UUID128,      //!< Discovery 128 bit UUID characteristic descriptors.
+    DISC_RESULT_RELATION_UUID16,        //!< Discovery 16 bit UUID relations.
+    DISC_RESULT_RELATION_UUID128,       //!< Discovery 128 bit UUID relations.
+    DISC_RESULT_BY_UUID16_CHAR,         //!< Discovery characteristics by 16 bit UUID.
+    DISC_RESULT_BY_UUID128_CHAR,        //!< Discovery characteristics by 128 bit UUID.
 } T_DISCOVERY_RESULT_TYPE;
 
 /** @brief  GATT write type*/
 typedef enum
 {
-    GATT_WRITE_TYPE_REQ = 0x01,           /**<  ATT "Write Request".  */
-    GATT_WRITE_TYPE_CMD = 0x02,           /**<  ATT "Write Command".  */
-    GATT_WRITE_TYPE_SIGNED_CMD = 0x04     /**<  ATT "Signed Write Command".  */
+    GATT_WRITE_TYPE_REQ = 0x01,           /**<  ATT Write Request.  */
+    GATT_WRITE_TYPE_CMD = 0x02,           /**<  ATT Write Command.  */
+    GATT_WRITE_TYPE_SIGNED_CMD = 0x04     /**<  ATT Signed Write Command.  */
 } T_GATT_WRITE_TYPE;
 
 typedef struct
@@ -241,7 +241,7 @@ typedef union
     T_READ_MULTI_RESULT_CB_DATA  read_multi_result_data;
 } T_CLIENT_CB_DATA;
 
-/** @brief  The General Client Callback Data Struct.
+/** @brief  The general client callback data struct.
   *
   * Callback data sent to application directly from client, include type and content.
   */
@@ -266,7 +266,6 @@ typedef struct
  * @brief Initialize parameters of GATT client.
  *
  * @param[in] client_num  Set the number of clients that need to register.
- * @return void.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -282,11 +281,11 @@ void client_init(uint8_t client_num);
  * @brief Configure the client interface.
  *
  * @param[in] use_ext Whether to use the extension API. Default value is false.
- *                    @arg true Use the API in profile_client_ext.h.
- *                    @arg false Use the API in profile_client.h.
- * @return Configure result.
- * @retval true Success.
- * @retval false Failed.
+ *                    - true: Use the API in @ref GATT_CLIENT_EXT_API.
+ *                    - false: Use the API in @ref GATT_CLIENT_LEGACY_API.
+ * @return Operation result.
+ * @retval true    Operation success.
+ * @retval false   Operation failure.
  *
  * <b>Example usage</b>
  * \code{.c}

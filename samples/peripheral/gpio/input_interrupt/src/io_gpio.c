@@ -17,8 +17,6 @@
 #include "rtl_nvic.h"
 #include "rtl_gpio.h"
 #include "trace.h"
-#include "utils.h"
-
 #include "io_gpio.h"
 
 /* Private typedef -----------------------------------------------------------*/

@@ -28,7 +28,6 @@
 /* ADC Demo Mode*/
 #define ADC_DEMO_POLLING                    0
 #define ADC_DEMO_AVERAGE                    1
-#define ADC_DEMO_DIFFERENTIAL               2
 /*Change ADC Demo Mode Here!*/
 #define ADC_DEMO_MODE                       ADC_DEMO_POLLING
 
@@ -46,15 +45,8 @@
 */
 void board_adc_init(void)
 {
-#if (ADC_DEMO_MODE == ADC_DEMO_POLLING || ADC_DEMO_MODE == ADC_DEMO_AVERAGE)
-    Pad_Config(ADC_SAMPLE_PIN, PAD_SW_MODE, PAD_IS_PWRON, PAD_PULL_NONE, PAD_OUT_DISABLE,
+    Pad_Config(ADC_SAMPLE_PIN, PAD_SW_MODE, PAD_NOT_PWRON, PAD_PULL_NONE, PAD_OUT_DISABLE,
                PAD_OUT_LOW);
-#else
-    Pad_Config(ADC_SAMPLE_PIN_0, PAD_SW_MODE, PAD_IS_PWRON, PAD_PULL_NONE, PAD_OUT_DISABLE,
-               PAD_OUT_LOW);
-    Pad_Config(ADC_SAMPLE_PIN_1, PAD_SW_MODE, PAD_IS_PWRON, PAD_PULL_NONE, PAD_OUT_DISABLE,
-               PAD_OUT_LOW);
-#endif
 }
 
 /**
@@ -81,10 +73,6 @@ void driver_adc_init(void)
     ADC_InitStruct.ADC_DataAvgEn        = ENABLE;
     ADC_InitStruct.ADC_DataAvgSel       = ADC_DATA_AVERAGE_OF_4;
     ADC_InitStruct.ADC_Bitmap           = 0x01;
-#elif (ADC_DEMO_MODE == ADC_DEMO_DIFFERENTIAL)
-    ADC_InitStruct.ADC_SchIndex[0]      = EXT_DIFFERENTIAL(ADC_SAMPLE_CHANNEL_0);
-    ADC_InitStruct.ADC_SchIndex[1]      = EXT_DIFFERENTIAL(ADC_SAMPLE_CHANNEL_1);
-    ADC_InitStruct.ADC_Bitmap           = 0x03;
 #endif
 
     /* When this parameter is set to ENABLE: Power consumption will increase in this mode,
@@ -99,12 +87,7 @@ void driver_adc_init(void)
     DBG_DIRECT("[ADC]ADC sample mode is bypass mode !");
     /* High bypass resistance mode config, please notice that the input voltage of
       adc channel using high bypass mode should not be over 0.9V */
-#if (ADC_DEMO_MODE == ADC_DEMO_POLLING || ADC_DEMO_MODE == ADC_DEMO_AVERAGE)
     ADC_BypassCmd(ADC_SAMPLE_CHANNEL, ENABLE);
-#else
-    ADC_BypassCmd(ADC_SAMPLE_CHANNEL_0, ENABLE);
-    ADC_BypassCmd(ADC_SAMPLE_CHANNEL_1, ENABLE);
-#endif
 #else
     DBG_DIRECT("[ADC]ADC sample mode is divide mode !");
 #endif
@@ -195,31 +178,5 @@ void adc_sample_demo(void)
         DBG_DIRECT("[ADC] adc_sample_demo: ADC sample data_integer = %d, voltage = %dmV ",
                    sample_data_integer, (uint32_t)sample_voltage);
     }
-
-#elif (ADC_DEMO_MODE == ADC_DEMO_DIFFERENTIAL)
-    uint16_t sample_data[ADC_CHANNEL_NUM] = {0};
-
-    sample_data[0] = ADC_ReadRawData(ADC, 0);
-    sample_data[1] = ADC_ReadRawData(ADC, 1);
-
-    uint8_t sample_data_len = 0;
-    float sample_voltage[ADC_CHANNEL_NUM] = {0};
-
-    for (uint8_t i = 0; i < ADC_CHANNEL_NUM; i++)
-    {
-        sample_voltage[i] = ADC_GetVoltage(DIVIDE_DIFFERENTIAL_MODE, (int32_t)sample_data[i],
-                                           &error_status);
-        if (error_status < 0)
-        {
-            DBG_DIRECT("[io_adc]io_adc_voltage_calculate: ADC parameter or efuse data error! i = %d, error_status = %d",
-                       i, error_status);
-        }
-        else
-        {
-            DBG_DIRECT("[io_adc]io_adc_voltage_calculate: ADC rawdata_%d = %d, voltage_%d = %dmV ", i,
-                       sample_data[i], i, (int32_t)sample_voltage[i]);
-        }
-    }
-
 #endif
 }

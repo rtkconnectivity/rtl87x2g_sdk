@@ -52,19 +52,19 @@ extern "C" {
  */
 typedef enum
 {
-    LPC_CHANNEL_ADC0,
-    LPC_CHANNEL_ADC1,
-    LPC_CHANNEL_ADC2,
-    LPC_CHANNEL_ADC3,
-    LPC_CHANNEL_ADC4,
-    LPC_CHANNEL_ADC5,
-    LPC_CHANNEL_ADC6,
-    LPC_CHANNEL_ADC7,
-    LPC_CHANNEL_VBAT,
-    LPC_CHANNEL_MAX,
+    LPC_CHANNEL_ADC0,    //!< LPC channel is adc0.
+    LPC_CHANNEL_ADC1,    //!< LPC channel is adc1.
+    LPC_CHANNEL_ADC2,    //!< LPC channel is adc2.
+    LPC_CHANNEL_ADC3,    //!< LPC channel is adc3.
+    LPC_CHANNEL_ADC4,    //!< LPC channel is adc4.
+    LPC_CHANNEL_ADC5,    //!< LPC channel is adc5.
+    LPC_CHANNEL_ADC6,    //!< LPC channel is adc6.
+    LPC_CHANNEL_ADC7,    //!< LPC channel is adc7.
+    LPC_CHANNEL_VBAT,    //!< LPC channel is vbat.
+    LPC_CHANNEL_MAX,     //!< LPC channel maximum number.
 } LPCChannelSel_TypeDef;
 
-#define IS_LPC_CHANNEL(CHANNEL) (((CHANNEL) < LPC_CHANNEL_MAX))
+#define IS_LPC_CHANNEL(CHANNEL) (((CHANNEL) < LPC_CHANNEL_MAX)) //!< Specify the maximum LPC channel number.
 
 /** End of LPC_Channel
   * \}
@@ -77,12 +77,12 @@ typedef enum
  */
 typedef enum
 {
-    LPC_Vin_Below_Vth,
-    LPC_Vin_Over_Vth,
+    LPC_Vin_Below_Vth,    //!< The input voltage is below threshold voltage.
+    LPC_Vin_Over_Vth,     //!< The input voltage is over threshold voltage.
 } LPCEdge_TypeDef;
 
 #define IS_LPC_EDGE(EDGE) (((EDGE) == LPC_Vin_Below_Vth) || \
-                           ((EDGE) == LPC_Vin_Over_Vth))
+                           ((EDGE) == LPC_Vin_Over_Vth)) //!< Check if the input parameter is valid.
 
 /** End of LPC_Edge
   * \}
@@ -96,12 +96,12 @@ typedef enum
  */
 typedef enum
 {
-    LPC_DIVIDE_MODE,
-    LPC_BYPASS_MODE,
+    LPC_DIVIDE_MODE,   //!< LPC divide mode.
+    LPC_BYPASS_MODE,   //!< LPC bypass mode.
 } LPCMode_TypeDef;
 
 #define IS_LPC_MODE(MODE) (((MODE) == LPC_BYPASS_MODE) || \
-                           ((MODE) == LPC_DIVIDE_MODE))
+                           ((MODE) == LPC_DIVIDE_MODE)) //!< Check if the input parameter is valid.
 
 /** End of LPC_Mode
   * \}
@@ -114,12 +114,12 @@ typedef enum
  */
 typedef enum
 {
-    LPC_SINGLE_OUTPUT,
-    LPC_DUAL_OUTPUT,
+    LPC_SINGLE_OUTPUT,   //!< LPC single output.
+    LPC_DUAL_OUTPUT,     //!< LPC dual output.
 } LPCTriggerMode_TypeDef;
 
 #define IS_LPC_TRIGGER_MODE(MODE) (((MODE) == LPC_SINGLE_OUTPUT) || \
-                                   ((MODE) == LPC_DUAL_OUTPUT))
+                                   ((MODE) == LPC_DUAL_OUTPUT)) //!< Check if the input parameter is valid.
 
 /** End of LPC_Trigger_Mode
   * \}
@@ -128,20 +128,20 @@ typedef enum
 #endif
 
 /**
- * \defgroup    LPC_Debounce_Div LPC Debounce Div
+ * \defgroup    LPC_Debounce_Divider LPC Debounce Divider
  * \{
  * \ingroup     LPC_Exported_constants
  */
 typedef enum
 {
-    LPC_DEBOUNCE_DIV_1,
-    LPC_DEBOUNCE_DIV_2,
-    LPC_DEBOUNCE_DIV_4,
-    LPC_DEBOUNCE_DIV_8,
-    LPC_DEBOUNCE_DIV_16,
-    LPC_DEBOUNCE_DIV_32,
-    LPC_DEBOUNCE_DIV_40,
-    LPC_DEBOUNCE_DIV_64,
+    LPC_DEBOUNCE_DIV_1,     //!< The debounce divider is 1.
+    LPC_DEBOUNCE_DIV_2,     //!< The debounce divider is 2.
+    LPC_DEBOUNCE_DIV_4,     //!< The debounce divider is 4.
+    LPC_DEBOUNCE_DIV_8,     //!< The debounce divider is 8.
+    LPC_DEBOUNCE_DIV_16,    //!< The debounce divider is 16.
+    LPC_DEBOUNCE_DIV_32,    //!< The debounce divider is 32.
+    LPC_DEBOUNCE_DIV_40,    //!< The debounce divider is 40.
+    LPC_DEBOUNCE_DIV_64,    //!< The debounce divider is 64.
 } LPCDebDiv_TypeDef;
 
 #define IS_LPC_DEB_DIV(DIV) (((DIV) == LPC_DEBOUNCE_DIV_1) || \
@@ -151,28 +151,11 @@ typedef enum
                              ((DIV) == LPC_DEBOUNCE_DIV_16) || \
                              ((DIV) == LPC_DEBOUNCE_DIV_32) || \
                              ((DIV) == LPC_DEBOUNCE_DIV_40) || \
-                             ((DIV) == LPC_DEBOUNCE_DIV_64))
+                             ((DIV) == LPC_DEBOUNCE_DIV_64)) //!< Check if the input parameter is valid.
 
-/** End of LPC_Debounce_Div
+/** End of LPC_Debounce_Divider
   * \}
   */
-
-/**
- * \defgroup    LPC_Threshold LPC Threshold
- * \{
- * \ingroup     LPC_Exported_constants
- */
-typedef enum
-{
-    LPC_INPUT_RANGE
-} LPCThreshod_TypeDef;
-
-#define IS_LPC_THRESHOLD(THRESHOLD) ((THRESHOLD) < LPC_THRESHOLD_MAX)
-
-/** End of LPC_Threshold
-  * \}
-  */
-
 
 
 #if LPC_SUPPORT_RAP_MODE
@@ -237,20 +220,32 @@ typedef enum
  */
 typedef struct
 {
-    LPCChannelSel_TypeDef LPC_Channel;       /*!< Specifies the input pin.*/
-    LPCEdge_TypeDef LPC_Edge;                /*!< Specifies the comparator output edge. */
-    LPCThreshod_TypeDef
-    LPC_Threshold;       /*!< Specifies the threshold value of comparator voltage. */
+    LPCChannelSel_TypeDef LPC_Channel;       /*!< Specify the input LPC channel.
+                                                  This parameter can be a value of \ref LPC_Channel. */
+
+    LPCEdge_TypeDef LPC_Edge;                /*!< Specify the comparator output edge.
+                                                  This parameter can be a value of \ref LPC_Edge. */
+    LPCThreshold_TypeDef
+    LPC_Threshold;                           /*!< Specify the threshold value of comparator voltage.
+                                                  This parameter can be a value of \ref LPC_Threshold. */
 #if  LPC_SUPPORT_DEBOUNCE_MODE
-    FunctionalState LPC_DebouncEn;           /*!< Specifies the LPC Debounce. */
-    LPCDebDiv_TypeDef LPC_DebouncDiv;        /*!< Specifies the LPC Debounce Divider. */
-    uint32_t LPC_DebouncCnt;                 /*!< Set lpcomp debounce time debounce. debounce time=(LPC_CLK/(reg_lpcomp0_deb_cnt+1)). LPC_DebouncCnt <=255.*/
+    FunctionalState LPC_DebouncEn;           /*!< Specify the LPC Debounce.
+                                                  This parameter can be a value of DISABLE or ENABLE. */
+
+    LPCDebDiv_TypeDef LPC_DebouncDiv;        /*!< Specify the LPC Debounce Divider.
+                                                  This parameter can be a value of \ref LPC_Debounce_Divider. */
+
+    uint32_t LPC_DebouncCnt;                 /*!< Set lpcomp debounce time debounce. Debounce time=(LPC_CLK/(LPC_DebouncCnt+1)). The LPC_CLK for the LPC is typically 32k.
+                                                  This parameter can be a value of 0 ~ 255. */
 #endif
 #if  LPC_SUPPORT_TRIGER_MODE
-    LPCMode_TypeDef LPC_Mode;                /*!< Specifies the LPC mode.*/
-    uint8_t LPC_ThresholdL;                  /*!< Specifies the threshold value of comparator voltage. */
-    LPCTriggerMode_TypeDef LPC_TrigerMode;   /*!< Specifies the LPC0 triger mode.
-                                                  This parameter can be a value of \ref LPC Trigger Mode. */
+    LPCMode_TypeDef LPC_Mode;                /*!< Specify the LPC mode.
+                                                  This parameter can be a value of \ref LPC_Mode. */
+
+    uint8_t LPC_ThresholdL;                  /*!< Specify the threshold value of comparator voltage. */
+
+    LPCTriggerMode_TypeDef LPC_TrigerMode;   /*!< Specify the LPC0 triger mode.
+                                                  This parameter can be a value of \ref LPC_Trigger_Mode. */
 #endif
 } LPC_InitTypeDef;
 
@@ -271,12 +266,12 @@ typedef struct
  * \{
  * \ingroup     LPC_Exported_Constants
  */
-#define LPC_FLAG_LPCOMP                     (BIT0)
-#define LPC_FLAG_LPCOMP_AON                 (BIT1)
+#define LPC_FLAG_LPCOMP                     (BIT0)     //!< Voltage detection interrupt flag.
+#define LPC_FLAG_LPCOMP_AON                 (BIT1)     //!< Wakeup voltage detection interrupt flag.
 
 #define IS_LPC_FLAG(FLAG) (((FLAG) == LPC_FLAG_LPCOMP_AON) || \
-                           ((FLAG) == LPC_FLAG_LPCOMP))
-#define IS_LPC_CLEAR_FLAG(FLAG) ((FLAG) == LPC_FLAG_LPCOMP)
+                           ((FLAG) == LPC_FLAG_LPCOMP))     //!< Check if the input parameter is valid.
+#define IS_LPC_CLEAR_FLAG(FLAG) ((FLAG) == LPC_FLAG_LPCOMP) //!< Check if the input parameter is valid.
 
 /** End of LPC_Flags_Definition
   * \}
@@ -295,19 +290,18 @@ typedef struct
   */
 
 /**
-  * \brief  Reset LPC.
-  * \param[in] LPCx: Select the LPC peripheral. \ref LPC_Declaration
-  * \return None
-  */
+ * \brief  Reset LPC.
+ *
+ * \param[in] LPCx  Select the LPC peripheral. Refer to \ref LPC_Declaration.
+ */
 void LPC_DeInit(LPC_TypeDef *LPCx);
 
 /**
- * \brief   Initializes LPC peripheral according to
+ * \brief   Initialize LPC peripheral according to
  *          the specified parameters in LPC_InitStruct.
- * \param[in] LPCx: Select the LPC peripheral. \ref LPC_Declaration
- * \param[in] LPC_InitStruct: Pointer to a LPC_InitTypeDef structure that contains
- *                            the configuration information for the specified LPC peripheral.
- * \return None.
+ *
+ * \param[in] LPCx            Select the LPC peripheral. Refer to \ref LPC_Declaration.
+ * \param[in] LPC_InitStruct  Pointer to a LPC_InitTypeDef structure which will be initialized.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -338,10 +332,20 @@ void LPC_DeInit(LPC_TypeDef *LPCx);
 void LPC_Init(LPC_TypeDef *LPCx, LPC_InitTypeDef *LPC_InitStruct);
 
 /**
- * \brief  Fills each LPC_InitStruct member with its default value.
- * \param[in]  LPCx: Select the LPC peripheral. \ref LPC_Declaration
- * \param[in]  LPC_InitStruct : Pointer to a LPC_InitTypeDef structure which will be initialized.
- * \return None.
+ * \brief  Fill each LPC_InitStruct member with its default value.
+ *
+ * \note The default settings for the LPC_InitStruct member are shown in the following table:
+ *       | LPC_InitStruct member        | Default value                        |
+ *       |:----------------------------:|:------------------------------------:|
+ *       | LPC_Channel                  | \ref LPC_CHANNEL_ADC0                |
+ *       | LPC_Edge                     | \ref LPC_Vin_Below_Vth               |
+ *       | LPC_DebouncEn                | DISABLE                              |
+ *       | LPC_DebouncDiv               | \ref LPC_DEBOUNCE_DIV_1              |
+ *       | LPC_DebouncCnt               | 0                                    |
+ *       | LPC_Threshold                | \ref LPC_2000_mV                     |
+ *
+ * \param[in]  LPCx            Select the LPC peripheral. Refer to \ref LPC_Declaration.
+ * \param[in]  LPC_InitStruct  Pointer to a LPC_InitTypeDef structure which will be initialized.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -362,10 +366,12 @@ void LPC_StructInit(LPC_InitTypeDef *LPC_InitStruct);
 
 /**
  * \brief  Enable or disable LPC peripheral.
- * \param[in]  LPCx: Select the LPC peripheral. \ref LPC_Declaration
- * \param[in]  NewState: New state of LPC peripheral.
- *      This parameter can be: ENABLE or DISABLE.
- * \return None.
+ *
+ * \param[in]  LPCx      Select the LPC peripheral. Refer to \ref LPC_Declaration.
+ * \param[in]  NewState  New state of LPC peripheral.
+ *                       This parameter can be one of the following values:
+ *                       - ENABLE: Enable LPC voltage detect.
+ *                       - DISABLE: Disable LPC voltage detect.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -387,14 +393,16 @@ void LPC_Cmd(LPC_TypeDef *LPCx, FunctionalState NewState);
 
 /**
  * \brief  Enable or disable the specified LPC interrupts.
- * \param[in]  LPCx: Select the LPC peripheral. \ref LPC_Declaration
- * \param[in] LPC_INT: Specifies the LPC interrupt source to be enabled or disabled.
- *      This parameter can be one of the following values:
- *      \arg LPC_INT_LPCOMP: voltage detection interrupt.
- *      \arg LPC_INT_LPCOMP_AON: wakeup voltage detection interrupt.
- * \param[in]  NewState: New state of the specified LPC interrupt.
- *      This parameter can be: ENABLE or DISABLE.
- * \return None.
+ *
+ * \param[in] LPCx      Select the LPC peripheral. Refer to \ref LPC_Declaration.
+ * \param[in] LPC_INT   Specify the LPC interrupt source to be enabled or disabled.
+ *                      This parameter can be one of the following values:
+ *                      \arg LPC_INT_LPCOMP: Voltage detection interrupt.
+ *                      \arg LPC_INT_LPCOMP_AON: Wakeup voltage detection interrupt.
+ * \param[in] NewState  New state of the specified LPC interrupt.
+ *                      This parameter can be one of the following values:
+ *                      - ENABLE: Enable the LPC interrupt.
+ *                      - DISABLE: Disable the LPC interrupt.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -425,11 +433,13 @@ void LPC_Cmd(LPC_TypeDef *LPCx, FunctionalState NewState);
 void LPC_INTConfig(LPC_TypeDef *LPCx, uint32_t LPC_INT, FunctionalState NewState);
 
 /**
- * \brief     Enable wakeup signal to power sequence.
- * \param[in] LPCx: Select the LPC peripheral. \ref LPC_Declaration
- * \param[in] NewState: Enable or disable LPC wakeup signal to power sequence.
- *            This parameter can be: ENABLE or DISABLE..
- * \return    None.
+ * \brief     Enable or disable wakeup signal to power sequence.
+ *
+ * \param[in] LPCx      Select the LPC peripheral. Refer to \ref LPC_Declaration.
+ * \param[in] NewState  New state of the specified LPC wakeup interrupt.
+ *                      This parameter can be one of the following values:
+ *                      - ENABLE: Enable LPC wakeup signal to power sequence.
+ *                      - DISABLE: Disable LPC wakeup signal to power sequence.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -460,83 +470,62 @@ void LPC_INTConfig(LPC_TypeDef *LPCx, uint32_t LPC_INT, FunctionalState NewState
 void LPC_WKCmd(LPC_TypeDef *LPCx, FunctionalState NewState);
 
 /**
-  * \brief  Checks whether the specified LPC interrupt is set or not.
-  * \param[in] LPCx: Select the LPC peripheral. \ref LPC_Declaration
-  * \param  LPC_FLAG: specifies the LPC interrupt to check.
-  *     This parameter can be one of the following values:
-  *     \arg LPC_INT_LPCOMP: voltage detection interrupt.
-  *     \arg LPC_INT_LPCOMP_AON: wakeup voltage detection interrupt.
-  * \return The new state of SPI_IT (SET or RESET).
-  */
+ * \brief  Get the specified LPC interrupt flag status.
+ *
+ * \param[in] LPCx      Select the LPC peripheral. Refer to \ref LPC_Declaration.
+ * \param[in] LPC_FLAG  Specify the LPC interrupt flags.
+ *                      This parameter can be one of the following values:
+ *                      \arg LPC_FLAG_LPCOMP: Voltage detection interrupt flag.
+ *                      \arg LPC_FLAG_LPCOMP_AON: Wakeup voltage detection interrupt flag.
+ *
+ * \return  The status of \ref LPC_Flags_Definition.
+ *          - SET: The LPC flag has been set.
+ *          - RESET: The LPC flag has been reset.
+ *
+ * <b>Example usage</b>
+ * \code{.c}
+ *
+ * if (LPC_GetFlagStatus(LPC0, LPC_FLAG_LPCOMP_AON) == SET)
+ * {
+ *     DBG_DIRECT("LPC AON");
+ * }
+ * \endcode
+ */
 FlagStatus LPC_GetFlagStatus(LPC_TypeDef *LPCx, uint32_t LPC_FLAG);
 
 /**
-  * \brief  Clear the specified LPC flag.
-  * \param[in] LPCx: Select the LPC peripheral. \ref LPC_Declaration
-  * \param  LPC_FLAG: specifies the LPC flag to clear.
-  *   This parameter can be one of the following values:
-  *     \arg LPC_FLAG_LPCOMP: LPC NVIC flag.
-  * \return None
-  */
+ * \brief  Clear the specified LPC flag.
+ *
+ * \param[in] LPCx      Select the LPC peripheral. Refer to \ref LPC_Declaration.
+ * \param[in] LPC_FLAG  Specify the LPC flag.
+ *                      This parameter can be one of the following values:
+ *                      - LPC_FLAG_LPCOMP: LPC counter comparator interrupt flag.
+ *
+ * <b>Example usage</b>
+ * \code{.c}
+ *
+ * if (LPC_GetFlagStatus(LPC0, LPC_FLAG_LPCOMP) == SET)
+ * {
+ *     LPC_ClearFlag(LPC0, LPC_FLAG_LPCOMP);
+ * }
+ * \endcode
+ */
 void LPC_ClearFlag(LPC_TypeDef *LPCx, uint32_t LPC_FLAG);
 
 /**
- * \brief  Checks whether the specified LPC interrupt is set or not.
- * \param[in] LPCx: Select the LPC peripheral. \ref LPC_Declaration
- * \param[in]  LPC_INT: specifies the LPC interrupt to check.
- *   This parameter can be one of the following values:
- *     \arg LPC_INT_LPCOMP: voltage detection interrupt.
- *     \arg LPC_INT_LPCOMP_AON: wakeup voltage detection interrupt(for RTL8772F).
- * \return  The new state of SPI_IT (SET or RESET).
+ * \brief  Get the specified LPC interrupt status.
+ *
+ * \param[in] LPCx     Select the LPC peripheral. Refer to \ref LPC_Declaration.
+ * \param[in] LPC_INT  Specify the LPC interrupts.
+ *                     This parameter can be one of the following values:
+ *                     \arg LPC_INT_LPCOMP: voltage detection interrupt.
+ *
+ * \return  The status of LPC interrupt.
+ *          - SET: The LPC interrupt status has been set.
+ *          - RESET: The LPC interrupt status has been reset.
  *
  */
 ITStatus LPC_GetINTStatus(LPC_TypeDef *LPCx, uint32_t LPC_INT);
-
-/**
- * \brief  Configure LPCOMP counter's comparator value.
- * \param[in] LPCx: Select the LPC peripheral. \ref LPC_Declaration
- * \param[in]  data: LPCOMP counter's comparator value, which can be 0 to 0xfff.
- * \return None.
- *
- */
-void LPC_WriteComparator(LPC_TypeDef *LPCx, uint32_t data);
-
-
-/**
- * \brief  Read LPCOMP comparator value.
- *
- * \param[in] LPCx: Select the LPC peripheral. \ref LPC_Declaration
- * \return  LPCOMP comparator value.
- */
-uint16_t LPC_ReadComparator(LPC_TypeDef *LPCx);
-
-
-/**
- * \brief  Read LPC counter value.
- * \param[in] LPCx: Select the LPC peripheral. \ref LPC_Declaration
- * \return  LPCOMP comparator value.
- *
- */
-uint16_t LPC_ReadCounter(LPC_TypeDef *LPCx);
-
-
-/**
-  * @brief Reset the LPC counter.
-  * \param  LPCx: Select the LPC peripheral. \ref LPC_Declaration
-  */
-void LPC_CounterReset(LPC_TypeDef *LPCx);
-
-/**
-  * @brief Start or stop the LPC counter.
-  * \param  LPCx: Select the LPC peripheral. \ref LPC_Declaration
-  * @param  NewState: new state of the LPC counter.
-  *   This parameter can be one of the following values:
-  *     @arg ENABLE: Start LPCOMP counter.
-  *     @arg DISABLE: Stop LPCOMP counter.
-  * @retval None
-  */
-void LPC_CounterCmd(LPC_TypeDef *LPCx, FunctionalState NewState);
-
 
 #if LPC_SUPPORT_RAP_MODE
 

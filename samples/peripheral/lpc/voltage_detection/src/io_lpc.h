@@ -36,6 +36,8 @@
 
 #define LPC_VOLTAGE_DETECT_EDGE         LPC_Vin_Over_Vth
 
+#define LPC_TEST_PIN                    P2_2
+
 /* Private function prototypes -----------------------------------------------*/
 
 /* Private functions ---------------------------------------------------------*/

@@ -79,7 +79,7 @@ typedef struct
   * \{
   */
 
-#define AON_WDT            ((AON_WDT_TypeDef *) AON_WDT_REG_BASE)
+#define AON_WDT            ((AON_WDT_TypeDef *) AON_WDT_REG_BASE) //!< AON_WDT base address.
 
 /** End of AON_WDT_Declaration
   * \}

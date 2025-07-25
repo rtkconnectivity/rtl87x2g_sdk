@@ -4,15 +4,14 @@
 #include <stdbool.h>
 #include "usb_spec20.h"
 
-/** \defgroup USB_DEV_Driver USB Dev Driver
+/** \addtogroup USB_DEV_Driver
   * \brief USB device driver.
   * @{
   */
+
 /**
- * \addtogroup USB_DEV_Driver
+ * \defgroup USB_Dev_Driver_Usage_Chapter_Vendor How to Use Vendor Callback
  * @{
- *
- * \section USB_Dev_Driver_Usage_Chapter_Vendor How to Use Vendor Callback
  *
  * \details The vendor callback will notify the information to the upper application.
  *
@@ -36,16 +35,15 @@
  *          .set = demo_set_vendor,
  *      };
  *      usb_dev_driver_vendor_cbs_register(&demo_cbs);
+
  *\endcode
  * @}
  */
-/**
- * \addtogroup USB_DEV_Driver
- * @{
- *
- * \section USB_DEV_Driver_Definitions Definitions
- *
-*/
+
+/** @defgroup USB_DEV_Driver_Exported_Types USB Device Driver Exported Types
+  * @{
+  */
+
 /**
  * usb_dev_driver.h
  *
@@ -76,6 +74,13 @@ typedef struct _string_tab
     T_STRING *strings;
 } T_STRING_TAB;
 
+/** End of group USB_DEV_Driver_Exported_Types
+  * @}
+  */
+
+/** @defgroup USB_DEV_Driver_Exported_Functions USB Device Driver Exported Functions
+  * @{
+  */
 
 /**
  *
@@ -89,11 +94,20 @@ typedef bool (*USB_SPD_CB)(uint8_t);
  *
  * \brief   register USB speed callback.
  *
- * \param USB speed callbac \ref USB_SPD_CB.
+ * \param USB_SPD_CB speed callbac \ref USB_SPD_CB.
  *
  */
 void usb_spd_cb_register(USB_SPD_CB cb);
 
+/**
+ * usb_dev_driver.h
+ *
+ * \brief  Register the USB device descriptor.
+ *
+ * \param desc The device descriptor.
+ *
+ */
+void usb_dev_driver_dev_desc_register(T_USB_DEVICE_DESC *desc);
 /**
  * usb_dev_driver.h
  *
@@ -136,7 +150,7 @@ void usb_dev_driver_string_desc_unregister(T_STRING_TAB *string_tbl[]);
  */
 void usb_dev_driver_cfg_desc_unregister(T_USB_CONFIG_DESC *desc);
 
-
+/** @} */ /* End of group USB_DEV_Driver_Exported_Functions */
 /** @}*/
 /** End of USB_DEV_Driver
 */

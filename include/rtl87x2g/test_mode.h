@@ -21,7 +21,7 @@ extern "C" {
 #endif
 
 /** @defgroup TEST_MODE_API  Test Mode
-  * @brief test mode APIs
+  * @brief Test mode APIs
   * @{
   */
 
@@ -33,44 +33,35 @@ extern "C" {
   * @{
   */
 /**
-  * @brief  check whether mcu should be single tone test mode or not
-  * @retval true means mcu is in single tone test mode now
-  * @retval false means mcu is not in single tone test mode now
+  * @brief  Check whether MCU should be single tone test mode or not.
+  * @retval true if the MCU is in single tone test mode, false otherwise.
   */
 extern bool (*is_single_tone_test_mode)(void);
 
 /**
-  * @brief  switch to single tone test mode
-  * @param  none
-  * @return none
+  * @brief  Switch to single tone test mode.
   */
 extern void (*switch_into_single_tone_test_mode)(void);
 
 /**
-  * @brief  reset single tone test mode
-  * @param  none
-  * @return none
+  * @brief  Reset single tone test mode.
   */
 extern void (*reset_single_tone_test_mode)(void);
 
 /**
-  * @brief  set hci mode flag
-  * @param  true means enable, flase means disable
-  * @retval none
+  * @brief  Set HCI mode flag.
+  * @param[in]  enable   true means enable, false means disable.
   */
 extern void (*set_hci_mode_flag)(bool enable);
 
 /**
-  * @brief  check whether mcu should be hci mode or not
-  * @retval true means mcu is in hci mode now
-  * @retval false means mcu is not in hci mode now
+  * @brief  Check whether MCU should be hci mode or not.
+  * @retval true if the MCU is in HCI mode, false otherwise.
   */
 bool check_hci_mode_flag(void);
 
 /**
-  * @brief  switch to hci mode
-  * @param  none
-  * @return none
+  * @brief  Switch to HCI mode.
   */
 extern void (*switch_into_hci_mode)(void);
 

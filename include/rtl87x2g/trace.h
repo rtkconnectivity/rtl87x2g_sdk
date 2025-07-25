@@ -3,7 +3,7 @@
 *               Copyright (c) 2017, Realtek Semiconductor Corporation. All rights reserved.
 ************************************************************************************************************
 * @file     trace.h
-* @brief    for log print
+* @brief    For log print
 * @author   arthur_pan
 * @date     2024-11
 * @version  v1.0
@@ -23,26 +23,33 @@ extern "C" {
 
 
 /**
- * \defgroup    TRACE       Trace
- *
- * \brief       Defines debug trace macros for each module.
- *
- */
+  * @defgroup    TRACE       Trace
+  * @brief       Defines debug trace macros for each module.
+  * @{
+  */
 
-
+/*============================================================================*
+ *                              Macros
+ *============================================================================*/
+/** @defgroup TRACE_Exported_Macros Trace Exported Constants
+  * @{
+  */
+/**
+ * \cond INTERNAL
+*/
 /* Log Section Definition */
 #define TRACE_DATA __attribute__((section(".TRACE"))) __attribute__((aligned(4))) __attribute__((used))
+/**
+ * \endcond
+*/
 
 /**
- * trace.h
  *
  * \name    TRACE_LEVEL
  * \brief   Log Level Definition.
  * \anchor  TRACE_LEVEL
  */
-/**
- * \ingroup TRACE
- */
+
 /**@{*/
 #define LEVEL_OFF       (-1)
 #define LEVEL_ERROR     (0)
@@ -51,6 +58,9 @@ extern "C" {
 #define LEVEL_TRACE     (3)
 #define LEVEL_NUM       (4)
 /**@}*/
+/**
+ * \cond INTERNAL
+*/
 
 /*
  * DBG_LEVEL is used to control the log printed by DBG_BUFFER(), DBG_INDEX() and DBG_TEXT().
@@ -61,7 +71,9 @@ extern "C" {
  * LEVEL_TRACE : Print ERROR, WARN, INFO, TRACE
  */
 #define DBG_LEVEL               LEVEL_TRACE
-
+/**
+ * \endcond
+*/
 /* Log type definition */
 typedef enum
 {
@@ -105,10 +117,14 @@ typedef enum
 
     /* type 220~251 reserved for Bee1 platform debug buffer */
 } T_LOG_TYPE;
-
+/**
+ * \cond INTERNAL
+*/
 /* Log type current ic used */
 #define LOG_TYPE                (TYPE_BEE4)
-
+/**
+ * \endcond
+*/
 
 /* Log subtype definition */
 typedef enum
@@ -135,15 +151,12 @@ typedef enum
 } T_LOG_SUBTYPE;
 
 /**
- * trace.h
  *
  * \name    MODULE_ID
  * \brief   Module ID definition.
  * \anchor  MODULE_ID
  */
-/**
- * \ingroup TRACE
- */
+
 /**@{*/
 typedef enum
 {
@@ -205,6 +218,9 @@ typedef enum
     MODULE_NUM                      = 64
 } T_MODULE_ID;
 /**@}*/
+/**
+ * \cond INTERNAL
+*/
 #define LOWERSTACK_LOGBUFFER_SIGNATURE      249
 #define NEW_LOWERSTACK_LOGBUFFER_SIGNATURE  252
 
@@ -218,17 +234,16 @@ typedef enum
 #define GET_MODULE(info)                (uint8_t)((info) >> 8)
 #define GET_LEVEL(info)                 (uint8_t)((info) >> 0)
 #define GET_MODULE_LOWSTACK(str_index)  (uint8_t)((str_index) >> 16)
-
 /**
- * trace.h
+ * \endcond
+*/
+/**
  *
  * \name    MODULE_BITMAP
  * \brief   Module bitmap definition.
  * \anchor  MODULE_BITMAP
  */
-/**
- * \ingroup TRACE
- */
+
 /**@{*/
 #define MODULE_BIT_PATCH            ((uint64_t)1 << MODULE_PATCH     )
 #define MODULE_BIT_OS               ((uint64_t)1 << MODULE_OS        )
@@ -281,13 +296,21 @@ typedef enum
 #define MODULE_BIT_LOWERSTACK       ((uint64_t)1 << MODULE_LOWERSTACK)
 #define MODULE_BIT_UPPERSTACK       ((uint64_t)1 << MODULE_UPPERSTACK)
 /**@}*/
+/**
+ * \cond INTERNAL
+*/
 #define LOG_BINARY_MASK             BIT0
 #define LOG_ASCII_MASK              BIT1
 
 #define LOG_OUTPUT_UART_MASK        BIT0
 #define LOG_OUTPUT_FLASH_MASK       BIT1
 #define LOG_OUTPUT_VENDOR_MASK      BIT2
-
+/**
+ * \endcond
+*/
+/**
+ * \cond INTERNAL
+*/
 void fill_log_data(uint8_t *l_msg, uint32_t info);
 /* Internal function that is used by internal macro DBG_DIRECT. */
 extern void (*log_direct)(uint32_t info, const char *fmt, ...);
@@ -413,19 +436,26 @@ const char *trace_binary(uint32_t info, uint16_t length, uint8_t *p_data);
 #define DBG_TEXT_COMBINE_LEVEL_TRACE(module, submodule, fmt, ...)
 #endif
 
-#define DBG_BUFFER(type, sub_type, module, level, fmt, param_num,...)   \
-    DBG_BUFFER_##level(type, sub_type, module, fmt, param_num, ##__VA_ARGS__)
-
 #define DBG_INDEX(type, sub_type, module, level, fmt, param_num,...)   \
     DBG_INDEX_##level(type, sub_type, module, fmt, param_num, ##__VA_ARGS__)
 
 #define DBG_TEXT(module, level, fmt, ...)   \
     DBG_TEXT_##level(module, fmt, ##__VA_ARGS__)
+/**
+ * \endcond
+*/
+
+#define DBG_BUFFER(type, sub_type, module, level, fmt, param_num,...)   \
+    DBG_BUFFER_##level(type, sub_type, module, fmt, param_num, ##__VA_ARGS__)
 
 #define DBG_DIRECT(...)     do {\
         log_direct(COMBINE_TRACE_INFO(LOG_TYPE, SUBTYPE_DIRECT, 0, 0), __VA_ARGS__);\
     } while (0)
 
+
+/**
+ * \cond INTERNAL
+*/
 #define DIRECT_LOG(fmt, param_num,...)     do {\
         DBG_BUFFER_INTERNAL(LOG_TYPE, SUBTYPE_FORMAT, MODULE_BOOT, LEVEL_ERROR, fmt, param_num, ##__VA_ARGS__);\
     } while (0)
@@ -447,128 +477,109 @@ const char *trace_binary(uint32_t info, uint16_t length, uint8_t *p_data);
 #define DBG_SNOOP(type, sub_type, module, level, length, snoop)    do {\
         log_snoop(COMBINE_TRACE_INFO(type, sub_type, module, level), length, snoop);\
     } while (0)
+/**
+ * \endcond
+*/
+/** End of TRACE_Exported_Macros
+    * @}
+    */
 
 
+/** @defgroup TRACE_Exported_Functions Trace Exported Functions
+  * @{
+  */
+
+/**
+ * \brief    Write log data directly by uart.
+ * \param[in]   data  Point to the data buffer.
+ * \param[in]   len   The data length to transfer trough log uart.
+ */
 void LogUartTxData(uint8_t *data, uint32_t len);
 
 /**
- * trace.h
- *
  * \brief    Initialize module trace mask.
- *
  * \param[in]   mask    Module trace mask array. Set NULL to load default mask array.
- *
- * \return      None.
- *
- * \ingroup  TRACE
  */
 void log_module_trace_init(uint64_t mask[LEVEL_NUM]);
 
 /**
- * trace.h
- *
  * \brief    Enable/Disable the module ID's trace.
- *
  * \param[in]   module_id   The specific module ID defined in \ref MODULE_ID.
- *
  * \param[in]   trace_level The trace level of the module ID defined in \ref TRACE_LEVEL.
- *
  * \param[in]   set         Enable or disable the module ID's trace.
  * \arg \c true     Enable the module ID's trace.
  * \arg \c false    Disable the module ID's trace.
- *
  * \return           The status of setting module ID's trace.
  * \retval true      Module ID's trace was set successfully.
- * \retval false     Module ID's trace failed to set.
- *
- * \ingroup  TRACE
+ * \retval false     Module ID's trace was failed to set.
  */
 extern bool log_module_trace_set(T_MODULE_ID module_id, uint8_t trace_level, bool set);
 
 /**
- * trace.h
- *
  * \brief    Enable/Disable module bitmap's trace.
- *
  * \param[in]   module_bitmap   The module bitmap defined in \ref MODULE_BITMAP.
- *
  * \param[in]   trace_level     The trace level of the module bitmap defined in \ref TRACE_LEVEL.
- *
  * \param[in]   set             Enable or disable the module bitmap's trace.
  * \arg \c true     Enable the module bitmap's trace.
  * \arg \c false    Disable the module bitmap's trace.
- *
  * \return           The status of setting module bitmap's trace.
  * \retval true      Module bitmap's trace was set successfully.
- * \retval false     Module bitmap's trace failed to set.
- *
- * \ingroup  TRACE
+ * \retval false     Module bitmap's trace was failed to set.
  */
 bool log_module_bitmap_trace_set(uint64_t module_bitmap, uint8_t trace_level, bool set);
 
 /**
- * trace.h
- *
  * \brief    Get system timestamp.
- *
- * \param       None.
- *
  * \return      System timestamp value in milliseconds.
- *
- * \ingroup  TRACE
  */
 extern uint32_t (*sys_timestamp_get)(void);
-extern uint32_t (*log_timestamp_get)(void);
+
 /**
- * trace.h
- *
+ * \brief    Get log timestamp.
+ * \return      log timestamp value in milliseconds.
+ */
+extern uint32_t (*log_timestamp_get)(void);
+
+/**
  * \brief    Register log destination callback function.
- *
  * \param[in]   dest    Indicates where the callback is registered in.
  * \arg \c LOG_OUTPUT_FLASH_MASK    Register callback for log to flash.
  * \arg \c LOG_OUTPUT_VENDOR_MASK   Register callback for vendor specific use.
- *
  * \param[in]   func    The callback function to register.
- *
- * \return      None.
  */
 void register_log_dest_cb(uint8_t dest, void *func);
 
+/** End of TRACE_Exported_Functions
+  * @}
+  */
+
+/** @defgroup TRACE_Exported_Macros Trace Exported Macros
+  * @{
+  */
+
 /**
- * trace.h
  *
  * \name    AUXILIARY_PRINT_BDADDR
  * \brief   Auxiliary Interface that is used to print BD address.
  * \anchor  AUXILIARY_PRINT_BDADDR
  */
-/**
- * \ingroup TRACE
- */
 #define TRACE_BDADDR(bd_addr)   \
     trace_string(COMBINE_TRACE_INFO(LOG_TYPE, SUBTYPE_BDADDR, 0, 0), 0, (char *)(bd_addr))
 
 /**
- * trace.h
  *
  * \name    AUXILIARY_PRINT_STRING
  * \brief   Auxiliary Interface that is used to print string.
  * \anchor  AUXILIARY_PRINT_STRING
  */
-/**
- * \ingroup TRACE
- */
 #define TRACE_STRING(data)    \
     trace_string(COMBINE_TRACE_INFO(LOG_TYPE, SUBTYPE_STRING, 0, 0), 0, (char *)(data))
 
 /**
- * trace.h
  *
  * \name    AUXILIARY_PRINT_BINARY
  * \brief   Auxiliary Interface that is used to print binary string.
  * \anchor  AUXILIARY_PRINT_BINARY
- */
-/**
- * \ingroup TRACE
  */
 /**@{*/
 #define TRACE_BINARY(length, data)  \
@@ -1728,185 +1739,10 @@ void register_log_dest_cb(uint8_t dest, void *func);
     DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_PROFILE, LEVEL_TRACE, fmt, 8, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
 
 /**
- * trace.h
- *
- * \name    SHM_PRINT_TRACE
- * \brief   SHM Trace Interfaces.
- * \anchor  SHM_PRINT_TRACE
- */
-/**
- * \ingroup TRACE
- */
-/**@{*/
-#define SHM_PRINT_ERROR0(fmt)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_ERROR, "!!!"fmt, 0)
-#define SHM_PRINT_ERROR1(fmt, arg0)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_ERROR, "!!!"fmt, 1, arg0)
-#define SHM_PRINT_ERROR2(fmt, arg0, arg1)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_ERROR, "!!!"fmt, 2, arg0, arg1)
-#define SHM_PRINT_ERROR3(fmt, arg0, arg1, arg2)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_ERROR, "!!!"fmt, 3, arg0, arg1, arg2)
-#define SHM_PRINT_ERROR4(fmt, arg0, arg1, arg2, arg3)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_ERROR, "!!!"fmt, 4, arg0, arg1, arg2, arg3)
-#define SHM_PRINT_ERROR5(fmt, arg0, arg1, arg2, arg3, arg4)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_ERROR, "!!!"fmt, 5, arg0, arg1, arg2, arg3, arg4)
-#define SHM_PRINT_ERROR6(fmt, arg0, arg1, arg2, arg3, arg4, arg5)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_ERROR, "!!!"fmt, 6, arg0, arg1, arg2, arg3, arg4, arg5)
-#define SHM_PRINT_ERROR7(fmt, arg0, arg1, arg2, arg3, arg4, arg5, arg6)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_ERROR, "!!!"fmt, 7, arg0, arg1, arg2, arg3, arg4, arg5, arg6)
-#define SHM_PRINT_ERROR8(fmt, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_ERROR, "!!!"fmt, 8, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
-#define SHM_PRINT_WARN0(fmt)     \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_WARN, "!!*"fmt, 0)
-#define SHM_PRINT_WARN1(fmt, arg0)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_WARN, "!!*"fmt, 1, arg0)
-#define SHM_PRINT_WARN2(fmt, arg0, arg1)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_WARN, "!!*"fmt, 2, arg0, arg1)
-#define SHM_PRINT_WARN3(fmt, arg0, arg1, arg2)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_WARN, "!!*"fmt, 3, arg0, arg1, arg2)
-#define SHM_PRINT_WARN4(fmt, arg0, arg1, arg2, arg3)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_WARN, "!!*"fmt, 4, arg0, arg1, arg2, arg3)
-#define SHM_PRINT_WARN5(fmt, arg0, arg1, arg2, arg3, arg4)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_WARN, "!!*"fmt, 5, arg0, arg1, arg2, arg3, arg4)
-#define SHM_PRINT_WARN6(fmt, arg0, arg1, arg2, arg3, arg4, arg5)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_WARN, "!!*"fmt, 6, arg0, arg1, arg2, arg3, arg4, arg5)
-#define SHM_PRINT_WARN7(fmt, arg0, arg1, arg2, arg3, arg4, arg5, arg6)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_WARN, "!!*"fmt, 7, arg0, arg1, arg2, arg3, arg4, arg5, arg6)
-#define SHM_PRINT_WARN8(fmt, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_WARN, "!!*"fmt, 8, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
-#define SHM_PRINT_INFO0(fmt)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_INFO, "!**"fmt, 0)
-#define SHM_PRINT_INFO1(fmt, arg0)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_INFO, "!**"fmt, 1, arg0)
-#define SHM_PRINT_INFO2(fmt, arg0, arg1)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_INFO, "!**"fmt, 2, arg0, arg1)
-#define SHM_PRINT_INFO3(fmt, arg0, arg1, arg2)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_INFO, "!**"fmt, 3, arg0, arg1, arg2)
-#define SHM_PRINT_INFO4(fmt, arg0, arg1, arg2, arg3)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_INFO, "!**"fmt, 4, arg0, arg1, arg2, arg3)
-#define SHM_PRINT_INFO5(fmt, arg0, arg1, arg2, arg3, arg4)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_INFO, "!**"fmt, 5, arg0, arg1, arg2, arg3, arg4)
-#define SHM_PRINT_INFO6(fmt, arg0, arg1, arg2, arg3, arg4, arg5)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_INFO, "!**"fmt, 6, arg0, arg1, arg2, arg3, arg4, arg5)
-#define SHM_PRINT_INFO7(fmt, arg0, arg1, arg2, arg3, arg4, arg5, arg6)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_INFO, "!**"fmt, 7, arg0, arg1, arg2, arg3, arg4, arg5, arg6)
-#define SHM_PRINT_INFO8(fmt, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_INFO, "!**"fmt, 8, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
-#define SHM_PRINT_TRACE0(fmt)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_TRACE, fmt, 0)
-#define SHM_PRINT_TRACE1(fmt, arg0)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_TRACE, fmt, 1, arg0)
-#define SHM_PRINT_TRACE2(fmt, arg0, arg1)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_TRACE, fmt, 2, arg0, arg1)
-#define SHM_PRINT_TRACE3(fmt, arg0, arg1, arg2)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_TRACE, fmt, 3, arg0, arg1, arg2)
-#define SHM_PRINT_TRACE4(fmt, arg0, arg1, arg2, arg3)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_TRACE, fmt, 4, arg0, arg1, arg2, arg3)
-#define SHM_PRINT_TRACE5(fmt, arg0, arg1, arg2, arg3, arg4)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_TRACE, fmt, 5, arg0, arg1, arg2, arg3, arg4)
-#define SHM_PRINT_TRACE6(fmt, arg0, arg1, arg2, arg3, arg4, arg5)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_TRACE, fmt, 6, arg0, arg1, arg2, arg3, arg4, arg5)
-#define SHM_PRINT_TRACE7(fmt, arg0, arg1, arg2, arg3, arg4, arg5, arg6)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_TRACE, fmt, 7, arg0, arg1, arg2, arg3, arg4, arg5, arg6)
-#define SHM_PRINT_TRACE8(fmt, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SHM, LEVEL_TRACE, fmt, 8, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
-/**@}*/
-
-/**
- * trace.h
- *
- * \name    LOADER_PRINT_TRACE
- * \brief   BINLOADER Trace Interfaces.
- * \anchor  BINLOADER_PRINT_TRACE
- */
-/**
- * \ingroup TRACE
- */
-/**@{*/
-#define LOADER_PRINT_ERROR0(fmt)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_ERROR, "!!!"fmt, 0)
-#define LOADER_PRINT_ERROR1(fmt, arg0)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_ERROR, "!!!"fmt, 1, arg0)
-#define LOADER_PRINT_ERROR2(fmt, arg0, arg1)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_ERROR, "!!!"fmt, 2, arg0, arg1)
-#define LOADER_PRINT_ERROR3(fmt, arg0, arg1, arg2)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_ERROR, "!!!"fmt, 3, arg0, arg1, arg2)
-#define LOADER_PRINT_ERROR4(fmt, arg0, arg1, arg2, arg3)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_ERROR, "!!!"fmt, 4, arg0, arg1, arg2, arg3)
-#define LOADER_PRINT_ERROR5(fmt, arg0, arg1, arg2, arg3, arg4)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_ERROR, "!!!"fmt, 5, arg0, arg1, arg2, arg3, arg4)
-#define LOADER_PRINT_ERROR6(fmt, arg0, arg1, arg2, arg3, arg4, arg5)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_ERROR, "!!!"fmt, 6, arg0, arg1, arg2, arg3, arg4, arg5)
-#define LOADER_PRINT_ERROR7(fmt, arg0, arg1, arg2, arg3, arg4, arg5, arg6)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_ERROR, "!!!"fmt, 7, arg0, arg1, arg2, arg3, arg4, arg5, arg6)
-#define LOADER_PRINT_ERROR8(fmt, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_ERROR, "!!!"fmt, 8, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
-#define LOADER_PRINT_WARN0(fmt)     \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_WARN, "!!*"fmt, 0)
-#define LOADER_PRINT_WARN1(fmt, arg0)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_WARN, "!!*"fmt, 1, arg0)
-#define LOADER_PRINT_WARN2(fmt, arg0, arg1)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_WARN, "!!*"fmt, 2, arg0, arg1)
-#define LOADER_PRINT_WARN3(fmt, arg0, arg1, arg2)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_WARN, "!!*"fmt, 3, arg0, arg1, arg2)
-#define LOADER_PRINT_WARN4(fmt, arg0, arg1, arg2, arg3)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_WARN, "!!*"fmt, 4, arg0, arg1, arg2, arg3)
-#define LOADER_PRINT_WARN5(fmt, arg0, arg1, arg2, arg3, arg4)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_WARN, "!!*"fmt, 5, arg0, arg1, arg2, arg3, arg4)
-#define LOADER_PRINT_WARN6(fmt, arg0, arg1, arg2, arg3, arg4, arg5)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_WARN, "!!*"fmt, 6, arg0, arg1, arg2, arg3, arg4, arg5)
-#define LOADER_PRINT_WARN7(fmt, arg0, arg1, arg2, arg3, arg4, arg5, arg6)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_WARN, "!!*"fmt, 7, arg0, arg1, arg2, arg3, arg4, arg5, arg6)
-#define LOADER_PRINT_WARN8(fmt, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_WARN, "!!*"fmt, 8, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
-#define LOADER_PRINT_INFO0(fmt)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_INFO, "!**"fmt, 0)
-#define LOADER_PRINT_INFO1(fmt, arg0)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_INFO, "!**"fmt, 1, arg0)
-#define LOADER_PRINT_INFO2(fmt, arg0, arg1)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_INFO, "!**"fmt, 2, arg0, arg1)
-#define LOADER_PRINT_INFO3(fmt, arg0, arg1, arg2)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_INFO, "!**"fmt, 3, arg0, arg1, arg2)
-#define LOADER_PRINT_INFO4(fmt, arg0, arg1, arg2, arg3)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_INFO, "!**"fmt, 4, arg0, arg1, arg2, arg3)
-#define LOADER_PRINT_INFO5(fmt, arg0, arg1, arg2, arg3, arg4)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_INFO, "!**"fmt, 5, arg0, arg1, arg2, arg3, arg4)
-#define LOADER_PRINT_INFO6(fmt, arg0, arg1, arg2, arg3, arg4, arg5)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_INFO, "!**"fmt, 6, arg0, arg1, arg2, arg3, arg4, arg5)
-#define LOADER_PRINT_INFO7(fmt, arg0, arg1, arg2, arg3, arg4, arg5, arg6)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_INFO, "!**"fmt, 7, arg0, arg1, arg2, arg3, arg4, arg5, arg6)
-#define LOADER_PRINT_INFO8(fmt, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_INFO, "!**"fmt, 8, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
-#define LOADER_PRINT_TRACE0(fmt)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_TRACE, fmt, 0)
-#define LOADER_PRINT_TRACE1(fmt, arg0)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_TRACE, fmt, 1, arg0)
-#define LOADER_PRINT_TRACE2(fmt, arg0, arg1)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_TRACE, fmt, 2, arg0, arg1)
-#define LOADER_PRINT_TRACE3(fmt, arg0, arg1, arg2)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_TRACE, fmt, 3, arg0, arg1, arg2)
-#define LOADER_PRINT_TRACE4(fmt, arg0, arg1, arg2, arg3)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_TRACE, fmt, 4, arg0, arg1, arg2, arg3)
-#define LOADER_PRINT_TRACE5(fmt, arg0, arg1, arg2, arg3, arg4)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_TRACE, fmt, 5, arg0, arg1, arg2, arg3, arg4)
-#define LOADER_PRINT_TRACE6(fmt, arg0, arg1, arg2, arg3, arg4, arg5)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_TRACE, fmt, 6, arg0, arg1, arg2, arg3, arg4, arg5)
-#define LOADER_PRINT_TRACE7(fmt, arg0, arg1, arg2, arg3, arg4, arg5, arg6)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_TRACE, fmt, 7, arg0, arg1, arg2, arg3, arg4, arg5, arg6)
-#define LOADER_PRINT_TRACE8(fmt, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_LOADER, LEVEL_TRACE, fmt, 8, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
-/**@}*/
-
-
-/**
- * trace.h
  *
  * \name    THREAD_PRINT_TRACE
  * \brief   THREAD Trace Interfaces.
  * \anchor  THREAD_PRINT_TRACE
- */
-/**
- * \ingroup TRACE
  */
 /**@{*/
 #define THREAD_PRINT_ERROR0(fmt)   \
@@ -1985,14 +1821,10 @@ void register_log_dest_cb(uint8_t dest, void *func);
 
 
 /**
- * trace.h
  *
  * \name    MATTER_PRINT_TRACE
  * \brief   MATTER Trace Interfaces.
  * \anchor  MATTER_PRINT_TRACE
- */
-/**
- * \ingroup TRACE
  */
 /**@{*/
 #define MATTER_PRINT_ERROR0(fmt)   \
@@ -2071,14 +1903,10 @@ void register_log_dest_cb(uint8_t dest, void *func);
 
 
 /**
- * trace.h
  *
  * \name    ZIGBEE_PRINT_TRACE
  * \brief   ZIGBEE Trace Interfaces.
  * \anchor  ZIGBEE_PRINT_TRACE
- */
-/**
- * \ingroup TRACE
  */
 /**@{*/
 #define ZIGBEE_PRINT_ERROR0(fmt)   \
@@ -2157,14 +1985,10 @@ void register_log_dest_cb(uint8_t dest, void *func);
 
 
 /**
- * trace.h
  *
  * \name    APP_PRINT_TRACE
  * \brief   Bluetooth APP Trace Interfaces.
  * \anchor  APP_PRINT_TRACE
- */
-/**
- * \ingroup TRACE
  */
 /**@{*/
 #define APP_PRINT_ERROR0(fmt)   \
@@ -2243,14 +2067,10 @@ void register_log_dest_cb(uint8_t dest, void *func);
 
 
 /**
- * trace.h
  *
  * \name    CONSOLE_PRINT_TRACE
  * \brief   Console Trace Interfaces.
  * \anchor  CONSOLE_PRINT_TRACE
- */
-/**
- * \ingroup TRACE
  */
 /**@{*/
 #define CONSOLE_PRINT_ERROR0(fmt)   \
@@ -2327,90 +2147,6 @@ void register_log_dest_cb(uint8_t dest, void *func);
     DBG_BUFFER(LOG_TYPE, SUBTYPE_TEXT, MODULE_CONSOLE, LEVEL_TRACE, fmt, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
 /**@}*/
 
-/**
- * trace.h
- *
- * \name    ENGAGE_PRINT_TRACE
- * \brief   Engage Trace Interfaces.
- * \anchor  ENGAGE_PRINT_TRACE
- */
-/**
- * \ingroup TRACE
- */
-/**@{*/
-#define ENGAGE_PRINT_ERROR0(fmt)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_ERROR, "!!!"fmt, 0)
-#define ENGAGE_PRINT_ERROR1(fmt, arg0)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_ERROR, "!!!"fmt, 1, arg0)
-#define ENGAGE_PRINT_ERROR2(fmt, arg0, arg1)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_ERROR, "!!!"fmt, 2, arg0, arg1)
-#define ENGAGE_PRINT_ERROR3(fmt, arg0, arg1, arg2)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_ERROR, "!!!"fmt, 3, arg0, arg1, arg2)
-#define ENGAGE_PRINT_ERROR4(fmt, arg0, arg1, arg2, arg3)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_ERROR, "!!!"fmt, 4, arg0, arg1, arg2, arg3)
-#define ENGAGE_PRINT_ERROR5(fmt, arg0, arg1, arg2, arg3, arg4)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_ERROR, "!!!"fmt, 5, arg0, arg1, arg2, arg3, arg4)
-#define ENGAGE_PRINT_ERROR6(fmt, arg0, arg1, arg2, arg3, arg4, arg5)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_ERROR, "!!!"fmt, 6, arg0, arg1, arg2, arg3, arg4, arg5)
-#define ENGAGE_PRINT_ERROR7(fmt, arg0, arg1, arg2, arg3, arg4, arg5, arg6)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_ERROR, "!!!"fmt, 7, arg0, arg1, arg2, arg3, arg4, arg5, arg6)
-#define ENGAGE_PRINT_ERROR8(fmt, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_ERROR, "!!!"fmt, 8, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
-#define ENGAGE_PRINT_WARN0(fmt)     \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_WARN, "!!*"fmt, 0)
-#define ENGAGE_PRINT_WARN1(fmt, arg0)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_WARN, "!!*"fmt, 1, arg0)
-#define ENGAGE_PRINT_WARN2(fmt, arg0, arg1)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_WARN, "!!*"fmt, 2, arg0, arg1)
-#define ENGAGE_PRINT_WARN3(fmt, arg0, arg1, arg2)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_WARN, "!!*"fmt, 3, arg0, arg1, arg2)
-#define ENGAGE_PRINT_WARN4(fmt, arg0, arg1, arg2, arg3)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_WARN, "!!*"fmt, 4, arg0, arg1, arg2, arg3)
-#define ENGAGE_PRINT_WARN5(fmt, arg0, arg1, arg2, arg3, arg4)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_WARN, "!!*"fmt, 5, arg0, arg1, arg2, arg3, arg4)
-#define ENGAGE_PRINT_WARN6(fmt, arg0, arg1, arg2, arg3, arg4, arg5)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_WARN, "!!*"fmt, 6, arg0, arg1, arg2, arg3, arg4, arg5)
-#define ENGAGE_PRINT_WARN7(fmt, arg0, arg1, arg2, arg3, arg4, arg5, arg6)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_WARN, "!!*"fmt, 7, arg0, arg1, arg2, arg3, arg4, arg5, arg6)
-#define ENGAGE_PRINT_WARN8(fmt, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_WARN, "!!*"fmt, 8, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
-#define ENGAGE_PRINT_INFO0(fmt)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_INFO, "!**"fmt, 0)
-#define ENGAGE_PRINT_INFO1(fmt, arg0)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_INFO, "!**"fmt, 1, arg0)
-#define ENGAGE_PRINT_INFO2(fmt, arg0, arg1)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_INFO, "!**"fmt, 2, arg0, arg1)
-#define ENGAGE_PRINT_INFO3(fmt, arg0, arg1, arg2)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_INFO, "!**"fmt, 3, arg0, arg1, arg2)
-#define ENGAGE_PRINT_INFO4(fmt, arg0, arg1, arg2, arg3)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_INFO, "!**"fmt, 4, arg0, arg1, arg2, arg3)
-#define ENGAGE_PRINT_INFO5(fmt, arg0, arg1, arg2, arg3, arg4)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_INFO, "!**"fmt, 5, arg0, arg1, arg2, arg3, arg4)
-#define ENGAGE_PRINT_INFO6(fmt, arg0, arg1, arg2, arg3, arg4, arg5)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_INFO, "!**"fmt, 6, arg0, arg1, arg2, arg3, arg4, arg5)
-#define ENGAGE_PRINT_INFO7(fmt, arg0, arg1, arg2, arg3, arg4, arg5, arg6)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_INFO, "!**"fmt, 7, arg0, arg1, arg2, arg3, arg4, arg5, arg6)
-#define ENGAGE_PRINT_INFO8(fmt, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_INFO, "!**"fmt, 8, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
-#define ENGAGE_PRINT_TRACE0(fmt)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_TRACE, fmt, 0)
-#define ENGAGE_PRINT_TRACE1(fmt, arg0)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_TRACE, fmt, 1, arg0)
-#define ENGAGE_PRINT_TRACE2(fmt, arg0, arg1)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_TRACE, fmt, 2, arg0, arg1)
-#define ENGAGE_PRINT_TRACE3(fmt, arg0, arg1, arg2)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_TRACE, fmt, 3, arg0, arg1, arg2)
-#define ENGAGE_PRINT_TRACE4(fmt, arg0, arg1, arg2, arg3)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_TRACE, fmt, 4, arg0, arg1, arg2, arg3)
-#define ENGAGE_PRINT_TRACE5(fmt, arg0, arg1, arg2, arg3, arg4)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_TRACE, fmt, 5, arg0, arg1, arg2, arg3, arg4)
-#define ENGAGE_PRINT_TRACE6(fmt, arg0, arg1, arg2, arg3, arg4, arg5)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_TRACE, fmt, 6, arg0, arg1, arg2, arg3, arg4, arg5)
-#define ENGAGE_PRINT_TRACE7(fmt, arg0, arg1, arg2, arg3, arg4, arg5, arg6)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_TRACE, fmt, 7, arg0, arg1, arg2, arg3, arg4, arg5, arg6)
-#define ENGAGE_PRINT_TRACE8(fmt, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)   \
-    DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_ENGAGE, LEVEL_TRACE, fmt, 8, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
-/**@}*/
 
 /* AES Trace Interfaces */
 #define AES_PRINT_ERROR0(fmt)   \
@@ -2827,7 +2563,7 @@ void register_log_dest_cb(uint8_t dest, void *func);
     DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_DFU, LEVEL_TRACE, fmt, 8, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
 
 
-/* Bluetooth FLASH/CACHE Trace Interfaces */
+/* FLASH Trace Interfaces */
 #define FLASH_PRINT_ERROR0(fmt)   \
     DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_FLASH, LEVEL_ERROR, "!!!"fmt, 0)
 #define FLASH_PRINT_ERROR1(fmt, arg0)   \
@@ -3939,9 +3675,18 @@ void register_log_dest_cb(uint8_t dest, void *func);
 #define SDIO_PRINT_TRACE8(fmt, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)   \
     DBG_BUFFER(LOG_TYPE, SUBTYPE_FORMAT, MODULE_SDIO, LEVEL_TRACE, fmt, 8, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
 
+
 /*Fixed time stamp after out DLPS*/
 extern void (*timestamp_enter_dlps_cb)(void);
 extern void (*timestamp_exit_dlps_cb)(void);
+
+/** End of TRACE_Exported_Macros
+  * @}
+  */
+
+/** End of TRACE
+  * @}
+  */
 
 #ifdef __cplusplus
 }

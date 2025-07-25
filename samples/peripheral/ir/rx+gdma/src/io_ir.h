@@ -32,8 +32,14 @@ extern "C" {
 
 #define IR_RX_PIN                               P2_5
 #define IR_RX_FIFO_THR_LEVEL                    30
-#define IR_DATA_SIZE_MAX                        68
+#define IR_DATA_SIZE_MAX                        80
 #define IO_TEST_GDMA_TRANSFER_SIZE              IR_DATA_SIZE_MAX
+
+#define PWM_OUT_PIN                             P2_6//Used for IR sampling output, for debug
+#define PWM_OUT_PINMUX                          TIMER_PWM5
+#define PWM_TIMER_NUM                           TIM5
+#define PWM_HIGH_COUNT                          (20000 - 1)
+#define PWM_LOW_COUNT                           (20000 - 1)
 
 #define IO_TEST_GDMA_CHANNEL_MUM                1
 

@@ -21,13 +21,15 @@
 /* Private typedef -----------------------------------------------------------*/
 
 /* Private define ------------------------------------------------------------*/
-#define PWM_OUT_P_PIN        P0_0
-#define PWM_PINMUX_OUT_P     ENPWM0_P
-#define PWM_OUT_N_PIN        P0_1
-#define PWM_PINMUX_OUT_N     ENPWM0_N
+#define PWM_OUT_P_PIN                     P0_0
+#define PWM_PINMUX_OUT_P                  ENPWM0_P
+#define PWM_OUT_N_PIN                     P0_1
+#define PWM_PINMUX_OUT_N                  ENPWM0_N
 
-#define Enhance_Timer_Num              0
-#define Enhance_Timer                  ENH_TIM0
+#define Enhance_Timer_Num                 0
+#define Enhance_Timer                     ENH_TIM0
+
+#define PWM_MAXCNT                        100     /*< Setting this macro to 100 means the PWM period is 100 * 25ns. */
 
 /* Gloables define -----------------------------------------------------------*/
 #define Enhance_Timer_GDMA_CH_NUM      GDMA_CH_NUM0
@@ -70,7 +72,7 @@ void enhance_timer_init(void)
     ENHTIM_InitStruct.ENHTIM_Mode               = ENHTIM_MODE_PWM_AUTO;
     ENHTIM_InitStruct.ENHTIM_PWMOutputEn        = ENABLE;
     ENHTIM_InitStruct.ENHTIM_PWMStartPolarity   = ENHTIM_PWM_START_WITH_HIGH;
-    ENHTIM_InitStruct.ENHTIM_MaxCount           = 100;
+    ENHTIM_InitStruct.ENHTIM_MaxCount           = PWM_MAXCNT;
 
     ENHTIM_InitStruct.ENHTIM_PWMDeadZoneClockSource = ENHTIM_PWM_DZCLKSRCE_32K;
     ENHTIM_InitStruct.ENHTIM_PWMDeadZoneEn = ENABLE;

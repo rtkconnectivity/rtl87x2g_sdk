@@ -111,8 +111,8 @@ void driver_i2c_master_init(void)
     I2C_InitStruct.I2C_Ack           = ENABLE;
     I2C_InitStruct.I2C_RxDmaEn       = ENABLE;
     I2C_InitStruct.I2C_TxDmaEn       = ENABLE;
-    I2C_InitStruct.I2C_RxWaterlevel  = 3;
-    I2C_InitStruct.I2C_TxWaterlevel  = 22;
+    I2C_InitStruct.I2C_RxWaterlevel  = 1;
+    I2C_InitStruct.I2C_TxWaterlevel  = 23;
     I2C_Init(I2C0, &I2C_InitStruct);
 
     I2C_Cmd(I2C0, ENABLE);
@@ -137,7 +137,7 @@ void driver_i2c_slave_init(void)
     I2C_InitStruct.I2C_SlaveAddress  = 0x50;
     I2C_InitStruct.I2C_Ack           = ENABLE;
     I2C_InitStruct.I2C_TxDmaEn       = ENABLE;
-    I2C_InitStruct.I2C_TxWaterlevel  = 16;
+    I2C_InitStruct.I2C_TxWaterlevel  = 20;
     I2C_Init(I2C1, &I2C_InitStruct);
 
     NVIC_InitTypeDef NVIC_InitStruct;

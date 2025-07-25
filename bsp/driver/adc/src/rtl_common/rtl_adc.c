@@ -227,10 +227,10 @@ void ADC_Cmd(ADC_TypeDef *ADCx, ADCOperationMode_TypeDef AdcMode, FunctionalStat
     assert_param(IS_ADC_MODE(adcMode));
 
     ADC_DIG_CTRL_TypeDef adc_0x04 = {.d32 = ADCx->ADC_DIG_CTRL};
-    ADC_POW_DATA_DLY_CTRL_TypeDef adc_0x50 = {.d32 = ADCx->ADC_POW_DATA_DLY_CTRL};
     if (NewState == ENABLE)
     {
 #if ADC_SUPPORT_POWER_MODE_CTRL
+        ADC_POW_DATA_DLY_CTRL_TypeDef adc_0x50 = {.d32 = ADCx->ADC_POW_DATA_DLY_CTRL};
         if (adc_0x50.b.adc_manual_poweron  == ADC_POWER_ON_MANUAL)
         {
             ADC_ManualModePowerOn();
@@ -250,6 +250,7 @@ void ADC_Cmd(ADC_TypeDef *ADCx, ADCOperationMode_TypeDef AdcMode, FunctionalStat
     else
     {
 #if ADC_SUPPORT_POWER_MODE_CTRL
+        ADC_POW_DATA_DLY_CTRL_TypeDef adc_0x50 = {.d32 = ADCx->ADC_POW_DATA_DLY_CTRL};
         if (adc_0x50.b.adc_manual_poweron  == ADC_POWER_ON_MANUAL)
         {
             ADC_ManualModePowerOff();
@@ -424,14 +425,14 @@ void ADC_BitMapConfig(ADC_TypeDef *ADCx, uint16_t BitMap, FunctionalState NewSta
     assert_param(IS_FUNCTIONAL_STATE(NewState));
 
     ADC_SCHED_CTRL_TypeDef adc_0x08 = {.d32 = ADCx->ADC_SCHED_CTRL};
-    adc_0x08.b.adc_schedule_idx_sel = ENABLE ? BitMap : (~BitMap);
+    adc_0x08.b.adc_schedule_idx_sel = NewState ? BitMap : 0;
     ADCx->ADC_SCHED_CTRL = adc_0x08.d32;
 
     return;
 }
 
 /**
-  * \brief  Enbale or disable stop fifo from writing data.
+  * \brief  Enbale or disable write data to FIFO.
   * \param  ADCx: selected ADC peripheral.
   * \param  NewState: new state of the ADC fifo write.
   *     This parameter can be: ENABLE or DISABLE.
@@ -560,7 +561,7 @@ void ADC_StopwriteFifoStatusClear(ADC_TypeDef *ADCx)
 /**
   * \brief  Get the index state of ADC controller.
   * \param  ADCx: Specify ADC peripheral.
-  * \return BIT15:0 stores the data in the fifo, BIT31:28 stores the index of the data.
+  * \return BIT[15:0] stores the data in the fifo, BIT[31:28] stores the index of the data.
   */
 uint32_t ADC_ReadScheduleIndexandFifoData(ADC_TypeDef *ADCx)
 {

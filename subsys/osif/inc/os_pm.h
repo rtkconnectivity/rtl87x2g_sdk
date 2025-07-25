@@ -1,6 +1,15 @@
-/*
- * Copyright (c) 2017, Realtek Semiconductor Corporation. All rights reserved.
- */
+/**
+*********************************************************************************************************
+*               Copyright(c) 2024, Realtek Semiconductor Corporation. All rights reserved.
+*********************************************************************************************************
+* @file      os_pm.h
+* @brief     Header file for os power manager API.
+* @details   This file is used for power manager.
+* @author    rui_yu
+* @date      2024-12-30
+* @version   v1.0
+* *********************************************************************************************************
+*/
 
 #ifndef _OS_POWER_MANAGER_H_
 #define _OS_POWER_MANAGER_H_
@@ -37,12 +46,16 @@ extern "C" {
 
 #define SYSTICK_RELOAD_VALUE    (os_sys_tick_clk_get() / os_sys_tick_rate_get() - 1)
 
+/** @addtogroup POWER_MANAGER_Exported_Types
+* @{
+*/
 typedef enum
 {
-    PLATFORM_PM_EXCLUDED_TIMER,
-    PLATFORM_PM_EXCLUDED_TASK,
-    PLATFORM_PM_EXCLUDED_TYPE_MAX,
+    PLATFORM_PM_EXCLUDED_TIMER,     /**< Timer exclude type for power manager. */
+    PLATFORM_PM_EXCLUDED_TASK,      /**< Task exclude type for power manager. */
+    PLATFORM_PM_EXCLUDED_TYPE_MAX,  /**< Max exclude type number for power manager. */
 } PlatformExcludedHandleType;
+/** @} */
 
 typedef struct
 {
@@ -77,8 +90,26 @@ extern uint64_t (*os_sys_tick_increase)(uint32_t tick_increment);
 
 extern uint32_t (*os_pm_next_timeout_value_get)(void);
 
+/** @addtogroup POWER_MANAGER_Exported_Functions
+* @{
+*/
+
+/**
+ * @brief  Exclude SW timer or task from low power wake list, SW timer needs to be one-shot timer.
+ * @param[in]  handle Handle of SW timer or task.
+ * @param[in]  type Type of SW timer or task, refer to @ref PlatformExcludedHandleType.
+ * @return Operation status. It returns false when pp_handle is NULL or there is not enough heap to malloc.
+*/
 extern bool (*os_register_pm_excluded_handle)(void **pp_handle, PlatformExcludedHandleType type);
+
+/**
+ * @brief  Cancel exclude SW timer or task from low power wake list.
+ * @param[in]  handle Handle of timer or task.
+ * @param[in]  type Type of timer or task, refer to @ref PlatformExcludedHandleType.
+ * @return Operation status. It returns false when pp_handle is NULL or the pp_handle is not found.
+*/
 extern bool (*os_unregister_pm_excluded_handle)(void **pp_handle, PlatformExcludedHandleType type);
+/** @} */
 
 #ifdef __cplusplus
 }

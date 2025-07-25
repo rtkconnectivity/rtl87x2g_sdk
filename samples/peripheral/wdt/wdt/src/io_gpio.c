@@ -17,8 +17,6 @@
 #include "rtl_gpio.h"
 #include "rtl_pinmux.h"
 #include "app_task.h"
-
-#include "io_wdt.h"
 #include "io_gpio.h"
 #include "trace.h"
 

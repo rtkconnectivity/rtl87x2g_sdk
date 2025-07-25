@@ -26,7 +26,7 @@
 #define CAN_TX_PIN          P3_2
 #define CAN_RX_PIN          P3_4
 
-#define CAN_RX_FIFO_EN    0
+#define CAN_RX_FIFO_EN    1
 #define CAN_TIME_STAMP_EN 0
 
 #if CAN_TIME_STAMP_EN

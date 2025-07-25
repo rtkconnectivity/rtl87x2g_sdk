@@ -45,6 +45,11 @@ typedef struct
 
     SAU_ATTRIBUTE_CONFIG sau_region[8];
 
+    uint32_t reserved1[3];
+
+    uint32_t secure_heap_addr;
+    uint32_t secure_heap_size;
+
 } __attribute__((packed)) BOOT_ROM_CFG;
 
 extern BOOT_ROM_CFG boot_cfg;

@@ -79,41 +79,41 @@ typedef struct
  * @brief  Get L2CAP channel information.
  * @param[in]  conn_handle Connection handle of the ACL link.
  * @param[in]  cid Channel Identifier.
- * @param[out] p_info L2CAP channel information @ref T_GAP_CHANN_INFO.
- * @return Get result.
- * @retval true Success.
- * @retval false Get failed.
+ * @param[in,out] p_info Pointer to L2CAP channel information @ref T_GAP_CHANN_INFO.
+ * @return Operation result.
+ * @retval true Operation success.
+ * @retval false Operation failure.
  */
 bool gap_chann_get_info(uint16_t conn_handle, uint16_t cid, T_GAP_CHANN_INFO *p_info);
 
 /**
  * @brief  Get channel address information.
  * @param[in]  conn_handle Connection handle of the ACL link.
- * @param[out] bd_addr Remote Bluetooth device address.
- * @param[out] p_bd_type Remote Bluetooth device address type.
- * @return Get result.
- * @retval true Success.
- * @retval false Get failed.
+ * @param[in,out] bd_addr Pointer to remote Bluetooth device address.
+ * @param[in,out] p_bd_type Pointer to remote Bluetooth device address type.
+ * @return Operation result.
+ * @retval true Operation success.
+ * @retval false Operation failure.
  */
 bool gap_chann_get_addr(uint16_t conn_handle, uint8_t *bd_addr, uint8_t *p_bd_type);
 
 /**
  * @brief  Get connection handle information.
- * @param[in]  bd_addr Connection handle of the ACL link.
+ * @param[in]  bd_addr Pointer to remote Bluetooth device address.
  * @param[in]  bd_type Remote Bluetooth device address type.
- * @param[out] p_conn_handle Connection handle.
- * @return Get result.
- * @retval true Success.
- * @retval false Get failed.
+ * @param[in,out] p_conn_handle Pointer to Connection handle.
+ * @return Operation result.
+ * @retval true Operation success.
+ * @retval false Operation failure.
  */
 bool gap_chann_get_handle(uint8_t *bd_addr, uint8_t bd_type, uint16_t *p_conn_handle);
 
 /**
- * @brief  Get L2CAP channel number.
+ * @brief  Get active L2CAP channel number.
  * @param[in]  conn_handle Connection handle of the ACL link.
  * @return Active channel number.
  * @retval 0 No channel created.
- * @retval other channel number.
+ * @retval Others Connected channel number.
  */
 uint8_t gap_chann_get_num(uint16_t conn_handle);
 
@@ -124,9 +124,9 @@ uint8_t gap_chann_get_num(uint16_t conn_handle);
  * @param[in]       cid_record_num   Number of CID could be recorded by @ref p_cid.
  * @param[in, out]  p_cid            Pointer to Channel Identifier.
  * @param[in, out]  p_cid_num        Pointer to number of Channel Identifier.
- * @return Get result.
- * @retval true Success.
- * @retval false Get failed.
+ * @return Operation result.
+ * @retval true Operation success.
+ * @retval false Operation failure.
  */
 bool gap_chann_get_cid(uint16_t conn_handle, uint8_t cid_record_num, uint16_t *p_cid,
                        uint8_t *p_cid_num);

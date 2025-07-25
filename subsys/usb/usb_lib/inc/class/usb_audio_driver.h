@@ -14,37 +14,46 @@
 #include <stdint.h>
 
 /**
- * @addtogroup USB_AUDIO_DRIVER
+ * \addtogroup USB_Audio_Driver
+ * \brief The module primarily offers the parts needed to put USB audio class into practice. In addition
+ * to supporting multiple function instances, such as two speakers operating simultaneously,
+ * the driver supports UAC 1.0 and UAC 2.0. Additionally, the driver allows for several alternative
+ * settings for each interface.
  * @{
- * The module mainly supply components to realize USB Audio Class. \n
- * This driver support UAC 1.0 & UAC 2.0, and also support multiple function instances, \n
- * such as 2 speakers that all in working. This driver also support multiple alternates per interface.
- * @}
   */
 
 /**
- * @addtogroup USB_AUDIO_DRIVER
+ * @defgroup USB_AUDIO_DRIVER_USAGE How to Implement a USB Audio Interface
  * @{
- * @section USB_AUDIO_DRIVER_USAGE How to realize USB Audio interface.
- * Firstly, allocate a function instance by \ref usb_audio_driver_inst_alloc, and the input \ref version \n
- * is the version of UAC-- \ref USB_AUDIO_VERSION_1 \ \ref USB_AUDIO_VERSION_2.
- * @par Example
- * @code
- *      void *demo_instance = usb_audio_driver_inst_alloc(USB_AUDIO_VERSION_1, 2, 2);
- * @endcode
  *
- * Then, realize control interface & audio streaming interface as follows:
- *  - \b Audio \b Control \b interface. \n
- *    - step1: realize descriptors array. \n
- *    - step2: realize control related process. \n
- *             The core structure is \ref T_USB_AUDIO_DRIVER_CTRL to process individual control, such volume control. \n
- *             One control unit may includes multiple controls, such as one feature unit may includes volume\mute control \n
- *             simultaneously, so no less than 1  \ref T_USB_AUDIO_DRIVER_CTRL make up one control entity \ref T_USB_AUDIO_DRIVER_CTRL_ENTITY. \n
- *             All control entities make up the total control topology defined in \b step \b 1 . \n
- * @par Example -- USB Audio speaker
- * @code
+ * \brief This section provides a comprehensive guide on implementing a USB audio interface,
+ *        complete with sample code for your reference.
+ *
+ * \section USB_AUDIO_DRIVER_ALLOCATE_INSTANCE Allocate Instance
+ *
+ * Allocate an instance of the function using \ref usb_audio_driver_inst_alloc, and the input version
+ * is \ref USB_AUDIO_VERSION_1 and \ref USB_AUDIO_VERSION_2, which are the UAC versions.
+ *
+ * \par Example
+ * \code
+ *      void *demo_instance = usb_audio_driver_inst_alloc(USB_AUDIO_VERSION_1, 2, 2);
+ * \endcode
+ *
+ * \section USB_AUDIO_DRIVER_AUDIO_CONTROL_INTERFACE Audio Control Interface
+ * Implement control interface as follows:
+ *    - Implement the descriptor arrays.
+ *    - Implement the control-related processes. \n
+ *      The main structure to handle individual controls, including volume control, is
+ *      \ref T_USB_AUDIO_DRIVER_CTRL. Multiple controls can be included in a single control
+ *      unit. For instance, a single feature unit may have volume and mute controls at the
+ *      same time. Thus, one control entity \ref T_USB_AUDIO_DRIVER_CTRL_ENTITY consists of
+ *      no less than one \ref T_USB_AUDIO_DRIVER_CTRL. The overall control architecture
+ *      specified in the descriptor arrays is composed of all control entities.
+ *
+ * \par Example
+ * \code
  *      #include "usb_spec20.h"
- *      #include "uac1.h"
+ *      #include "usb_audio1_spec.h"
  *      #include "usb_audio1_ctrl.h"
  *
  *      T_USB_INTERFACE_DESC demo_ac_desc =
@@ -162,16 +171,18 @@
  *
  *      usb_audio_driver_desc_register(demo_instance, demo_ctrl_descs_fs, demo_ctrl_descs_hs);
  *      usb_audio_driver_ctrl_register(demo_instance, (T_USB_AUDIO_DRIVER_CTRL_ENTITY_HDR **)demo_all_ctrls);
- * @endcode
+ * \endcode
  *
- * - \b Audio \b Streaming \b interface \n
- *   - step 1: realize interface descriptors array. \n
- *   - step 2: initialize streaming attribute. \n
- *   - step 3: register cb to process audio data. \n
- * @par Example -- USB Audio speaker
- * @code
+ * \section USB_AUDIO_DRIVER_AUDIO_STREAMING_INTERFACE Audio Streaming Interface
+ * Implement audio streaming interface as follows:
+ *   - Implement descriptor arrays of the interfaces.
+ *   - Initialize streaming attributes.
+ *   - Register callbacks to process audio data.
+ *
+ * \par Example
+ * \code
  *      #include "usb_spec20.h"
- *      #include "uac1.h"
+ *      #include "usb_audio1_spec.h"
  *
  *      T_USB_INTERFACE_DESC demo_if_alt0_desc =
  *      {
@@ -189,7 +200,7 @@
  *      {
  *          ...init...
  *      };
- *      T_UAC1_STD_EP_DESC demo_std_iso_out_ep_desc =
+ *      T_UAC1_STD_ISO_EP_DESC demo_std_iso_out_ep_desc =
  *      {
  *          ...init...
  *      };
@@ -248,7 +259,7 @@
  *      }
  *      int demo_usb_audio_downstream(uint8_t *buf, uint16_t len)
  *      {
- *          //Process data in buf which length is len
+ *          //Process the downstream buffer data, where 'len' is the data length.
  *      }
  *      T_USB_AUDIO_DRIVER_CBS demo_cbs =
  *      {
@@ -258,21 +269,21 @@
  *          .downstream = demo_usb_audio_downstream,
  *      }
  *      usb_audio_driver_cb_register(demo_instance, &demo_cbs);
- * @endcode
+ * \endcode
  *
- * Lastly, call \ref usb_audio_driver_init to initialize usb audio driver.
+ * \section USB_AUDIO_DRIVER_INITIALIZE_AUDIO_DRIVER Initialize Audio Driver
+ * Call `usb_audio_driver_init` to initialize the USB audio driver.
  */
 /** @}*/
 
-/**
- * @addtogroup USB_AUDIO_DRIVER
- * @{
- * @section Definitions
- */
+/** @defgroup USB_Audio_Driver_Exported_Constants USB Audio Driver Exported Constants
+  * @{
+  */
+
 /**
  * usb_audio_driver.h
  *
- * @brief   USB Audio class version
+ * \brief  The version of USB audio class.
  *
  */
 #define USB_AUDIO_VERSION_1         0x01
@@ -291,21 +302,53 @@ typedef enum
     USB_AUDIO_DIR_IN = 2,
 } T_USB_AUDIO_DIR;
 
+/**
+ * usb_audio_driver.h
+ *
+ * \brief   The USB audio interrupt pipe.
+ *
+ */
 typedef void   *USB_AUDIO_DRIVER_INTR_PIPE;
 
+/**
+ * usb_audio_driver.h
+ *
+ * \brief   The callback defined in \ref T_USB_AUDIO_DRIVER_CBS.
+ *
+ */
 typedef  int (*USB_AUDIO_DRV_CB_ACTIVATE)(uint8_t dir, uint8_t bit_res, uint32_t sample_rate,
                                           uint8_t chan_num);
-typedef  int (*USB_AUDIO_DRV_CB_DEACTIVATE)(uint8_t dir);
-typedef  int (*USB_AUDIO_DRV_CB_XMIT)(uint8_t *buf, uint16_t len);
 /**
- * @brief USB Audio driver cbs to transport necessary informations or audio data to upper sw \n
- *        \ref activate: usb audio function is ready to transmit audio data, param \dir is \n
- *        defined in \ref T_USB_AUDIO_DIR, \ref bit_res, \ref sample_rate and \ref chan_num are used together \n
- *        to define audio data attribute \n
- *        \ref deactivate: usb audio function is no longer transmit audio data, param \dir is \n
- *        defined in \ref T_USB_AUDIO_DIR \n
- *        \ref upstream: transmit data from device to host, \ref buf is audio data will be sent, \ref len is length of \ref buf \n
- *        \ref downstream: transmit data from host to device, \ref buf is audio data has been received, \ref len is length of \ref buf \n
+* usb_audio_driver.h
+*
+* \brief   The callback defined in \ref T_USB_AUDIO_DRIVER_CBS.
+*
+*/
+typedef  int (*USB_AUDIO_DRV_CB_DEACTIVATE)(uint8_t dir);
+
+/**
+ * usb_audio_driver.h
+ *
+ * \brief   The callback defined in \ref T_USB_AUDIO_DRIVER_CBS.
+ *
+ */
+typedef  int (*USB_AUDIO_DRV_CB_XMIT)(uint8_t *buf, uint16_t len);
+
+/**
+ * \brief USB audio driver callbacks to transfer necessary information or audio data to the upper
+ *        software layers.
+ *
+ * \param activate: USB audio function is ready to transmit audio data. The parameter \p dir is
+ *                  defined in \ref T_USB_AUDIO_DIR; \p bit_res, \p sample_rate, and \p chan_num
+ *                  together describe the attributes of the audio data.
+ * \param deactivate: USB audio function terminates the audio data transfer. The parameter \p dir
+ *                    is defined in \ref T_USB_AUDIO_DIR.
+ * \param upstream: Transmit data from device to host. The parameter \p buf is the audio data that will be sent,
+ *                      and \p len is the length of the \p buf.
+ * \param downstream: Transmit data from host to device. The parameter \p buf is the audio data that has been
+ *                    received, and \p len is the length of the \p buf.
+ * \param feedback_d: Transmit feedback value of downstream from device to host. The parameter \p buf is the feedback
+ *                    data that will be sent, and \p len is the length of the \p buf.
  */
 typedef struct _usb_audio_driver_cbs
 {
@@ -317,12 +360,14 @@ typedef struct _usb_audio_driver_cbs
 } T_USB_AUDIO_DRIVER_CBS;
 
 /**
- * @brief usb audio driver control attribute \n
- *        \ref data: contents of attribute, for example, \n
- *        usb audio1.0 attribute can be defined as int attribute[5], the array is index by  \n
- *        xxx_CUR/xxx_MIN/xxx_MAX/xxx_RES/xxx_MEM defined in ch5 in https://www.usb.org/document-library/audio-device-document-10 \n
- *        usb audio2.0 attribute is defined in ch5.2.3 in https://www.usb.org/document-library/audio-devices-rev-20-and-adopters-agreement \n
- *        \ref len: length of data
+ * \brief The control attributes of USB audio driver.
+ *
+ * \param data: The contents of attribute. For example, USB audio 1.0 attribute can be defined as int
+ *              attribute[5], the array is indexed by xxx_CUR/xxx_MIN/xxx_MAX/xxx_RES/xxx_MEM as
+ *              defined in chapter 5 of https://www.usb.org/document-library/audio-device-document-10.
+ *              The attributes for USB audio 2.0 is defined in chaptor 5.2.3 in
+ *              https://www.usb.org/document-library/audio-devices-rev-20-and-adopters-agreement.
+ * \param len: The length of data.
  *
  */
 typedef struct _usb_audio_driver_ctrl_attr
@@ -331,19 +376,28 @@ typedef struct _usb_audio_driver_ctrl_attr
     uint32_t len;
 } T_USB_AUDIO_DRIVER_CTRL_ATTR;
 /**
- * @brief USB Audio callbacks to process control selectors cmd
+ * \brief USB audio callbacks to process control selectors' commands.
  *
  */
 typedef T_USB_AUDIO_DRIVER_CTRL_ATTR *(*T_USB_AUDIO_CTRL_GET_FUNC)(T_USB_AUDIO_DRIVER_CTRL_ATTR
                                                                    *attr, uint8_t cmd);
+
+/**
+* \brief USB audio callbacks to process control selectors' commands.
+*
+*/
 typedef int (*T_USB_AUDIO_CTRL_SET_FUNC)(T_USB_AUDIO_DRIVER_CTRL_ATTR *attr, uint8_t cmd,
                                          int value);
 /**
- * @brief USB Audio driver control to realize control selectors process \n
- *        \ref type: control type, for usb audio1.0,refer to A.10 of https://www.usb.org/document-library/audio-device-document-10 \n
- *        for usb audio2.0,refer to A.17 of https://www.usb.org/document-library/audio-devices-rev-20-and-adopters-agreement \n
- *        \ref attr stores attributes defined in \ref T_USB_AUDIO_DRIVER_CTRL_ATTR \n
- *        \ref get is used to process GET_XXX request, for example, GET_CUR .etc
+ * \brief Implement the procession of control selectors.
+ *
+ * \param type: The control type. For USB audio 1.0, refer to A.10 of
+ *              https://www.usb.org/document-library/audio-device-document-10.
+ *              For USB audio 2.0, refer to A.17 of
+ *              https://www.usb.org/document-library/audio-devices-rev-20-and-adopters-agreement.
+ * \param attr: The attributes defined in \ref T_USB_AUDIO_DRIVER_CTRL_ATTR.
+ * \param set: It is used to handle SET_XXX requests, such as SET_CUR and so on.
+ * \param get: It is used to handle GET_XXX requests, such as GET_CUR and so on.
  *
  */
 typedef struct _usb_audio_driver_ctrl
@@ -353,12 +407,9 @@ typedef struct _usb_audio_driver_ctrl
     T_USB_AUDIO_CTRL_SET_FUNC set;
     T_USB_AUDIO_CTRL_GET_FUNC get;
 } T_USB_AUDIO_DRIVER_CTRL;
+
 /**
- * @brief USB Audio driver control per control entity \n
- *        \ref entity_id: id of entity defined in control interface, \n
- *        it MUST be EQUAL TO bTerminalID of the corresponding unit descriptor
- *
- *        \ref ctrls: control functions of the given control selector
+ * \brief The common header of the controls defined in \ref T_USB_AUDIO_DRIVER_CTRL_ENTITY.
  *
  */
 #define T_USB_AUDIO_DRIVER_CTRL_ENTITY(id, num)     \
@@ -378,14 +429,12 @@ typedef struct _usb_audio_driver_ctrl_entity_hdr
     uint8_t     ctrl_num;
 } T_USB_AUDIO_DRIVER_CTRL_ENTITY_HDR;
 /**
- * usb_audio_driver.h
+ * \brief The USB audio stream attributes.
  *
- * @brief   USB Audio stream atrributes
- *          \ref dir: ref to \ref T_USB_AUDIO_DIR
- *          \ref chann_num: channel number of the given alternate setting
- *          \ref bit_width: bit width of the given alternate setting
- *  *       \ref max_sample_rate: maximum  sample rate of the given alternate setting
- *
+ * \param dir: Refer to \ref T_USB_AUDIO_DIR.
+ * \param chann_num: The channel number of the given alternate setting.
+ * \param bit_width: The bit width of the given alternate setting.
+ * \param max_sample_rate: The maximum sample rate of the given alternate setting.
  */
 typedef struct _usb_audio_driver_attr
 {
@@ -396,7 +445,9 @@ typedef struct _usb_audio_driver_attr
     uint32_t        max_sample_rate;
 } T_USB_AUDIO_DRIVER_ATTR;
 /**
- * @brief  common header of all USB descriptors
+ * \brief  The common header of all USB descriptors.
+ * \param bLength: The length of the descriptor.
+ * \param bDescriptorType: The descriptor type of the descriptor.
  *
  */
 typedef struct _usb_audio_driver_desc_hdr
@@ -405,104 +456,117 @@ typedef struct _usb_audio_driver_desc_hdr
     uint8_t  bDescriptorType;
 } __attribute__((packed)) T_USB_AUDIO_DRIVER_DESC_HDR;
 
+/** End of group USB_Audio_Driver_Exported_Types
+  * @}
+  */
+
+/** @defgroup USB_Audio_Driver_Exported_Functions USB Audio Driver Exported Functions
+  * @{
+  */
+
 /**
- * @brief alloc audio function instance, which has the standalone audio control/streaming
- * @param version \ref USB_AUDIO_VERSION_1 & \ref USB_AUDIO_VERSION_2
- * @param proc_interval_out
- * @return void*  audio function instance
+ * \brief Allocate the audio function instance, which possesses independent audio
+ *        control/streaming capabilities.
  *
- * @par Example
- * Please refer to \ref USB_AUDIO_DRIVER_USAGE
+ * \param version \ref USB_AUDIO_VERSION_1 and \ref USB_AUDIO_VERSION_2.
+ * \param proc_interval_out The interval for downstream interrupt handling.
+ * \param proc_interval_in The interval for upstream interrupt handling.
+ * \return The audio function instance.
+ *
+ * \par Example
+ * Please refer to \ref USB_AUDIO_DRIVER_USAGE.
  */
 void *usb_audio_driver_inst_alloc(uint8_t version, uint8_t proc_interval_out,
                                   uint8_t proc_interval_in);
 
 /**
- * @brief free audio function instance,alloacted by \ref usb_audio_driver_inst_alloc
- * @param inst, instance alloacted by \ref usb_audio_driver_inst_alloc
- * @return int result, refer to \ref errno.h
+ * \brief Free the audio function instance alloacted by \ref usb_audio_driver_inst_alloc.
+ * \param inst The instance alloacted by \ref usb_audio_driver_inst_alloc.
+ * \return Refer to `errno.h`.
  *
- * @par Example
- * Please refer to \ref USB_AUDIO_DRIVER_USAGE
+ * \par Example
+ * Please refer to \ref USB_AUDIO_DRIVER_USAGE.
  */
 int usb_audio_driver_inst_free(void *inst);
 /**
- * @brief register inteface descriptors
+ * \brief Register interface descriptors to the driver.
  *
- * @param inst audio instance returned in \ref usb_audio_driver_inst_alloc
- * @param desc_fs full speed inteface descriptors
- * @param desc_hs high speed inteface descriptors
- * @return int result, refer to \ref errno.h
+ * \param inst The audio instance returned by \ref usb_audio_driver_inst_alloc.
+ * \param desc_fs The interface descriptors of full speed.
+ * \param desc_hs The interface descriptors of high speed.
+ * \return Refer to `errno.h`.
  *
- * @par Example
- * Please refer to \b Audio \b Control \b interface & \b Audio \b Streaming \b interface in \ref USB_AUDIO_DRIVER_USAGE
+ * \par Example
+ * Please refer to \b Audio \b Control \b Interface & \b Audio \b Streaming \b Interface in \ref USB_AUDIO_DRIVER_USAGE.
  *
  */
 int usb_audio_driver_desc_register(void *inst, T_USB_AUDIO_DRIVER_DESC_HDR **descs_fs,
                                    T_USB_AUDIO_DRIVER_DESC_HDR **descs_hs);
 /**
- * @brief register usb audio callbacks
+ * \brief Register USB audio callbacks.
  *
- * @param inst audio instance returned in \ref usb_audio_driver_inst_alloc
- * @param cbs \ref T_USB_AUDIO_DRIVER_CBS
+ * \param inst The audio instance returned by \ref usb_audio_driver_inst_alloc.
+ * \param cbs Refer to \ref T_USB_AUDIO_DRIVER_CBS.
  *
- * @par Example
- * Please refer to \b Audio \b Streaming \b interface in \ref USB_AUDIO_DRIVER_USAGE
+ * \par Example
+ * Please refer to \b Audio \b Streaming \b Interface in \ref USB_AUDIO_DRIVER_USAGE.
  */
 int usb_audio_driver_cb_register(void *inst, T_USB_AUDIO_DRIVER_CBS *cbs);
 /**
- * @brief register usb audio control process
+ * \brief Register the USB audio control process.
  *
- * @param inst audio instance returned in \ref usb_audio_driver_inst_alloc
- * @param ctrl  refer to \ref T_USB_AUDIO_DRIVER_CTRL_ENTITY
+ * \param inst The audio instance returned by \ref usb_audio_driver_inst_alloc.
+ * \param ctrl  Refer to \ref T_USB_AUDIO_DRIVER_CTRL_ENTITY.
  *
- * @par Example
- * Please refer to \b Audio \b Control \b interface in \ref USB_AUDIO_DRIVER_USAGE
+ * \par Example
+ * Please refer to \b Audio \b Control \b Interface in \ref USB_AUDIO_DRIVER_USAGE.
  *
  */
 int usb_audio_driver_ctrl_register(void *inst, T_USB_AUDIO_DRIVER_CTRL_ENTITY_HDR *ctrl[]);
 /**
- * @brief unregister inteface descriptors
+ * \brief Unregister interface descriptors.
  *
- * @param inst audio instance returned in \ref usb_audio_driver_inst_alloc
+ * \param inst The audio instance returned by \ref usb_audio_driver_inst_alloc.
  *
  */
 int usb_audio_driver_desc_unregister(void *inst);
 /**
- * @brief unregister inteface callbacks
+ * \brief Unregister interface callbacks.
  *
- * @param inst audio instance returned in \ref usb_audio_driver_inst_alloc
+ * \param inst The audio instance returned by \ref usb_audio_driver_inst_alloc.
  *
  */
 int usb_audio_driver_cb_unregister(void *inst);
 /**
- * @brief unregister inteface control process
+ * \brief Unregister interface control process.
  *
- * @param inst audio instance returned in \ref usb_audio_driver_inst_alloc
+ * \param inst The audio instance returned by \ref usb_audio_driver_inst_alloc.
  *
  */
 int usb_audio_driver_ctrl_unregister(void *inst);
 /**
- * @brief USB audio interface frequency set to USB audio driver.
- *        it is only used in USB Audio2.0, because its sample freq control is realized in control interface
+ * \brief The USB audio interface frequency that is set to the USB audio driver. It is only used in
+ *        USB audio 2.0, because its sample freqency control is implemented in the control interface.
  *
- * @param inst audio instance returned in \ref usb_audio_driver_inst_alloc
- * @param dir \ref T_USB_AUDIO_DIR
- * @param freq sample frequency
+ * \param inst The audio instance returned by \ref usb_audio_driver_inst_alloc.
+ * \param dir Refer to \ref T_USB_AUDIO_DIR.
+ * \param freq The sample frequency.
  *
  */
 int usb_audio_driver_freq_change(void *inst, T_USB_AUDIO_DIR dir, uint32_t freq);
 /**
- * @brief initialize  USB Audio attribute of the given alternate setting
+ * \brief Initialize the USB audio attributes for the given alternate setting.
  *
- * @param inst audio instance returned in \ref usb_audio_driver_inst_alloc
- * @param alt_num alternate setting defined in bAlternateSetting of interface descriptor
- * @param attr ref T_USB_AUDIO_DRIVER_ATTR
+ * \param inst The audio instance returned by \ref usb_audio_driver_inst_alloc.
+ * \param alt_num The alternate setting defined in bAlternateSetting of interface descriptor.
+ * \param attr Refer to \ref T_USB_AUDIO_DRIVER_ATTR.
  *
- * @par Example
- * Please refer to \b Audio \b Streaming \b interface in \ref USB_AUDIO_DRIVER_USAGE
+ * \par Example
+ * Please refer to \b Audio \b Streaming \b Interface in \ref USB_AUDIO_DRIVER_USAGE.
  *
  */
 int usb_audio_driver_attr_init(void *inst, uint8_t alt_num, T_USB_AUDIO_DRIVER_ATTR attr);
+
+/** @} */ /* End of group USB_Audio_Driver_Exported_Functions */
 /** @}*/
 #endif

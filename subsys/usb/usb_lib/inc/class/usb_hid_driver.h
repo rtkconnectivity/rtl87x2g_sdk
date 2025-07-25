@@ -15,18 +15,20 @@
 
 /**
  * \addtogroup USB_HID_Driver
- * @{
- * The module primarily provides components for implementing USB HID Class.
+ * \brief The module primarily provides components for implementing USB HID Class.
  * This driver support multiple interfaces and endpoints, along with a variety of functions
  * such as consumer control, mouse, keyboard and so on.
- * @}
-  */
-/**
- * \addtogroup USB_HID_Driver
  * @{
- * \section USB_HID_DRIVER_USAGE How to Implement USB HID Interface
+  */
+
+/**
+ * \defgroup USB_HID_DRIVER_USAGE How to Implement USB HID Interface
+ * @{
  *
- * \par Allocate Instance
+ * \brief This section provides a comprehensive guide on implementing a USB HID interface,
+ *        complete with sample code for your reference.
+ *
+ * \section USB_HID_DRIVER_ALLOCATE_INSTANCE Allocate Instance
  * Allocate a function instance by \ref usb_hid_driver_inst_alloc.
  *
  * \par Example
@@ -34,7 +36,7 @@
  *      void *demo_instance = usb_hid_driver_inst_alloc();
  * \endcode
  *
- * \par HID Interfaces
+ * \section USB_HID_DRIVER_HID_INTERFACES HID Interfaces
  * Initialize HID interfaces as follows:
  *    - Initialize a repot descriptor.
  *    - Initialize descriptor arrays.
@@ -77,7 +79,7 @@
  *      };
  *
  *      void *demo_data_pipe_open(uint8_t ep_addr, T_USB_HID_DRIVER_ATTR attr, uint8_t pending_req_num,
- *                                  USB_CDC_DATA_PIPE_CB cb)
+ *                                  USB_HID_DATA_PIPE_CB cb)
  *      {
  *          ...
  *          return usb_hid_driver_data_pipe_open(ep_addr, attr, pending_req_num, cb);
@@ -100,17 +102,15 @@
  *      usb_hid_driver_cbs_register(demo_instance, &demo_cbs);
  * \endcode
  *
- * \par Initialize HID Driver
+ * \section USB_HID_DRIVER_INITIALIZE_HID_DRIVER Initialize HID Driver
  * Call \ref usb_hid_driver_init to initialize USB HID driver.
  */
 /** @}*/
-/**
- * \addtogroup USB_HID_Driver
- * @{
- *
- * \section USB_HID_Driver_Definitions Definitions
- *
-*/
+
+/** @defgroup USB_HID_Driver_Exported_Constants USB HID Driver Exported Constants
+  * @{
+  */
+
 /**
  * usb_hid_driver.h
  *
@@ -146,6 +146,14 @@
  *
  */
 #define HID_DRIVER_CONGESTION_CTRL_DROP_FIRST   USB_PIPE_CONGESTION_CTRL_DROP_FIRST
+
+/** End of group USB_HID_Driver_Exported_Constants
+  * @}
+  */
+
+/** @defgroup USB_HID_Driver_Exported_Types USB HID Driver Exported Types
+  * @{
+  */
 
 /**
  * usb_hid_driver.h
@@ -204,6 +212,14 @@ typedef struct _usb_hid_driver_cbs
 
 } T_USB_HID_DRIVER_CBS;
 
+/** End of group USB_HID_Driver_Exported_Types
+  * @}
+  */
+
+/** @defgroup USB_HID_Driver_Exported_Functions USB HID Driver Exported Functions
+  * @{
+  */
+
 /**
  * \brief Allocate the HID function instance, which possesses independent function.
  * \return  HID function instance.
@@ -216,7 +232,7 @@ void *usb_hid_driver_inst_alloc(void);
 /**
  * \brief Free HID function instance alloacted by \ref usb_hid_driver_inst_alloc.
  * \param inst The instance alloacted by \ref usb_hid_driver_inst_alloc.
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  *
  * \par Example
  * Please refer to \ref USB_HID_DRIVER_USAGE.
@@ -233,7 +249,7 @@ int usb_hid_driver_inst_free(void *inst);
  * \param  fs_desc HID interface descriptor of full speed.
  * \param  report_desc HID report descriptor.
  *
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  *
  * \par Example
  * Please refer to \ref USB_HID_DRIVER_USAGE.
@@ -247,7 +263,7 @@ int usb_hid_driver_if_desc_register(void *inst, void *hs_desc, void *fs_desc, vo
  *
  * \param inst HID instance returned in \ref usb_hid_driver_inst_alloc.
  *
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  *
  * \par Example
  * Please refer to \ref USB_HID_DRIVER_USAGE
@@ -280,7 +296,7 @@ void *usb_hid_driver_data_pipe_open(uint8_t ep_addr, T_USB_HID_DRIVER_ATTR attr,
  *
  * \param  handle The return value of \ref usb_hid_driver_data_pipe_open.
  *
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  *
  */
 int usb_hid_driver_data_pipe_close(void *handle);
@@ -294,7 +310,7 @@ int usb_hid_driver_data_pipe_close(void *handle);
  * \param  buf The data to be sent.
  * \param  len The length of data.
  *
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  *
  * \par Example
  * Please refer to \ref USB_HID_DRIVER_USAGE.
@@ -307,9 +323,9 @@ int usb_hid_driver_data_pipe_send(void *handle, void *buf, uint32_t len);
  * \brief   Register HID driver callbacks to process set_reoprt/get_report request.
  *
  * \param  inst HID instance returned by \ref usb_hid_driver_inst_alloc.
- * \param  cbs Refer to \ref T_HID_DRIVER_CBS.
+ * \param  cbs Refer to \ref T_USB_HID_DRIVER_CBS.
  *
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  *
  * \par Example
  * Please refer to \ref USB_HID_DRIVER_USAGE.
@@ -323,7 +339,7 @@ int usb_hid_driver_cbs_register(void *inst, T_USB_HID_DRIVER_CBS *cbs);
  *
  * \param  inst HID instance returned by \ref usb_hid_driver_inst_alloc.
  *
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  *
  */
 int usb_hid_driver_cbs_unregister(void *inst);
@@ -333,7 +349,9 @@ int usb_hid_driver_cbs_unregister(void *inst);
  *
  * \brief   USB remote wakeup.
  *
- * \return Refer to 'rtl_errno.h'.
+ * \param  force Select whether to turn on force-enabled remote wake-up feature.
+ *
+ * \return Refer to `rtl_errno.h`.
  *
  */
 int usb_hid_driver_remote_wakeup(bool force);
@@ -343,7 +361,7 @@ int usb_hid_driver_remote_wakeup(bool force);
  *
  * \brief   Initalize USB HID interfaces.
  *
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  *
  * \par Example
  * Please refer to \ref USB_HID_DRIVER_USAGE.
@@ -355,9 +373,10 @@ int usb_hid_driver_init(void);
  *
  * \brief   Deinit USB HID interfaces.
  *
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  */
 int usb_hid_driver_deinit(void);
 
+/** @} */ /* End of group USB_HID_Driver_Exported_Functions */
 /** @}*/
 #endif

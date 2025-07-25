@@ -41,8 +41,8 @@ typedef enum
 typedef enum
 {
     SECURE_FUNCTION_OPCODE_INIT = 0,
-    EFUSE_ACCESS  = 1,
-    EFUSE_RAM_ACCESS  = 2,
+    EFUSE_ACCESS = 1,
+    EFUSE_RAM_ACCESS = 2,
     SECURE_REGION_ACCESS = 3,
     DISABLE_SWD_PIN = 4,
     SPIC_SET_INTERFACE = 5,

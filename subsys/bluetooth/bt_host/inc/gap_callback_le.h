@@ -45,105 +45,174 @@ extern "C"
   */
 
 //gap_le.h
-#define GAP_MSG_LE_MODIFY_WHITE_LIST                0x01 //!<Response msg type for le_modify_white_list
-#define GAP_MSG_LE_SET_RAND_ADDR                    0x02 //!<Response msg type for le_set_rand_addr
-#define GAP_MSG_LE_SET_HOST_CHANN_CLASSIF           0x03 //!<Response msg type for le_set_host_chann_classif
-#define GAP_MSG_LE_WRITE_DEFAULT_DATA_LEN           0x04 //!<Response msg type for le_write_default_data_len
+#define GAP_MSG_LE_MODIFY_WHITE_LIST                0x01 /**< Response msg type for @ref le_modify_white_list.
+                                                              The structure of callback data is @ref T_LE_MODIFY_WHITE_LIST_RSP. */
+#define GAP_MSG_LE_SET_RAND_ADDR                    0x02 /**< Response msg type for @ref le_set_rand_addr.
+                                                              The structure of callback data is @ref T_LE_SET_RAND_ADDR_RSP. */
+#define GAP_MSG_LE_SET_HOST_CHANN_CLASSIF           0x03 /**< Response msg type for @ref le_set_host_chann_classif.
+                                                              The structure of callback data is @ref T_LE_SET_HOST_CHANN_CLASSIF_RSP. */
+#define GAP_MSG_LE_WRITE_DEFAULT_DATA_LEN           0x04 /**< Response msg type for @ref le_write_default_data_len.
+                                                              The structure of callback data is @ref T_LE_CAUSE. */
 
 //gap_conn_le.h
-#define GAP_MSG_LE_READ_RSSI                        0x10 //!<Response msg type for le_read_rssi
-#define GAP_MSG_LE_READ_CHANN_MAP                   0x11 //!<Response msg type for le_read_chann_map
-#define GAP_MSG_LE_DISABLE_SLAVE_LATENCY            0x12 //!<Response msg type for le_disable_slave_latency
-#define GAP_MSG_LE_SET_DATA_LEN                     0x13 //!<Response msg type for le_set_data_len
-#define GAP_MSG_LE_DATA_LEN_CHANGE_INFO             0x14 //!<Notification msg type for data length changed
-#define GAP_MSG_LE_CONN_UPDATE_IND                  0x15 //!<Indication for LE connection parameter update
-#define GAP_MSG_LE_CREATE_CONN_IND                  0x16 //!<Indication for create LE connection
-#define GAP_MSG_LE_PHY_UPDATE_INFO                  0x17 //!<Information for LE PHY update
-#define GAP_MSG_LE_UPDATE_PASSED_CHANN_MAP          0x18 //!<Response msg type for le_update_passed_chann_map
-#define GAP_MSG_LE_REMOTE_FEATS_INFO                0x19 //!<Information for remote device supported features
-#define GAP_MSG_LE_SET_CONN_TX_PWR                  0x1A //!<Response msg type for le_set_conn_tx_power
-#define GAP_MSG_LE_READ_REMOTE_VERSION              0x1B //!<Response msg type for le_read_remote_version
-#define GAP_MSG_LE_ADV_SET_CONN_OWN_ADDR_TYPE_INFO  0x1C //!<Information of own address type for advertiser using ADV set
+#define GAP_MSG_LE_READ_RSSI                        0x10 /**< Response msg type for @ref le_read_rssi.
+                                                              The structure of callback data is @ref T_LE_READ_RSSI_RSP. */
+#define GAP_MSG_LE_READ_CHANN_MAP                   0x11 /**< Response msg type for @ref le_read_chann_map.
+                                                              The structure of callback data is @ref T_LE_READ_CHANN_MAP_RSP. */
+#define GAP_MSG_LE_DISABLE_SLAVE_LATENCY            0x12 /**< Response msg type for @ref le_disable_slave_latency.
+                                                              The structure of callback data is @ref T_LE_DISABLE_SLAVE_LATENCY_RSP. */
+#define GAP_MSG_LE_SET_DATA_LEN                     0x13 /**< Response msg type for @ref le_set_data_len.
+                                                              The structure of callback data is @ref T_LE_SET_DATA_LEN_RSP. */
+#define GAP_MSG_LE_DATA_LEN_CHANGE_INFO             0x14 /**< Information msg type for data length changed.
+                                                              The structure of callback data is @ref T_LE_DATA_LEN_CHANGE_INFO. */
+#define GAP_MSG_LE_CONN_UPDATE_IND                  0x15 /**< Indication msg type for LE connection parameter update.
+                                                              The structure of callback data is @ref T_LE_CONN_UPDATE_IND. */
+#define GAP_MSG_LE_CREATE_CONN_IND                  0x16 /**< Indication msg type for create LE connection.
+                                                              The structure of callback data is @ref T_LE_CREATE_CONN_IND. */
+#define GAP_MSG_LE_PHY_UPDATE_INFO                  0x17 /**< Information msg type for LE PHY update.
+                                                              The structure of callback data is @ref T_LE_PHY_UPDATE_INFO. */
+#define GAP_MSG_LE_UPDATE_PASSED_CHANN_MAP          0x18 /**< Response msg type for @ref le_update_passed_chann_map.
+                                                              The structure of callback data is @ref T_LE_UPDATE_PASSED_CHANN_MAP_RSP. */
+#define GAP_MSG_LE_REMOTE_FEATS_INFO                0x19 /**< Information msg type for remote device supported features.
+                                                              The structure of callback data is @ref T_LE_REMOTE_FEATS_INFO. */
+#define GAP_MSG_LE_SET_CONN_TX_PWR                  0x1A /**< Response msg type for @ref le_set_conn_tx_power.
+                                                              The structure of callback data is @ref T_LE_CAUSE. */
+#define GAP_MSG_LE_READ_REMOTE_VERSION              0x1B /**< Response msg type for @ref le_read_remote_version.
+                                                              The structure of callback data is @ref T_LE_READ_REMOTE_VERSION_RSP. */
+#define GAP_MSG_LE_ADV_SET_CONN_OWN_ADDR_TYPE_INFO  0x1C /**< Information of own address type for advertiser using ADV set.
+                                                              The structure of callback data is @ref T_LE_ADV_SET_CONN_OWN_ADDR_TYPE_INFO. */
 
 //gap_bond_le.h
-#define GAP_MSG_LE_BOND_MODIFY_INFO                 0x20 //!<Notification msg type for bond modify
-#define GAP_MSG_LE_KEYPRESS_NOTIFY                  0x21 //!<Response msg type for le_bond_keypress_notify
-#define GAP_MSG_LE_KEYPRESS_NOTIFY_INFO             0x22 //!<Notification msg type for le_bond_keypress_notify
-#define GAP_MSG_LE_GATT_SIGNED_STATUS_INFO          0x23 //!<Notification msg type for LE signed status information
+#define GAP_MSG_LE_BOND_MODIFY_INFO                 0x20 /**< Information msg type for bond modify.
+                                                              The structure of callback data is @ref T_LE_BOND_MODIFY_INFO. */
+#define GAP_MSG_LE_KEYPRESS_NOTIFY                  0x21 /**< Response msg type for @ref le_bond_keypress_notify.
+                                                              The structure of callback data is @ref T_LE_KEYPRESS_NOTIFY_RSP. */
+#define GAP_MSG_LE_KEYPRESS_NOTIFY_INFO             0x22 /**< Information msg type for keypress notification.
+                                                              The structure of callback data is @ref T_LE_KEYPRESS_NOTIFY_INFO. */
+#define GAP_MSG_LE_GATT_SIGNED_STATUS_INFO          0x23 /**< Information msg type for LE signed status.
+                                                              The structure of callback data is @ref T_LE_GATT_SIGNED_STATUS_INFO. */
 
-/* The type of callback will only be used when gap_param_key_manager equals 2 and no matching key entry is found. */
-#define GAP_MSG_LE_BOND_KEY_REQ                     0x24 //!<Notification msg type for LE bond key request information
+#define GAP_MSG_LE_BOND_KEY_REQ                     0x24 /**< Information msg type for LE bond key request.
+                                                              The structure of callback data is @ref T_LE_BOND_KEY_REQ.
+                                                              - When receiving the message, APP shall set LTK to the callback data
+                                                                and operation result is the return value of callback @ref T_APP_RESULT.
+                                                              - The msg type of callback will only be used when @ref le_bond_set_param
+                                                                has been called with @ref GAP_PARAM_BOND_KEY_MANAGER to set the
+                                                                key manager value to 2 and no matching key entry is found. */
 
 //gap_scan.h
-#define GAP_MSG_LE_SCAN_INFO                        0x30 //!<Notification msg type for LE scan
-#define GAP_MSG_LE_DIRECT_ADV_INFO                  0x31 //!<Notification msg type for LE direct ADV info
+#define GAP_MSG_LE_SCAN_INFO                        0x30 /**< Information msg type for LE scan.
+                                                              The structure of callback data is @ref T_LE_SCAN_INFO. */
+#define GAP_MSG_LE_DIRECT_ADV_INFO                  0x31 /**< Information msg type for LE direct ADV info.
+                                                              The structure of callback data is @ref T_LE_DIRECT_ADV_INFO. */
 
 //gap_adv.h
-#define GAP_MSG_LE_ADV_UPDATE_PARAM                 0x40 //!<Response msg type for le_adv_update_param
-#define GAP_MSG_LE_ADV_READ_TX_POWER                0x41 //!<Response msg type for le_adv_read_tx_power
-#define GAP_MSG_LE_ADV_SET_TX_POWER                 0x42 //!<Response msg type for le_adv_set_tx_power
+#define GAP_MSG_LE_ADV_UPDATE_PARAM                 0x40 /**< Response msg type for @ref le_adv_update_param.
+                                                              The structure of callback data is @ref T_LE_ADV_UPDATE_PARAM_RSP. */
+#define GAP_MSG_LE_ADV_READ_TX_POWER                0x41 /**< Response msg type for @ref le_adv_read_tx_power.
+                                                              The structure of callback data is @ref T_LE_ADV_READ_TX_POWER_RSP. */
+#define GAP_MSG_LE_ADV_SET_TX_POWER                 0x42 /**< Response msg type for @ref le_adv_set_tx_power.
+                                                              The structure of callback data is @ref T_LE_CAUSE. */
 
 //gap_dtm.h
-#define GAP_MSG_LE_DTM_RECEIVER_TEST                0x70 //!<Response msg type for le_dtm_receiver_test
-#define GAP_MSG_LE_DTM_TRANSMITTER_TEST             0x71 //!<Response msg type for le_dtm_transmitter_test
-#define GAP_MSG_LE_DTM_TEST_END                     0x72 //!<Response msg type for le_dtm_test_end
-#define GAP_MSG_LE_DTM_ENHANCED_RECEIVER_TEST       0x73 //!<Response msg type for le_dtm_enhanced_receiver_test
-#define GAP_MSG_LE_DTM_ENHANCED_TRANSMITTER_TEST    0x74 //!<Response msg type for le_dtm_enhanced_transmitter_test
-#define GAP_MSG_LE_DTM_RECEIVER_TEST_V3             0x75 //!<Response msg type for le_dtm_receiver_test_v3
-#define GAP_MSG_LE_DTM_TRANSMITTER_TEST_V3          0x76 //!<Response msg type for le_dtm_transmitter_test_v3
-#define GAP_MSG_LE_DTM_TRANSMITTER_TEST_V4          0x77 //!<Response msg type for le_dtm_transmitter_test_v4
+#define GAP_MSG_LE_DTM_RECEIVER_TEST                0x70 /**< Response msg type for @ref le_dtm_receiver_test.
+                                                              The structure of callback data is @ref T_LE_CAUSE. */
+#define GAP_MSG_LE_DTM_TRANSMITTER_TEST             0x71 /**< Response msg type for @ref le_dtm_transmitter_test.
+                                                              The structure of callback data is @ref T_LE_CAUSE. */
+#define GAP_MSG_LE_DTM_TEST_END                     0x72 /**< Response msg type for @ref le_dtm_test_end.
+                                                              The structure of callback data is @ref T_LE_DTM_TEST_END_RSP. */
+#define GAP_MSG_LE_DTM_ENHANCED_RECEIVER_TEST       0x73 /**< Response msg type for @ref le_dtm_enhanced_receiver_test.
+                                                              The structure of callback data is @ref T_LE_CAUSE. */
+#define GAP_MSG_LE_DTM_ENHANCED_TRANSMITTER_TEST    0x74 /**< Response msg type for @ref le_dtm_enhanced_transmitter_test.
+                                                              The structure of callback data is @ref T_LE_CAUSE. */
+#define GAP_MSG_LE_DTM_RECEIVER_TEST_V3             0x75 /**< Response msg type for @ref le_dtm_receiver_test_v3.
+                                                              The structure of callback data is @ref T_LE_CAUSE. */
+#define GAP_MSG_LE_DTM_TRANSMITTER_TEST_V3          0x76 /**< Response msg type for @ref le_dtm_transmitter_test_v3.
+                                                              The structure of callback data is @ref T_LE_CAUSE. */
+#define GAP_MSG_LE_DTM_TRANSMITTER_TEST_V4          0x77 /**< Response msg type for @ref le_dtm_transmitter_test_v4.
+                                                              The structure of callback data is @ref T_LE_CAUSE. */
 
 //gap_ext_scan.h
-#define GAP_MSG_LE_EXT_ADV_REPORT_INFO                      0x50 //!<Notification msg type for LE extended ADV report
-/* The type of callback will only be used after APP calls @ref le_ext_scan_gap_msg_info_way(false). */
-#define GAP_MSG_LE_EXT_SCAN_STATE_CHANGE_INFO               0x51 //!<Notification msg type for extended scanning state
+#define GAP_MSG_LE_EXT_ADV_REPORT_INFO                      0x50 /**< Information msg type for LE extended ADV report.
+                                                                      The structure of callback data is @ref T_LE_EXT_ADV_REPORT_INFO. */
+#define GAP_MSG_LE_EXT_SCAN_STATE_CHANGE_INFO               0x51 /**< Information msg type for extended scanning state.
+                                                                      The structure of callback data is @ref T_LE_EXT_SCAN_STATE_CHANGE_INFO.
+                                                                      The msg type of callback will only be used after APP calls @ref le_ext_scan_gap_msg_info_way (false). */
 
 //gap_pa_sync.h
-#define GAP_MSG_LE_PA_SYNC_MODIFY_PERIODIC_ADV_LIST         0x54 //!<Response msg type for le_pa_sync_modify_periodic_adv_list
-#define GAP_MSG_LE_PERIODIC_ADV_REPORT_INFO                 0x55 //!<Notification msg type for LE periodic advertising report
-#define GAP_MSG_LE_PA_SYNC_DEV_STATE_CHANGE_INFO            0x56 //!<Notification msg type for synchronization device state of periodic advertising trains
-#define GAP_MSG_LE_PA_SYNC_STATE_CHANGE_INFO                0x57 //!<Notification msg type for synchronization state of periodic advertising trains
-#define GAP_MSG_LE_PA_SYNC_SET_PERIODIC_ADV_RECEIVE_ENABLE  0x58 //!<Response msg type for le_pa_sync_set_periodic_adv_receive_enable
+#define GAP_MSG_LE_PA_SYNC_MODIFY_PERIODIC_ADV_LIST         0x54 /**< Response msg type for @ref le_pa_sync_modify_periodic_adv_list.
+                                                                      The structure of callback data is @ref T_LE_PA_SYNC_MODIFY_PERIODIC_ADV_LIST_RSP. */
+#define GAP_MSG_LE_PERIODIC_ADV_REPORT_INFO                 0x55 /**< Information msg type for LE periodic advertising report.
+                                                                      The structure of callback data is @ref T_LE_PERIODIC_ADV_REPORT_INFO. */
+#define GAP_MSG_LE_PA_SYNC_DEV_STATE_CHANGE_INFO            0x56 /**< Information msg type for synchronization device state of periodic advertising trains.
+                                                                      The structure of callback data is @ref T_LE_PA_SYNC_DEV_STATE_CHANGE_INFO. */
+#define GAP_MSG_LE_PA_SYNC_STATE_CHANGE_INFO                0x57 /**< Information msg type for synchronization state of periodic advertising trains.
+                                                                      The structure of callback data is @ref T_LE_PA_SYNC_STATE_CHANGE_INFO. */
+#define GAP_MSG_LE_PA_SYNC_SET_PERIODIC_ADV_RECEIVE_ENABLE  0x58 /**< Response msg type for @ref le_pa_sync_set_periodic_adv_receive_enable.
+                                                                      The structure of callback data is @ref T_LE_PA_SET_PERIODIC_ADV_RECEIVE_ENABLE_RSP. */
 //gap_past_sender.h
-#define GAP_MSG_LE_PAST_SENDER_PERIODIC_ADV_SYNC_TRANSFER   0x59 //!<Response msg type for le_past_sender_periodic_adv_sync_transfer
+#define GAP_MSG_LE_PAST_SENDER_PERIODIC_ADV_SYNC_TRANSFER   0x59 /**< Response msg type for @ref le_past_sender_periodic_adv_sync_transfer.
+                                                                      The structure of callback data is @ref T_LE_PAST_SENDER_PERIODIC_ADV_SYNC_TRANSFER_RSP. */
 //gap_past_recipient.h
-#define GAP_MSG_LE_PAST_RECIPIENT_SET_DEFAULT_PERIODIC_ADV_SYNC_TRANSFER_PARAMS   0x5A //!<Response msg type for le_past_recipient_set_default_periodic_adv_sync_transfer_params
-#define GAP_MSG_LE_PAST_RECIPIENT_SET_PERIODIC_ADV_SYNC_TRANSFER_PARAMS           0x5B //!<Response msg type for le_past_recipient_set_periodic_adv_sync_transfer_params
-#define GAP_MSG_LE_PAST_RECIPIENT_PERIODIC_ADV_SYNC_TRANSFER_RECEIVED_INFO        0x5C //!<Notification msg type for le_past_recipient_set_default_periodic_adv_sync_transfer_params or le_past_recipient_set_periodic_adv_sync_transfer_params
+#define GAP_MSG_LE_PAST_RECIPIENT_SET_DEFAULT_PERIODIC_ADV_SYNC_TRANSFER_PARAMS   0x5A /**< Response msg type for @ref le_past_recipient_set_default_periodic_adv_sync_transfer_params.
+                                                                                            The structure of callback data is @ref T_LE_PAST_RECIPIENT_SET_DEFAULT_PERIODIC_ADV_SYNC_TRANSFER_PARAMS_RSP. */
+#define GAP_MSG_LE_PAST_RECIPIENT_SET_PERIODIC_ADV_SYNC_TRANSFER_PARAMS           0x5B /**< Response msg type for @ref le_past_recipient_set_periodic_adv_sync_transfer_params.
+                                                                                            The structure of callback data is @ref T_LE_PAST_RECIPIENT_SET_PERIODIC_ADV_SYNC_TRANSFER_PARAMS_RSP. */
+#define GAP_MSG_LE_PAST_RECIPIENT_PERIODIC_ADV_SYNC_TRANSFER_RECEIVED_INFO        0x5C /**< Information msg type for @ref le_past_recipient_set_default_periodic_adv_sync_transfer_params or
+                                                                                            @ref le_past_recipient_set_periodic_adv_sync_transfer_params.
+                                                                                            The structure of callback data is @ref T_LE_PAST_RECIPIENT_PERIODIC_ADV_SYNC_TRANSFER_RECEIVED_INFO. */
 //gap_pa_sync.h
-#define GAP_MSG_LE_BIGINFO_ADV_REPORT_INFO          0x5D //!<Notification msg type for LE BIGInfo advertising report
+#define GAP_MSG_LE_BIGINFO_ADV_REPORT_INFO          0x5D /**< Information msg type for LE BIGInfo advertising report.
+                                                              The structure of callback data is @ref T_LE_BIGINFO_ADV_REPORT_INFO. */
 
 //gap_ext_adv.h
-#define GAP_MSG_LE_EXT_ADV_START_SETTING            0x60 //!<Response msg type for le_ext_adv_start_setting
-#define GAP_MSG_LE_EXT_ADV_REMOVE_SET               0x61 //!<Response msg type for le_ext_adv_remove_set
-#define GAP_MSG_LE_EXT_ADV_CLEAR_SET                0x62 //!<Response msg type for le_ext_adv_clear_set
-#define GAP_MSG_LE_EXT_ADV_ENABLE                   0x63 //!<Response msg type for le_ext_adv_enable
-#define GAP_MSG_LE_EXT_ADV_DISABLE                  0x64 //!<Response msg type for le_ext_adv_disable
-#define GAP_MSG_LE_SCAN_REQ_RECEIVED_INFO           0x65 //!<Notification msg type for LE scan received info
-/* The type of callback will only be used after APP calls @ref le_ext_adv_gap_msg_info_way(false). */
-#define GAP_MSG_LE_EXT_ADV_STATE_CHANGE_INFO        0x66 //!<Notification msg type for extended advertising state
+#define GAP_MSG_LE_EXT_ADV_START_SETTING            0x60 /**< Response msg type for @ref le_ext_adv_start_setting.
+                                                              The structure of callback data is @ref T_LE_EXT_ADV_START_SETTING_RSP. */
+#define GAP_MSG_LE_EXT_ADV_REMOVE_SET               0x61 /**< Response msg type for @ref le_ext_adv_remove_set.
+                                                              The structure of callback data is @ref T_LE_EXT_ADV_REMOVE_SET_RSP. */
+#define GAP_MSG_LE_EXT_ADV_CLEAR_SET                0x62 /**< Response msg type for @ref le_ext_adv_clear_set.
+                                                              The structure of callback data is @ref T_LE_EXT_ADV_CLEAR_SET_RSP. */
+#define GAP_MSG_LE_EXT_ADV_ENABLE                   0x63 /**< Response msg type for @ref le_ext_adv_enable.
+                                                              The structure of callback data is @ref T_LE_CAUSE. */
+#define GAP_MSG_LE_EXT_ADV_DISABLE                  0x64 /**< Response msg type for @ref le_ext_adv_disable.
+                                                              The structure of callback data is @ref T_LE_CAUSE. */
+#define GAP_MSG_LE_SCAN_REQ_RECEIVED_INFO           0x65 /**< Information msg type for LE scan request received.
+                                                              The structure of callback data is @ref T_LE_SCAN_REQ_RECEIVED_INFO. */
+#define GAP_MSG_LE_EXT_ADV_STATE_CHANGE_INFO        0x66 /**< Information msg type for extended advertising state.
+                                                              The structure of callback data is @ref T_LE_EXT_ADV_STATE_CHANGE_INFO.
+                                                              The msg type of callback will only be used after APP calls @ref le_ext_adv_gap_msg_info_way (false). */
 
 //gap_pa_adv.h
-#define GAP_MSG_LE_PA_ADV_START_SETTING             0x6A //!<Response msg type for le_pa_adv_start_setting
-#define GAP_MSG_LE_PA_ADV_SET_PERIODIC_ADV_ENABLE   0x6B //!<Response msg type for le_pa_adv_set_periodic_adv_enable
-#define GAP_MSG_LE_PA_ADV_STATE_CHANGE_INFO         0x6C //!<Notification msg type for PA periodic advertising state
+#define GAP_MSG_LE_PA_ADV_START_SETTING             0x6A /**< Response msg type for @ref le_pa_adv_start_setting.
+                                                              The structure of callback data is @ref T_LE_PA_ADV_START_SETTING_RSP. */
+#define GAP_MSG_LE_PA_ADV_SET_PERIODIC_ADV_ENABLE   0x6B /**< Response msg type for @ref le_pa_adv_set_periodic_adv_enable.
+                                                              The structure of callback data is @ref T_LE_PA_ADV_SET_PERIODIC_ADV_ENABLE_RSP. */
+#define GAP_MSG_LE_PA_ADV_STATE_CHANGE_INFO         0x6C /**< Information msg type for PA periodic advertising state.
+                                                              The structure of callback data is @ref T_LE_PA_ADV_STATE_CHANGE_INFO. */
 //gap_past_sender.h
-#define GAP_MSG_LE_PAST_SENDER_PERIODIC_ADV_SET_INFO_TRANSFER  0x6E //!<Response msg type for le_past_sender_periodic_adv_set_info_transfer
+#define GAP_MSG_LE_PAST_SENDER_PERIODIC_ADV_SET_INFO_TRANSFER  0x6E /**< Response msg type for @ref le_past_sender_periodic_adv_set_info_transfer.
+                                                                         The structure of callback data is @ref T_LE_PAST_SENDER_PERIODIC_ADV_SET_INFO_TRANSFER_RSP. */
 
 //gap_vendor.h
-#define GAP_MSG_LE_VENDOR_SET_MIN_REM_SCA           0xA2 //!<Response msg type for le_set_min_rem_sca
-#define GAP_MSG_LE_VENDOR_ONE_SHOT_ADV              0xA3 //!<Response msg type for le_vendor_one_shot_adv
+#define GAP_MSG_LE_VENDOR_SET_MIN_REM_SCA           0xA2 /**< Response msg type for @ref le_set_min_rem_sca.
+                                                              The structure of callback data is @ref T_LE_CAUSE. */
+#define GAP_MSG_LE_VENDOR_ONE_SHOT_ADV              0xA3 /**< Response msg type for @ref le_vendor_one_shot_adv.
+                                                              The structure of callback data is @ref T_LE_CAUSE. */
 
-#define GAP_MSG_LE_GAP_STATE_MSG                    0xB0
+#define GAP_MSG_LE_GAP_STATE_MSG                    0xB0 /**< Information msg type for GAP state when @ref le_gap_msg_info_way (false) has been called. */
 
 #if F_BT_LE_FIX_CHANN_SUPPORT
 //gap_fix_chann_conn.h
-#define GAP_MSG_LE_FIXED_CHANN_DATA_SEND            0xC0 //!<Response msg type for le_fixed_chann_data_send
-#define GAP_MSG_LE_FIXED_CHANN_DATA_IND             0xC1 //!<Indication for LE fixed channel data received
-#define GAP_MSG_LE_FIXED_CHANN_REG                  0xC2 //!<Response msg type for le_fixed_chann_reg
+#define GAP_MSG_LE_FIXED_CHANN_DATA_SEND            0xC0 /**< Response msg type for @ref le_fixed_chann_data_send.
+                                                              The structure of callback data is @ref T_LE_FIXED_CHANN_DATA_SEND_RSP. */
+#define GAP_MSG_LE_FIXED_CHANN_DATA_IND             0xC1 /**< Indication for LE fixed channel data received.
+                                                              The structure of callback data is @ref T_LE_FIXED_CHANN_DATA_IND. */
+#define GAP_MSG_LE_FIXED_CHANN_REG                  0xC2 /**< Response msg type for @ref le_fixed_chann_reg.
+                                                              The structure of callback data is @ref T_LE_FIXED_CHANN_REG_RSP. */
 #endif
 
-#define GAP_MSG_LE_CONN_INFO                        0xD2 //!<Msg type for LE connection
+#define GAP_MSG_LE_CONN_INFO                        0xD2 /**< Information msg type for LE connection.
+                                                              The structure of callback data is @ref T_LE_CONN_INFO_CB. */
 
 /** End of GAP_LE_MSG_Types
   * @}
@@ -165,7 +234,7 @@ typedef struct
     uint16_t            cause;
 } T_LE_CAUSE;
 
-/** @brief  Response of LE modify white list request.*/
+/** @brief  Response of LE modify Filter Accept List request.*/
 typedef struct
 {
     T_GAP_WHITE_LIST_OP operation;
@@ -200,20 +269,20 @@ typedef struct
     uint8_t         channel_map[5];
 } T_LE_READ_CHANN_MAP_RSP;
 
-/** @brief  Response for disable slave latency.*/
+/** @brief  Response for disable Peripheral latency.*/
 typedef struct
 {
     uint16_t        cause;
 } T_LE_DISABLE_SLAVE_LATENCY_RSP;
 
-/** @brief  Response for set data length, which is used for BT4.2 data length extension.*/
+/** @brief  Response for set data length, which is used for LE Data Packet Length Extension.*/
 typedef struct
 {
     uint8_t         conn_id;
     uint16_t        cause;
 } T_LE_SET_DATA_LEN_RSP;
 
-/** @brief  Notification for data length change info, which is used for BT4.2 data length extension.*/
+/** @brief  Information for data length change, which is used for LE Data Packet Length Extension.*/
 typedef struct
 {
     uint8_t         conn_id;
@@ -240,15 +309,15 @@ typedef struct
     T_GAP_REMOTE_ADDR_TYPE remote_addr_type; /**< Address type of remote device. */
 }  T_LE_CREATE_CONN_IND;
 
-/** @brief  Notification information when phy changed.*/
+/** @brief  Information when PHY changed.*/
 typedef struct
 {
-    uint8_t         conn_id;
-    uint16_t        cause;
-    T_GAP_PHYS_TYPE tx_phy;
-    T_GAP_PHYS_TYPE rx_phy;
-    bool            read_phy_rsp; /* True:  Callback data is result of read PHY.
-                                     False: Callback data is result of update PHY. */
+    uint8_t         conn_id;    /**< Connection ID */
+    uint16_t        cause;      /**< Cause. */
+    T_GAP_PHYS_TYPE tx_phy;     /**< Transmitter PHY for the connection. */
+    T_GAP_PHYS_TYPE rx_phy;     /**< Receiver PHY for the connection */
+    bool            read_phy_rsp; /* - true:  Callback data is result of read PHY.
+                                     - false: Callback data is result of update PHY. */
 } T_LE_PHY_UPDATE_INFO;
 
 /** @brief  Response for  update passed channel map.*/
@@ -285,7 +354,7 @@ typedef struct
 } T_LE_ADV_SET_CONN_OWN_ADDR_TYPE_INFO;
 
 //gap_bond_le.h
-/** @brief  Bond information modify type*/
+/** @brief  Bond information modify type.*/
 typedef enum
 {
     LE_BOND_DELETE,             //!< Delete bond information.
@@ -329,8 +398,8 @@ typedef struct
 /** @brief  Structure for bond key request information.*/
 typedef struct
 {
-    uint8_t                     bd_addr[6];
-    T_GAP_REMOTE_ADDR_TYPE      remote_addr_type;
+    uint8_t                     bd_addr[6];         /**< Bluetooth address of remote device. */
+    T_GAP_REMOTE_ADDR_TYPE      remote_addr_type;   /**< Address type of remote device. */
     T_GAP_KEY_TYPE              key_type;           /**< Key type. */
     uint8_t                     key_len;            /**< Provided by APP. */
     uint8_t                     link_key[28];       /**< Provided by APP. */
@@ -350,8 +419,8 @@ typedef struct
     T_GAP_REMOTE_ADDR_TYPE remote_addr_type;/**< Address type of remote device. */
     T_GAP_ADV_EVT_TYPE     adv_type;/**< Advertising event type. */
     int8_t                 rssi;   /**< RSSI. */
-    uint8_t                data_len;
-    uint8_t                data[31];
+    uint8_t                data_len; /**< Length of the data field. */
+    uint8_t                data[31]; /**< Advertising or scan response data according to adv_type. */
 } T_LE_SCAN_INFO;
 
 /** @brief  Information of LE direct advertising.   */
@@ -410,15 +479,15 @@ typedef struct
     T_GAP_DIRECT_ADDR_TYPE        direct_addr_type;
     uint8_t                       direct_addr[6];
     uint8_t                       data_len;
-    uint8_t                      *p_data; //max 229 bytes
+    uint8_t                      *p_data;
 } T_LE_EXT_ADV_REPORT_INFO;
 
-/** @brief  Notification of extended scanning state.
- *          The struct will only be used after APP calls le_ext_scan_gap_msg_info_way(false).
+/** @brief  Information for extended scanning state.
+ *          The struct will only be used after APP calls @ref le_ext_scan_gap_msg_info_way (false).
  */
 typedef struct
 {
-    uint16_t cause;
+    uint16_t cause;         /**< State change cause. */
     uint8_t  state;         /**< @ref GAP_SCAN_STATE. */
 } T_LE_EXT_SCAN_STATE_CHANGE_INFO;
 
@@ -449,14 +518,14 @@ typedef struct
     uint8_t         scanner_addr[6];
 } T_LE_SCAN_REQ_RECEIVED_INFO;
 
-/** @brief  Notification of extended advertising state.
- *          The struct will only be used after APP calls le_ext_adv_gap_msg_info_way(false).
+/** @brief  Information for extended advertising state.
+ *          The struct will only be used after APP calls @ref le_ext_adv_gap_msg_info_way (false).
  */
 typedef struct
 {
-    uint16_t cause;
+    uint16_t cause;            /**< State change cause. */
     uint8_t  adv_handle;       /**< Identify an advertising set. */
-    uint8_t  state;            /**< GAP extended advertising state. @ref T_GAP_EXT_ADV_STATE. */
+    uint8_t  state;            /**< GAP extended advertising state @ref T_GAP_EXT_ADV_STATE. */
 } T_LE_EXT_ADV_STATE_CHANGE_INFO;
 
 typedef struct
@@ -473,12 +542,12 @@ typedef struct
     uint8_t         enable;
 } T_LE_PA_ADV_SET_PERIODIC_ADV_ENABLE_RSP;
 
-/** @brief  Notification of PA periodic advertising state. */
+/** @brief  Information for PA periodic advertising state. */
 typedef struct
 {
-    uint16_t cause;
+    uint16_t cause;               /**< State change cause. */
     uint8_t  adv_handle;          /**< Identify an advertising set. */
-    uint8_t  state;               /**< PA periodic advertising state. @ref T_GAP_PA_ADV_STATE. */
+    uint8_t  state;               /**< PA periodic advertising state @ref T_GAP_PA_ADV_STATE. */
 } T_LE_PA_ADV_STATE_CHANGE_INFO;
 
 typedef struct
@@ -492,12 +561,13 @@ typedef struct
 {
     uint8_t     sync_id;          /**< Identify the periodic advertising train. */
     uint16_t    sync_handle;      /**< Sync_Handle identifying the periodic advertising train. */
-    int8_t      tx_power;         /**< Range: -127 to +20, Units: dBm.
-                                       0x7F: Tx Power information not available. */
-    int8_t      rssi;             /**< Range: -127 to +20, Units: dBm.
-                                       0x7F: RSSI is not available. */
-    T_GAP_PERIODIC_ADV_REPORT_CTE_TYPE     cte_type;
-    T_GAP_PERIODIC_ADV_REPORT_DATA_STATUS  data_status;
+    int8_t      tx_power;         /**< - Range: -127 to +20, Units: dBm.
+                                       - 0x7F: Tx Power information not available. */
+    int8_t      rssi;             /**< - Range: -127 to +20, Units: dBm.
+                                       - 0x7F: RSSI is not available. */
+    T_GAP_PERIODIC_ADV_REPORT_CTE_TYPE     cte_type;    /**< @ref T_GAP_PERIODIC_ADV_REPORT_CTE_TYPE. */
+    T_GAP_PERIODIC_ADV_REPORT_DATA_STATUS
+    data_status; /**< @ref T_GAP_PERIODIC_ADV_REPORT_DATA_STATUS. */
     uint8_t     data_len;/**< Length of the Data field. */
     uint8_t    *p_data; /**< Data received from a Periodic Advertising packet. */
 } T_LE_PERIODIC_ADV_REPORT_INFO;
@@ -511,24 +581,25 @@ typedef struct
     uint8_t gap_pa_sync_rfu_state: 5;                  /**< Reserved for future use. */
 } T_GAP_PA_SYNC_DEV_STATE;
 
-/** @brief  Notification of synchronization device state of periodic advertising trains. */
+/** @brief  Information for synchronization device state of periodic advertising trains. */
 typedef struct
 {
     T_GAP_PA_SYNC_DEV_STATE  state;
     uint16_t cause;
 } T_LE_PA_SYNC_DEV_STATE_CHANGE_INFO;
 
-/** @brief  Notification of synchronization state of periodic advertising trains. */
+/** @brief  Information for synchronization state of periodic advertising trains. */
 typedef struct
 {
     uint8_t sync_id;                  /**< Identify the periodic advertising train. */
     uint16_t  sync_handle;            /**< Sync_Handle identifying the periodic advertising train. */
     uint8_t state;                    /**< @ref T_GAP_PA_SYNC_STATE. */
-    bool sync_transfer_received_flag; /* sync_transfer_received_flag will be only used when state is GAP_PA_SYNC_STATE_SYNCHRONIZED.
-                                         @arg True:  Periodic advertising synchronization is received through le_past_recipient_set_default_periodic_adv_sync_transfer_params
-                                                     or le_past_recipient_set_periodic_adv_sync_transfer_params.
-                                         @arg False: Periodic advertising packet is received through le_pa_sync_create_sync.*/
-    uint16_t cause;
+    bool sync_transfer_received_flag; /* sync_transfer_received_flag will be only used when state is @ref GAP_PA_SYNC_STATE_SYNCHRONIZED.
+                                         - true:  Periodic advertising synchronization is received through
+                                                  @ref le_past_recipient_set_default_periodic_adv_sync_transfer_params
+                                                  or @ref le_past_recipient_set_periodic_adv_sync_transfer_params.
+                                         - false: Periodic advertising packet is received through @ref le_pa_sync_create_sync.*/
+    uint16_t cause;                   /**< State change cause. */
 } T_LE_PA_SYNC_STATE_CHANGE_INFO;
 
 typedef struct
@@ -567,14 +638,14 @@ typedef struct
 
 typedef struct
 {
-    uint16_t            cause;
+    uint16_t            cause;        /**< Cause. */
     uint8_t             conn_id;      /**< Used to identify a connection. */
     uint8_t             sync_id;      /**< Identify the periodic advertising train. */
     uint16_t            sync_handle;  /**< Sync_Handle identifying the periodic advertising train. */
     uint16_t            service_data; /**< A value provided by peer device. */
     uint8_t             adv_sid;      /**< Value of the Advertising SID used to advertise the
                                            periodic advertising. */
-    T_GAP_PA_SYNC_ADV_ADDR_TYPE            adv_addr_type; /**< Advertiser address type. @ref
+    T_GAP_PA_SYNC_ADV_ADDR_TYPE            adv_addr_type; /**< Advertiser address type @ref
                                                                T_GAP_PA_SYNC_ADV_ADDR_TYPE for reception of info. */
     uint8_t             adv_addr[GAP_BD_ADDR_LEN];  /**< Public Device Address, Random Device Address,
                                                          Public Identity Address, or Random (static) Identity
@@ -582,19 +653,19 @@ typedef struct
     T_GAP_PHYS_TYPE     adv_phy;                    /**< Advertiser_PHY specifies the PHY used for the
                                                          periodic advertising. */
     uint16_t            periodic_adv_interval;      /**< Periodic advertising interval.
-                                                         @arg Range: 0x0006 to 0xFFFF.
-                                                         @arg Time = N * 1.25 ms.
-                                                         @arg Time Range: 7.5 ms to 81.91875 s. */
+                                                         - Range: 0x0006 to 0xFFFF.
+                                                         - Time = N * 1.25 ms.
+                                                         - Time Range: 7.5 ms to 81.91875 s. */
     uint8_t             adv_clock_accuracy;         /**< Advertiser_Clock_Accuracy specifies the
                                                          accuracy of the periodic advertiser's clock.
-                                                         @arg 0x00: 500 ppm.
-                                                         @arg 0x01: 250 ppm.
-                                                         @arg 0x02: 150 ppm.
-                                                         @arg 0x03: 100 ppm.
-                                                         @arg 0x04: 75  ppm.
-                                                         @arg 0x05: 50  ppm.
-                                                         @arg 0x06: 30  ppm.
-                                                         @arg 0x07: 20  ppm. */
+                                                         - 0x00: 500 ppm.
+                                                         - 0x01: 250 ppm.
+                                                         - 0x02: 150 ppm.
+                                                         - 0x03: 100 ppm.
+                                                         - 0x04: 75  ppm.
+                                                         - 0x05: 50  ppm.
+                                                         - 0x06: 30  ppm.
+                                                         - 0x07: 20  ppm. */
 } T_LE_PAST_RECIPIENT_PERIODIC_ADV_SYNC_TRANSFER_RECEIVED_INFO;
 
 typedef struct
@@ -619,16 +690,15 @@ typedef struct
     uint32_t sdu_interval;   /**< Value of the SDU_Interval subfield of the BIGInfo field.
                                   The time interval, in microseconds, of the periodic SDUs. */
     uint16_t max_sdu;        /**< The maximum size, in octets, of an SDU. */
-    T_GAP_PHYS_TYPE phy;     /**< Indicate the PHY used by the BIG. @ref T_GAP_PHYS_TYPE. */
+    T_GAP_PHYS_TYPE phy;     /**< Indicate the PHY used by the BIG. */
     uint8_t framing;         /**< Indicate whether the BIG carries framed or unframed data.
-                                  @arg 0x00: Unframed.
-                                  @arg 0x01: Framed. */
+                                  - 0x00: Unframed.
+                                  - 0x01: Framed. */
     uint8_t encryption;      /**< Indicate whether the BIG is encrypted or not.
-                                  @arg 0x00: BIG carries unencrypted data.
-                                  @arg 0x01: BIG carries encrypted data. */
+                                  - 0x00: BIG carries unencrypted data.
+                                  - 0x01: BIG carries encrypted data. */
 } T_LE_BIGINFO_ADV_REPORT_INFO;
 
-#if F_BT_LE_FIX_CHANN_SUPPORT
 typedef struct
 {
     uint8_t         conn_id;
@@ -649,9 +719,8 @@ typedef struct
     uint16_t        cid;
     uint16_t        cause;
 } T_LE_FIXED_CHANN_REG_RSP;
-#endif
 
-/** @brief  GAP LE Callback Data*/
+/** @brief  GAP LE callback data */
 typedef union
 {
     T_LE_CAUSE                                le_cause;
@@ -690,7 +759,7 @@ typedef union
 
 //gap_ext_scan.h
     T_LE_EXT_ADV_REPORT_INFO                 *p_le_ext_adv_report_info;
-    /* The callback data will only be used after APP calls @ref le_ext_scan_gap_msg_info_way(false). */
+    /* The callback data will only be used after APP calls @ref le_ext_scan_gap_msg_info_way (false). */
     T_LE_EXT_SCAN_STATE_CHANGE_INFO          *p_le_ext_scan_state_change_info;
 
 //gap_ext_adv.h
@@ -698,7 +767,7 @@ typedef union
     T_LE_EXT_ADV_REMOVE_SET_RSP              *p_le_ext_adv_remove_set_rsp;
     T_LE_EXT_ADV_CLEAR_SET_RSP               *p_le_ext_adv_clear_set_rsp;
     T_LE_SCAN_REQ_RECEIVED_INFO              *p_le_scan_req_received_info;
-    /* The callback data will only be used after APP calls @ref le_ext_adv_gap_msg_info_way(false). */
+    /* The callback data will only be used after APP calls @ref le_ext_adv_gap_msg_info_way (false). */
     T_LE_EXT_ADV_STATE_CHANGE_INFO           *p_le_ext_adv_state_change_info;
 
     T_LE_PA_ADV_START_SETTING_RSP            *p_le_pa_adv_start_setting_rsp;

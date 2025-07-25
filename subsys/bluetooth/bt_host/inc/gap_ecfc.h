@@ -3,7 +3,7 @@
 *     Copyright(c) 2021, Realtek Semiconductor Corporation. All rights reserved.
 *****************************************************************************************
   * @file    gap_ecfc.h
-  * @brief   This file contains all the constants and functions prototypes for L2CAP enhanced credit based flow control mode.
+  * @brief   This file contains all the constants and functions prototypes for L2CAP Enhanced Credit Based Flow Control Mode.
   * @details
   * @author  jane
   * @date    2021-04-06
@@ -28,7 +28,7 @@ extern "C" {
 #endif
 
 /** @defgroup GAP_ECFC_MODULE GAP ECFC Module
-  * @brief GAP enhanced credit based flow control mode module
+  * @brief GAP Enhanced Credit Based Flow Control Mode module
   * @{
   */
 
@@ -87,8 +87,8 @@ typedef enum
 /** @brief GAP ECFC Parameter List */
 typedef enum
 {
-    GAP_ECFC_PARAM_INIT_CREDITS      = 0x430, //!< Local initial credits. Write Only.  Default is 4.
-    GAP_ECFC_PARAM_LOCAL_MPS         = 0x431, //!< Local MPS. Write Only. Default is 254.
+    GAP_ECFC_PARAM_INIT_CREDITS      = 0x430, //!< Local initial credits. Write only. Size is 2 octets. Default value is 4.
+    GAP_ECFC_PARAM_LOCAL_MPS         = 0x431, //!< Local MPS. Write only. Size is 2 octets. Default value is 254.
 } T_GAP_ECFC_PARAM_TYPE;
 
 /**
@@ -99,7 +99,7 @@ typedef enum
 typedef struct
 {
     bool      is_le;    //!< Whether using LE transport.
-    uint16_t  proto_id; //!< Protocol ID assigned by GAP ECFC Module
+    uint16_t  proto_id; //!< Protocol ID assigned by GAP ECFC Module.
     uint16_t  psm;      //!< PSM of the protocol.
     uint16_t  cause;    //!< Result of registering protocol to L2CAP layer.
 } T_GAP_ECFC_PROTO_REG_RSP;
@@ -118,8 +118,9 @@ typedef struct
     uint16_t
     cid[GAP_ECFC_CREATE_CHANN_MAX_NUM]; //!< Local Channel Identifier array assigned by Bluetooth Host.
     uint8_t     bd_addr[6];  //!< Bluetooth address of remote device.
-    uint8_t     bd_type;     //!< Bluetooth address type of remote device. @ref T_GAP_REMOTE_ADDR_TYPE
-    uint16_t    identity_id; //!< Identity ID for gap_ecfc_send_conn_cfm.
+    uint8_t
+    bd_type;     //!< Bluetooth address type of remote device. Value is @ref T_GAP_REMOTE_ADDR_TYPE.
+    uint16_t    identity_id; //!< Identity ID for @ref gap_ecfc_send_conn_cfm.
 } T_GAP_ECFC_CONN_IND;
 
 /**
@@ -133,7 +134,8 @@ typedef struct
     uint8_t     cid_num;    //!< The number of the L2CAP ECFC channels request to establish.
     uint16_t    cause;      //!< Result of executing L2CAP ECFC connection request.
     uint8_t     bd_addr[6]; //!< Bluetooth address of remote device.
-    uint8_t     bd_type;    //!< Bluetooth address type of remote device. @ref T_GAP_REMOTE_ADDR_TYPE
+    uint8_t
+    bd_type;    //!< Bluetooth address type of remote device. Value is @ref T_GAP_REMOTE_ADDR_TYPE.
 } T_GAP_ECFC_CONN_RSP;
 
 /**
@@ -155,7 +157,7 @@ typedef struct
     uint16_t    ds_data_offset; //!< Offset used to fill user data when sending L2CAP data to remote.
     uint8_t     bd_addr[6];     //!< Bluetooth address of remote device.
     uint8_t
-    bd_type;        //!< Bluetooth address type of remote device. @ref T_GAP_REMOTE_ADDR_TYPE.
+    bd_type;        //!< Bluetooth address type of remote device. Value is @ref T_GAP_REMOTE_ADDR_TYPE.
 } T_GAP_ECFC_CONN_CMPL_INFO;
 
 /**
@@ -259,38 +261,50 @@ typedef struct
     uint16_t    remote_mps;  //!< REmote MPS.
 } T_GAP_ECFC_RECONFIGURE_IND;
 
-/** @brief L2CAP ECFC connection confirm cause used in \ref gap_ecfc_send_conn_cfm API. */
+/** @brief L2CAP ECFC connection confirm cause used in @ref gap_ecfc_send_conn_cfm API. */
 typedef enum
 {
-    GAP_ECFC_CONN_ACCEPT               = L2C_ECFC_ALL_CONN_SUCCESS,                                  //!< All connections accept
-    GAP_ECFC_CONN_NO_RESOURCES         = (L2C_ERR | L2C_ECFC_CONN_RSP_SOME_CONN_NO_RESOURCES),       //!< Some connections refused:insufficient resources available
-    GAP_ECFC_CONN_UNACCEPTABLE_PARAMS  = (L2C_ERR | L2C_ECFC_CONN_RSP_ALL_CONN_UNACCEPTABLE_PARAMS), //!< All connections refused:unacceptable parameters
-    GAP_ECFC_CONN_INVALID_PARAMS       = (L2C_ERR | L2C_ECFC_CONN_RSP_ALL_CONN_INVALID_PARAMS),      //!< All connections refused:invalid parameters
-    GAP_ECFC_CONN_PENDING_NO_INFO      = (L2C_ERR | L2C_ECFC_CONN_RSP_ALL_CONN_PENDING_NO_INFO),     //!< All connections pending:no further information available
-    GAP_ECFC_CONN_PENDING_AUTHOR       = (L2C_ERR | L2C_ECFC_CONN_RSP_ALL_CONN_PENDING_AUTHOR),      //!< All connections pending:authorization pending
+    GAP_ECFC_CONN_ACCEPT               = L2C_ECFC_ALL_CONN_SUCCESS,                                  //!< All connections accept.
+    GAP_ECFC_CONN_NO_RESOURCES         = (L2C_ERR | L2C_ECFC_CONN_RSP_SOME_CONN_NO_RESOURCES),       //!< Some connections refused:insufficient resources available.
+    GAP_ECFC_CONN_UNACCEPTABLE_PARAMS  = (L2C_ERR | L2C_ECFC_CONN_RSP_ALL_CONN_UNACCEPTABLE_PARAMS), //!< All connections refused:unacceptable parameters.
+    GAP_ECFC_CONN_INVALID_PARAMS       = (L2C_ERR | L2C_ECFC_CONN_RSP_ALL_CONN_INVALID_PARAMS),      //!< All connections refused:invalid parameters.
+    GAP_ECFC_CONN_PENDING_NO_INFO      = (L2C_ERR | L2C_ECFC_CONN_RSP_ALL_CONN_PENDING_NO_INFO),     //!< All connections pending:no further information available.
+    GAP_ECFC_CONN_PENDING_AUTHOR       = (L2C_ERR | L2C_ECFC_CONN_RSP_ALL_CONN_PENDING_AUTHOR),      //!< All connections pending:authorization pending.
 } T_GAP_ECFC_CONN_CFM_CAUSE;
 
-/** @brief L2CAP reconfigure confirm cause used in \ref GAP_ECFC_RECONFIGURE_IND callback.*/
+/** @brief L2CAP reconfigure confirm cause used in @ref GAP_ECFC_RECONFIGURE_IND callback.*/
 typedef enum
 {
-    GAP_ECFC_RCFG_ACCEPT               = L2C_ECFC_ALL_CONN_SUCCESS,                         //!< All connections accept
-    GAP_ECFC_RCFG_UNACCEPTABLE_PARAMS  = (L2C_ERR | L2C_ECFC_RCFG_RSP_UNACCEPTABLE_PARAMS), //!< Reconfiguration failed - other unacceptable parameters
+    GAP_ECFC_RCFG_ACCEPT               = L2C_ECFC_ALL_CONN_SUCCESS,                         //!< All connections accept.
+    GAP_ECFC_RCFG_UNACCEPTABLE_PARAMS  = (L2C_ERR | L2C_ECFC_RCFG_RSP_UNACCEPTABLE_PARAMS), //!< Reconfiguration failed - other unacceptable parameters.
 } T_GAP_ECFC_RCFG_CFM_CAUSE;
 
 /** @brief  */
 typedef enum
 {
-    GAP_ECFC_PROTO_REG_RSP,              /**< Response of register protocol into L2CAP layer. Message data is \ref T_GAP_ECFC_PROTO_REG_RSP. */
-    GAP_ECFC_SEC_REG_RSP,                /**< Response of register protocol security requirement into Bluetooth Host. Message data is \ref T_GAP_ECFC_SEC_REG_RSP. */
-    GAP_ECFC_CONN_IND,                   /**< Indication of L2CAP ECFC connection request from remote device. Message data is \ref T_GAP_ECFC_CONN_IND. */
-    GAP_ECFC_CONN_RSP,                   /**< Response of send L2CAP ECFC connection request to remote device. Message data is \ref T_GAP_ECFC_CONN_RSP. */
-    GAP_ECFC_CONN_CMPL,                  /**< Information of L2CAP ECFC connection establish result. Message data is \ref T_GAP_ECFC_CONN_CMPL_INFO. */
-    GAP_ECFC_DATA_IND,                   /**< Indication of L2CAP ECFC data received from remote device. Message data is \ref T_GAP_ECFC_DATA_IND. */
-    GAP_ECFC_DATA_RSP,                   /**< Response of send L2CAP ECFC data to remote device. Message data is \ref T_GAP_ECFC_DATA_RSP. */
-    GAP_ECFC_DISCONN_IND,                /**< Indication of L2CAP disconnection request from remote device. Message data is \ref T_GAP_ECFC_DISCONN_IND. */
-    GAP_ECFC_DISCONN_RSP,                /**< Response of send L2CAP disconnection request ro remote device. Message data is \ref T_GAP_ECFC_DISCONN_RSP. */
-    GAP_ECFC_RECONFIGURE_IND,            /**< Indication of L2CAP ECFC reconfigure request from remote device. Message data is \ref T_GAP_ECFC_RECONFIGURE_IND. */
-    GAP_ECFC_RECONFIGURE_RSP             /**< Response of send L2CAP ECFC reconfigure request to remote device. Message data is \ref T_GAP_ECFC_RECONFIGURE_RSP. */
+    GAP_ECFC_PROTO_REG_RSP,              /**< Response msg type for @ref gap_ecfc_reg_proto.
+                                              The structure of callback data is @ref T_GAP_ECFC_PROTO_REG_RSP. */
+    GAP_ECFC_SEC_REG_RSP,                /**< Response msg type for @ref gap_ecfc_send_sec_reg_req.
+                                              The structure of callback data is @ref T_GAP_ECFC_SEC_REG_RSP. */
+    GAP_ECFC_CONN_IND,                   /**< Indication msg type for receiving L2CAP ECFC connection request from remote device.
+                                              APP shall call @ref gap_ecfc_send_conn_cfm when receiving this msg.
+                                              The structure of callback data is @ref T_GAP_ECFC_CONN_IND. */
+    GAP_ECFC_CONN_RSP,                   /**< Response msg type for @ref gap_ecfc_send_conn_req.
+                                              The structure of callback data is @ref T_GAP_ECFC_CONN_RSP. */
+    GAP_ECFC_CONN_CMPL,                  /**< Information msg type for L2CAP ECFC connection establish result.
+                                              The structure of callback data is @ref T_GAP_ECFC_CONN_CMPL_INFO. */
+    GAP_ECFC_DATA_IND,                   /**< Indication msg type for receiving L2CAP ECFC data from remote device.
+                                              The structure of callback data is @ref T_GAP_ECFC_DATA_IND. */
+    GAP_ECFC_DATA_RSP,                   /**< Response msg type for @ref gap_ecfc_send_data_req.
+                                              The structure of callback data is @ref T_GAP_ECFC_DATA_RSP. */
+    GAP_ECFC_DISCONN_IND,                /**< Indication msg type for receiving L2CAP disconnection request from remote device.
+                                              The structure of callback data is @ref T_GAP_ECFC_DISCONN_IND. */
+    GAP_ECFC_DISCONN_RSP,                /**< Response msg type for @ref gap_ecfc_send_disconn_req.
+                                              The structure of callback data is @ref T_GAP_ECFC_DISCONN_RSP. */
+    GAP_ECFC_RECONFIGURE_IND,            /**< Indication msg type for receiving ECFC reconfigure request from remote device.
+                                              The structure of callback data is @ref T_GAP_ECFC_RECONFIGURE_IND. */
+    GAP_ECFC_RECONFIGURE_RSP             /**< Response msg type for @ref gap_ecfc_send_reconfigure_req.
+                                              The structure of callback data is @ref T_GAP_ECFC_RECONFIGURE_RSP. */
 } T_GAP_ECFC_MSG;
 
 /** End of GAP_ECFC_Exported_Types
@@ -307,12 +321,12 @@ typedef enum
  */
 /**
  * @brief Prototype of callback function to handle L2CAP ECFC related messages.
- * @param[in] p_buf     Message data and the content of data is dependent on message type.
+ * @param[in] p_buf     Pointer to the buffer of message data. The content of data is dependent
+ *                      on the message type.
  * @param[in] msg       Callback msg type @ref T_GAP_ECFC_MSG.
- * @return Result.
- * @retval 0 Success.
- * @retval other Failed.
-  */
+ * @return    Result used for msg @ref GAP_ECFC_RECONFIGURE_IND.
+ * @retval    result @ref T_GAP_ECFC_RCFG_CFM_CAUSE.
+ */
 typedef uint16_t (* P_GAP_ECFC_CB)(void *p_buf, T_GAP_ECFC_MSG msg);
 
 /**
@@ -320,7 +334,7 @@ typedef uint16_t (* P_GAP_ECFC_CB)(void *p_buf, T_GAP_ECFC_MSG msg);
  * @param[in] proto_num Initialize protocol number.
  * @return Operation result.
  * @retval true Operation success.
- * @retval false Operation failed.
+ * @retval false Operation failure.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -334,38 +348,41 @@ bool gap_ecfc_init(uint8_t proto_num);
 
 /**
  * @brief  Set a GAP ECFC parameter.
- * @param[in] param     Profile parameter ID: @ref T_GAP_ECFC_PARAM_TYPE
+ *
+ * This function can be called with a GAP ECFC parameter type @ref T_GAP_ECFC_PARAM_TYPE and it will set the GAP ECFC parameter.
+ * The 'p_value' field must point to an appropriate data type that meets the requirements for the corresponding parameter type.
+ * (For example: if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
+ *
+ * @param[in] param     GAP ECFC parameter type @ref T_GAP_ECFC_PARAM_TYPE
  * @param[in] len       Length of data to write.
- * @param[in] p_value   Pointer to data to write.  This is dependent on
- *                      the parameter ID and WILL be cast to the appropriate
- *                      data type (For example: if data type param is uint16, p_value will be cast to
- *                      pointer of uint16_t).
+ * @param[in] p_value   Pointer to data to write.
+ *
  * @return Operation result.
  * @retval true Operation success.
- * @retval false Operation failed.
+ * @retval false Operation failure.
  *
  * <b>Example usage</b>
  * \code{.c}
-    static T_USER_CMD_PARSE_RESULT cmd_ecfccfg(T_USER_CMD_PARSED_VALUE *p_parse_value)
+    bool test(void)
     {
-        uint8_t type = p_parse_value->dw_param[0];
+        uint8_t type;
         if (type == 0)
         {
-            uint16_t initial_credits = p_parse_value->dw_param[1];
+            uint16_t initial_credits;
             if (gap_ecfc_set_param(GAP_ECFC_PARAM_INIT_CREDITS, sizeof(uint16_t), &initial_credits))
             {
-                return RESULT_SUCESS;
+                return true;
             }
         }
         else if (type == 1)
         {
-            uint16_t local_mps = p_parse_value->dw_param[1];
+            uint16_t local_mps;
             if (gap_ecfc_set_param(GAP_ECFC_PARAM_LOCAL_MPS, sizeof(uint16_t), &local_mps))
             {
-                return RESULT_SUCESS;
+                return true;
             }
         }
-        return RESULT_ERR;
+        return false;
     }
  * \endcode
  */
@@ -373,15 +390,19 @@ bool gap_ecfc_set_param(T_GAP_ECFC_PARAM_TYPE param, uint8_t len, void *p_value)
 
 /**
  * @brief  Register a callback function to handle L2CAP ECFC related messages for a specific PSM.
+ *
+ * If sending request operation is successful, the registering result will be returned by callback
+ * registered by @ref gap_ecfc_reg_proto with msg type @ref GAP_ECFC_PROTO_REG_RSP.
+ *
  * @param[in] psm       Protocol service multiplexer that the callback function is related.
  * @param[in] callback  Callback function to handle L2CAP ECFC messages. The function
  *                      must have the prototype defined as @ref P_GAP_ECFC_CB.
  * @param[in] is_le     Whether is LE transport.
- * @param[out] p_proto_id Protocol ID assigned by GAP ECFC module which will be used in @ref gap_ecfc_send_conn_req.
- * @param[in] data_path Data path to use. Should be use @ref GAP_ECFC_DATA_PATH.
- * @return The result of callback function register.
- * @retval true  The function was successfully registered.
- * @retval false The function was failed to register.
+ * @param[in,out] p_proto_id Pointer to protocol ID assigned by GAP ECFC module which will be used in @ref gap_ecfc_send_conn_req.
+ * @param[in] data_path Data path @ref GAP_ECFC_DATA_PATH.
+ * @return The result of sending request.
+ * @retval true Sending request operation is successful.
+ * @retval false Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -418,21 +439,24 @@ bool gap_ecfc_reg_proto(uint16_t psm, P_GAP_ECFC_CB callback, bool is_le, uint8_
                         uint8_t data_path);
 
 /**
- * @brief    Send a request to create L2CAP ECFC connections. If the request was successfully sent,
- *           @ref GAP_ECFC_CONN_RSP will be received in the callback function registered by
- *           @ref gap_ecfc_reg_proto to indicate whether the procedure was started successfully.
- *           If the procedure was started, @ref GAP_ECFC_CONN_CMPL will be received later to tell the
- *           result of L2CAP channel establishment.
+ * @brief    Send a request to create L2CAP ECFC connections.
+ *
+ * If the request was successfully sent, @ref GAP_ECFC_CONN_RSP will be received in the callback function registered by
+ * @ref gap_ecfc_reg_proto to indicate whether the procedure was started successfully.
+ *
+ * If the procedure was started, @ref GAP_ECFC_CONN_CMPL will be received later about the
+ * result of L2CAP channel establishment.
  *
  * @param[in] psm       PSM of the L2CAP ECFC channel that will be established.
  * @param[in] proto_id  Protocol ID.
  * @param[in] local_mtu Preferred MTU size value of the L2CAP ECFC channel.
- * @param[in] bd_addr   Bluetooth address of remote device.
+ * @param[in] bd_addr   Pointer to Bluetooth address of remote device.
  * @param[in] bd_type   Bluetooth address type of remote device.
- * @param[in] cid_num   The number of the L2CAP ECFC channels request to establish. Range: (1- GAP_ECFC_CREATE_CHANN_MAX_NUM)
- * @return Operation result.
- * @retval true Send request success.
- * @retval false Send request failed.
+ * @param[in] cid_num   The number of the L2CAP ECFC channels request to establish.
+ *                      - Range: (1- @ref GAP_ECFC_CREATE_CHANN_MAX_NUM)
+ * @return The result of sending request.
+ * @retval true Sending request operation is successful.
+ * @retval false Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -506,22 +530,25 @@ bool gap_ecfc_send_conn_req(uint16_t psm, uint16_t proto_id,
 
 /**
  * @brief    Send a confirmation for a L2CAP ECFC connection request from remote device.
- *           If the confirmation was successfully sent with cause as @ref GAP_ECFC_CONN_ACCEPT,
- *           @ref GAP_ECFC_CONN_CMPL will also be received in the callback function registered by
- *           @ref gap_ecfc_reg_proto to tell the result of L2CAP ECFC channels establishment.
- *           If there was no resources to establishment all cid_num(@ref T_GAP_ECFC_CONN_IND) channels,
- *           the confirmation can reduce cid_num and sent with cause as @ref GAP_ECFC_CONN_NO_RESOURCES.
+ *
+ * If the confirmation was successfully sent with cause as @ref GAP_ECFC_CONN_ACCEPT,
+ * @ref GAP_ECFC_CONN_CMPL will also be received in the callback function registered by
+ * @ref gap_ecfc_reg_proto about the result of L2CAP ECFC channels establishment.
+ *
+ * If there was no resources to establishment all cid_num (@ref T_GAP_ECFC_CONN_IND) channels,
+ * the confirmation can reduce cid_num and sent with cause as @ref GAP_ECFC_CONN_NO_RESOURCES.
  *
  * @param[in] conn_handle Connection handle of the ACL link.
  * @param[in] identity_id Identity ID. The value shall be gotten from @ref T_GAP_ECFC_CONN_IND message.
  * @param[in] cause       Confirmation cause for the connection request from remote device.
- * @param[in] p_cid       Confirmation the cid array allow to establish.
+ *                        Value is @ref T_GAP_ECFC_CONN_CFM_CAUSE.
+ * @param[in] p_cid       Pointer to the cid array allow to establish.
  *                        The array shall be the subset of the p_cid get from @ref T_GAP_ECFC_CONN_IND message.
  * @param[in] cid_num     Confirmation the number of the L2CAP ECFC channels allow to establish.
  * @param[in] local_mtu   Preferred MTU size value of the L2CAP ECFC channel.
  * @return Operation result.
- * @retval true Send request success.
- * @retval false Send request failed.
+ * @retval true    Operation success.
+ * @retval false   Operation failure.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -586,15 +613,16 @@ bool gap_ecfc_send_conn_cfm(uint16_t conn_handle, uint16_t identity_id,
                             uint16_t *p_cid, uint8_t cid_num, uint16_t local_mtu);
 
 /**
- * @brief    Send a request to disconnect a L2CAP ECFC connection. If the request was successfully sent,
- *           @ref GAP_ECFC_DISCONN_RSP will be received in the callback function registered by
- *           @ref gap_ecfc_reg_proto to show the result of disconnection.
+ * @brief    Send a request to disconnect a L2CAP ECFC connection.
+ *
+ * If sending request operation is successful, the disconnecting result will be returned by callback
+ * registered by @ref gap_ecfc_reg_proto with msg type @ref GAP_ECFC_DISCONN_RSP.
  *
  * @param[in] conn_handle Connection handle of the ACL link.
  * @param[in] cid         Local Channel Identifier of the L2CAP ECFC channel to disconnect.
- * @return Operation result.
- * @retval true Send request success.
- * @retval false Send request failed.
+ * @return The result of sending request.
+ * @retval true Sending request operation is successful.
+ * @retval false Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -618,11 +646,9 @@ bool gap_ecfc_send_conn_cfm(uint16_t conn_handle, uint16_t identity_id,
        }
    }
 
-   int test(void)
+   void test(void)
    {
-       gap_ecfc_reg_proto(PSM_EATT, app_ecfc_callback, true, &ecfc_proto_id, GAP_ECFC_DATA_PATH_GATT);
-
-       return 0;
+        bool result = gap_ecfc_send_disconn_req(conn_handle, cid);
    }
  * \endcode
  */
@@ -630,16 +656,20 @@ bool gap_ecfc_send_disconn_req(uint16_t conn_handle, uint16_t cid);
 
 /**
  * @brief  Send a request to send L2CAP ECFC channel data to remote device.
- *         Applications can use this API when data_path is GAP_ECFC_DATA_PATH_APP
- *         configured by @ref gap_ecfc_reg_proto.
+ *
+ * Applications can use this API when data_path is @ref GAP_ECFC_DATA_PATH_APP configured by @ref gap_ecfc_reg_proto.
+ *
+ * If sending request operation is successful, the sending result will be returned by callback
+ * registered by @ref gap_ecfc_reg_proto with msg type @ref GAP_ECFC_DATA_RSP.
  *
  * @param[in] conn_handle Connection handle of the ACL link.
- * @param[in] cid         Local Channel Identifier. The value can be gotten from \ref GAP_ECFC_CONN_CMPL message.
- * @param[in] p_data      Point to data to be sent.
- * @param[in] length      Length of value to be sent. Range: 0 ~ local_mtu.
- * @return Operation result.
- * @retval true Send request success.
- * @retval false Send request failed.
+ * @param[in] cid         Local Channel Identifier. The value can be gotten from @ref GAP_ECFC_CONN_CMPL message.
+ * @param[in] p_data      Pointer to data to be sent.
+ * @param[in] length      Length of value to be sent.
+ *                        - Range: 0 ~ local_mtu.
+ * @return The result of sending request.
+ * @retval true Sending request operation is successful.
+ * @retval false Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -663,32 +693,32 @@ bool gap_ecfc_send_disconn_req(uint16_t conn_handle, uint16_t cid);
        }
    }
 
-   int test(void)
+   void test(void)
    {
-       gap_ecfc_reg_proto(PSM_EATT, app_ecfc_callback, true, &ecfc_proto_id, GAP_ECFC_DATA_PATH_GATT);
-
-       return 0;
+        bool result = gap_ecfc_send_data_req(conn_handle, cid, &data, length);
    }
  * \endcode
  */
 bool gap_ecfc_send_data_req(uint16_t conn_handle, uint16_t cid, uint8_t *p_data, uint16_t length);
 
 /**
- * @brief    Send a request to register/deregister a protocol security entry over L2CAP.
- *           The security will be used when establishing a L2CAP ECFC channel. If the
- *           request was successfully sent, a message whose type is \ref GAP_ECFC_SEC_REG_RSP
- *           and data is \ref T_GAP_ECFC_SEC_REG_RSP will be received in the callback
- *           function registered by \ref gap_ecfc_reg_proto.
+ * @brief    Send a request to register or deregister a protocol security entry over L2CAP.
+ *           The security entry will be used when establishing a L2CAP ECFC channel.
+ *
+ * If the request was successfully sent, a message whose type is @ref GAP_ECFC_SEC_REG_RSP
+ * and data is @ref T_GAP_ECFC_SEC_REG_RSP will be received in the callback
+ * function registered by @ref gap_ecfc_reg_proto.
  *
  * @param[in] is_le       Whether is LE transport.
- * @param[in] active      Register/Deregister the security entry.
+ * @param[in] active      Register or deregister the security entry.
  * @param[in] psm         PSM value for protocol.
- * @param[in] uuid
- * @param[in] requirement Security requirement of the entry. Valid values are combinations of \ref GAP_ECFC_SEC_SETTING.
+ * @param[in] uuid        UUID of the service.
+ * @param[in] requirement A bit field security requirement of the entry.
+ *                        Valid values are combinations of @ref GAP_ECFC_SEC_SETTING.
  * @param[in] key_size    Key size requirement of the entry.
- * @return Operation result.
- * @retval true Send request success.
- * @retval false Send request failed.
+ * @return The result of sending request.
+ * @retval true Sending request operation is successful.
+ * @retval false Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -719,36 +749,38 @@ bool gap_ecfc_send_data_req(uint16_t conn_handle, uint16_t cid, uint8_t *p_data,
 
        return 0;
    }
-   static T_USER_CMD_PARSE_RESULT cmd_ecfcsec(T_USER_CMD_PARSED_VALUE *p_parse_value)
-    {
-        uint8_t requirements = p_parse_value->dw_param[0];
+   bool test(void)
+   {
+        uint8_t requirements;
         if (gap_ecfc_send_sec_reg_req(true, 1, PSM_EATT, 0, requirements, 16))
         {
-            return RESULT_SUCESS;
+            return true;
         }
         else
         {
-            return RESULT_ERR;
+            return false;
         }
-    }
+   }
  * \endcode
  */
 bool gap_ecfc_send_sec_reg_req(bool is_le, uint8_t active, uint16_t psm,
                                uint16_t uuid, uint8_t requirement, uint8_t key_size);
 
 /**
- * @brief    Send a request to reconfigure L2CAP ECFC channel. If the request was successfully sent,
- *           @ref GAP_ECFC_RECONFIGURE_RSP will be received in the callback function registered by
- *           @ref gap_ecfc_reg_proto to indicate whether the procedure was successful.
+ * @brief    Send a request to reconfigure L2CAP ECFC channel.
+ *
+ * If sending request operation is successful, the reconfiguring result will be returned by callback
+ * registered by @ref gap_ecfc_reg_proto with msg type @ref GAP_ECFC_RECONFIGURE_RSP.
  *
  * @param[in] conn_handle Connection handle of the ACL link.
- * @param[in] p_cid       Local Channel Identifier array need to reconfigure.
- * @param[in] cid_num     The cid number of p_cid array. Range: (1- GAP_ECFC_CREATE_CHANN_MAX_NUM).
+ * @param[in] p_cid       Pointer to local Channel Identifier array need to reconfigure.
+ * @param[in] cid_num     The cid number of p_cid array.
+ *                        - Range: (1 - @ref GAP_ECFC_CREATE_CHANN_MAX_NUM).
  * @param[in] local_mtu   Preferred Local MTU size value of the L2CAP ECFC channel.
  * @param[in] local_mps   Preferred Local MPS value of the L2CAP ECFC channel.
- * @return Operation result.
- * @retval true Send request success.
- * @retval false Send request failed.
+ * @return The result of sending request.
+ * @retval true Sending request operation is successful.
+ * @retval false Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -775,11 +807,9 @@ bool gap_ecfc_send_sec_reg_req(bool is_le, uint8_t active, uint16_t psm,
        }
    }
 
-   int test(void)
+   void test(void)
    {
-       gap_ecfc_reg_proto(PSM_EATT, app_ecfc_callback, true, &ecfc_proto_id, GAP_ECFC_DATA_PATH_GATT);
-
-       return 0;
+        bool result = gap_ecfc_send_reconfigure_req(conn_handle, &cid, cid_num, local_mtu, local_mps);
    }
  * \endcode
  */

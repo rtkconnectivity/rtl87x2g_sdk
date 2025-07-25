@@ -55,11 +55,11 @@ extern "C" {
  */
 typedef enum
 {
-    SPI3W_2WIRE_MODE,
-    SPI3W_3WIRE_MODE,
+    SPI3W_2WIRE_MODE,   //!< 2-wire mode, disable SPI3W.
+    SPI3W_3WIRE_MODE,   //!< 3-wire mode, enable SPI3W.
 } SPI3WMode_TypeDef;
 
-#define IS_SPI3W_MODE(MODE) ((MODE) == SPI3W_2WIRE_MODE || (MODE) == SPI3W_3WIRE_MODE)
+#define IS_SPI3W_MODE(MODE) ((MODE) == SPI3W_2WIRE_MODE || (MODE) == SPI3W_3WIRE_MODE) //!< Check if the input parameter is valid.
 
 /** End of SPI3W_Mode
   * \}
@@ -72,11 +72,11 @@ typedef enum
  */
 typedef enum
 {
-    SPI3W_OE_DELAY_NONE,
-    SPI3W_OE_DELAY_1T,
+    SPI3W_OE_DELAY_NONE,   //!< Turn off the extension of the delay.
+    SPI3W_OE_DELAY_1T,     //!< Extend the SPI3W_OE by spi3w_dly_cycle + 1 clock cycles.
 } SPI3WDelay_TypeDef;
 
-#define IS_SPI3W_OE_DELAY_CFG(CFG) ((CFG) == SPI3W_OE_DELAY_1T || (CFG) == SPI3W_OE_DELAY_NONE)
+#define IS_SPI3W_OE_DELAY_CFG(CFG) ((CFG) == SPI3W_OE_DELAY_1T || (CFG) == SPI3W_OE_DELAY_NONE) //!< Check if the input parameter is valid.
 
 /** End of SPI3W_OE_Delay_Config
   * \}
@@ -89,11 +89,11 @@ typedef enum
  */
 typedef enum
 {
-    SPI3W_NORMAL_MODE,
-    SPI3W_EXTEND_MODE,
+    SPI3W_NORMAL_MODE,    //!< SPI3W is in normal mode.
+    SPI3W_EXTEND_MODE,    //!< SPI3W is in extend mode.
 } SPI3WExtMode_TypeDef;
 
-#define IS_SPI3W_END_EXTEND_MODE(MODE) ((MODE) == SPI3W_EXTEND_MODE || (MODE) == SPI3W_NORMAL_MODE)
+#define IS_SPI3W_END_EXTEND_MODE(MODE) ((MODE) == SPI3W_EXTEND_MODE || (MODE) == SPI3W_NORMAL_MODE) //!< Check if the input parameter is valid.
 
 /** End of SPI3W_End_Extend_Mode
   * \}
@@ -104,7 +104,7 @@ typedef enum
  * \{
  * \ingroup     SPI3W_Exported_Constants
  */
-#define IS_SPI3W_READ_CYCLE_DELAY(DELAY) (DELAY <= 0x1f)
+#define IS_SPI3W_READ_CYCLE_DELAY(DELAY) (DELAY <= 0x1f)     //!< SPI3W Read Cycle Delay.
 
 /** End of SPI3W_Read_Cycle_Delay
   * \}
@@ -115,13 +115,13 @@ typedef enum
  * \{
  * \ingroup     SPI3W_Exported_Constants
  */
-#define SPI3W_FLAG_BUSY                       BIT4
-#define SPI3W_FLAG_INT_IND                    BIT5
-#define SPI3W_FLAG_RESYNC_BUSY                BIT6
+#define SPI3W_FLAG_BUSY                       BIT4     //!< SPI3W is busy.
+#define SPI3W_FLAG_INT_IND                    BIT5     //!< There is SPI3W interrupt.
+#define SPI3W_FLAG_RESYNC_BUSY                BIT6     //!< SPI3W resync busy indicator.
 
 #define IS_SPI3W_FLAG(FLAG) (((FLAG) == SPI3W_FLAG_BUSY) || \
                              ((FLAG) == SPI3W_FLAG_INT_IND) || \
-                             ((FLAG) == SPI3W_FLAG_RESYNC_BUSY))
+                             ((FLAG) == SPI3W_FLAG_RESYNC_BUSY)) //!< Check if the input parameter is valid.
 
 /** End of SPI3W_Flag
   * \}
@@ -132,9 +132,9 @@ typedef enum
  * \{
  * \ingroup     SPI3W_Exported_Constants
  */
-#define SPI3W_INT_BIT                          BIT0
+#define SPI3W_INT_BIT                          BIT0     //!< SPI3W Interrupt Definition.
 
-#define IS_SPI3W_INT(INT) ((INT) == SPI3W_INT_BIT)
+#define IS_SPI3W_INT(INT) ((INT) == SPI3W_INT_BIT) //!< Check if the input parameter is valid.
 
 /** End of SPI3W_Interrupt_Definition
   * \}
@@ -191,15 +191,24 @@ typedef enum
  */
 typedef struct
 {
-    uint32_t SPI3W_SysClock;     /**< Specifies system clock. */
-    uint32_t SPI3W_Speed;        /**< Specifies SPI3W clock. */
-    uint32_t SPI3W_Mode;         /**< Specifies SPI3W operation mode.
-                                      This parameter can be a value of \ref SPI3WMode_TypeDef. */
-    uint32_t SPI3W_ReadDelay;    /**< Specifies the delay time from the end of address phase to the start of read data phase.
-                                      This parameter can be a value of 0x0 to 0x1f, delay time = (SPI3W_ReadDelay+1)/(2*SPI3W_Speed). */
-    uint32_t SPI3W_OutputDelay;  /**< Specifies SPI output delay 1T or not.
-                                      This parameter can be a value of \ref SPI3W_OE_Delay_Config. */
-    uint32_t SPI3W_ExtMode;      /**< Specifies extended timing window for SPI output enable = 0. */
+    uint32_t SPI3W_SysClock;              /**< Specify system clock.
+                                               This parameter must be 20MHz. */
+
+    uint32_t SPI3W_Speed;                 /**< Specify SPI3W clock.
+                                               This parameter can be a value of 20/256MHz ~ 2MHz. */
+
+    SPI3WMode_TypeDef SPI3W_Mode;         /**< Specify SPI3W operation mode.
+                                               This parameter can be a value of \ref SPI3W_Mode. */
+
+    uint32_t SPI3W_ReadDelay;             /**< Specify the delay time from the end of address phase to the start of read data phase.
+                                               This parameter can be a value of 0x0 to 0x1f.
+                                               delay time = (SPI3W_ReadDelay+1)/(2*SPI3W_Speed). */
+
+    SPI3WDelay_TypeDef SPI3W_OutputDelay; /**< Specify SPI output delay 1T or not.
+                                               This parameter can be a value of \ref SPI3W_OE_Delay_Config. */
+
+    SPI3WExtMode_TypeDef SPI3W_ExtMode;   /**< Specify extended timing window for SPI output enable = 0.
+                                               This parameter can be a value of \ref SPI3W_End_Extend_Mode. */
 } SPI3W_InitTypeDef;
 
 /** End of SPI3W_Exported_Types
@@ -215,8 +224,7 @@ typedef struct
   */
 
 /**
- * \brief  Deinitializes the SPI3W peripheral registers to their default reset values.
- * \return None.
+ * \brief  Deinitialize the SPI3W peripheral registers to their default reset values.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -230,11 +238,9 @@ typedef struct
 void SPI3W_DeInit(void);
 
 /**
- * \brief   Initializes the SPI3W peripheral according to the specified
- *          parameters in SPI3W_InitStruct
- * \param[in] SPI3W_InitStruct: Pointer to a SPI3W_InitTypeDef structure that
- *            contains the configuration information for the specified SPI3W peripheral.
- * \return None.
+ * \brief   Initialize the SPI3W peripheral according to the specified parameters in SPI3W_InitStruct.
+ *
+ * \param[in] SPI3W_InitStruct  Pointer to a SPI3W_InitTypeDef structure which will be initialized.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -256,9 +262,19 @@ void SPI3W_DeInit(void);
 void SPI3W_Init(SPI3W_InitTypeDef *SPI3W_InitStruct);
 
 /**
- * \brief   Fills each SPI3W_InitStruct member with its default value.
- * \param[in] SPI3W_InitStruct: Pointer to an SPI3W_InitTypeDef structure which will be initialized.
- * \return  None.
+ * \brief   Fill each SPI3W_InitStruct member with its default value.
+ *
+ * \note The default settings for the SPI3W_InitStruct member are shown in the following table:
+ *       | SPI3W_InitStruct member      | Default value                        |
+ *       |:----------------------------:|:------------------------------------:|
+ *       | SPI3W_SysClock               | 20000000                             |
+ *       | SPI3W_Speed                  | 1000000                              |
+ *       | SPI3W_Mode                   | \ref SPI3W_2WIRE_MODE                |
+ *       | SPI3W_ReadDelay              | 0                                    |
+ *       | SPI3W_OutputDelay            | \ref SPI3W_OE_DELAY_1T               |
+ *       | SPI3W_ExtMode                | \ref SPI3W_NORMAL_MODE               |
+ *
+ * \param[in] SPI3W_InitStruct  Pointer to a SPI3W_InitTypeDef structure which will be initialized.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -279,9 +295,11 @@ void SPI3W_StructInit(SPI3W_InitTypeDef *SPI3W_InitStruct);
 
 /**
  * \brief   Enable or disable the specified SPI3W peripheral.
- * \param[in] NewState: New state of the SPI3W peripheral.
- *            This parameter can be: ENABLE or DISABLE.
- * \return  None.
+ *
+ * \param[in] NewState  New state of the SPI3W peripheral.
+ *                      This parameter can be one of the following values:
+ *                      - ENABLE: Enable the SPI3W.
+ *                      - DISABLE: Disable the SPI3W.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -303,12 +321,14 @@ void SPI3W_Cmd(FunctionalState NewState);
 
 /**
  * \brief   Enable or disable the specified SPI3W interrupts.
- * \param[in] SPI3W_INT: Specifies the SPI3W interrupts sources to be enabled or disabled.
- *      This parameter can be only be the following value:
- *      \arg SPI3W_INT_BIT: Enable SPI3W interrupt.
- * \param[in]  newState: New state of the specified SPI3W interrupts.
- *      This parameter can be: ENABLE or DISABLE.
- * \return None.
+ *
+ * \param[in] SPI3W_INT  Specify the SPI3W interrupts sources to be enabled or disabled.
+ *                       This parameter can be only be the following value:
+ *                       \arg SPI3W_INT_BIT: Enable SPI3W interrupt.
+ * \param[in] newState   New state of the specified SPI3W interrupts.
+ *                       This parameter can be one of the following values:
+ *                       - ENABLE: Enable the interrupt of SPI3W.
+ *                       - DISABLE: Disable the interrupt of SPI3W.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -330,9 +350,9 @@ void SPI3W_INTConfig(uint32_t SPI3W_INT, FunctionalState newState);
 
 /**
  * \brief   Configure resync signal time value.
- * \param[in] value: Resync signal time value whose uint is 1/(2*SPI3W_Speed).
- *      This parameter can be only be the following value: 0x0 to 0xf.
- * \return  None.
+ *
+ * \param[in] value  Resync signal time value whose uint is 1/(2*SPI3W_Speed).
+ *                   This parameter can be only be a value of 0x0 ~ 0xf.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -346,12 +366,12 @@ void SPI3W_INTConfig(uint32_t SPI3W_INT, FunctionalState newState);
 void SPI3W_SetResyncTime(uint32_t value);
 
 /**
- * \brief   Send resync signal or not. Must send when SPI3W is disable.
- * \param[in] NewState: New state of the SPI3W peripheral.
- *      This parameter can be only be the following value:
- *      \arg ENABLE: Trigger resync signal.
- *      \arg DISABLE: Disable resync signal.
- * \return None.
+ * \brief   Enable or disable sending the resync signal. Must send when SPI3W is disable.
+ *
+ * \param[in] NewState  New state of the SPI3W peripheral.
+ *                      This parameter can be only be the following value:
+ *                      - ENABLE: Trigger resync signal.
+ *                      - DISABLE: Disable resync signal.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -366,7 +386,7 @@ void SPI3W_ResyncSignalCmd(FunctionalState NewState);
 
 /**
  * \brief   Get total number of data byte in each SPI reading.
- * \param[in] None.
+ *
  * \return  The total number of data byte in each SPI reading.
  *
  * <b>Example usage</b>
@@ -383,8 +403,6 @@ uint8_t SPI3W_GetRxDataLen(void);
 
 /**
  * \brief   Clear read data number status.
- * \param[in] None.
- * \return  None.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -399,8 +417,6 @@ void SPI3W_ClearRxDataLen(void);
 
 /**
  * \brief   Clear all read data registers.
- * \param[in] None.
- * \return  None.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -415,9 +431,9 @@ void SPI3W_ClearRxFIFO(void);
 
 /**
  * \brief   Start to write data.
- * \param[in] address: Write address.
- * \param[in] data: Write data.
- * \return  None.
+ *
+ * \param[in] address  Write address.
+ * \param[in] data     Write data.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -433,10 +449,10 @@ void SPI3W_ClearRxFIFO(void);
 void SPI3W_StartWrite(uint8_t address, uint8_t data);
 
 /**
- * \brief   Start read.
- * \param[in] address: Read address.
- * \param[in] len: Number of data to read. This value can be 0x1 to 0xf.
- * \return  None.
+ * \brief   Start reading data.
+ *
+ * \param[in] address  Read address.
+ * \param[in] len      Number of data to read. This value can be 0x1 to 0xf.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -453,9 +469,9 @@ void SPI3W_StartRead(uint8_t address, uint32_t len);
 
 /**
  * \brief  Read data.
- * \param[in] pBuf: Buffer to store read datas.
- * \param[in] readNum: Read number.
- * \return  None.
+ *
+ * \param[in] pBuf     Buffer to store read data.
+ * \param[in] readNum  Read number.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -471,15 +487,17 @@ void SPI3W_StartRead(uint8_t address, uint32_t len);
 void SPI3W_ReadBuf(uint8_t *pBuf, uint8_t readNum);
 
 /**
- * \brief   Check whether the specified SPI3W flag is set.
- * \param[in] SPI3W_FLAG: Specify flags to check.
- *      This parameter can be one of the following values:
- *      \arg SPI3W_FLAG_BUSY: SPI3W is busy.
- *      \arg SPI3W_FLAG_INT_IND: There is SPI3W interrupt.
- *      \arg SPI3W_FLAG_RESYNC_BUSY: Resync busy or not.
+ * \brief   Get the specified SPI3W flag status.
+ *
+ * \param[in] SPI3W_FLAG  Specify flags to check.
+ *                        This parameter can be one of the following values, Refer to \ref SPI3W_Flag.
+ *                        \arg SPI3W_FLAG_BUSY: SPI3W is busy.
+ *                        \arg SPI3W_FLAG_INT_IND: There is SPI3W interrupt.
+ *                        \arg SPI3W_FLAG_RESYNC_BUSY: Resync busy or not.
+ *
  * \return  The new state of the specified SPI3W flag.
- * \retval  SET: The specified SPI3W flag state is pending.
- * \retval  RESET: The specified SPI3W flag state is not pending.
+ *          - SET: The specified SPI3W flag state is pending.
+ *          - RESET: The specified SPI3W flag state is not pending.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -495,10 +513,10 @@ FlagStatus SPI3W_GetFlagStatus(uint32_t SPI3W_FLAG);
 
 /**
  * \brief   Clear the SPI3W interrupt pending bit.
- * \param[in] SPI3W_INT: Specify the SPI3W interrupt source to enable or disable.
- *      This parameter can only be the following values:
- *      \arg SPI3W_INT_BIT: Enable SPI3W interrupt source.
- * \return None.
+ *
+ * \param[in] SPI3W_INT  Specify the SPI3W interrupt sources.
+ *                       This parameter can only be the following values:
+ *                       - SPI3W_INT_BIT: Enable SPI3W interrupt source.
  *
  * <b>Example usage</b>
  * \code{.c}

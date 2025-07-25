@@ -1,13 +1,22 @@
-/*
- * Copyright (c) 2017, Realtek Semiconductor Corporation. All rights reserved.
- */
+/**
+*********************************************************************************************************
+*               Copyright(c) 2024, Realtek Semiconductor Corporation. All rights reserved.
+*********************************************************************************************************
+* @file      os_mem.h
+* @brief     Header file for os memory API.
+* @details   This file is used for memory malloc and free.
+* @author    rui_yu
+* @date      2024-12-30
+* @version   v1.0
+* *********************************************************************************************************
+*/
 
 #ifndef _OS_MEM_H_
 #define _OS_MEM_H_
 
 #include <stdint.h>
 #include <stddef.h>
-#include "mem_types.h"
+#include <mem_types.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -41,21 +50,17 @@ extern void *(*os_mem_aligned_alloc_intern)(RAM_TYPE ram_type,
   */
 
 /**
- * os_mem.h
  *
  * \brief    Allocate a memory block with required size, using the given RAM type.
  *           If required size is not aligned to 8, the actual allocated block size will
- *           aligned to 8.
+ *           be automatically aligned to 8.
  *
- * \param   ram_type            RAM type for allocation.
- * \arg \c  RAM_TYPE_DATA_ON        Data RAM type.
- * \arg \c  RAM_TYPE_BUFFER_ON      BUFFER RAM type.
- * \arg \c  RAM_TYPE_EXT_DATA_SRAM  EXT_DATA_SRAM type.
+ * \param[in]   ram_type RAM type for allocation, refer to @ref RAM_TYPE.
  *
- * \param   size     Required memory size.
+ * \param[in]   size     Required memory size.
  *
  * \return     The address of the allocated memory block. If the address is NULL, the
- *             memory allocation failed.
+ *             memory allocation failed. The user needs to check if heap is not enough.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -85,16 +90,15 @@ extern void *(*os_mem_aligned_alloc_intern)(RAM_TYPE ram_type,
     os_mem_alloc_intern(ram_type, size, __func__, __LINE__)
 
 /**
- * os_mem.h
  *
  * \brief    Allocate a memory block with required size, using the fixed Data RAM type.
  *           If required size is not aligned to 8, the actual allocated block size will
  *           aligned to 8.
  *
- * \param   size     Required memory size.
+ * \param[in]   size     Required memory size.
  *
  * \return     The address of the allocated memory block. If the address is NULL, the
- *             memory allocation failed.
+ *             memory allocation failed. The user needs to check if heap is not enough.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -124,21 +128,17 @@ extern void *(*os_mem_aligned_alloc_intern)(RAM_TYPE ram_type,
     os_mem_alloc_intern(RAM_TYPE_DATA_ON, size, __func__, __LINE__)
 
 /**
- * os_mem.h
  *
  * \brief    Allocate and clear a memory block with required size, using the given RAM type.
  *           If required size is not aligned to 8, the actual allocated block size will
- *           aligned to 8.
+ *           be automatically aligned to 8.
  *
- * \param   ram_type            RAM type for allocation.
- * \arg \c  RAM_TYPE_DATA_ON        Data RAM type.
- * \arg \c  RAM_TYPE_BUFFER_ON      BUFFER RAM type.
- * \arg \c  RAM_TYPE_EXT_DATA_SRAM  EXT_DATA_SRAM type.
+ * \param[in]   ram_type RAM type for allocation, refer to @ref RAM_TYPE.
  *
- * \param   size     Required memory size.
+ * \param[in]   size     Required memory size.
  *
  * \return     The address of the allocated memory block. If the address is NULL, the
- *             memory allocation failed.
+ *             memory allocation failed. The user needs to check if heap is not enough.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -168,16 +168,15 @@ extern void *(*os_mem_aligned_alloc_intern)(RAM_TYPE ram_type,
     os_mem_zalloc_intern(ram_type, size, __func__, __LINE__)
 
 /**
- * os_mem.h
  *
  * \brief    Allocate and clear a memory block with required size, using the fixed Data RAM type.
  *           If required size is not aligned to 8, the actual allocated block size will
  *           aligned to 8.
  *
- * \param   size     Required memory size.
+ * \param[in]   size     Required memory size.
  *
  * \return     The address of the allocated memory block. If the address is NULL, the
- *             memory allocation failed.
+ *             memory allocation failed. The user needs to check if heap is not enough.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -207,23 +206,19 @@ extern void *(*os_mem_aligned_alloc_intern)(RAM_TYPE ram_type,
     os_mem_zalloc_intern(RAM_TYPE_DATA_ON, size, __func__, __LINE__)
 
 /**
- * os_mem.h
  *
  * \brief    Allocate an aligned memory block with required size.
  *
- * \param   ram_type            RAM type for allocation.
- * \arg \c  RAM_TYPE_DATA_ON        Data RAM type.
- * \arg \c  RAM_TYPE_BUFFER_ON      BUFFER RAM type.
- * \arg \c  RAM_TYPE_EXT_DATA_SRAM  EXT_DATA_SRAM type.
+ * \param[in]   ram_type    RAM type for allocation, refer to @ref RAM_TYPE.
  *
- * \param   size        Required memory size.
+ * \param[in]   size        Required memory size.
  *
- * \param   alignment   Memory alignment in 2^N bytes. If alignment is 0, use
+ * \param[in]   alignment   Memory alignment in 2^N bytes. If alignment is 0, use
  *                      system default memory alignment (8 Bytes for FreeRTOS).
  *                      The aligned memory block must use os_mem_aligned_free() API function to free.
  *
  * \return     The address of the allocated memory block. If the address is NULL, the
- *             memory allocation failed.
+ *             memory allocation failed. The user needs to check if heap is not enough.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -254,11 +249,10 @@ extern void *(*os_mem_aligned_alloc_intern)(RAM_TYPE ram_type,
     os_mem_aligned_alloc_intern(ram_type, size, alignment, __func__, __LINE__)
 
 /**
- * os_mem.h
  *
  * \brief    Free a memory block that had been allocated.
  *
- * \param   p_block     The address of memory block being freed.
+ * \param[in]   p_block  The address of memory block being freed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -287,14 +281,11 @@ extern void *(*os_mem_aligned_alloc_intern)(RAM_TYPE ram_type,
 extern void (*os_mem_free)(void *p_block);
 
 /**
- * os_mem.h
  *
  * \brief    Free a memory block that had been aligned allocated.
  *
- * \param    p_block  The address of memory block being freed.
+ * \param[in]    p_block  The address of memory block being freed.
  *
- * \return     The address of the allocated memory block. If the address is NULL, the
- *             memory allocation failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -324,14 +315,10 @@ extern void (*os_mem_free)(void *p_block);
 extern void (*os_mem_aligned_free)(void *p_block);
 
 /**
- * os_mem.h
  *
  * \brief    Peek the total unused memory size in the specified RAM type.
  *
- * \param   ram_type            RAM type for peek.
- * \arg \c  RAM_TYPE_DATA_ON        Data RAM type.
- * \arg \c  RAM_TYPE_BUFFER_ON      BUFFER RAM type.
- * \arg \c  RAM_TYPE_EXT_DATA_SRAM  EXT_DATA_SRAM type.
+ * \param[in]   ram_type            RAM type for peek, refer to @ref RAM_TYPE.
  *
  * \return     The total unused memory size in bytes.
  *
@@ -345,8 +332,8 @@ extern void (*os_mem_aligned_free)(void *p_block);
  *     // Peek unused DATA ON memory size.
  *     unused_size = os_mem_peek(RAM_TYPE_DATA_ON);
  *
- *     // Peek unused DATA OFF memory size.
- *     unused_size = os_mem_peek(RAM_TYPE_DATA_OFF);
+ *     // Peek unused buffer on memory size.
+ *     unused_size = os_mem_peek(RAM_TYPE_BUFFER_ON);
  *
  *     return 0;
  * }
@@ -356,14 +343,10 @@ extern void (*os_mem_aligned_free)(void *p_block);
 extern size_t (*os_mem_peek)(RAM_TYPE ram_type);
 
 /**
- * os_mem.h
  *
  * \brief    Peek the max memory size of unused blocks in the specified RAM type.
  *
- * \param   ram_type            RAM type for peek.
- * \arg \c  RAM_TYPE_DATA_ON        Data RAM type.
- * \arg \c  RAM_TYPE_BUFFER_ON      BUFFER RAM type.
- * \arg \c  RAM_TYPE_EXT_DATA_SRAM  EXT_DATA_SRAM type.
+ * \param[in]   ram_type            RAM type for peek, refer to @ref RAM_TYPE.
  *
  * \return     The max memory size of unused blocks in bytes.
  *
@@ -389,7 +372,6 @@ extern size_t (*os_mem_peek_max_free_block)(RAM_TYPE ram_type);
 
 
 /**
- * os_mem.h
  *
  * \brief    Peek and print the unused memory size of all RAM type.
  *

@@ -277,7 +277,6 @@ void CODEC_Init(CODEC_TypeDef *CODECx, CODEC_InitTypeDef *CODEC_InitStruct)
     codec_0x164.b.adc_0_ad_lpf1st_en = 0x1;
     codec_0x164.b.adc_0_ad_lpf2nd_en = 0x1;
     codec_0x164.b.adc_0_ad_zdet_func = 0X2;
-    codec_0x164.b.adc_0_ad_zdet_tout = CODEC_InitStruct->CODEC_Ch0ZeroDetTimeout;
 
     codec_0x168.b.adc_0_ad_gain = CODEC_InitStruct->CODEC_Ch0AdGain;
     codec_0x168.b.adc_0_depop_en = 0x0;
@@ -293,7 +292,6 @@ void CODEC_Init(CODEC_TypeDef *CODECx, CODEC_InitTypeDef *CODEC_InitStruct)
     codec_0x16C.b.adc_1_ad_lpf2nd_en = 0x1;
     codec_0x16C.b.adc_1_ad_zdet_func =
         0x2; //Channel 1 ADC path zero detection function select 2'b00 : immediate change 2'b01 : zero detection & immediate change 2'b10:zdet & step 2'b11: zdet&timeout step
-    codec_0x16C.b.adc_1_ad_zdet_tout = CODEC_InitStruct->CODEC_Ch1ZeroDetTimeout;
 
     codec_0x170.b.adc_1_ad_gain = CODEC_InitStruct->CODEC_Ch1AdGain;
     codec_0x170.b.adc_1_depop_en = 0x0;
@@ -423,13 +421,11 @@ void CODEC_StructInit(CODEC_InitTypeDef *CODEC_InitStruct)
     CODEC_InitStruct->CODEC_Ch0MicType = CODEC_CH_AMIC;
     CODEC_InitStruct->CODEC_Ch0DmicDataLatch = DMIC_Ch_Rising_Latch;
     CODEC_InitStruct->CODEC_Ch0AdGain = 0x2F;
-    CODEC_InitStruct->CODEC_Ch0ZeroDetTimeout = Ch_ADC_Zero_DetTimeout_1024_16_Sample;
     /* MIC channel 1 initialization parameters section */
     CODEC_InitStruct->CODEC_Ch1Mute = CODEC_MUTE;
     CODEC_InitStruct->CODEC_Ch1MicType = CODEC_CH_DMIC;
     CODEC_InitStruct->CODEC_Ch1DmicDataLatch = DMIC_Ch_Falling_Latch;
     CODEC_InitStruct->CODEC_Ch1AdGain  = 0x2F;
-    CODEC_InitStruct->CODEC_Ch1ZeroDetTimeout = Ch_ADC_Zero_DetTimeout_1024_16_Sample;
     /* PDM initialization parameters section */
     CODEC_InitStruct->CODEC_DaMute = CODEC_MUTE;
     CODEC_InitStruct->CODEC_DaGain = 0xAF;

@@ -14,8 +14,8 @@ extern "C" {
 
 /**
  *
- * \brief   Add isr trace information for traceAlyzer
- * \details traceAlyzer can not trace isr automatically. os_trace_isr_create() give a name to
+ * \brief   Add isr trace information for traceAlyzer.
+ * \details TraceAlyzer can not trace isr automatically. os_trace_isr_create() give a name to
  *          the isr. os_trace_isr_begin() & os_trace_isr_end() can determine
  *          the trace scope.
  *
@@ -23,7 +23,6 @@ extern "C" {
 
 
 /**
- * os_trace.h
  *
  * \brief   Stores a name and priority level for an Interrupt Service Routine, to allow
  * for better visualization. Returns a handle used by os_trace_isr_begin.
@@ -32,7 +31,7 @@ extern "C" {
  *
  * \param[in]   p_name     A descriptive name for the isr.
  *
- * \param[in]   priority   the hardware priority of the isr.
+ * \param[in]   priority   The hardware priority of the isr.
  *
  * \return           The status of the isr trace creation.
  * \retval true      ISR trace handle was created successfully.
@@ -73,7 +72,6 @@ extern bool (*os_trace_isr_create)(void **pp_handle, const char *p_name, uint32_
 
 
 /**
- * os_trace.h
  *
  * \brief   Registers the beginning of an Interrupt Service Routine, using a handle
  * provided by os_trace_isr_create.
@@ -119,7 +117,6 @@ extern bool (*os_trace_isr_create)(void **pp_handle, const char *p_name, uint32_
 extern bool (*os_trace_isr_begin)(void *pp_handle);
 
 /**
- * os_trace.h
  *
  * \brief   Registers the end of an Interrupt Service Routine.
  *

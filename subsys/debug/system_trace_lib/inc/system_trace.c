@@ -25,7 +25,6 @@ extern BOOL_PATCH_FUNC patch_vTaskSwitchContext;
 extern void *xTimerQueue;
 
 #if (TRACE_HEAP_EN == 1)
-HEAP_INFO heap_info[TRACE_HEAP_TYPE_NUM];
 
 void print_heap_info(void)
 {

@@ -37,11 +37,17 @@
   * @{
   */
 
-#define GAP_COC_MSG_LE_CHANN_STATE          0x01
-#define GAP_COC_MSG_LE_REG_PSM              0x02
-#define GAP_COC_MSG_LE_SET_PSM_SECURITY     0x03
-#define GAP_COC_MSG_LE_SEND_DATA            0x04
-#define GAP_COC_MSG_LE_RECEIVE_DATA         0x05
+#define GAP_COC_MSG_LE_CHANN_STATE          0x01    /**< Information msg type for LE L2CAP Connection Oriented Channel state.
+                                                         The structure of callback data is @ref T_LE_COC_CHANN_STATE. */
+#define GAP_COC_MSG_LE_REG_PSM              0x02    /**< Response msg type for @ref le_coc_reg_psm.
+                                                         The structure of callback data is @ref T_LE_COC_CREDIT_BASED_PSM_REG_RSP. */
+#define GAP_COC_MSG_LE_SET_PSM_SECURITY     0x03    /**< Response msg type for @ref le_coc_set_psm_security.
+                                                         The structure of callback data is @ref T_LE_COC_CREDIT_BASED_SECURITY_REG_RSP. */
+#define GAP_COC_MSG_LE_SEND_DATA            0x04    /**< Response msg type for @ref le_coc_send_data.
+                                                         The structure of callback data is @ref T_LE_COC_SEND_DATA. */
+#define GAP_COC_MSG_LE_RECEIVE_DATA         0x05    /**< Information msg type to notify APP when receiving data from
+                                                         LE L2CAP Connection Oriented Channel.
+                                                         The structure of callback data is @ref T_LE_COC_RECEIVE_DATA. */
 
 /** End of GAP_LE_CREDIT_BASED_CONN_Exported_Macros
 * @}
@@ -63,8 +69,8 @@ typedef enum
 
 typedef enum
 {
-    COC_PARAM_CREDITS_THRESHOLD                = 0x400,   //!< Credits Threshold.
-    COC_PARAM_LOCAL_MTU                        = 0x401,   //!< Local MTU Size.
+    COC_PARAM_CREDITS_THRESHOLD                = 0x400,   /**< Credits Threshold. Write only. Size is 1 octet. Default value 2. */
+    COC_PARAM_LOCAL_MTU                        = 0x401,   /**< Local MTU Size. Write only. Size is 2 octets. Default value is 200. */
 } T_LE_COC_PARAM_TYPE;
 
 typedef enum
@@ -87,17 +93,17 @@ typedef enum
 
 typedef struct
 {
-    uint8_t         conn_id;        /**<  Connection ID.  */
-    uint16_t        cid;            /**<  Channel Identifier.  */
-    uint16_t        value_len;      /**<  Value length. */
+    uint8_t         conn_id;
+    uint16_t        cid;
+    uint16_t        value_len;
     uint8_t         *p_data;
 } T_LE_COC_RECEIVE_DATA;
 
 typedef struct
 {
-    uint8_t         conn_id;        /**<  Connection ID.  */
-    uint16_t        cid;            /**<  Channel Identifier.  */
-    uint16_t        cause;          /**<  Value length.  */
+    uint8_t         conn_id;
+    uint16_t        cid;
+    uint16_t        cause;
     uint8_t         credit;
 } T_LE_COC_SEND_DATA;
 
@@ -146,19 +152,19 @@ typedef union
   * @brief Callback for COC to notify APP.
   *
   * @param[in] coc_type    Callback msg type.
-  * @param[in] p_coc_data  Points to callback data @ref T_LE_COC_DATA.
+  * @param[in] p_coc_data  Pointer to callback data @ref T_LE_COC_DATA.
   * @return    Result.
   * @retval    result @ref T_APP_RESULT.
   */
 typedef T_APP_RESULT(*P_FUN_LE_COC_APP_CB)(uint8_t coc_type, void *p_coc_data);
 
 /**
- * @brief       Initialize the number of LE Connection Oriented Channels.
+ * @brief       Initialize the number of LE L2CAP Connection Oriented Channels.
  *
  * @param[in]   chann_num  Channel number.
- * @return Initialize result.
- * @retval true  Initialization success.
- * @retval false Initialization failure.
+ * @return Operation result.
+ * @retval true    Operation success.
+ * @retval false   Operation failure.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -172,10 +178,9 @@ typedef T_APP_RESULT(*P_FUN_LE_COC_APP_CB)(uint8_t coc_type, void *p_coc_data);
 bool        le_coc_init(uint8_t chann_num);
 
 /**
- * @brief       Register the callback function of LE Connection Oriented Channels.
+ * @brief       Register the callback function of LE L2CAP Connection Oriented Channels.
  *
  * @param[in]   app_callback  Callback function.
- * @return void.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -226,14 +231,18 @@ bool        le_coc_init(uint8_t chann_num);
 void        le_coc_register_app_cb(P_FUN_LE_COC_APP_CB app_callback);
 
 /**
- * @brief       Set parameters of LE Connection Oriented Channel.
+ * @brief       Set parameters of LE L2CAP Connection Oriented Channel.
  *
- * @param[in]   param    Parameter type: @ref T_LE_COC_PARAM_TYPE.
- * @param[in]   len      Parameter length.
- * @param[in]   p_value  Parameter value.
- * @return GAP Operation result.
- * @retval GAP_CAUSE_SUCCESS  GAP operation success.
- * @retval GAP_CAUSE_INVALID_PARAM Operation failure, invalid parameter.
+ * This function can be called with a COC parameter type @ref T_LE_COC_PARAM_TYPE and it will set the COC parameter.
+ * The 'p_value' field must point to an appropriate data type that meets the requirements for the corresponding parameter type.
+ * (For example: if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
+ *
+ * @param[in]   param    COC parameter type @ref T_LE_COC_PARAM_TYPE.
+ * @param[in]   len      Length of data to write.
+ * @param[in]   p_value  Pointer to data to write.
+ * @return Operation result.
+ * @retval GAP_CAUSE_SUCCESS    Operation success.
+ * @retval Others               Operation failure.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -246,14 +255,18 @@ void        le_coc_register_app_cb(P_FUN_LE_COC_APP_CB app_callback);
 T_GAP_CAUSE le_coc_set_param(T_LE_COC_PARAM_TYPE param, uint8_t len, void *p_value);
 
 /**
- * @brief       Get parameters of LE Connection Oriented Channel.
+ * @brief       Get channel parameters of LE L2CAP Connection Oriented Channel.
  *
- * @param[in]       param    Parameter type: @ref T_LE_COC_CHANN_PARAM_TYPE.
- * @param[in, out]  p_value  Parameter value.
+ * This function can be called with a channel parameter type @ref T_LE_COC_CHANN_PARAM_TYPE and it will get the channel parameter.
+ * The 'p_value' field must point to an appropriate data type that meets the requirements for the corresponding parameter type.
+ * (For example: if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
+ *
+ * @param[in]       param    Channel parameter type @ref T_LE_COC_CHANN_PARAM_TYPE.
+ * @param[in, out]  p_value  Pointer to location to get the value.
  * @param[in]       cid      Channel Identifier.
- * @return GAP Operation result.
- * @retval GAP_CAUSE_SUCCESS  GAP operation success.
- * @retval GAP_CAUSE_INVALID_PARAM Operation failure, invalid parameter.
+ * @return Operation result.
+ * @retval GAP_CAUSE_SUCCESS    Operation success.
+ * @retval Others   Operation failure.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -266,13 +279,16 @@ T_GAP_CAUSE le_coc_set_param(T_LE_COC_PARAM_TYPE param, uint8_t len, void *p_val
 T_GAP_CAUSE le_coc_get_chann_param(T_LE_COC_CHANN_PARAM_TYPE param, void *p_value, uint16_t cid);
 
 /**
- * @brief       Create LE Connection Oriented Channel.
+ * @brief       Create LE L2CAP Connection Oriented Channel.
+ *
+ * If sending request operation is successful, the creating result will be returned by callback registered
+ * by @ref le_coc_register_app_cb with msg type @ref GAP_COC_MSG_LE_CHANN_STATE.
  *
  * @param[in]   conn_id   Connection ID.
  * @param[in]   le_psm    LE PSM.
- * @return GAP Operation result.
- * @retval GAP_CAUSE_SUCCESS  GAP operation success.
- * @retval Others Operation failure, invalid parameter.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -314,12 +330,15 @@ T_GAP_CAUSE le_coc_get_chann_param(T_LE_COC_CHANN_PARAM_TYPE param, void *p_valu
 T_GAP_CAUSE le_coc_create(uint8_t conn_id, uint16_t le_psm);
 
 /**
- * @brief       Disconnect LE Connection Oriented Channel.
+ * @brief       Disconnect LE L2CAP Connection Oriented Channel.
+ *
+ * If sending request operation is successful, the disconnecting result will be returned by callback registered
+ * by @ref le_coc_register_app_cb with msg type @ref GAP_COC_MSG_LE_CHANN_STATE.
  *
  * @param[in]   cid   Channel Identifier.
- * @return GAP Operation result.
- * @retval GAP_CAUSE_SUCCESS  GAP operation success.
- * @retval Others Operation failure, invalid parameter.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -355,14 +374,17 @@ T_GAP_CAUSE le_coc_create(uint8_t conn_id, uint16_t le_psm);
 T_GAP_CAUSE le_coc_disc(uint16_t cid);
 
 /**
- * @brief       Send data by Connection Oriented Channel.
+ * @brief       Send data by L2CAP Connection Oriented Channel.
+ *
+ * If sending request operation is successful, the sending result will be returned by callback
+ * registered by @ref le_coc_register_app_cb with msg type @ref GAP_COC_MSG_LE_SEND_DATA.
  *
  * @param[in]   cid       Channel Identifier.
  * @param[in]   p_data    The pointer for data will be sent.
  * @param[in]   data_len  Data length.
- * @return GAP Operation result.
- * @retval GAP_CAUSE_SUCCESS  GAP operation success.
- * @retval Others Operation failure, invalid parameter.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -398,15 +420,18 @@ T_GAP_CAUSE le_coc_disc(uint16_t cid);
 T_GAP_CAUSE le_coc_send_data(uint16_t cid, uint8_t *p_data, uint16_t data_len);
 
 /**
- * @brief       Register/Deregister LE PSM.
+ * @brief       Register or deregister LE PSM.
+ *
+ * If sending request operation is successful, the registering or deregistering result will be returned by callback
+ * registered by @ref le_coc_register_app_cb with msg type @ref GAP_COC_MSG_LE_REG_PSM.
  *
  * @param[in]   le_psm   LE PSM.
  * @param[in]   action   The action for LE PSM.
- * \arg    1     Register PSM.
- * \arg    0     Deregister PSM.
- * @return GAP Operation result.
- * @retval GAP_CAUSE_SUCCESS  GAP operation success.
- * @retval Others Operation failure, invalid parameter.
+ *                       - 1:     Register PSM.
+ *                       - 0:     Deregister PSM.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -440,17 +465,20 @@ T_GAP_CAUSE le_coc_send_data(uint16_t cid, uint8_t *p_data, uint16_t data_len);
 T_GAP_CAUSE le_coc_reg_psm(uint16_t le_psm, uint8_t action);
 
 /**
- * @brief       Set PSM security for LE Connection Oriented Channels.
+ * @brief       Set PSM security for LE L2CAP Connection Oriented Channels.
+ *
+ * If sending request operation is successful, the setting result will be returned by callback
+ * registered by @ref le_coc_register_app_cb with msg type @ref GAP_COC_MSG_LE_SET_PSM_SECURITY.
  *
  * @param[in]   le_psm    LE PSM.
- * @param[in]   active    Whether to allocate secure entry.
- * \arg    true     Allocate secure entry.
- * \arg    false    Release secure entry.
- * @param[in]   mode      COC security mode: @ref T_LE_COC_SECURITY_MODE.
+ * @param[in]   active    Allocate or release secure entry.
+ *                        -    true     Allocate secure entry.
+ *                        -    false    Release secure entry.
+ * @param[in]   mode      COC security mode @ref T_LE_COC_SECURITY_MODE.
  * @param[in]   key_size  Secure key size.
- * @return GAP Operation result.
- * @retval GAP_CAUSE_SUCCESS  GAP operation success.
- * @retval Others Operation failure, invalid parameter.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}

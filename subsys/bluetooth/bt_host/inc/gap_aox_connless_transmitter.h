@@ -123,10 +123,9 @@ typedef enum
  * @brief       Initialize the number of advertising sets for connectionless transmitter.
  *
  * @param[in]   adv_set_num Advertising sets number.
- * @return GAP Operation result.
- * @retval GAP_CAUSE_SUCCESS  GAP operation success.
- * @retval GAP_CAUSE_INVALID_PARAM Operation failure, invalid parameter.
- * @retval GAP_CAUSE_NO_RESOURCE   Operation failure, memory acquisition failure.
+ * @return Operation result.
+ * @retval GAP_CAUSE_SUCCESS  Operation success.
+ * @retval Others Operation failure.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -141,28 +140,29 @@ T_GAP_CAUSE le_aox_connless_transmitter_init(uint8_t adv_set_num);
 /**
  * @brief       Request the Controller to set parameters for the transmission of Constant Tone Extensions in periodic advertising.
  *
- * This function can be called after Bluetooth Host is ready. \n
- *              Explanation: If Bluetooth Host is ready, the application will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE
- *                           with new_state about gap_init_state which is configured as @ref GAP_INIT_STATE_STACK_READY.
+ * If sending request operation is successful, the setting result will be returned by the callback
+ * function registered by @ref le_register_aox_cb with msg type @ref GAP_MSG_LE_AOX_CONNLESS_TRANSMITTER_SET_CTE_TRANSMIT_PARAMS.
  *
- * If sending request operation is successful, the result of setting parameters related parameters will be returned by
- *              @ref app_gap_aox_callback with cb_type @ref GAP_MSG_LE_AOX_CONNLESS_TRANSMITTER_SET_CTE_TRANSMIT_PARAMS.
+ * This function can be called after Bluetooth Host is ready.
+ *
+ * Explanation: If Bluetooth Host is ready, the application will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE
+ * with new_state about gap_init_state which is configured as @ref GAP_INIT_STATE_STACK_READY.
  *
  * @param[in]   adv_handle                 Used to identify an advertising set.
  * @param[in]   cte_length                 Constant Tone Extension length in 8 μs units.
- *                                         Range: 0x02 to max_cte_length supported by controller returned by
+ *                                         Range: 0x02 to max_cte_length supported by Controller returned by
  *                                                @ref le_aox_read_antenna_information.
  * @param[in]   cte_type                   @ref T_GAP_AOX_CONNLESS_TRANSMITTER_CTE_TYPES.
  * @param[in]   cte_count                  The number of Constant Tone Extensions to transmit in each periodic advertising interval.
  *                                         Range: 0x01 to 0x10.
  * @param[in]   switching_pattern_length   The number of Antenna IDs in the pattern.
- *                                         Range: 0x02 to max_switching_pattern_length supported by controller returned by
+ *                                         Range: 0x02 to max_switching_pattern_length supported by Controller returned by
  *                                                @ref le_aox_read_antenna_information.
  * @param[in]   p_antenna_ids              Antenna ID in the pattern.
  *
- * @return Send request operation.
- * @retval GAP_CAUSE_SUCCESS  Send request operation success.
- * @retval Others             Send request operation failure.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -197,19 +197,20 @@ T_GAP_CAUSE le_aox_connless_transmitter_set_cte_transmit_params(uint8_t adv_hand
 /**
  * @brief       Request the Controller to enable or disable the use of Constant Tone Extensions in periodic advertising.
  *
- * This function can be called after Bluetooth Host is ready. \n
- *              Explanation: If Bluetooth Host is ready, the application will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE
- *                           with new_state about gap_init_state which is configured as @ref GAP_INIT_STATE_STACK_READY.
+ * If sending request operation is successful, the enabling or disabling result will be returned by
+ * the callback function by @ref le_register_aox_cb with msg type @ref GAP_MSG_LE_AOX_CONNLESS_TRANSMITTER_STATE_CHANGE_INFO.
  *
- * If sending request operation is successful, the result of enabling or disabling will be returned by
- *              @ref app_gap_aox_callback with cb_type @ref GAP_MSG_LE_AOX_CONNLESS_TRANSMITTER_STATE_CHANGE_INFO.
+ * This function can be called after Bluetooth Host is ready.
+ *
+ * Explanation: If Bluetooth Host is ready, the application will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE
+ * with new_state about gap_init_state which is configured as @ref GAP_INIT_STATE_STACK_READY.
  *
  * @param[in]   adv_handle  Identifier for the advertising set in which Constant Tone Extension is being enabled or disabled.
  * @param[in]   cte_enable  @ref AOX_CONNLESS_TRANSMITTER_CTE_ENABLE.
  *
- * @return Send request operation.
- * @retval GAP_CAUSE_SUCCESS  Send request operation success.
- * @retval Others             Send request operation failure.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}

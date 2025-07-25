@@ -72,27 +72,56 @@ extern "C"
   * @{
   */
 /* Response type for @ref BIG_MGR_ROLE_ISOC_BROADCASTER and @ref BIG_MGR_ROLE_SYNC_RECEIVER. */
-#define MSG_BIG_MGR_SETUP_DATA_PATH       0x60 //!<Response msg type for gap_big_mgr_setup_data_path.
-#define MSG_BIG_MGR_REMOVE_DATA_PATH      0x61 //!<Response msg type for gap_big_mgr_remove_data_path.
+#define MSG_BIG_MGR_SETUP_DATA_PATH       0x60    /**< Response msg type for @ref gap_big_mgr_setup_data_path.
+                                                       The structure of callback data is @ref T_BIG_MGR_SETUP_DATA_PATH_RSP.
+                                                       Used for @ref BIG_MGR_ROLE_ISOC_BROADCASTER and @ref BIG_MGR_ROLE_SYNC_RECEIVER. */
+#define MSG_BIG_MGR_REMOVE_DATA_PATH      0x61    /**< Response msg type for @ref gap_big_mgr_remove_data_path.
+                                                       The structure of callback data is @ref T_BIG_MGR_REMOVE_DATA_PATH_RSP.
+                                                       Used for @ref BIG_MGR_ROLE_ISOC_BROADCASTER and @ref BIG_MGR_ROLE_SYNC_RECEIVER. */
 
 /* Test command response type for @ref BIG_MGR_ROLE_ISOC_BROADCASTER and @ref BIG_MGR_ROLE_SYNC_RECEIVER. */
-#define MSG_BIG_MGR_ISO_TEST_END          0x70 //!<Response msg type for gap_big_mgr_iso_test_end.
+#define MSG_BIG_MGR_ISO_TEST_END          0x70    /**< Response msg type for @ref gap_big_mgr_iso_test_end.
+                                                       The structure of callback data is @ref T_BIG_MGR_ISO_TEST_END_RSP.
+                                                       Used for @ref BIG_MGR_ROLE_ISOC_BROADCASTER and @ref BIG_MGR_ROLE_SYNC_RECEIVER. */
+
 /* Test command response type for @ref BIG_MGR_ROLE_ISOC_BROADCASTER. */
-#define MSG_BIG_MGR_TRANSMIT_TEST         0x74 //!<Response msg type for gap_big_mgr_transmit_test.
+#define MSG_BIG_MGR_TRANSMIT_TEST         0x74    /**< Response msg type for @ref gap_big_mgr_transmit_test.
+                                                       The structure of callback data is @ref T_BIG_MGR_TRANSMIT_TEST_RSP.
+                                                       Used for @ref BIG_MGR_ROLE_ISOC_BROADCASTER. */
+
 /* Test command response type for @ref BIG_MGR_ROLE_SYNC_RECEIVER. */
-#define MSG_BIG_MGR_RECEIVE_TEST          0x78 //!<Response msg type for gap_big_mgr_receive_test.
-#define MSG_BIG_MGR_READ_TEST_COUNTERS    0x79 //!<Response msg type for gap_big_mgr_read_test_counters.
+#define MSG_BIG_MGR_RECEIVE_TEST          0x78    /**< Response msg type for @ref gap_big_mgr_receive_test.
+                                                       The structure of callback data is @ref T_BIG_MGR_RECEIVE_TEST_RSP.
+                                                       Used for @ref BIG_MGR_ROLE_SYNC_RECEIVER. */
+#define MSG_BIG_MGR_READ_TEST_COUNTERS    0x79    /**< Response msg type for @ref gap_big_mgr_read_test_counters.
+                                                       The structure of callback data is @ref T_BIG_MGR_READ_TEST_COUNTERS_RSP.
+                                                       Used for @ref BIG_MGR_ROLE_SYNC_RECEIVER. */
 
-/* Notification and response type for @ref BIG_MGR_ROLE_ISOC_BROADCASTER. */
-#define MSG_BIG_MGR_ISOC_BROADCAST_STATE_CHANGE_INFO          0x80 //!<Isochronous Broadcaster broadcasting state change info.
-#define MSG_BIG_MGR_ISOC_BROADCASTER_CREATE_BIG_CMPL_INFO     0x81 //!<Notification msg type for gap_big_mgr_isoc_broadcaster_create_big.
-#define MSG_BIG_MGR_READ_ISO_TX_SYNC                          0x82 //!<Response msg type for gap_big_mgr_read_iso_tx_sync.
+/* Information and response type for @ref BIG_MGR_ROLE_ISOC_BROADCASTER. */
+#define MSG_BIG_MGR_ISOC_BROADCAST_STATE_CHANGE_INFO      0x80      /**< Information msg type for Isochronous Broadcaster broadcasting state.
+                                                                         The structure of callback data is @ref T_BIG_MGR_ISOC_BROADCAST_STATE_CHANGE_INFO.
+                                                                         Used for @ref BIG_MGR_ROLE_ISOC_BROADCASTER. */
+#define MSG_BIG_MGR_ISOC_BROADCASTER_CREATE_BIG_CMPL_INFO 0x81      /**< Information msg type for @ref gap_big_mgr_isoc_broadcaster_create_big.
+                                                                         The structure of callback data is @ref T_BIG_MGR_ISOC_BC_CREATE_BIG_CMPL_INFO.
+                                                                         Used for @ref BIG_MGR_ROLE_ISOC_BROADCASTER. */
+#define MSG_BIG_MGR_READ_ISO_TX_SYNC                      0x82      /**< Response msg type for @ref gap_big_mgr_read_iso_tx_sync.
+                                                                         The structure of callback data is @ref T_BIG_MGR_READ_ISO_TX_SYNC_RSP.
+                                                                         Used for @ref BIG_MGR_ROLE_ISOC_BROADCASTER. */
 
-/* Notification and response type for @ref BIG_MGR_ROLE_SYNC_RECEIVER. */
-#define MSG_BIG_MGR_SYNC_RECEIVER_DEV_STATE_CHANGE_INFO       0x90 //!<Synchronized Receiver device state change info.
-#define MSG_BIG_MGR_SYNC_RECEIVER_SYNC_STATE_CHANGE_INFO      0x91 //!<Synchronized Receiver synchronous state change info.
-#define MSG_BIG_MGR_SYNC_RECEIVER_BIG_SYNC_ESTABLISHED_INFO   0x92 //!<Notification msg type for gap_big_mgr_sync_receiver_big_create_sync.
-#define MSG_BIG_MGR_READ_ISO_LINK_QUALITY                     0x93 //!<Response msg type for gap_big_mgr_read_iso_link_quality.
+/* Information and response type for @ref BIG_MGR_ROLE_SYNC_RECEIVER. */
+#define MSG_BIG_MGR_SYNC_RECEIVER_DEV_STATE_CHANGE_INFO     0x90    /**< Information msg type for Synchronized Receiver device state.
+                                                                         The structure of callback data is @ref T_BIG_MGR_SYNC_RECEIVER_DEV_STATE_CHANGE_INFO.
+                                                                         Used for @ref BIG_MGR_ROLE_SYNC_RECEIVER. */
+#define MSG_BIG_MGR_SYNC_RECEIVER_SYNC_STATE_CHANGE_INFO    0x91    /**< Information msg type for Synchronized Receiver synchronous state.
+                                                                         The structure of callback data is @ref T_BIG_MGR_SYNC_RECEIVER_SYNC_STATE_CHANGE_INFO.
+                                                                         Used for @ref BIG_MGR_ROLE_SYNC_RECEIVER. */
+#define MSG_BIG_MGR_SYNC_RECEIVER_BIG_SYNC_ESTABLISHED_INFO 0x92    /**< Information msg type for @ref gap_big_mgr_sync_receiver_big_create_sync.
+                                                                         The structure of callback data is @ref T_BIG_MGR_SYNC_RECEIVER_BIG_SYNC_ESTABLISHED_INFO.
+                                                                         Used for @ref BIG_MGR_ROLE_SYNC_RECEIVER. */
+#define MSG_BIG_MGR_READ_ISO_LINK_QUALITY                   0x93    /**< Response msg type for @ref gap_big_mgr_read_iso_link_quality.
+                                                                         The structure of callback data is @ref T_BIG_MGR_READ_ISO_LINK_QUALITY_RSP.
+                                                                         Used for @ref BIG_MGR_ROLE_SYNC_RECEIVER. */
+
 /** End of BIG_MGR_CALLBACK_MSG
   * @}
   */
@@ -147,7 +176,7 @@ typedef enum
 
 typedef struct
 {
-    uint16_t cause;
+    uint16_t cause;                  /**< Setup response cause. */
     uint16_t bis_conn_handle;        /**< Connection handle of a BIS. */
     uint8_t  big_handle;             /**< Used to identify the BIG. */
     uint8_t  data_path_adding_path;
@@ -155,7 +184,7 @@ typedef struct
 
 typedef struct
 {
-    uint16_t cause;
+    uint16_t cause;                  /**< Remove response cause. */
     uint16_t bis_conn_handle;        /**< Connection handle of a BIS. */
     uint8_t  big_handle;             /**< Used to identify the BIG. */
     uint8_t  data_path_removing_path;
@@ -163,13 +192,13 @@ typedef struct
 
 typedef struct
 {
-    uint8_t bis_idx;
+    uint8_t bis_idx;                  /**< Index of a BIS. */
     uint16_t bis_conn_handle;         /**< Connection handle of a BIS. */
 } T_BIG_MGR_BIS_CONN_HANDLE_INFO;
 
 typedef struct
 {
-    uint16_t cause;
+    uint16_t cause;                 /**< Test end response cause. */
     uint16_t bis_conn_handle;       /**< Connection handle of a BIS. */
     uint8_t  big_handle;            /**< Used to identify the BIG. */
     uint32_t received_packet_count; /**< Number in the Received_SDU_Count.
@@ -188,31 +217,31 @@ typedef struct
 {
     uint8_t num_bis;                 /**< Total number of BISes in the BIG. */
     uint32_t sdu_interval;           /**< The interval, in microseconds, of periodic SDUs.
-                                          @arg Range: 0x0000FF to 0x0FFFFF. */
+                                          - Range: 0x0000FF to 0x0FFFFF. */
     uint16_t max_sdu;                /**< Maximum size of an SDU, in octets. */
     uint16_t max_transport_latency;  /**< Maximum transport latency, in milliseconds.
-                                          @arg Range: 0x0005 to 0x0FA0. */
+                                          - Range: 0x0005 to 0x0FA0. */
     uint8_t rtn;                     /**< The number of times that every BIS Data PDU should be retransmitted.
-                                          @arg Range: 0x00 to 0x1E. */
+                                          - Range: 0x00 to 0x1E. */
     uint8_t phy;                     /**< A bit field that indicates the PHY used for transmission of PDUs of BISes in the BIG.
-                                          @arg bit 0: The transmitter PHY of packets is LE 1M.
-                                          @arg bit 1: The transmitter PHY of packets is LE 2M.
-                                          @arg bit 2: The transmitter PHY of packets is LE Coded. */
+                                          - bit 0: The transmitter PHY of packets is LE 1M.
+                                          - bit 1: The transmitter PHY of packets is LE 2M.
+                                          - bit 2: The transmitter PHY of packets is LE Coded. */
     uint8_t  packing;                /**< Indicate the preferred method of arranging subevents of multiple BISes.
-                                          @arg 0x00: Sequential.
-                                          @arg 0x01: Interleaved. */
+                                          - 0x00: Sequential.
+                                          - 0x01: Interleaved. */
     uint8_t  framing;                /**< Indicate the format for sending BIS Data PDUs.
-                                          @arg 0x00: Unframed.
-                                          @arg 0x01: Framed. */
+                                          - 0x00: Unframed.
+                                          - 0x01: Framed. */
     uint8_t encryption;              /**< Identify the encryption mode of the BISes.
-                                          @arg 0x00: Unencrypted.
-                                          @arg 0x01: Encrypted. */
+                                          - 0x00: Unencrypted.
+                                          - 0x01: Encrypted. */
     uint8_t broadcast_code[16];      /**< Used to generate the encryption key for encrypting payloads of all BISes. */
 } T_BIG_MGR_ISOC_BROADCASTER_CREATE_BIG_PARAM;
 
 typedef struct
 {
-    uint16_t cause;
+    uint16_t cause;                 /**< Cause. */
     uint8_t  big_handle;            /**< Used to identify the BIG. */
     uint8_t adv_handle;             /**< Used to identify the periodic advertising train. */
     uint32_t big_sync_delay;        /**< The maximum time in microseconds for transmission of PDUs of all BISes in a BIG event. */
@@ -224,9 +253,9 @@ typedef struct
     uint8_t irc;                    /**< The number of times a payload is transmitted in a BIS event. */
     uint16_t max_pdu;               /**< Maximum size, in octets, of the payload. */
     uint16_t iso_interval;          /**< The time between two consecutive BIG anchor points.
-                                         @arg Range: 0x0004 to 0x0C80.
-                                         @arg Time = N * 1.25 ms.
-                                         @arg Time Range: 5 ms to 4 s. */
+                                         - Range: 0x0004 to 0x0C80.
+                                         - Time = N * 1.25 ms.
+                                         - Time Range: 5 ms to 4 s. */
     uint8_t num_bis;                /**< Total number of BISes in the BIG. */
     T_BIG_MGR_BIS_CONN_HANDLE_INFO bis_conn_handle_info[GAP_BIG_MGR_MAX_BIS_NUM];/**< Connection handle
                                                                                       of BIS. */
@@ -234,7 +263,7 @@ typedef struct
 
 typedef struct
 {
-    uint16_t cause;
+    uint16_t cause;                           /**< State change cause. */
     uint8_t big_handle;                       /**< Used to identify the BIG. */
     uint8_t adv_handle;                       /**< Used to identify the periodic advertising train. */
     T_GAP_BIG_ISOC_BROADCAST_STATE new_state; /**< @ref T_GAP_BIG_ISOC_BROADCAST_STATE. */
@@ -242,7 +271,7 @@ typedef struct
 
 typedef struct
 {
-    uint16_t cause;
+    uint16_t cause;                  /**< Read response cause. */
     uint16_t bis_conn_handle;        /**< Connection handle of a BIS. */
     uint8_t  big_handle;             /**< Used to identify the BIG. */
     uint8_t adv_handle;              /**< Used to identify the periodic advertising train. */
@@ -256,41 +285,41 @@ typedef struct
 {
     uint8_t num_bis;       /**< Total number of BISes in the BIG. */
     uint32_t sdu_interval; /**< The interval, in microseconds, of periodic SDUs.
-                                @arg Range: 0x0000FF to 0x0FFFFF */
+                                - Range: 0x0000FF to 0x0FFFFF */
     uint16_t iso_interval; /**< The time between consecutive BIG anchor points.
-                                @arg Range: 0x0004 to 0x0C80.
-                                @arg Time = N * 1.25 ms.
-                                @arg Time Range: 5 ms to 4 s. */
+                                - Range: 0x0004 to 0x0C80.
+                                - Time = N * 1.25 ms.
+                                - Time Range: 5 ms to 4 s. */
     uint8_t nse;           /**< The number of subevents in each BIS event in the BIG.
-                                @arg Range: 0x01 to 0x1F. */
+                                - Range: 0x01 to 0x1F. */
     uint16_t max_sdu;      /**< Maximum size, in octets, of an SDU. */
     uint16_t max_pdu;      /**< Maximum size, in octets, of the payload.
-                                @arg Range: 0x0001 to 0x00FB.*/
+                                - Range: 0x0001 to 0x00FB.*/
     uint8_t phy;           /**< A bit field that indicates the PHY used for transmission of PDUs of BISes in the BIG.
-                                @arg bit 0: The transmitter PHY of packets is LE 1M.
-                                @arg bit 1: The transmitter PHY of packets is LE 2M.
-                                @arg bit 2: The transmitter PHY of packets is LE Coded. */
+                                - bit 0: The transmitter PHY of packets is LE 1M.
+                                - bit 1: The transmitter PHY of packets is LE 2M.
+                                - bit 2: The transmitter PHY of packets is LE Coded. */
     uint8_t packing;       /**< Indicate the preferred method of arranging subevents of multiple BISes.
-                                @arg 0x00: Sequential.
-                                @arg 0x01: Interleaved. */
+                                - 0x00: Sequential.
+                                - 0x01: Interleaved. */
     uint8_t framing;       /**< Indicate the format for sending BIS Data PDUs.
-                                @arg 0x00: Unframed.
-                                @arg 0x01: Framed. */
+                                - 0x00: Unframed.
+                                - 0x01: Framed. */
     uint8_t bn;            /**< The number of new payloads in each interval for each BIS.
-                                @arg Range: 0x01 to 0x07. */
+                                - Range: 0x01 to 0x07. */
     uint8_t irc;           /**< The number of times the scheduled payloads are transmitted in a given event.
-                                @arg Range: 0x01 to 0x0F. */
+                                - Range: 0x01 to 0x0F. */
     uint8_t pto;           /**< Offset used for pre-transmissions.
-                                @arg Range: 0x00 to 0x0F. */
+                                - Range: 0x00 to 0x0F. */
     uint8_t encryption;    /**< Identify the encryption mode of the BISes.
-                                @arg 0x00: Unencrypted.
-                                @arg 0x01: Encrypted. */
+                                - 0x00: Unencrypted.
+                                - 0x01: Encrypted. */
     uint8_t broadcast_code[16];  /**< Used to generate the encryption key for encrypting payloads of all BISes. */
 } T_BIG_MGR_ISOC_BROADCASTER_CREATE_BIG_TEST_PARAM;
 
 typedef struct
 {
-    uint16_t cause;
+    uint16_t cause;              /**< Test response cause. */
     uint16_t bis_conn_handle;    /**< Connection handle of a BIS. */
     uint8_t  big_handle;         /**< Used to identify the BIG. */
     uint8_t adv_handle;          /**< Used to identify the periodic advertising train. */
@@ -310,7 +339,7 @@ typedef struct
 
 typedef struct
 {
-    uint16_t cause;
+    uint16_t cause;                             /**< State change cause. */
     uint8_t big_handle;                         /**< The identifier of the BIG. */
     uint8_t sync_id;                            /**< Identify the periodic advertising train. */
     uint16_t  sync_handle;                      /**< Sync_Handle identifying the periodic advertising train. */
@@ -320,26 +349,26 @@ typedef struct
 typedef struct
 {
     uint8_t encryption;                    /**< Identify the encryption mode of the BIG.
-                                                @arg 0x00: Unencrypted.
-                                                @arg 0x01: Encrypted. */
+                                                - 0x00: Unencrypted.
+                                                - 0x01: Encrypted. */
     uint8_t broadcast_code[16];            /**< Used to generate the session key to decrypt payloads of an encrypted BIS. */
     uint8_t mse;                           /**< The maximum number of subevents that a Controller should use to receive data
                                                 payloads in each interval for a BIS.
-                                                @arg 0x00: The Controller can schedule reception of any number of subevents up
-                                                      to NSE.
-                                                @arg 0x01 to 0x1F: Maximum number of subevents that should be used to receive data
-                                                              payloads in each BIS event. */
+                                                - 0x00: The Controller can schedule reception of any number of subevents up
+                                                        to NSE.
+                                                - 0x01 to 0x1F: Maximum number of subevents that should be used to receive data
+                                                                payloads in each BIS event. */
     uint16_t big_sync_timeout;             /**< Specify the maximum permitted time between successful receptions of BIS PDUs.
-                                                @arg Range: 0x000A to 0x4000.
-                                                @arg Time = N*10 ms.
-                                                @arg Time Range: 100 ms to 163.84 s. */
+                                                - Range: 0x000A to 0x4000.
+                                                - Time = N*10 ms.
+                                                - Time Range: 100 ms to 163.84 s. */
     uint8_t  num_bis;                      /**< Total number of BISes to synchronize. */
     uint8_t  bis[GAP_BIG_MGR_MAX_BIS_NUM]; /**< A list of indices corresponding to BIS(es). */
 } T_BIG_MGR_SYNC_RECEIVER_BIG_CREATE_SYNC_PARAM;
 
 typedef struct
 {
-    uint16_t cause;
+    uint16_t cause;                  /**< Cause. */
     uint8_t  big_handle;             /**< The identifier of the BIG. */
     uint8_t sync_id;                 /**< Identify the periodic advertising train. */
     uint16_t sync_handle;            /**< Sync_Handle identifying the periodic advertising train. */
@@ -350,9 +379,9 @@ typedef struct
     uint8_t irc;                     /**< The number of times a payload is transmitted in a BIS event. */
     uint16_t max_pdu;                /**< Maximum size, in octets, of the payload. */
     uint16_t iso_interval;           /**< The time between two consecutive BIG anchor points.
-                                          @arg Range: 0x0004 to 0x0C80.
-                                          @arg Time = N * 1.25 ms.
-                                          @arg Time Range: 5 ms to 4 s. */
+                                          - Range: 0x0004 to 0x0C80.
+                                          - Time = N * 1.25 ms.
+                                          - Time Range: 5 ms to 4 s. */
     uint8_t num_bis;                 /**< Indicate the number of BISes in the synchronized BIG specified
                                           by @ref gap_big_mgr_sync_receiver_big_create_sync. */
     T_BIG_MGR_BIS_CONN_HANDLE_INFO bis_conn_handle_info[GAP_BIG_MGR_MAX_BIS_NUM]; /**< Connection handle
@@ -361,7 +390,7 @@ typedef struct
 
 typedef struct
 {
-    uint16_t cause;
+    uint16_t cause;                    /**< Read response cause. */
     uint16_t bis_conn_handle;          /**< Connection handle of BIS. */
     uint8_t  big_handle;               /**< The identifier of the BIG. */
     uint8_t sync_id;                   /**< Identify the periodic advertising train. */
@@ -380,7 +409,7 @@ typedef struct
 
 typedef struct
 {
-    uint16_t cause;
+    uint16_t cause;           /**< Test response cause. */
     uint16_t bis_conn_handle; /**< Connection handle of BIS. */
     uint8_t big_handle;       /**< The identifier of the BIG. */
     uint8_t sync_id;          /**< Identify the periodic advertising train. */
@@ -389,7 +418,7 @@ typedef struct
 
 typedef struct
 {
-    uint16_t cause;
+    uint16_t cause;                  /**< Read response cause. */
     uint16_t bis_conn_handle;        /**< Connection handle of BIS. */
     uint8_t big_handle;              /**< The identifier of the BIG. */
     uint8_t sync_id;                 /**< Identify the periodic advertising train. */
@@ -449,9 +478,9 @@ typedef union
  *
  * @param[in]   big_handle_num     BIG handle number.
  * @param[in]   bis_num            BIS number.
- * @return      GAP Operation result.
- * @retval      GAP_CAUSE_SUCCESS       GAP operation success.
- * @retval      GAP_CAUSE_NO_RESOURCE   Operation failure, memory acquisition failure.
+ * @return Operation result.
+ * @retval GAP_CAUSE_SUCCESS    Operation success.
+ * @retval Others   Operation failure.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -469,30 +498,30 @@ T_GAP_CAUSE gap_big_mgr_init(uint8_t big_handle_num, uint8_t bis_num);
  * @note This function is used for @ref BIG_MGR_ROLE_ISOC_BROADCASTER and @ref BIG_MGR_ROLE_SYNC_RECEIVER.
  *
  * If sending request operation is successful, the result of creating the isochronous data path will be returned by
- *              @ref app_isoc_bis_broadcaster_cb for @ref BIG_MGR_ROLE_ISOC_BROADCASTER
- *              or @ref app_isoc_bis_receiver_cb for @ref BIG_MGR_ROLE_SYNC_RECEIVER
- *              with cb_type @ref MSG_BIG_MGR_SETUP_DATA_PATH.
+ * the callback function registered by @ref BIG_MGR_ROLE_ISOC_BROADCASTER or the callback function registered by @ref BIG_MGR_ROLE_SYNC_RECEIVER
+ * with msg type @ref MSG_BIG_MGR_SETUP_DATA_PATH.
  *
  * @param[in]   bis_conn_handle      Connection handle of the BIS.
- * @param[in]   data_path_direction  Specify the direction for which the data path is being configured. @ref LE_ISOC_DEF_SETUP_DATA_PATH_DATA_PATH_DIRECTION.
+ * @param[in]   data_path_direction  Specify the direction for which the data path is being configured.
+ *                                   Value is @ref LE_ISOC_DEF_SETUP_DATA_PATH_DATA_PATH_DIRECTION.
  *                                   @ref BIG_MGR_ROLE_ISOC_BROADCASTER uses @ref DATA_PATH_ADD_INPUT.
  *                                   @ref BIG_MGR_ROLE_SYNC_RECEIVER uses @ref DATA_PATH_ADD_OUTPUT.
  * @param[in]   data_path_id         Specify the data transport path used.
- *                                   @arg 0x00: HCI. @ref DATA_PATH_ID_HCI.
- *                                   @arg 0x01 to 0xFE: Logical_Channel_Number. The meaning of the logical channel is vendor-specific.
+ *                                   - 0x00: HCI. @ref DATA_PATH_ID_HCI.
+ *                                   - 0x01 to 0xFE: Logical_Channel_Number. The meaning of the logical channel is vendor-specific.
  * @param[in]   codec_id             Specify the coding format used over the air.
- *                                   @arg Octet 0: See Assigned Numbers for Coding Format.
- *                                   @arg Octets 1 to 2: Company ID, see Assigned Numbers for Company Identifier. Shall be ignored if octet 0 is not 0xFF.
- *                                   @arg Octets 3 to 4: Vendor-defined codec ID. Shall be ignored if octet 0 is not 0xFF.
+ *                                   - Octet 0: See Assigned Numbers for Coding Format.
+ *                                   - Octets 1 to 2: Company ID, see Assigned Numbers for Company Identifier. Shall be ignored if octet 0 is not 0xFF.
+ *                                   - Octets 3 to 4: Vendor-defined codec ID. Shall be ignored if octet 0 is not 0xFF.
  * @param[in]   controller_delay     Controller delay in microseconds.
- *                                   @arg Range: 0x000000 to 0x3D0900.
- *                                   @arg Time range: 0 s to 4 s.
+ *                                   - Range: 0x000000 to 0x3D0900.
+ *                                   - Time range: 0 s to 4 s.
  * @param[in]   codec_config_len     Length of codec configuration.
  * @param[in]   p_codec_config       Specify codec-specific configuration information for the specified direction.
  *
- * @return Send request operation.
- * @retval GAP_CAUSE_SUCCESS  Send request operation success.
- * @retval Others             Send request operation failure.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -550,18 +579,18 @@ T_GAP_CAUSE gap_big_mgr_setup_data_path(uint16_t bis_conn_handle, uint8_t data_p
  * @note This function is used for @ref BIG_MGR_ROLE_ISOC_BROADCASTER and @ref BIG_MGR_ROLE_SYNC_RECEIVER.
  *
  * If sending request operation is successful, the result of removing the data path will be returned by
- *              @ref app_isoc_bis_broadcaster_cb for @ref BIG_MGR_ROLE_ISOC_BROADCASTER
- *              or @ref app_isoc_bis_receiver_cb for @ref BIG_MGR_ROLE_SYNC_RECEIVER
- *              with cb_type @ref MSG_BIG_MGR_REMOVE_DATA_PATH.
+ * the callback function registered by @ref BIG_MGR_ROLE_ISOC_BROADCASTER or the callback function registered by @ref BIG_MGR_ROLE_SYNC_RECEIVER
+ * with msg type @ref MSG_BIG_MGR_REMOVE_DATA_PATH.
  *
  * @param[in]   bis_conn_handle      Connection handle of the BIS.
- * @param[in]   data_path_direction  Specify which directions are to have the data path removed. @ref LE_ISOC_DEF_DATA_PATH_DIRECTION_FLAG.
+ * @param[in]   data_path_direction  Specify which directions are to have the data path removed.
+ *                                   Value is @ref LE_ISOC_DEF_DATA_PATH_DIRECTION_FLAG.
  *                                   @ref BIG_MGR_ROLE_ISOC_BROADCASTER uses @ref DATA_PATH_INPUT_FLAG.
  *                                   @ref BIG_MGR_ROLE_SYNC_RECEIVER uses @ref DATA_PATH_OUTPUT_FLAG.
  *
- * @return Send request operation.
- * @retval GAP_CAUSE_SUCCESS  Send request operation success.
- * @retval Others             Send request operation failure.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -616,16 +645,15 @@ T_GAP_CAUSE gap_big_mgr_remove_data_path(uint16_t bis_conn_handle, uint8_t data_
  *
  * @note This function is used in ISO Test mode and only for testing purposes for @ref BIG_MGR_ROLE_ISOC_BROADCASTER and @ref BIG_MGR_ROLE_SYNC_RECEIVER.
  *
- * If sending request operation is success, the result of termination will be returned by
- *              @ref app_isoc_bis_broadcaster_cb for @ref BIG_MGR_ROLE_ISOC_BROADCASTER
- *              or @ref app_isoc_bis_receiver_cb for @ref BIG_MGR_ROLE_SYNC_RECEIVER
- *              with cb_type @ref MSG_BIG_MGR_ISO_TEST_END.
+ * If sending request operation is successful, the result of termination will be returned by
+ * the callback function registered by @ref BIG_MGR_ROLE_ISOC_BROADCASTER or the callback function registered by @ref BIG_MGR_ROLE_SYNC_RECEIVER
+ * with msg type @ref MSG_BIG_MGR_ISO_TEST_END.
  *
  * @param[in]   bis_conn_handle      Connection handle of the BIS.
  *
- * @return Send request operation.
- * @retval GAP_CAUSE_SUCCESS  Send request operation success.
- * @retval Others             Send request operation failure.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -684,7 +712,7 @@ T_GAP_CAUSE gap_big_mgr_iso_test_end(uint16_t bis_conn_handle);
   *
   * @param[in] big_handle  Used to identify the BIG.
   * @param[in] cb_type     Callback msg type @ref BIG_MGR_ROLE_ISOC_BROADCASTER in @ref BIG_MGR_CALLBACK_MSG.
-  * @param[in] p_cb_data   Point to callback data @ref T_BIG_MGR_CB_DATA.
+  * @param[in] p_cb_data   Pointer to callback data @ref T_BIG_MGR_CB_DATA.
   * @return    Result.
   * @retval    result @ref T_APP_RESULT.
   */
@@ -700,9 +728,9 @@ typedef T_APP_RESULT(*P_FUN_LE_BIG_MGR_ISOC_BC_CB)(uint8_t big_handle, uint8_t c
  * @param[in]   bis_num   BIS number.
  * @param[in]   cb_pfn    Callback.
  *
- * @return GAP operation result.
- * @retval GAP_CAUSE_SUCCESS  GAP operation success.
- * @retval Others             GAP operation failure.
+ * @return Operation result.
+ * @retval GAP_CAUSE_SUCCESS    Operation success.
+ * @retval Others   Operation failure.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -721,17 +749,18 @@ T_GAP_CAUSE gap_big_mgr_isoc_broadcaster_init(uint8_t big_num, uint8_t bis_num,
  *
  * @note This function is used for @ref BIG_MGR_ROLE_ISOC_BROADCASTER.
  *
- * If sending request operation is success, the result of creating BIG will be returned by
- *              @ref app_isoc_bis_broadcaster_cb for @ref BIG_MGR_ROLE_ISOC_BROADCASTER with cb_type
- *              @ref MSG_BIG_MGR_ISOC_BROADCASTER_CREATE_BIG_CMPL_INFO and @ref MSG_BIG_MGR_ISOC_BROADCAST_STATE_CHANGE_INFO.
+ * If sending request operation is successful, the result of creating BIG will be returned by
+ * the callback function registered by @ref BIG_MGR_ROLE_ISOC_BROADCASTER with msg type
+ * @ref MSG_BIG_MGR_ISOC_BROADCASTER_CREATE_BIG_CMPL_INFO and @ref MSG_BIG_MGR_ISOC_BROADCAST_STATE_CHANGE_INFO.
  *
  * @param[in]     adv_handle          Identify the periodic advertising train.
- * @param[in]     p_create_big_param  GAP Isochronous Broadcaster create BIG parameter. @ref T_BIG_MGR_ISOC_BROADCASTER_CREATE_BIG_PARAM.
- * @param[in,out] p_big_handle        Identify the BIG.
+ * @param[in]     p_create_big_param  Pointer to GAP Isochronous Broadcaster create BIG
+ *                                    parameter @ref T_BIG_MGR_ISOC_BROADCASTER_CREATE_BIG_PARAM.
+ * @param[in,out] p_big_handle        Pointer to BIG handle used to identify the BIG.
  *
- * @return Send request operation.
- * @retval GAP_CAUSE_SUCCESS  Send request operation success.
- * @retval Others             Send request operation failure.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -866,15 +895,16 @@ T_GAP_CAUSE gap_big_mgr_isoc_broadcaster_create_big(uint8_t adv_handle,
  * @note This function is used for @ref BIG_MGR_ROLE_ISOC_BROADCASTER.
  *
  * If sending request operation is successful, the result of creating BIG will be returned by
- *              @ref app_isoc_bis_broadcaster_cb for @ref BIG_MGR_ROLE_ISOC_BROADCASTER with cb_type
- *              @ref MSG_BIG_MGR_ISOC_BROADCAST_STATE_CHANGE_INFO.
+ * the callback function registered by @ref BIG_MGR_ROLE_ISOC_BROADCASTER with msg type
+ * @ref MSG_BIG_MGR_ISOC_BROADCAST_STATE_CHANGE_INFO.
  *
  * @param[in]     big_handle          Identify the BIG.
- * @param[in]     reason              Reason the BIG is terminated. @ref BT_HCI_ERROR (except @ref HCI_SUCCESS).
+ * @param[in]     reason              Reason the BIG is terminated.
+ *                                    Value is @ref BT_HCI_ERROR (except @ref HCI_SUCCESS).
  *
- * @return Send request operation.
- * @retval GAP_CAUSE_SUCCESS  Send request operation success.
- * @retval Others             Send request operation failure.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -972,14 +1002,14 @@ T_GAP_CAUSE gap_big_mgr_isoc_broadcaster_terminate_big(uint8_t big_handle, uint8
  * @note This function is used for @ref BIG_MGR_ROLE_ISOC_BROADCASTER.
  *
  * If sending request operation is successful, the reading result will be returned by
- *              @ref app_isoc_bis_broadcaster_cb for @ref BIG_MGR_ROLE_ISOC_BROADCASTER
- *              with cb_type @ref MSG_BIG_MGR_READ_ISO_TX_SYNC.
+ * the callback function registered by @ref BIG_MGR_ROLE_ISOC_BROADCASTER
+ * with msg type @ref MSG_BIG_MGR_READ_ISO_TX_SYNC.
  *
  * @param[in]   bis_conn_handle   Connection handle of the BIS.
  *
- * @return Send request operation.
- * @retval GAP_CAUSE_SUCCESS  Send request operation success.
- * @retval Others             Send request operation failure.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -1020,16 +1050,17 @@ T_GAP_CAUSE gap_big_mgr_read_iso_tx_sync(uint16_t bis_conn_handle);
  * @note This function is used in ISO Test mode and only for testing purposes for @ref BIG_MGR_ROLE_ISOC_BROADCASTER.
  *
  * If sending request operation is successful, the result of creating BIG will be returned by
- *              @ref app_isoc_bis_broadcaster_cb for @ref BIG_MGR_ROLE_ISOC_BROADCASTER with cb_type
- *              @ref MSG_BIG_MGR_ISOC_BROADCASTER_CREATE_BIG_CMPL_INFO and @ref MSG_BIG_MGR_ISOC_BROADCAST_STATE_CHANGE_INFO.
+ * the callback function registered by @ref BIG_MGR_ROLE_ISOC_BROADCASTER with msg type
+ * @ref MSG_BIG_MGR_ISOC_BROADCASTER_CREATE_BIG_CMPL_INFO and @ref MSG_BIG_MGR_ISOC_BROADCAST_STATE_CHANGE_INFO.
  *
  * @param[in]     adv_handle               Identify the periodic advertising train.
- * @param[in]     p_create_big_test_param  GAP Isochronous Broadcaster create BIG test parameter. @ref T_BIG_MGR_ISOC_BROADCASTER_CREATE_BIG_TEST_PARAM.
- * @param[in,out] p_big_handle             Identify the BIG.
+ * @param[in]     p_create_big_test_param  Pointer to GAP Isochronous Broadcaster create BIG test
+ *                                         parameter @ref T_BIG_MGR_ISOC_BROADCASTER_CREATE_BIG_TEST_PARAM.
+ * @param[in,out] p_big_handle             Pointer to BIG handle used to identify the BIG.
  *
- * @return Send request operation.
- * @retval GAP_CAUSE_SUCCESS  Send request operation success.
- * @retval Others             Send request operation failure.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -1163,19 +1194,19 @@ T_GAP_CAUSE gap_big_mgr_isoc_broadcaster_create_big_test(uint8_t adv_handle,
  *
  * @note This function is used in ISO Test mode and only for testing purposes for @ref BIG_MGR_ROLE_ISOC_BROADCASTER.
  *
- * If sending request operation is success, the result will be returned by
- *              @ref app_isoc_bis_broadcaster_cb for @ref BIG_MGR_ROLE_ISOC_BROADCASTER with cb_type
- *              @ref MSG_BIG_MGR_TRANSMIT_TEST.
+ * If sending request operation is successful, the result will be returned by
+ * the callback function registered by @ref BIG_MGR_ROLE_ISOC_BROADCASTER with msg type
+ * @ref MSG_BIG_MGR_TRANSMIT_TEST.
  *
  * @param[in]   bis_conn_handle   Connection handle of the BIS.
  * @param[in]   payload_type      Define the configuration of SDUs in the payload.
- *                                @arg 0x00: Zero length payload.
- *                                @arg 0x01: Variable length payload.
- *                                @arg 0x02: Maximum length payload.
+ *                                - 0x00: Zero length payload.
+ *                                - 0x01: Variable length payload.
+ *                                - 0x02: Maximum length payload.
  *
- * @return Send request operation.
- * @retval GAP_CAUSE_SUCCESS  Send request operation success.
- * @retval Others             Send request operation failure.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -1211,7 +1242,7 @@ T_GAP_CAUSE gap_big_mgr_transmit_test(uint16_t bis_conn_handle, uint8_t payload_
   *
   * @param[in] big_handle  Used to identify the BIG.
   * @param[in] cb_type     Callback msg type @ref BIG_MGR_ROLE_SYNC_RECEIVER in @ref BIG_MGR_CALLBACK_MSG.
-  * @param[in] p_cb_data   Point to callback data @ref T_BIG_MGR_CB_DATA.
+  * @param[in] p_cb_data   Pointer to callback data @ref T_BIG_MGR_CB_DATA.
   * @return    Result.
   * @retval    result @ref T_APP_RESULT.
   */
@@ -1221,17 +1252,18 @@ typedef T_APP_RESULT(*P_FUN_LE_BIG_MGR_SYNC_RX_CB)(uint8_t big_handle, uint8_t c
 /**
  * @brief       Initialize big configuration and register callback for GAP BIG Mgr @ref BIG_MGR_ROLE_SYNC_RECEIVER.
  *
- * @note This function is used for @ref BIG_MGR_ROLE_SYNC_RECEIVER. \n
- * @ref gap_register_direct_cb should be invoked to receive ISO Data
- *                    via cb_type @ref BT_DIRECT_MSG_ISO_DATA_IND.
+ * @note @parblock This function is used for @ref BIG_MGR_ROLE_SYNC_RECEIVER.
+ *
+ * @ref gap_register_direct_cb should be invoked to receive ISO Data via msg type @ref BT_DIRECT_MSG_ISO_DATA_IND.
+ * @endparblock
  *
  * @param[in]   big_num   BIG handle number.
  * @param[in]   bis_num   BIS number.
  * @param[in]   cb_pfn    Callback.
  *
- * @return GAP operation result.
- * @retval GAP_CAUSE_SUCCESS  GAP operation success.
- * @retval Others             GAP operation failure.
+ * @return Operation result.
+ * @retval GAP_CAUSE_SUCCESS    Operation success.
+ * @retval Others   Operation failure.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -1250,18 +1282,19 @@ T_GAP_CAUSE gap_big_mgr_sync_receiver_init(uint8_t big_num, uint8_t bis_num,
  *
  * @note This function is used for @ref BIG_MGR_ROLE_SYNC_RECEIVER.
  *
- * If sending request operation is success, the result of synchronization will be returned by
- *              @ref app_isoc_bis_receiver_cb for @ref BIG_MGR_ROLE_SYNC_RECEIVER with cb_type
- *              @ref MSG_BIG_MGR_SYNC_RECEIVER_DEV_STATE_CHANGE_INFO, @ref MSG_BIG_MGR_SYNC_RECEIVER_SYNC_STATE_CHANGE_INFO
- *              and @ref MSG_BIG_MGR_SYNC_RECEIVER_BIG_SYNC_ESTABLISHED_INFO.
+ * If sending request operation is successful, the result of synchronization will be returned by
+ * the callback function registered by @ref BIG_MGR_ROLE_SYNC_RECEIVER with msg type
+ * @ref MSG_BIG_MGR_SYNC_RECEIVER_DEV_STATE_CHANGE_INFO, @ref MSG_BIG_MGR_SYNC_RECEIVER_SYNC_STATE_CHANGE_INFO
+ * and @ref MSG_BIG_MGR_SYNC_RECEIVER_BIG_SYNC_ESTABLISHED_INFO.
  *
  * @param[in]     sync_handle              Identify the periodic advertising train.
- * @param[in]     p_big_create_sync_param  GAP Synchronized Receiver BIG create sync parameter. @ref T_BIG_MGR_SYNC_RECEIVER_BIG_CREATE_SYNC_PARAM.
- * @param[in,out] p_big_handle             Identify the BIG.
+ * @param[in]     p_big_create_sync_param  Pointer to GAP Synchronized Receiver BIG create sync
+ *                                         parameter @ref T_BIG_MGR_SYNC_RECEIVER_BIG_CREATE_SYNC_PARAM.
+ * @param[in,out] p_big_handle             Pointer to BIG handle used to identify the BIG.
 
- * @return Send request operation.
- * @retval GAP_CAUSE_SUCCESS  Send request operation success.
- * @retval Others             Send request operation failure.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -1396,15 +1429,15 @@ T_GAP_CAUSE gap_big_mgr_sync_receiver_big_create_sync(uint16_t sync_handle,
  *
  * @note This function is used for @ref BIG_MGR_ROLE_SYNC_RECEIVER.
  *
- * If sending request operation is success, the result of termination will be returned by
- *              @ref app_isoc_bis_receiver_cb for @ref BIG_MGR_ROLE_SYNC_RECEIVER with cb_type
- *              @ref MSG_BIG_MGR_SYNC_RECEIVER_SYNC_STATE_CHANGE_INFO.
+ * If sending request operation is successful, the result of termination will be returned by
+ * the callback function registered by @ref BIG_MGR_ROLE_SYNC_RECEIVER with msg type
+ * @ref MSG_BIG_MGR_SYNC_RECEIVER_SYNC_STATE_CHANGE_INFO.
  *
  * @param[in]   big_handle              Identify the BIG.
  *
- * @return Send request operation.
- * @retval GAP_CAUSE_SUCCESS  Send request operation success.
- * @retval Others             Send request operation failure.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -1477,14 +1510,14 @@ T_GAP_CAUSE gap_big_mgr_sync_receiver_big_terminate_sync(uint8_t big_handle);
  * @note This function is used for @ref BIG_MGR_ROLE_SYNC_RECEIVER.
  *
  * If sending request operation is successful, the reading result will be returned by
- *              @ref app_isoc_bis_receiver_cb for @ref BIG_MGR_ROLE_SYNC_RECEIVER with cb_type
- *              @ref MSG_BIG_MGR_READ_ISO_LINK_QUALITY.
+ * the callback function registered by @ref BIG_MGR_ROLE_SYNC_RECEIVER with msg type
+ * @ref MSG_BIG_MGR_READ_ISO_LINK_QUALITY.
  *
  * @param[in]   bis_conn_handle              Connection handle of the BIS.
  *
- * @return Send request operation.
- * @retval GAP_CAUSE_SUCCESS  Send request operation success.
- * @retval Others             Send request operation failure.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -1523,18 +1556,18 @@ T_GAP_CAUSE gap_big_mgr_read_iso_link_quality(uint16_t bis_conn_handle);
  * @note This function is used in ISO Test mode and only for testing purposes for @ref BIG_MGR_ROLE_SYNC_RECEIVER.
  *
  * If sending request operation is successful, the result will be returned by
- *              @ref app_isoc_bis_receiver_cb for @ref BIG_MGR_ROLE_SYNC_RECEIVER with cb_type
- *              @ref MSG_BIG_MGR_RECEIVE_TEST.
+ * the callback function registered by @ref BIG_MGR_ROLE_SYNC_RECEIVER with msg type
+ * @ref MSG_BIG_MGR_RECEIVE_TEST.
  *
  * @param[in]   bis_conn_handle   Connection handle of the BIS.
  * @param[in]   payload_type      Define the configuration of SDUs in the payload.
- *                                @arg 0x00: Zero length payload.
- *                                @arg 0x01: Variable length payload.
- *                                @arg 0x02: Maximum length payload.
+ *                                - 0x00: Zero length payload.
+ *                                - 0x01: Variable length payload.
+ *                                - 0x02: Maximum length payload.
  *
- * @return Send request operation.
- * @retval GAP_CAUSE_SUCCESS  Send request operation success.
- * @retval Others             Send request operation failure.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -1570,14 +1603,14 @@ T_GAP_CAUSE gap_big_mgr_receive_test(uint16_t bis_conn_handle, uint8_t payload_t
  * @note This function is used in ISO Test mode and only for testing purposes for @ref BIG_MGR_ROLE_SYNC_RECEIVER.
  *
  * If sending request operation is successful, the result will be returned by
- *              @ref app_isoc_bis_receiver_cb for @ref BIG_MGR_ROLE_SYNC_RECEIVER with cb_type
- *              @ref MSG_BIG_MGR_READ_TEST_COUNTERS.
+ * the callback function registered by @ref BIG_MGR_ROLE_SYNC_RECEIVER with msg type
+ * @ref MSG_BIG_MGR_READ_TEST_COUNTERS.
  *
  * @param[in]   bis_conn_handle   Connection handle of the BIS.
  *
- * @return Send request operation.
- * @retval GAP_CAUSE_SUCCESS  Send request operation success.
- * @retval Others             Send request operation failure.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}

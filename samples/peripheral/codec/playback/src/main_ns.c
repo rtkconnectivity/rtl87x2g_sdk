@@ -13,7 +13,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include <stdlib.h>
 #include "trace.h"
-#include "os_sched.h"
 #include "io_codec.h"
 
 /* Private typedef -----------------------------------------------------------*/

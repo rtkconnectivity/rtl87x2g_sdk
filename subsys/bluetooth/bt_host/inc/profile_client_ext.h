@@ -32,7 +32,7 @@ extern "C" {
   * @{
   */
 /** @defgroup GATT_CLIENT_EXT_API GATT Client Extension API
-  * @brief The GATT Client APIs can be used when parameter use_ext of the client_cfg_use_ext_api is true.
+  * @brief The GATT Client extension APIs can be used when parameter use_ext of the @ref client_cfg_use_ext_api is true.
   * @{
   */
 /*============================================================================*
@@ -80,11 +80,12 @@ typedef void (*P_FUN_EXT_DISCONNECT_CB)(uint16_t conn_handle, uint16_t cid);
   */
 typedef struct
 {
-    P_FUN_EXT_DISCOVER_STATE_CB    discover_state_cb;   //!< Discovery state callback function pointer
-    P_FUN_EXT_DISCOVER_RESULT_CB   discover_result_cb;  //!< Discovery result callback function pointer
-    P_FUN_EXT_READ_RESULT_CB       read_result_cb;      //!< Read response callback function pointer
-    P_FUN_EXT_WRITE_RESULT_CB      write_result_cb;     //!< Write result callback function pointer
-    P_FUN_EXT_NOTIFY_IND_RESULT_CB notify_ind_result_cb;//!< Notify Indication callback function pointer
+    P_FUN_EXT_DISCOVER_STATE_CB    discover_state_cb;   //!< Discovery state callback function pointer.
+    P_FUN_EXT_DISCOVER_RESULT_CB   discover_result_cb;  //!< Discovery result callback function pointer.
+    P_FUN_EXT_READ_RESULT_CB       read_result_cb;      //!< Read response callback function pointer.
+    P_FUN_EXT_WRITE_RESULT_CB      write_result_cb;     //!< Write result callback function pointer.
+    P_FUN_EXT_NOTIFY_IND_RESULT_CB
+    notify_ind_result_cb;//!< Notify Indication callback function pointer.
 } T_FUN_EXT_CLIENT_CBS;
 /** End of T_FUN_EXT_CLIENT_CBS
   * @}
@@ -102,7 +103,6 @@ typedef struct
 /**
   * @brief  Used by application, register general client callback.
   * @param[in]  p_fun_cb  Function offered by application.
-  * @return void.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -118,10 +118,13 @@ void client_ext_register_general_client_cb(P_FUN_EXT_GENERAL_APP_CB p_fun_cb);
 
 /**
  * @brief  Used by specific client, register callback.
- * @param[in,out]  p_out_client_id  Client ID generated for registered specific client module.
- * @param[in]      client_cbs       Callback functions implemented in specific client module.
- * @retval true   Register successful.
- * @retval false  Register failed.
+ * @param[in,out]  p_out_client_id  Pointer to Client ID generated for registered specific
+ *                                  client module @ref T_CLIENT_ID.
+ * @param[in]      client_cbs       Pointer to callback functions implemented in
+ *                                  specific client module @ref T_FUN_EXT_CLIENT_CBS.
+ * @return Operation result.
+ * @retval true    Operation success.
+ * @retval false   Operation failure.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -132,7 +135,7 @@ void client_ext_register_general_client_cb(P_FUN_EXT_GENERAL_APP_CB p_fun_cb);
         if (link_num > SIMP_MAX_LINKS)
         {
             APP_PRINT_ERROR1("simp_ble_add_client: invalid link_num %d", link_num);
-            return 0xff;
+            return 0xFF;
         }
         if (false == client_ext_register_spec_client_cb(&simp_client, &simp_ble_client_cbs))
         {
@@ -153,41 +156,63 @@ bool client_ext_register_spec_client_cb(T_CLIENT_ID *p_out_client_id,
 
 /**
   * @brief  Send discovery all primary services request.
+  *
+  * When client_id is set to @ref CLIENT_PROFILE_GENERAL_ID, if sending request operation is successful,
+  * the discovering result will be returned by callback registered by @ref client_ext_register_general_client_cb
+  * with client_id set to @ref CLIENT_PROFILE_GENERAL_ID and cb_type of p_data (@ref T_CLIENT_APP_CB_DATA)
+  * set to @ref CLIENT_APP_CB_TYPE_DISC_STATE and @ref CLIENT_APP_CB_TYPE_DISC_RESULT.
+  *
+  * When client_id is set to specific client ID registered by @ref client_ext_register_spec_client_cb, if sending
+  * request operation is successful, the discovering result will be returned by discover_state_cb
+  * and discover_result_cb registered by @ref client_ext_register_spec_client_cb.
+  *
   * @param[in] conn_handle     Connection handle of the ACL link.
   * @param[in] cid             Local Channel Identifier assigned by Bluetooth Host.
-  *                            @arg 0     Profile client layer will automatically search for available channels.
-  *                            @arg other Shall use the GAP_CHANNEL_STATE_CONNECTED state channel.
-  * @param[in]  client_id      Client ID of specific client module.
-  * @retval GAP_CAUSE_SUCCESS  Discovery request success.
-  * @retval other              Discovery request failed.
+  *                            - 0:      Profile client layer will automatically search for available channels.
+  *                            - Others: Shall use the @ref GAP_CHANNEL_STATE_CONNECTED state channel.
+  * @param[in]  client_id      - Client ID of specific client module. Value is @ref T_CLIENT_ID.
+  *                            - @ref CLIENT_PROFILE_GENERAL_ID.
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   */
 T_GAP_CAUSE client_ext_all_primary_srv_discovery(uint16_t conn_handle, uint16_t cid,
                                                  T_CLIENT_ID client_id);
 
 /**
   * @brief  Send discovery services by 16-bit UUID request.
+  *
+  * If sending request operation is successful, the discovering result will be returned by discover_state_cb
+  * and discover_result_cb registered by @ref client_ext_register_spec_client_cb.
+  *
   * @param[in] conn_handle     Connection handle of the ACL link.
   * @param[in] cid             Local Channel Identifier assigned by Bluetooth Host.
-  *                            @arg 0     Profile client layer will automatically search for available channels.
-  *                            @arg other Shall use the GAP_CHANNEL_STATE_CONNECTED state channel.
-  * @param[in]  client_id      Client ID of specific client module.
+  *                            - 0:      Profile client layer will automatically search for available channels.
+  *                            - Others: Shall use the @ref GAP_CHANNEL_STATE_CONNECTED state channel.
+  * @param[in]  client_id      Client ID of specific client module. Value is @ref T_CLIENT_ID.
   * @param[in]  uuid16         16-bit UUID.
-  * @retval GAP_CAUSE_SUCCESS  Discovery request success.
-  * @retval other              Discovery request failed.
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   */
 T_GAP_CAUSE client_ext_by_uuid_srv_discovery(uint16_t conn_handle, uint16_t cid,
                                              T_CLIENT_ID client_id, uint16_t uuid16);
 
 /**
   * @brief  Send discovery services by 128-bit UUID request.
+  *
+  * If sending request operation is successful, the discovering result will be returned by discover_state_cb
+  * and discover_result_cb registered by @ref client_ext_register_spec_client_cb.
+  *
   * @param[in] conn_handle     Connection handle of the ACL link.
   * @param[in] cid             Local Channel Identifier assigned by Bluetooth Host.
-  *                            @arg 0     Profile client layer will automatically search for available channels.
-  *                            @arg other Shall use the GAP_CHANNEL_STATE_CONNECTED state channel.
-  * @param[in]  client_id      Client ID of specific client module.
-  * @param[in]  p_uuid128      128-bit UUID.
-  * @retval GAP_CAUSE_SUCCESS  Discovery request success.
-  * @retval other              Discovery request failed.
+  *                            - 0:      Profile client layer will automatically search for available channels.
+  *                            - Others: Shall use the @ref GAP_CHANNEL_STATE_CONNECTED state channel.
+  * @param[in]  client_id      Client ID of specific client module. Value is @ref T_CLIENT_ID.
+  * @param[in]  p_uuid128      Pointer to 128-bit characteristic UUID.
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   */
 T_GAP_CAUSE client_ext_by_uuid128_srv_discovery(uint16_t conn_handle, uint16_t cid,
                                                 T_CLIENT_ID client_id,
@@ -195,15 +220,20 @@ T_GAP_CAUSE client_ext_by_uuid128_srv_discovery(uint16_t conn_handle, uint16_t c
 
 /**
   * @brief  Send discovery relationship services request.
+  *
+  * If sending request operation is successful, the discovering result will be returned by discover_state_cb
+  * and discover_result_cb registered by @ref client_ext_register_spec_client_cb.
+  *
   * @param[in]  conn_handle    Connection handle of the ACL link.
   * @param[in]  cid            Local Channel Identifier assigned by Bluetooth Host.
-  *                            @arg 0     Profile client layer will automatically search for available channels.
-  *                            @arg other Shall use the GAP_CHANNEL_STATE_CONNECTED state channel.
-  * @param[in]  client_id      Client ID of specific client module.
+  *                            - 0:      Profile client layer will automatically search for available channels.
+  *                            - Others: Shall use the @ref GAP_CHANNEL_STATE_CONNECTED state channel.
+  * @param[in]  client_id      Client ID of specific client module. Value is @ref T_CLIENT_ID.
   * @param[in]  start_handle   Start handle of range to be searched.
   * @param[in]  end_handle     End handle of range to be searched.
-  * @retval GAP_CAUSE_SUCCESS  Discovery request success.
-  * @retval other              Discovery request failed.
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   */
 T_GAP_CAUSE client_ext_relationship_discovery(uint16_t conn_handle, uint16_t cid,
                                               T_CLIENT_ID client_id,
@@ -211,49 +241,64 @@ T_GAP_CAUSE client_ext_relationship_discovery(uint16_t conn_handle, uint16_t cid
 
 /**
   * @brief  Send discovery characteristics request.
+  *
+  * If sending request operation is successful, the discovering result will be returned by discover_state_cb
+  * and discover_result_cb registered by @ref client_ext_register_spec_client_cb.
+  *
   * @param[in] conn_handle     Connection handle of the ACL link.
   * @param[in] cid             Local Channel Identifier assigned by Bluetooth Host.
-  *                            @arg 0     Profile client layer will automatically search for available channels.
-  *                            @arg other Shall use the GAP_CHANNEL_STATE_CONNECTED state channel.
-  * @param[in]  client_id      Client ID of specific client module.
+  *                            - 0:      Profile client layer will automatically search for available channels.
+  *                            - Others: Shall use the @ref GAP_CHANNEL_STATE_CONNECTED state channel.
+  * @param[in]  client_id      Client ID of specific client module. Value is @ref T_CLIENT_ID.
   * @param[in]  start_handle   Start handle of range to be searched.
   * @param[in]  end_handle     End handle of range to be searched.
-  * @retval GAP_CAUSE_SUCCESS  Discovery request success.
-  * @retval other              Discovery request failed.
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   */
 T_GAP_CAUSE client_ext_all_char_discovery(uint16_t conn_handle, uint16_t cid, T_CLIENT_ID client_id,
                                           uint16_t start_handle,
                                           uint16_t end_handle);
 
 /**
-  * @brief  Send discovery characteristics request by characteristic UUID.
+  * @brief  Send discovery characteristics request by 16-bit characteristic UUID.
+  *
+  * If sending request operation is successful, the discovering result will be returned by discover_state_cb
+  * and discover_result_cb registered by @ref client_ext_register_spec_client_cb.
+  *
   * @param[in] conn_handle     Connection handle of the ACL link.
   * @param[in] cid             Local Channel Identifier assigned by Bluetooth Host.
-  *                            @arg 0     Profile client layer will automatically search for available channels.
-  *                            @arg other Shall use the GAP_CHANNEL_STATE_CONNECTED state channel.
-  * @param[in]  client_id      Client ID of specific client module.
+  *                            - 0:      Profile client layer will automatically search for available channels.
+  *                            - Others: Shall use the @ref GAP_CHANNEL_STATE_CONNECTED state channel.
+  * @param[in]  client_id      Client ID of specific client module. Value is @ref T_CLIENT_ID.
   * @param[in]  start_handle   Start handle of range to be searched.
   * @param[in]  end_handle     End handle of range to be searched.
   * @param[in]  uuid16         16-bit characteristic UUID to be searched.
-  * @retval GAP_CAUSE_SUCCESS  Discovery request success.
-  * @retval other              Discovery request failed.
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   */
 T_GAP_CAUSE client_ext_by_uuid_char_discovery(uint16_t conn_handle, uint16_t cid,
                                               T_CLIENT_ID client_id,
                                               uint16_t start_handle,
                                               uint16_t end_handle, uint16_t uuid16);
 /**
-  * @brief  Send discovery characteristics request by characteristic UUID.
+  * @brief  Send discovery characteristics request by 128-bit characteristic UUID.
+  *
+  * If sending request operation is successful, the discovering result will be returned by discover_state_cb
+  * and discover_result_cb registered by @ref client_ext_register_spec_client_cb.
+  *
   * @param[in] conn_handle     Connection handle of the ACL link.
   * @param[in] cid             Local Channel Identifier assigned by Bluetooth Host.
-  *                            @arg 0     Profile client layer will automatically search for available channels.
-  *                            @arg other Shall use the GAP_CHANNEL_STATE_CONNECTED state channel.
-  * @param[in]  client_id      Client ID of specific client module.
+  *                            - 0:      Profile client layer will automatically search for available channels.
+  *                            - Others: Shall use the @ref GAP_CHANNEL_STATE_CONNECTED state channel.
+  * @param[in]  client_id      Client ID of specific client module. Value is @ref T_CLIENT_ID.
   * @param[in]  start_handle   Start handle of range to be searched.
   * @param[in]  end_handle     End handle of range to be searched.
-  * @param[in]  p_uuid128      128-bit characteristic UUID to be searched.
-  * @retval GAP_CAUSE_SUCCESS  Discovery request success.
-  * @retval other              Discovery request failed.
+  * @param[in]  p_uuid128      Pointer to 128-bit characteristic UUID to be searched.
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   */
 T_GAP_CAUSE client_ext_by_uuid128_char_discovery(uint16_t conn_handle, uint16_t cid,
                                                  T_CLIENT_ID client_id,
@@ -261,15 +306,20 @@ T_GAP_CAUSE client_ext_by_uuid128_char_discovery(uint16_t conn_handle, uint16_t 
                                                  uint16_t end_handle, uint8_t *p_uuid128);
 /**
   * @brief  Send discovery characteristics descriptor request.
+  *
+  * If sending request operation is successful, the discovering result will be returned by discover_state_cb
+  * and discover_result_cb registered by @ref client_ext_register_spec_client_cb.
+  *
   * @param[in] conn_handle     Connection handle of the ACL link.
   * @param[in] cid             Local Channel Identifier assigned by Bluetooth Host.
-  *                            @arg 0     Profile client layer will automatically search for available channels.
-  *                            @arg other Shall use the GAP_CHANNEL_STATE_CONNECTED state channel.
-  * @param[in]  client_id      Client ID of specific client module.
+  *                            - 0:      Profile client layer will automatically search for available channels.
+  *                            - Others: Shall use the @ref GAP_CHANNEL_STATE_CONNECTED state channel.
+  * @param[in]  client_id      Client ID of specific client module. Value is @ref T_CLIENT_ID.
   * @param[in]  start_handle   Start handle of range to be searched.
   * @param[in]  end_handle     End handle of range to be searched.
-  * @retval GAP_CAUSE_SUCCESS  Discovery request success.
-  * @retval other              Discovery request failed.
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   */
 T_GAP_CAUSE client_ext_all_char_descriptor_discovery(uint16_t conn_handle, uint16_t cid,
                                                      T_CLIENT_ID client_id,
@@ -277,31 +327,41 @@ T_GAP_CAUSE client_ext_all_char_descriptor_discovery(uint16_t conn_handle, uint1
 
 /**
   * @brief  Read characteristic by handle request.
+  *
+  * If sending request operation is successful, the reading result will be returned by read_result_cb
+  * registered by @ref client_ext_register_spec_client_cb.
+  *
   * @param[in] conn_handle     Connection handle of the ACL link.
   * @param[in] cid             Local Channel Identifier assigned by Bluetooth Host.
-  *                            @arg 0     Profile client layer will automatically search for available channels.
-  *                            @arg other Shall use the GAP_CHANNEL_STATE_CONNECTED state channel.
-  * @param[in]  client_id      Client ID of specific client module.
-  * @param[in]  handle         Request handle.
-  * @retval GAP_CAUSE_SUCCESS  Read request success.
-  * @retval other              Read request failed.
+  *                            - 0:      Profile client layer will automatically search for available channels.
+  *                            - Others: Shall use the @ref GAP_CHANNEL_STATE_CONNECTED state channel.
+  * @param[in]  client_id      Client ID of specific client module. Value is @ref T_CLIENT_ID.
+  * @param[in]  handle         Attribute handle.
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   */
 T_GAP_CAUSE client_ext_attr_read(uint16_t conn_handle, uint16_t cid, T_CLIENT_ID client_id,
                                  uint16_t handle);
 
 /**
   * @brief  Read characteristic by 16-bit UUID request.
+  *
+  * If sending request operation is successful, the reading result will be returned by read_result_cb
+  * registered by @ref client_ext_register_spec_client_cb.
+  *
   * @param[in] conn_handle    Connection handle of the ACL link.
   * @param[in] cid            Local Channel Identifier assigned by Bluetooth Host.
-  *                           @arg 0     Profile client layer will automatically search for available channels.
-  *                           @arg other Shall use the GAP_CHANNEL_STATE_CONNECTED state channel.
-  * @param[in]  client_id     Client ID of a specific client module.
+  *                           - 0:      Profile client layer will automatically search for available channels.
+  *                           - Others: Shall use the @ref GAP_CHANNEL_STATE_CONNECTED state channel.
+  * @param[in]  client_id     Client ID of specific client module. Value is @ref T_CLIENT_ID.
   * @param[in]  start_handle  Start handle of the range to be searched.
   * @param[in]  end_handle    End handle of the range to be searched.
-  * @param[in]  uuid16        Request 16-bit UUID.
-  * @param[in]  p_uuid128     Request 128-bit UUID.
-  * @retval GAP_CAUSE_SUCCESS Read request success.
-  * @retval other             Read request failed.
+  * @param[in]  uuid16        16-bit UUID.
+  * @param[in]  p_uuid128     Pointer to 128-bit UUID.
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   */
 T_GAP_CAUSE client_ext_attr_read_using_uuid(uint16_t conn_handle, uint16_t cid,
                                             T_CLIENT_ID client_id,
@@ -309,21 +369,26 @@ T_GAP_CAUSE client_ext_attr_read_using_uuid(uint16_t conn_handle, uint16_t cid,
                                             uint16_t end_handle, uint16_t uuid16, uint8_t *p_uuid128);
 /**
  * @brief  Write characteristic request.
+  *
+  * If sending request operation is successful, the writing result will be returned by write_result_cb
+  * registered by @ref client_ext_register_spec_client_cb.
+  *
  * @param[in] conn_handle Connection handle of the ACL link.
  * @param[in] cid         Local Channel Identifier assigned by Bluetooth Host.
- *                        @arg 0     Profile client layer will automatically search for available channels.
- *                        @arg other Shall use the GAP_CHANNEL_STATE_CONNECTED state channel.
- * @param[in]  client_id  Client ID of a specific client module.
- * @param[in]  write_type Type of write.
+ *                        - 0:      Profile client layer will automatically search for available channels.
+ *                        - Others: Shall use the @ref GAP_CHANNEL_STATE_CONNECTED state channel.
+ * @param[in]  client_id  Client ID of specific client module. Value is @ref T_CLIENT_ID.
+ * @param[in]  write_type Type of write @ref T_GATT_WRITE_TYPE.
  * @param[in]  handle     Attribute handle.
  * @param[in]  length     Length of data to be written.
-                          If write_type is GATT_WRITE_TYPE_REQ, range of length is from 0 to 512.
-                          If write_type is GATT_WRITE_TYPE_CMD, range of length is from 0 to (mtu_size - 3).
-                          If write_type is GATT_WRITE_TYPE_SIGNED_CMD, range of length is from 0 to (mtu_size - 15).
-                          uint16_t mtu_size is acquired by gap_chann_get_info(conn_handle, cid, p_info).
- * @param[in]  p_data     Points to the data to be written.
- * @retval GAP_CAUSE_SUCCESS: Write request success.
- * @retval other: Write request failed.
+                          - If write_type is @ref GATT_WRITE_TYPE_REQ, range of length is from 0 to 512.
+                          - If write_type is @ref GATT_WRITE_TYPE_CMD, range of length is from 0 to (mtu_size - 3).
+                          - If write_type is @ref GATT_WRITE_TYPE_SIGNED_CMD, range of length is from 0 to (mtu_size - 15).
+                          - uint16_t mtu_size is acquired by @ref gap_chann_get_info (conn_handle, cid, p_info).
+ * @param[in]  p_data     Pointer to the data to be written.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  */
 T_GAP_CAUSE client_ext_attr_write(uint16_t conn_handle, uint16_t cid, T_CLIENT_ID client_id,
                                   T_GATT_WRITE_TYPE write_type,
@@ -332,9 +397,10 @@ T_GAP_CAUSE client_ext_attr_write(uint16_t conn_handle, uint16_t cid, T_CLIENT_I
 /**
   * @brief  Confirm from the application when receiving indication from the server.
   * @param[in]  conn_handle    Connection handle of the ACL link.
-  * @param[in]  cid            Local Channel Identifier. The value shall be gotten from \ref P_FUN_EXT_NOTIFY_IND_RESULT_CB callback.
-  * @retval true: Confirm success.
-  * @retval false: Confirm failed.
+  * @param[in]  cid            Local Channel Identifier. The value shall be gotten from @ref P_FUN_EXT_NOTIFY_IND_RESULT_CB callback.
+  * @return Operation result.
+  * @retval GAP_CAUSE_SUCCESS Operation success.
+  * @retval Others Operation failure.
   */
 T_GAP_CAUSE client_ext_attr_ind_confirm(uint16_t conn_handle, uint16_t cid);
 
@@ -342,9 +408,16 @@ T_GAP_CAUSE client_ext_attr_ind_confirm(uint16_t conn_handle, uint16_t cid);
 /**
  * @brief Send the exchange MTU request.
  *
+ * If sending request operation is successful, result will be returned in one of the following ways:
+ * - In the default situation, or when @ref le_gap_msg_info_way (true) has been called, APP will be notified
+ *   by message @ref GAP_MSG_LE_CONN_MTU_INFO.
+ * - When @ref le_gap_msg_info_way (false) has been called, APP will be notified with the callback registered
+ *   by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_GAP_STATE_MSG.
+ *
  * @param[in]  conn_handle    Connection handle of the ACL link. Only for LE ACL link.
- * @retval GAP_CAUSE_SUCCESS: Exchange MTU request success.
- * @retval other: Exchange MTU request failed.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -376,16 +449,17 @@ T_GAP_CAUSE client_ext_send_exchange_mtu_req(uint16_t conn_handle);
 
 /**
  * @brief Get the header point of the notification data buffer.
+ *
  * This function is used to get the header buffer point of the notification command data.
  * This function can only be called in notify_ind_result_cb.
  *
  * @param[in]  conn_handle    Connection handle of the ACL link.
- * @param[in]  cid            Local Channel Identifier. The value shall be gotten from \ref P_FUN_EXT_NOTIFY_IND_RESULT_CB callback.
+ * @param[in]  cid            Local Channel Identifier. The value shall be gotten from @ref P_FUN_EXT_NOTIFY_IND_RESULT_CB callback.
  * @param[in,out] pp_buffer   Pointer to the address of the buffer.
  * @param[in,out] p_offset    Pointer to the offset of the data.
- * @return Buffer get result.
- * @retval true Success.
- * @retval false Failed.
+ * @return Operation result.
+ * @retval true    Operation success.
+ * @retval false   Operation failure.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -414,15 +488,21 @@ bool client_ext_get_notify_data_buffer(uint16_t conn_handle, uint16_t cid, uint8
 
 /**
  * @brief  Read multiple variable characteristic values.
+ *
+ * If sending request operation is successful, the reading result will be returned by callback
+ * registered by @ref client_ext_register_general_client_cb with client_id set to @ref CLIENT_PROFILE_GENERAL_ID,
+ * and cb_type of p_data (@ref T_CLIENT_APP_CB_DATA) set to @ref CLIENT_APP_CB_TYPE_READ_MULTI_RESULT.
+ *
  * @param[in]  conn_handle    Connection handle of the ACL link.
  * @param[in]  cid            Local Channel Identifier assigned by Bluetooth Host.
- *                            @arg 0     Profile client layer will automatically search for available channels.
- *                            @arg other Shall use the GAP_CHANNEL_STATE_CONNECTED state channel.
- * @param[in]  client_id      Client ID of a specific client module.
+ *                            - 0:      Profile client layer will automatically search for available channels.
+ *                            - Others: Shall use the @ref GAP_CHANNEL_STATE_CONNECTED state channel.
+ * @param[in]  client_id      Client ID of specific client module. Value is @ref T_CLIENT_ID.
  * @param[in]  num_handle     The number of p_handle.
- * @param[in]  p_handle       Handle array.
- * @retval GAP_CAUSE_SUCCESS  Read request success.
- * @retval other              Read request failed.
+ * @param[in]  p_handle       Pointer to handle array.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}

@@ -49,11 +49,11 @@ extern "C"
   * @{
   */
 
-/** @brief GAP gatt cccd not check. */
+/** @brief GAP GATT CCCD not check. */
 typedef enum
 {
-    CONFIG_GATT_CCCD_CHECK,         /**< Check cccd when server sends notification or indication. */
-    CONFIG_GATT_CCCD_NOT_CHECK,     /**< Not check cccd when server sends notification or indication. */
+    CONFIG_GATT_CCCD_CHECK,         /**< Check CCCD when server sends notification or indication. */
+    CONFIG_GATT_CCCD_NOT_CHECK,     /**< Not check CCCD when server sends notification or indication. */
 } T_GAP_CONFIG_GATT_CCCD_NOT_CHECK;
 
 /** End of GAP_LE_CONFIG_Exported_Types
@@ -69,9 +69,10 @@ typedef enum
   */
 
 /**
- * @brief   Configure whether to check cccd when server sends notification or indication.
+ * @brief   Configure whether to check CCCD when server sends notification or indication.
  *
- * @param[in]      cccd_not_check_flag   Whether to check cccd: @ref T_GAP_CONFIG_GATT_CCCD_NOT_CHECK.
+ * @param[in]      cccd_not_check_flag   Whether to check CCCD.
+ *                                       Value is @ref T_GAP_CONFIG_GATT_CCCD_NOT_CHECK.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -121,11 +122,12 @@ void gap_config_max_mtu_size(uint16_t att_max_mtu_size);
 /**
  * @brief   Configure key storage flag to determine keys that need to be saved.
  *
- * @note Storage bits are defined by group GAP_LE_STORAGE_BITS in gap_storage_le.h.
-                  Storage bit: 0-not save, 1-save. \n
-                  Default value is 0x80FF, which indicates all keys need to be saved.
- *
  * @param[in]      le_key_storage_flag   Key storage flag to determine keys that need to be saved.
+ *                                       Use the combination of macros defined in @ref GAP_LE_STORAGE_BITS.
+ *                                       Default value is 0x80FF.
+ *                                       Storage bit value:
+ *                                       - 0: Not save.
+ *                                       - 1: Save.
  *
  * <b>Example usage</b>
  * \code{.c}

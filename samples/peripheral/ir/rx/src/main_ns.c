@@ -42,6 +42,7 @@ void global_data_init(void)
 void board_init(void)
 {
     board_ir_init();
+    board_pwm_init();
 }
 
 /**
@@ -52,6 +53,7 @@ void board_init(void)
 void driver_init(void)
 {
     driver_ir_init();
+    driver_pwm_init();
 }
 
 /**
@@ -70,7 +72,12 @@ int main(void)
     ir_demo();
     while (1)
     {
-
+        __NOP();
+        __NOP();
+        __NOP();
+        __NOP();
+        __NOP();
+        __NOP();
     }
 
     //return 0;

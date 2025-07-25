@@ -52,15 +52,15 @@ extern "C"
  *              to a connected device.
  *
  * If sending request operation is successful, the result will be returned by
- *              @ref app_gap_callback with cb_type @ref GAP_MSG_LE_PAST_SENDER_PERIODIC_ADV_SET_INFO_TRANSFER.
+ *              the callback function with msg type @ref GAP_MSG_LE_PAST_SENDER_PERIODIC_ADV_SET_INFO_TRANSFER.
  *
  * @param[in]   conn_id        Used to identify a connection.
  * @param[in]   service_data   A value provided by the Host to identify the periodic advertising train to the peer device.
  * @param[in]   adv_handle     Used to identify the advertising set.
  *
- * @return Send request operation.
- * @retval GAP_CAUSE_SUCCESS  Send request operation success.
- * @retval Others             Send request operation failure.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -96,15 +96,15 @@ T_GAP_CAUSE le_past_sender_periodic_adv_set_info_transfer(uint8_t conn_id, uint1
  *              to a connected device.
  *
  * If sending request operation is successful, the result will be returned by
- *              @ref app_gap_callback with cb_type @ref GAP_MSG_LE_PAST_SENDER_PERIODIC_ADV_SYNC_TRANSFER.
+ *              the callback function with msg type @ref GAP_MSG_LE_PAST_SENDER_PERIODIC_ADV_SYNC_TRANSFER.
  *
  * @param[in]   conn_id        Used to identify a connection.
  * @param[in]   service_data   A value provided by the Host to identify the periodic advertising train to the peer device.
  * @param[in]   sync_id        Identify the periodic advertising train.
  *
- * @return Send request operation.
- * @retval GAP_CAUSE_SUCCESS  Send request operation success.
- * @retval Others             Send request operation failure.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}

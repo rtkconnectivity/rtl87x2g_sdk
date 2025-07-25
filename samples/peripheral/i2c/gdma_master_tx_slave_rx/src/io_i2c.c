@@ -103,10 +103,8 @@ void driver_i2c_master_init(void)
     I2C_InitStruct.I2C_AddressMode   = I2C_AddressMode_7BIT;
     I2C_InitStruct.I2C_SlaveAddress  = 0x50;
     I2C_InitStruct.I2C_Ack           = ENABLE;
-    I2C_InitStruct.I2C_RxDmaEn       = ENABLE;
     I2C_InitStruct.I2C_TxDmaEn       = ENABLE;
-    I2C_InitStruct.I2C_RxWaterlevel  = 3;
-    I2C_InitStruct.I2C_TxWaterlevel  = 22;
+    I2C_InitStruct.I2C_TxWaterlevel  = 23;
     I2C_Init(I2C0, &I2C_InitStruct);
 
     I2C_Cmd(I2C0, ENABLE);
@@ -131,7 +129,7 @@ void driver_i2c_slave_init(void)
     I2C_InitStruct.I2C_SlaveAddress  = 0x50;
     I2C_InitStruct.I2C_Ack           = ENABLE;
     I2C_InitStruct.I2C_RxDmaEn       = ENABLE;
-    I2C_InitStruct.I2C_RxWaterlevel  = 3;
+    I2C_InitStruct.I2C_RxWaterlevel  = 1;
     I2C_Init(I2C1, &I2C_InitStruct);
 
     I2C_Cmd(I2C1, ENABLE);
@@ -162,8 +160,8 @@ void gdma_i2c_slave_rx_init(void)
     GDMA_InitStruct.GDMA_DestinationInc       = DMA_DestinationInc_Inc;
     GDMA_InitStruct.GDMA_SourceDataSize       = GDMA_DataSize_Byte;
     GDMA_InitStruct.GDMA_DestinationDataSize  = GDMA_DataSize_Byte;
-    GDMA_InitStruct.GDMA_SourceMsize          = GDMA_Msize_4;
-    GDMA_InitStruct.GDMA_DestinationMsize     = GDMA_Msize_4;
+    GDMA_InitStruct.GDMA_SourceMsize          = GDMA_Msize_1;
+    GDMA_InitStruct.GDMA_DestinationMsize     = GDMA_Msize_1;
     GDMA_InitStruct.GDMA_SourceAddr           = (uint32_t)(&(I2C1->IC_DATA_CMD));
     GDMA_InitStruct.GDMA_DestinationAddr      = (uint32_t)(GDMA_I2C_Recv_Buf);
     GDMA_InitStruct.GDMA_SourceHandshake      = GDMA_Handshake_I2C1_RX;

@@ -36,39 +36,61 @@
   * @brief
   * @{
   */
-/** @brief  Calculate the offset of a member within a struct */
+
+/**
+ * \defgroup    BLE_DFU_Transport_Defines    BLE DFU Transport Defines
+ * \{
+ * \ingroup     BLE_DFU_TRANSPORT_Exported_Macros
+ */
+/** @brief  Calculate the offset of a member within a struct. */
 #define MEMBER_OFFSET(struct_type, member)      ((uint32_t)&((struct_type *)0)->member)
 
-/** @brief  SPP protocol information */
+/** @brief  SPP protocol information. */
 #define SPP_PROTOCOL_INFO      0x0011
 
-/** @brief  BLE protocol information */
+/** @brief  BLE protocol information. */
 #define BLE_PROTOCOL_INFO      0x0015
 
-/** @brief  BLE OTA version */
+/** @brief  BLE OTA version. */
 #define BLE_OTA_VERSION     0x1
 
-/** @brief  SPP OTA version */
+/** @brief  SPP OTA version. */
 #define SPP_OTA_VERSION     0x7
 
 
-/** @brief  Not support bank switch */
+/** @brief  Not support bank switch. */
 #define NOT_SUPPORT_BANK_SWITCH     0
 
-/** @brief  Image is located in Bank0 */
+/** @brief  Image is located in Bank0. */
 #define IMAGE_LOCATION_BANK0        1
 
-/** @brief  Image is located in Bank1 */
+/** @brief  Image is located in Bank1. */
 #define IMAGE_LOCATION_BANK1        2
 
+/** @brief  Max image number. */
+#define MAX_IMG_NUM                         (IMG_DFU_MAX - IMG_DFU_FIRST + IMG_USER_DATA_MAX - IMG_USER_DATA_FIRST) //0x16 + 8
+/** End of BLE_DFU_Transport_Defines
+  * \}
+  */
 
-/** @brief  Bit set of device info data2 */
+/**
+ * \defgroup    OTA_Device_Feature_Bit_Set     OTA Device Feature Bit Set
+ * \{
+ * \ingroup     BLE_DFU_TRANSPORT_Exported_Macros
+ */
 #define OTA_DEVICE_FEATURE_SUPPORT_BUFFER_CHECK     (1 << 0)
 #define OTA_DEVICE_FEATURE_ENABLE_AES_ENCRYPT       (1 << 1)
 #define OTA_DEVICE_FEATURE_ENCRYPT_MODE_16N         (1 << 2)
 #define OTA_DEVICE_FEATURE_SUPPORT_MULTIIMAGE       (1 << 3)
+/** End of OTA_Device_Feature_Bit_Set
+  * \}
+  */
 
-/** @brief  Index for DFU APP return value*/
+/**
+ * \defgroup    DFU_APP_Return_Value_Index     DFU APP Return Value Index
+ * \{
+ * \ingroup     BLE_DFU_TRANSPORT_Exported_Macros
+ */
 #define DFU_ARV_SUCCESS                         0x01
 #define DFU_ARV_FAIL_INVALID_PARAMETER          0x02
 #define DFU_ARV_FAIL_OPERATION                  0x03
@@ -78,8 +100,15 @@
 #define DFU_ARV_FAIL_FLASH_WRITE_ERROR          0x07
 #define DFU_ARV_FAIL_FLASH_ERASE_ERROR          0x08
 #define DFU_ARV_FAIL_SYS_VERSION_ERROR          0x09
+/** End of DFU_APP_Return_Value_Index
+  * \}
+  */
 
-/** @brief  Opcode code for DFU service */
+/**
+ * \defgroup    DFU_Service_Opcode     DFU Service Opcode
+ * \{
+ * \ingroup     BLE_DFU_TRANSPORT_Exported_Macros
+ */
 #define DFU_OPCODE_MIN                      0x00
 #define DFU_OPCODE_START_DFU                0x01
 #define DFU_OPCODE_RECEIVE_FW_IMAGE_INFO    0x02
@@ -98,23 +127,35 @@
 #define DFU_OPCODE_TEST_EN                  0x11
 #define DFU_OPCODE_REPORT_IMAGE_NUM         0x12
 #define DFU_OPCODE_NOTIF                    0x10
+/** End of DFU_Service_Opcode
+  * \}
+  */
 
-/** @brief  Length of each control point procedure */
-#define DFU_LENGTH_CP_START_DFU                (1+12+4) //12bytes ctrl header + 4bytes padding for encrypt
+/**
+ * \defgroup    DFU_Control_Point_Length    DFU Control Point Length
+ * \{
+ * \ingroup     BLE_DFU_TRANSPORT_Exported_Macros
+ */
+#define DFU_LENGTH_CP_START_DFU                (1+12+4) //12 bytes ctrl header + 4 bytes padding for encrypt
 #define DFU_LENGTH_CP_RECEIVE_FW_IMAGE_INFO    (1+2+4)
 #define DFU_LENGTH_CP_VALID_FW                 (1+2+1)
 #define DFU_LENGTH_CP_ACTIVE_IMAGE_RESET       (1+1)  //is_enter_dfu_mode
 #define DFU_LENGTH_CP_SYSTEM_RESET             0x01
 #define DFU_LENGTH_CP_REPORT_TARGET_INFO       (1+2)
-#define DFU_LENGTH_CP_CONN_PARA_UPDATE_REQ     (1+2+2+2+2) //conn_interval_min,conn_interval_max,conn_latency,superv_tout
+#define DFU_LENGTH_CP_CONN_PARA_UPDATE_REQ     (1+2+2+2+2) //conn_interval_min, conn_interval_max, conn_latency, superv_tout
 #define DFU_LENGTH_CP_PKT_RX_NOTIF_REQ         (1+2)
 #define DFU_LENGTH_CP_CONN_PARA_TO_UPDATE_REQ  (1+2+2+2+2)
 #define DFU_LENGTH_CP_BUFFER_CHECK_EN          0x01
 #define DFU_LENGTH_CP_REPORT_BUFFER_CRC        (1+2+2)
+/** End of DFU_Control_Point_Length
+  * \}
+  */
 
-#define MAX_IMG_NUM                         (IMG_DFU_MAX - IMG_DFU_FIRST + IMG_USER_DATA_MAX - IMG_USER_DATA_FIRST) //0x16 + 8
-
-/** @brief  Length of each control point notification */
+/**
+ * \defgroup    DFU_Notification_Length    DFU Notification Length
+ * \{
+ * \ingroup     BLE_DFU_TRANSPORT_Exported_Macros
+ */
 #define DFU_NOTIFY_LEN_TARGET_INFO          (1+4+4+2) //error_code, rsvd, cur_offset, buffer_check_offset
 #define DFU_NOTIFY_LEN_CONN_PARA_UPDATE_REQ (1+2+2+2) //connInterval, latency, supervisionTimeout
 #define DFU_NOTIFY_LEN_BUFFER_CHECK_EN      (1+2+2)   //error_code, bufcheck_en, max_buf_size, rsvd
@@ -123,20 +164,35 @@
 #define DFU_NOTIFY_LEN_RELEASE_VER          6         //release version of app data bin
 #define DFU_NOTIFY_LEN_IMG_INFO             (1+1+(2+4)*MAX_IMG_NUM)  //bank_num, img_num, img_id1, img_ver1, ....
 #define DFU_NOTIFY_LEN_SECTION_SIZE         (1+(2+4)*MAX_IMG_NUM)   //img_num, img_id1, img_size1, ....
+/** End of DFU_Notification_Length
+  * \}
+  */
 
+/**
+ * \defgroup    BLE_DFU_Transport_Defines    BLE DFU Transport Defines
+ * \{
+ * \ingroup     BLE_DFU_TRANSPORT_Exported_Macros
+ */
+/** @brief  Length of image information data */
 #define IMG_INFO_LEN                        DFU_NOTIFY_LEN_IMG_INFO
+
+/** @brief  Length of section size data */
 #define SECTION_SIZE_LEN                    DFU_NOTIFY_LEN_SECTION_SIZE
 
-
-#define UINT_4K                 4096
+/** @brief  Maximum buffer size definition */
 #define MAX_BUFFER_SIZE         4096
 
-#define SHA256_OFFSET           (MEMBER_OFFSET(T_AUTH_HEADER_FORMAT, image_hash)) //372
+/** @brief  Offset for the image_hash within the T_AUTH_HEADER_FORMAT */
+#define SHA256_OFFSET           (MEMBER_OFFSET(T_AUTH_HEADER_FORMAT, image_hash)) // 372
+
+/** @brief  Length of the SHA256 hash */
 #define SHA256_LEN              32
+
+/** @brief  Offset for release version information */
 #define RELEASE_VER_OFFSET      (SHA256_OFFSET + SHA256_LEN)
-
-
-#define BTAON_FAST_AON_GPR_15   0x1a2
+/** End of BLE_DFU_Transport_Defines
+  * \}
+  */
 
 /** End of BLE_DFU_TRANSPORT_Exported_Macros
   * @}
@@ -149,12 +205,20 @@
   * @brief
   * @{
   */
+/** @brief Indicates whether a switch to OTA mode is pending */
 extern bool dfu_switch_to_ota_mode_pending;
-extern bool dfu_active_reset_pending;
-extern bool dfu_active_reset_to_ota_mode;
-extern P_FUN_SERVER_GENERAL_CB p_dfu_extended_cb;
-extern T_SERVER_ID dfu_srv_id_local;
 
+/** @brief Indicates whether an active reset is pending */
+extern bool dfu_active_reset_pending;
+
+/** @brief Indicates whether the active reset aims to switch to OTA mode */
+extern bool dfu_active_reset_to_ota_mode;
+
+/** @brief Pointer to callback function for handling DFU service related events */
+extern P_FUN_SERVER_GENERAL_CB p_dfu_extended_cb;
+
+/** @brief Local identifier for the DFU service */
+extern T_SERVER_ID dfu_srv_id_local;
 
 /** End of BLE_DFU_TRANSPORT_Exported_Variables
   * @}
@@ -193,7 +257,12 @@ typedef enum
 /** @brief  OTA flag */
 typedef union
 {
+    /** \name Union members */
+    /** @{ */
     uint8_t value;
+    /** @} */
+    /** \name Bit field structure */
+    /** @{ */
     struct
     {
         uint8_t buffer_check_en: 1;
@@ -204,12 +273,18 @@ typedef union
         uint8_t ota_mode: 1;
         uint8_t RSVD: 2;
     };
+    /** @} */
 } OTA_FLAG;
 
 /** @brief  OTA test flag */
 typedef union
 {
+    /** \name Union members */
+    /** @{ */
     uint8_t value;
+    /** @} */
+    /** \name Bit field structure */
+    /** @{ */
     struct
     {
         uint8_t t_aes_en: 1;
@@ -219,6 +294,7 @@ typedef union
         uint8_t t_buffercheck_disable: 1;
         uint8_t rsvd: 3;
     };
+    /** @} */
 } TEST_ENABLE;
 
 /** @brief  OTA image offset */
@@ -227,7 +303,7 @@ typedef struct
     uint32_t image_offset;
 } T_TEMP_IMAGE_INFO;
 
-/** @brief  Table used to store Extended Device Information */
+/** @brief  Extended device information for OTA operations */
 typedef struct
 {
     void *timer_handle_ota_transfer;
@@ -259,14 +335,14 @@ typedef struct
     uint8_t sha256[32];
 } SHA256_CHECK;
 
-/** @brief  OTA image infomation */
+/** @brief  OTA image information. */
 typedef struct
 {
     uint16_t img_id;
     uint8_t data[4];
 } IMG_INFO;
 
-/** @brief  OTA device infomation mode*/
+/** @brief  OTA device information mode. */
 typedef union
 {
     uint8_t value;
@@ -282,7 +358,7 @@ typedef union
     };
 } DEVICE_INFO_MODE;
 
-/** @brief  OTA device infomation */
+/** @brief  OTA device information. */
 typedef struct
 {
     uint8_t ic_type;
@@ -297,7 +373,7 @@ typedef struct
     uint8_t rsvd1;
 } __attribute__((packed)) DEVICE_INFO;
 
-/** @brief  OTA setting */
+/** @brief  OTA setting. */
 typedef union
 {
     uint32_t value;
@@ -317,66 +393,59 @@ typedef union
 /*============================================================================*
  *                              Functions
  *============================================================================*/
-/** @defgroup BLE_DFU_TRANSPORT_Exported_Functions BLE DFU Transport Functions
+/** @defgroup BLE_DFU_TRANSPORT_Exported_Functions BLE DFU Transport Exported Functions
   * @brief
   * @{
   */
 /**
-    * @brief        Used to get device information
-    * @param        conn_id       connection id
-    * @param        p_deviceinfo  point of the device info
-    * @return       void
-    */
+ * @brief    Get the device information for a specified connection.
+ * @param[in]     conn_id       The ID of the connection for which device information is requested.
+ * @param[out]    p_deviceinfo  Pointer to a \ref DEVICE_INFO structure where the device information will be stored.
+ */
 void ble_dfu_get_device_info(uint8_t conn_id, DEVICE_INFO *p_deviceinfo);
 
 /**
-    * @brief    Used to get image version
-    * @param    p_data   point of image version
-    * @param    bank   0:active bank    1:inactive bank
-    * @return   void
-    */
+ * @brief    Get the image version.
+ * @param[out]    p_data   Pointer to store the image version.
+ * @param[in]     bank     Specifies the bank: 0 for active bank, 1 for inactive bank.
+ */
 void ble_dfu_get_img_version(uint8_t *p_data, uint8_t bank);
 
 /**
-    * @brief    Used to get image section size
-    * @param    p_data  point of the section size
-    * @return   void
-    */
+ * @brief    Get the size of an image section.
+ * @param[out]    p_data   Pointer to store the section size.
+ */
 void ble_dfu_get_section_size(uint8_t *p_data);
 
 /**
-    * @brief        Used to get ota status
-    * @param        void
-    * @return       true: in ota process    false: not in ota process
-    */
+ * @brief    Check the OTA process status.
+ * @return   true if in OTA process, false otherwise.
+ */
 bool ble_dfu_get_ota_status(void);
 
 /**
-    * @brief    dfu notify connection parameter update request
-    * @param    conn_id     ID to identify the connection
-    * @param    error_code  error code of conn para update req
-    * @return   void
-    */
+ * @brief    Notify about connection parameter update request during DFU.
+ * @param[in]     conn_id     Identifier for the connection.
+ * @param[in]     error_code  Error code for the connection parameter update request.
+ */
 void dfu_notify_conn_para_update_req(uint8_t conn_id, uint8_t error_code);
 
 /**
-    * @brief    Handle written request on DFU packet characteristic
-    * @param    conn_id     ID to identify the connection
-    * @param    length      Length of value to be written
-    * @param    p_value     Value to be written
-    * @return   T_APP_RESULT
-    * @retval   Handle result of this request
-    */
+ * @brief    Handle a write request for the DFU packet characteristic.
+ * @param[in]     conn_id     Identifier for the connection.
+ * @param[in]     length      Length of the value to be written.
+ * @param[in]     p_value     Pointer to the value to be written.
+ * @return   Result of handling this request.
+ */
 T_APP_RESULT ble_dfu_service_handle_packet(uint8_t conn_id, uint16_t length, uint8_t *p_value);
 
 /**
-    * @brief    Handle written request on DFU control point characteristic
-    * @param    conn_id     ID to identify the connection
-    * @param    length      Length of value to be written
-    * @param    p_value     Value to be written
-    * @return   T_APP_RESULT
-    * @retval   Handle result of this request
-    */
+ * @brief    Handle control point write requests for the DFU packet characteristic.
+ * @param[in]     conn_id     Identifier for the connection.
+ * @param[in]     length      Length of the value to be written.
+ * @param[in]     p_value     Pointer to the value to be written.
+ * @return   Result of handling this request.
+ */
 T_APP_RESULT ble_dfu_service_handle_cp_req(uint8_t conn_id, uint16_t length, uint8_t *p_value);
 
 

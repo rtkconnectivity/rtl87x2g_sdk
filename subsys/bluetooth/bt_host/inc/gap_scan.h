@@ -44,12 +44,24 @@ extern "C"
 /** @brief LE scan parameter type */
 typedef enum
 {
-    GAP_PARAM_SCAN_LOCAL_ADDR_TYPE   = 0x240,  //!< The type of address being used in the scan request packets. Read/Write.
-    GAP_PARAM_SCAN_MODE              = 0x241,  //!< Scan mode. Read/Write. Size is uint8. Default is GAP_SCAN_MODE_ACTIVE (@ref T_GAP_SCAN_MODE).
-    GAP_PARAM_SCAN_INTERVAL          = 0x242,  //!< Scan Interval. Read/Write. Size is uint16_t. Default is 0x10. Value range: 0x0004 - 0x4000 (2.5ms - 10240ms 0.625ms/step).
-    GAP_PARAM_SCAN_WINDOW            = 0x243,  //!< Scan Window. Read/Write. Size is uint16_t. Default is 0x10. Value range: 0x0004 - 0x4000 (2.5ms - 10240ms 0.625ms/step).
-    GAP_PARAM_SCAN_FILTER_POLICY     = 0x244,  //!< Scan Filter Policy. Read/Write. Size is uint8_t. Default is GAP_SCAN_FILTER_ANY (@ref T_GAP_SCAN_FILTER_POLICY).
-    GAP_PARAM_SCAN_FILTER_DUPLICATES = 0x245   //!< Scan Filter Duplicates. Read/Write. Size is uint8_t. Default is GAP_SCAN_FILTER_DUPLICATE_DISABLE (@ref T_GAP_SCAN_FILTER_DUPLICATE).
+    GAP_PARAM_SCAN_LOCAL_ADDR_TYPE   = 0x240,  /**< The type of address being used in the scan request packets. Read/Write. Size is 1 octet.
+                                                    Value is @ref T_GAP_LOCAL_ADDR_TYPE. Default value is @ref GAP_LOCAL_ADDR_LE_PUBLIC. */
+    GAP_PARAM_SCAN_MODE              = 0x241,  /**< The type of scan to perform. Read/Write. Size is 1 octet.
+                                                    Value is @ref T_GAP_SCAN_MODE. Default value is @ref GAP_SCAN_MODE_ACTIVE. */
+    GAP_PARAM_SCAN_INTERVAL          = 0x242,  /**< The time interval from when the Controller started its last LE scan until it begins the subsequent LE scan.
+                                                    Read/Write. Size is 2 octets. Value range: 0x0004 - 0x4000 (2.5 ms - 10240 ms, 0.625 ms/step).
+                                                    Default value is 0x10 (10 ms). Please refer to @ref GAP_PARAM_SCAN_WINDOW for details on usage. */
+    GAP_PARAM_SCAN_WINDOW            = 0x243,  /**< The duration of the LE scan. Read/Write. Size is 2 octets.
+                                                    Value range: 0x0004 - 0x4000 (2.5 ms - 10240 ms, 0.625 ms/step).
+                                                    Default value is 0x10 (10 ms).
+
+                                                    Usage:
+                                                    - LE_Scan_Window shall be less than or equal to LE_Scan_Interval @ref GAP_PARAM_SCAN_INTERVAL.
+                                                    */
+    GAP_PARAM_SCAN_FILTER_POLICY     = 0x244,  /**< Scan Filter Policy. Read/Write. Size is 1 octet. Value is @ref T_GAP_SCAN_FILTER_POLICY.
+                                                    Default value is @ref GAP_SCAN_FILTER_ANY. */
+    GAP_PARAM_SCAN_FILTER_DUPLICATES = 0x245   /**< Whether to filter out duplicate advertising reports. Read/Write. Size is 1 octet.
+                                                    Value is @ref T_GAP_SCAN_FILTER_DUPLICATE. Default value is @ref GAP_SCAN_FILTER_DUPLICATE_DISABLE. */
 } T_LE_SCAN_PARAM_TYPE;
 
 
@@ -68,48 +80,27 @@ typedef enum
 /**
  * @brief       Set a scan parameter.
  *
- * This function can be called with a scan parameter type and it will set the
- *              scan parameter. Scan parameters are defined in @ref T_LE_SCAN_PARAM_TYPE.
- *              If the "len" field is set to the size of a "uint16_t", the "p_value" field must
- *              point to data with type "uint16".
+ * This function can be called with a scan parameter type @ref T_LE_SCAN_PARAM_TYPE and it will set the scan parameter.
+ * The 'p_value' field must point to an appropriate data type that meets the requirements for the corresponding parameter type.
+ * (For example: if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
  *
- * @param[in]   param Scan parameter type: @ref T_LE_SCAN_PARAM_TYPE.
+ * @param[in]   param Scan parameter type @ref T_LE_SCAN_PARAM_TYPE.
  * @param[in]   len  Length of data to write.
- * @param[in]   p_value  Pointer to data to write. This is dependent on
- *              the parameter type and will be cast to the appropriate
- *              data type (For example: if data type param is uint16, p_value will be cast to
- *              pointer of uint16_t).
+ * @param[in]   p_value  Pointer to data to write.
  *
- * @return Set result.
- * @retval GAP_CAUSE_SUCCESS Set parameter success.
- * @retval other Set parameter failed.
+ * @return Operation result.
+ * @retval GAP_CAUSE_SUCCESS    Operation success.
+ * @retval Others   Operation failure.
   *
   * <b>Example usage</b>
   * \code{.c}
-    void app_le_gap_init()
+    void test(void)
     {
-        uint8_t device_name[GAP_DEVICE_NAME_LEN] = "BBPro_central";
-        uint16_t appearance = GAP_GATT_APPEARANCE_UNKNOWN;
-
         uint8_t scan_mode = GAP_SCAN_MODE_ACTIVE;
         uint16_t scan_interval = DEFAULT_SCAN_INTERVAL;
         uint16_t scan_window = DEFAULT_SCAN_WINDOW;
         uint8_t scan_filter_policy = GAP_SCAN_FILTER_ANY;
         uint8_t scan_filter_duplicate = GAP_SCAN_FILTER_DUPLICATE_ENABLE;
-
-        uint8_t pair_mode = GAP_PAIRING_MODE_PAIRABLE;
-        uint16_t auth_flags = GAP_AUTHEN_BIT_BONDING_FLAG;
-        uint8_t io_cap = GAP_IO_CAP_NO_INPUT_NO_OUTPUT;
-        uint8_t oob_enable = false;
-        uint32_t passkey = 0;
-        uint8_t fix_passkey_enable = false;
-
-        le_set_gap_param(GAP_PARAM_DEVICE_NAME, GAP_DEVICE_NAME_LEN, device_name);
-        le_set_gap_param(GAP_PARAM_APPEARANCE, sizeof(appearance), &appearance);
-        gap_set_param(GAP_PARAM_BOND_PAIRING_MODE, sizeof(uint8_t), &pair_mode);
-        gap_set_param(GAP_PARAM_BOND_AUTHEN_REQUIREMENTS_FLAGS, sizeof(uint16_t), &auth_flags);
-        gap_set_param(GAP_PARAM_BOND_IO_CAPABILITIES, sizeof(uint8_t), &io_cap);
-        gap_set_param(GAP_PARAM_BOND_OOB_ENABLED, sizeof(uint8_t), &oob_enable);
 
         le_scan_set_param(GAP_PARAM_SCAN_MODE, sizeof(scan_mode), &scan_mode);
         le_scan_set_param(GAP_PARAM_SCAN_INTERVAL, sizeof(scan_interval), &scan_interval);
@@ -118,9 +109,6 @@ typedef enum
                          &scan_filter_policy);
         le_scan_set_param(GAP_PARAM_SCAN_FILTER_DUPLICATES, sizeof(scan_filter_duplicate),
                          &scan_filter_duplicate);
-
-        le_bond_set_param(GAP_PARAM_BOND_FIXED_PASSKEY, sizeof(uint32_t), &passkey);
-        le_bond_set_param(GAP_PARAM_BOND_FIXED_PASSKEY_ENABLE, sizeof(uint8_t), &fix_passkey_enable);
     }
   * \endcode
   */
@@ -129,19 +117,16 @@ T_GAP_CAUSE le_scan_set_param(T_LE_SCAN_PARAM_TYPE param, uint8_t len, void *p_v
 /**
  * @brief       Get a scan parameter.
  *
- * This function can be called with a scan parameter type and it will get a
- *              scan parameter.  Scan parameters are defined in @ref T_LE_SCAN_PARAM_TYPE.
- *              Also, the "p_value" field must point to a data with type of "uint16_t".
+ * This function can be called with a scan parameter type @ref T_LE_SCAN_PARAM_TYPE and it will get the scan parameter.
+ * The 'p_value' field must point to an appropriate data type that meets the requirements for the corresponding parameter type.
+ * (For example: if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
  *
- * @param[in]   param   Scan parameter type: @ref T_LE_SCAN_PARAM_TYPE.
- * @param[in,out]  p_value Pointer to location to get the parameter value.  This is dependent on
- *                      the parameter type and will be cast to the appropriate
- *                      data type (For example: if data type of param is uint16_t, p_value will be cast to
- *                      pointer of uint16_t).
+ * @param[in]   param   Scan parameter type @ref T_LE_SCAN_PARAM_TYPE.
+ * @param[in,out]  p_value Pointer to location to get the parameter value.
  *
- * @return  Get result.
- * @retval  GAP_CAUSE_SUCCESS Get parameter success.
- * @retval  Others Get parameter failed.
+ * @return Operation result.
+ * @retval GAP_CAUSE_SUCCESS    Operation success.
+ * @retval Others   Operation failure.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -155,18 +140,25 @@ T_GAP_CAUSE le_scan_set_param(T_LE_SCAN_PARAM_TYPE param, uint8_t len, void *p_v
 T_GAP_CAUSE le_scan_get_param(T_LE_SCAN_PARAM_TYPE param, void *p_value);
 
 /**
- * @brief   Start a device discovery scan. If device changes to scanning state, @ref app_handle_dev_state_evt
- *          will be called. And the advertising data or scan response data will be returned by @ref app_gap_callback
- *          with cb_type @ref GAP_MSG_LE_SCAN_INFO.
+ * @brief   Start scan.
  *
- * Applications can only call this API after Bluetooth Host is ready. \n
- *                 Explanation: If Bluetooth Host is ready, the application will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE
- *                              with new_state about gap_init_state which is configured as @ref GAP_INIT_STATE_STACK_READY.
+ * If sending request operation is successful, the starting result will be returned in one of the following ways:
+ * - In the default situation, or when @ref le_gap_msg_info_way (true) has been called, APP will be notified
+ *   by message @ref GAP_MSG_LE_DEV_STATE_CHANGE with new_state about gap_scan_state @ref GAP_SCAN_STATE.
+ * - When @ref le_gap_msg_info_way (false) has been called, APP will be notified with the callback registered
+ *   by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_GAP_STATE_MSG.
  *
- * @return Operation result.
- * @retval  GAP_CAUSE_SUCCESS: Operation success, scan started.
- * @retval  GAP_CAUSE_ALREADY_IN_REQ: Operation failure, scan state is GAP_SCAN_STATE_START.
- * @retval  GAP_CAUSE_INVALID_STATE: Operation failure, invalid device state.
+ * If the device is in the scanning state @ref GAP_SCAN_STATE_SCANNING, the advertising data or scan response data will be returned by
+ * the callback registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_SCAN_INFO.
+ *
+ * Applications can only call this API after Bluetooth Host is ready.
+ *
+ * Explanation: If Bluetooth Host is ready, the application will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE
+ * with new_state about gap_init_state which is configured as @ref GAP_INIT_STATE_STACK_READY.
+ *
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -205,7 +197,7 @@ T_GAP_CAUSE le_scan_get_param(T_LE_SCAN_PARAM_TYPE param, void *p_value);
         switch (cb_type)
         {
         case GAP_MSG_LE_SCAN_INFO:
-            APP_PRINT_INFO5("GAP_MSG_LE_SCAN_INFO:adv_type 0x%x, bd_addr %s, remote_addr_type %d, rssi %d, data_len %d",
+            APP_PRINT_INFO5("GAP_MSG_LE_SCAN_INFO:adv_type 0x%x, bd_addr %s, remote_addr_type %d, RSSI %d, data_len %d",
                            cb_data.p_le_scan_info->adv_type,
                            TRACE_BDADDR(cb_data.p_le_scan_info->bd_addr),
                            cb_data.p_le_scan_info->remote_addr_type,
@@ -219,15 +211,22 @@ T_GAP_CAUSE le_scan_get_param(T_LE_SCAN_PARAM_TYPE param, void *p_value);
 T_GAP_CAUSE le_scan_start(void);
 
 /**
-  * @brief   Cancel a device discovery scan.
+  * @brief   Stop scan.
   *
-  * Applications can only call this API after Bluetooth Host is ready. \n
-  *                 Explanation: If Bluetooth Host is ready, the application will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE
-  *                              with new_state about gap_init_state which is configured as @ref GAP_INIT_STATE_STACK_READY.
+  * If sending request operation is successful, the stopping result will be returned in one of the following ways:
+  * - In the default situation, or when @ref le_gap_msg_info_way (true) has been called, APP will be notified
+  *   by message @ref GAP_MSG_LE_DEV_STATE_CHANGE with new_state about gap_scan_state @ref GAP_SCAN_STATE.
+  * - When @ref le_gap_msg_info_way (false) has been called, APP will be notified with the callback registered
+  *   by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_GAP_STATE_MSG.
   *
-  * @return Operation result.
-  * @retval  GAP_CAUSE_SUCCESS: Operation success, Cancel started.
-  * @retval  GAP_CAUSE_INVALID_STATE: Operation Failure. Invalid state, not in scan mode.
+  * Applications can only call this API after Bluetooth Host is ready.
+  *
+  * Explanation: If Bluetooth Host is ready, the application will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE
+  * with new_state about gap_init_state which is configured as @ref GAP_INIT_STATE_STACK_READY.
+  *
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
   *
   * <b>Example usage</b>
   * \code{.c}
@@ -258,45 +257,6 @@ T_GAP_CAUSE le_scan_start(void);
   * \endcode
   */
 T_GAP_CAUSE le_scan_stop(void);
-
-/**
-  * @brief   Set scan information filter.
-  *
-  * This function can be called before @ref gap_start_bt_stack is invoked.
-  *
-  * @param[in]  enable   Whether to open the scan info comparison function.
-  * @param[in]  offset   The start offset of the scan info to compare.
-  * @param[in]  len      Length of data to compare.
-  * @param[in]  p_filter Point the data to compare with the scan info.
-  * @return  Operation result.
-  * @retval  TRUE  Operation success.
-  * @retval  FALSE Operation Failure.
-  *
-  * <b>Example usage</b>
-  * \code{.c}
-    static T_USER_CMD_PARSE_RESULT cmd_scanf(T_USER_CMD_PARSED_VALUE *p_parse_value)
-    {
-        uint8_t type = p_parse_value->dw_param[0];
-        uint8_t offset = 0;
-        uint8_t len = 0;
-        uint8_t filter_data[31];
-        if(type == 0)
-        {
-            le_scan_info_filter(false, offset, len, filter_data);
-        }
-        else
-        {
-            offset = 5;
-            len = 2;
-            filter_data[0] = LO_WORD(GATT_UUID_SIMPLE_PROFILE);
-            filter_data[1] = HI_WORD(GATT_UUID_SIMPLE_PROFILE);
-            le_scan_info_filter(true, offset, len, filter_data);
-        }
-        return RESULT_SUCESS;
-    }
-  * \endcode
-  */
-bool le_scan_info_filter(bool enable, uint8_t offset, uint8_t len, uint8_t *p_filter);
 
 /** @} */ /* End of group Observer_Exported_Functions */
 /** @} */ /* End of group Observer_Role */

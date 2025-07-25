@@ -34,6 +34,15 @@ void board_ir_init(void)
     Pinmux_Config(IR_RX_PIN, IRDA_RX);
 }
 
+void board_pwm_init(void)
+{
+    Pad_Config(PWM_OUT_PIN, PAD_PINMUX_MODE, PAD_IS_PWRON, PAD_PULL_NONE, PAD_OUT_ENABLE,
+               PAD_OUT_HIGH);
+    /* Normal mode */
+    Pinmux_Config(PWM_OUT_PIN, PWM_OUT_PINMUX);
+}
+
+
 /**
   * @brief  Initialize ir peripheral.
   * @param  No parameter.
@@ -50,8 +59,8 @@ void driver_ir_init(void)
     IR_StructInit(&IR_InitStruct);
 
     IR_InitStruct.IR_Clock              = IR_CLOCK_40M;
-//    IR_InitStruct.IR_Freq               = 40000000;
-    IR_InitStruct.IR_Freq               = 38000;
+    IR_InitStruct.IR_Freq               = 40000000;
+//    IR_InitStruct.IR_Freq               = 38000;
     IR_InitStruct.IR_Mode               = IR_MODE_RX;
     IR_InitStruct.IR_RxStartMode        = IR_RX_AUTO_MODE;
     IR_InitStruct.IR_RxFIFOThrLevel     = IR_RX_FIFO_THR_LEVEL;
@@ -66,6 +75,22 @@ void driver_ir_init(void)
     IR_Init(&IR_InitStruct);
     IR_Cmd(IR_MODE_RX, ENABLE);
     IR_ClearRxFIFO();
+}
+
+void driver_pwm_init(void)
+{
+    RCC_PeriphClockCmd(APBPeriph_TIMER, APBPeriph_TIMER_CLOCK, ENABLE);
+
+    TIM_TimeBaseInitTypeDef TIM_InitStruct;
+    TIM_StructInit(&TIM_InitStruct);
+
+    TIM_InitStruct.TIM_PWM_En = ENABLE;
+    TIM_InitStruct.TIM_PWM_High_Count = PWM_HIGH_COUNT;
+    TIM_InitStruct.TIM_PWM_Low_Count  = PWM_LOW_COUNT;
+    TIM_InitStruct.TIM_Mode = TIM_Mode_UserDefine;
+    TIM_TimeBaseInit(PWM_TIMER_NUM, &TIM_InitStruct);
+
+    TIM_Cmd(PWM_TIMER_NUM, ENABLE);
 }
 
 /**

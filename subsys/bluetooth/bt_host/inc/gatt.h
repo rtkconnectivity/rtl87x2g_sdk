@@ -12,45 +12,29 @@ extern "C" {
 *                         Macros
 *============================================================================*/
 
-/**
+/** @addtogroup  GATT_SERVER_API GATT Server API
+  * @defgroup    GATT_ATTRIBUTE  GATT Attribute
+  * @brief       GATT Attribute Definitions
+  *
+  * @{
+  */
 
- * \addtogroup  GATT_SERVER_API GATT Server API
- *
- * \defgroup    GATT_ATTRIBUTE  GATT Attribute
- *
- * \brief       GATT Attribute Definitions
- *
- * \ingroup     GATT_SERVER_API
- * \{
- */
-
-/**
- * gatt.h
- *
- * \defgroup  GATT_DECLARATIONS_UUID    GATT Declarations UUID
- * \brief     GATT declarations UUID.
- * \anchor    GATT_DECLARATIONS_UUID
- * \ingroup   GATT_ATTRIBUTE
- * \{
- */
+/** @defgroup  GATT_DECLARATIONS_UUID    GATT Declarations UUID
+  * @brief     GATT declarations UUID.
+  * @{
+  */
 #define GATT_UUID_PRIMARY_SERVICE       0x2800  /**<  GATT Primary Service Declaration. */
 #define GATT_UUID_SECONDARY_SERVICE     0x2801  /**<  GATT Secondary Service Declaration. */
 #define GATT_UUID_INCLUDE               0x2802  /**<  GATT Include Declaration. */
 #define GATT_UUID_CHARACTERISTIC        0x2803  /**<  GATT Characteristic Declaration. */
-/**
- * End of GATT_DECLARATIONS_UUID
- * \}
+/** End of GATT_DECLARATIONS_UUID
+ * @}
  */
 
-/**
- * gatt.h
- *
- * \defgroup  GATT_DESCRIPTORS_UUID     GATT Descriptors UUID
- * \brief     GATT descriptors UUID.
- * \anchor    GATT_DESCRIPTORS_UUID
- * \ingroup   GATT_ATTRIBUTE
- * \{
- */
+/** @defgroup  GATT_DESCRIPTORS_UUID     GATT Descriptors UUID
+  * @brief     GATT descriptors UUID.
+  * @{
+  */
 #define GATT_UUID_CHAR_EXTENDED_PROP                    0x2900  /**<  Characteristic Extended Properties. */
 #define GATT_UUID_CHAR_USER_DESCR                       0x2901  /**<  Characteristic User Description. */
 #define GATT_UUID_CHAR_CLIENT_CONFIG                    0x2902  /**<  Client Characteristic Configuration. */
@@ -66,20 +50,14 @@ extern "C" {
 #define GATT_UUID_CHAR_SENSING_MEASUREMENT              0x290C  /**<  Environmental Sensing Measurement. */
 #define GATT_UUID_CHAR_SENSING_TRIGGER_SETTING          0x290D  /**<  Environmental Sensing Trigger Setting. */
 #define GATT_UUID_CHAR_DESCRIPTOR_TIME_TRIGGER_SETTING  0x290E  /**<  Time Trigger Setting. */
-/**
- * End of GATT_DESCRIPTORS_UUID
- * \}
+/** End of GATT_DESCRIPTORS_UUID
+ * @}
  */
 
-/**
- * gatt.h
- *
- * \defgroup  GATT_CHARACTERISTICS_UUID     GATT Characteristics UUID
- * \brief     GATT characteristics UUID.
- * \anchor    GATT_CHARACTERISTICS_UUID
- * \ingroup   GATT_ATTRIBUTE
- * \{
- */
+/** @defgroup  GATT_CHARACTERISTICS_UUID     GATT Characteristics UUID
+  * @brief     GATT characteristics UUID.
+  * @{
+  */
 #define GATT_UUID_CHAR_DEVICE_NAME                     0x2A00  /**<  Device Name. */
 #define GATT_UUID_CHAR_APPEARANCE                      0x2A01  /**<  Appearance. */
 #define GATT_UUID_CHAR_PER_PRIV_FLAG                   0x2A02  /**<  Peripheral Privacy Flag. */
@@ -94,57 +72,45 @@ extern "C" {
 
 /* GATT Service Client Supported Features bit field. */
 #define GATTS_CLIENT_SUPPORTED_FEATURES_DEFAULT_VALUE       0x00 /**< Server shall not use any of the features associated with that bit when communicating with this client. */
-#define GATTS_CLIENT_SUPPORTED_FEATURES_ROBUST_CACHING_BIT  0x01 /**< The client supports robust caching. */
-#define GATTS_CLIENT_SUPPORTED_FEATURES_EATT_BEARER_BIT     0x02 /**< The client supports Enhanced ATT bearer. */
-#define GATTS_CLIENT_SUPPORTED_FEATURES_MULTI_NOTIF_BIT     0x04 /**< The client supports receiving ATT_MULTIPLE_HANDLE_VALUE_NTF PDUs. */
+#define GATTS_CLIENT_SUPPORTED_FEATURES_ROBUST_CACHING_BIT  0x01 /**< Client supports robust caching. */
+#define GATTS_CLIENT_SUPPORTED_FEATURES_EATT_BEARER_BIT     0x02 /**< Client supports Enhanced ATT bearer. */
+#define GATTS_CLIENT_SUPPORTED_FEATURES_MULTI_NOTIF_BIT     0x04 /**< Client supports receiving ATT_MULTIPLE_HANDLE_VALUE_NTF PDUs. */
 
 /* GATT Service Server Supported Features bit field. */
-#define GATTS_SERVER_SUPPORTED_FEATURES_EATT_BIT  0x01
+#define GATTS_SERVER_SUPPORTED_FEATURES_EATT_BIT  0x01 /**< Server supports Enhanced ATT feature. */
 
-/* GATT Service Client Supported Features length. variable length, 1 is used in Core Spec v5.2. */
-#define GATTS_CLIENT_SUPPORTED_FEATURES_LEN   1
+#define GATTS_CLIENT_SUPPORTED_FEATURES_LEN   1        /**< GATT Service Client Supported Features characteristic value length.
+                                                            Variable length, 1 is used in Core Spec v5.2. */
 
-/* GATT Service Database Hash length. */
-#define GATTS_DATABASE_HASH_LEN               16
-/**
- * End of GATT_CHARACTERISTICS_UUID
- * \}
+#define GATTS_DATABASE_HASH_LEN               16       /**< GATT Service Database Hash characteristic value length. */
+/** End of GATT_CHARACTERISTICS_UUID
+ * @}
  */
 
-/**
- * gatt.h
- *
- * \defgroup  GATT_SERVICE_UUID     GATT Services UUID
- * \brief     GATT services UUID.
- * \anchor    GATT_SERVICE_UUID
- * \ingroup   GATT_ATTRIBUTE
- * \{
- */
-#define GATT_UUID_GAP                       0x1800  /**<  Generic Access. */
-#define GATT_UUID_GATT                      0x1801  /**<  Generic Attribute. */
-/**
- * End of GATT_SERVICE_UUID
- * \}
+/** @defgroup  GATT_BASED_SERVICE_UUID     GATT Based Service UUID
+  * @brief     GATT based service UUID.
+  * @{
+  */
+#define GATT_UUID_GAP                       0x1800  /**<  GAP Service. */
+#define GATT_UUID_GATT                      0x1801  /**<  GATT Service. */
+/** End of GATT_BASED_SERVICE_UUID
+ * @}
  */
 
-/**
- * gatt.h
- *
- * \defgroup  GATT_ATTRIBUTE_PERMISSIONS    GATT Attribute Permissions
- * \brief Attribute read/write permissions, encryption key size.
- * \anchor    GATT_ATTRIBUTE_PERMISSIONS
- * \ingroup   GATT_ATTRIBUTE
- * \{
- */
-#define GATT_PERM_NONE                   0x00
-#define GATT_PERM_ALL                    0x01  /**< Bits 0..1 (read), 4..5 (write), 8..9 (notification/indication). */
-#define GATT_PERM_AUTHEN_REQ             0x02
-#define GATT_PERM_AUTHEN_MITM_REQ        0x03
-#define GATT_PERM_AUTHOR_REQ             0x04  /**< Bits 2 (read), 6 (write), 10 (notification/indication). */
-#define GATT_PERM_ENCRYPTED_REQ          0x08  /**< Bits 3 (read), 7 (write), 11 (notification/indication). */
-#define GATT_PERM_AUTHEN_SC_REQ          0x00010000
+/** @defgroup  GATT_ATTRIBUTE_PERMISSIONS    GATT Attribute Permissions
+  * @brief Attribute read and/or write permissions, encryption key size.
+  * @{
+  */
+#define GATT_PERM_NONE                   0x00  /**< Read or write is not permitted. */
+#define GATT_PERM_ALL                    0x01  /**< Authentication not necessary. */
+#define GATT_PERM_AUTHEN_REQ             0x02  /**< Permissions require authentication, MITM protection not necessary. */
+#define GATT_PERM_AUTHEN_MITM_REQ        0x03  /**< Permissions require authentication and MITM protection. */
+#define GATT_PERM_AUTHOR_REQ             0x04  /**< Permissions require authorization. */
+#define GATT_PERM_ENCRYPTED_REQ          0x08  /**< Permissions require encryption. */
+#define GATT_PERM_AUTHEN_SC_REQ          0x00010000   /**< Permissions require authentication of Secure Connections,
+                                                           MITM protection not necessary. */
 
-/* read (bits 0..3) */
+/* read (bits 0..3 & bit 16) */
 #define GATT_PERM_READ                   GATT_PERM_ALL
 #define GATT_PERM_READ_AUTHEN_REQ        GATT_PERM_AUTHEN_REQ
 #define GATT_PERM_READ_AUTHEN_MITM_REQ   GATT_PERM_AUTHEN_MITM_REQ
@@ -157,7 +123,7 @@ extern "C" {
 #define GATT_PERM_READ_ENCRYPT_GET(x)    (x & 0x08)
 #define GATT_PERM_READ_AUTHEN_SC_GET(x)  (x & 0x00010000)
 
-/* write (bits 4..7) */
+/* write (bits 4..7 & bit 20) */
 #define GATT_PERM_WRITE                  (GATT_PERM_ALL << 4)
 #define GATT_PERM_WRITE_AUTHEN_REQ       (GATT_PERM_AUTHEN_REQ << 4)
 #define GATT_PERM_WRITE_AUTHEN_MITM_REQ  (GATT_PERM_AUTHEN_MITM_REQ << 4)
@@ -170,7 +136,7 @@ extern "C" {
 #define GATT_PERM_WRITE_ENCRYPT_GET(x)   ((x >> 4) & 0x08)
 #define GATT_PERM_WRITE_AUTHEN_SC_GET(x) ((x>>4) & 0x00010000)
 
-/* notification/indication (bits 8..11) */
+/* notification/indication (bits 8..11 & bit 24) */
 #define GATT_PERM_NOTIF_IND                  (GATT_PERM_ALL << 8)
 #define GATT_PERM_NOTIF_IND_AUTHEN_REQ       (GATT_PERM_AUTHEN_REQ << 8)
 #define GATT_PERM_NOTIF_IND_AUTHEN_MITM_REQ  (GATT_PERM_AUTHEN_MITM_REQ << 8)
@@ -190,20 +156,14 @@ extern "C" {
         if ( size > 0 )             \
             size++;                   \
     }
-/**
- * End of GATT_ATTRIBUTE_PERMISSIONS
- * \}
+/** End of GATT_ATTRIBUTE_PERMISSIONS
+ * @}
  */
 
-/**
- * gatt.h
- *
- * \defgroup  GATT_CHARACTERISTIC_PROPERTIES    GATT Characteristic Properties
- * \brief     GATT characteristic properties.
- * \anchor    GATT_CHARACTERISTIC_PROPERTIES
- * \ingroup   GATT_ATTRIBUTE
- * \{
- */
+/** @defgroup  GATT_CHARACTERISTIC_PROPERTIES    GATT Characteristic Properties
+  * @brief     GATT characteristic properties.
+  * @{
+  */
 #define GATT_CHAR_PROP_BROADCAST           0x01  /**< If set, permits broadcasts of the Characteristic Value using
 Server Characteristic Configuration Descriptor. */
 #define GATT_CHAR_PROP_READ                0x02  /**< If set, permits reads of the Characteristic Value. */
@@ -221,35 +181,28 @@ Extended Properties Descriptor. */
 #define GATT_CLIENT_CHAR_CONFIG_INDICATE        0x0002 /**< The Characteristic Value shall be indicated. */
 #define GATT_CLIENT_CHAR_CONFIG_NOTIFY_INDICATE 0x0003 /**< The Characteristic Value shall be both indicated and notified. */
 
-#define GATT_CLIENT_CHAR_NOTIF_IND_DATA_PENGDING 0x8000
+#define GATT_CLIENT_CHAR_NOTIF_IND_DATA_PENGDING 0x8000 /**< The Characteristic Value to be indicated or notified is pending. */
 
 /* GATT server characteristic configuration bit field */
 #define GATT_SERVER_CHAR_CONFIG_BROADCAST       0x0001 /**< The Characteristic Value shall be broadcast. */
-/**
- * End of GATT_CHARACTERISTIC_PROPERTIES
- * \}
+/** End of GATT_CHARACTERISTIC_PROPERTIES
+ * @}
  */
 
 
-/**
- * gatt.h
- *
- * \defgroup  GATT_UUID_SIZE    GATT UUID Size
- * \brief     GATT UUID size.
- * \anchor    GATT_UUID_SIZE
- * \ingroup   GATT_ATTRIBUTE
- * \{
- */
+/** @defgroup  GATT_UUID_SIZE    GATT UUID Size
+  * @brief     GATT UUID size.
+  * @{
+  */
 #define UUID_16BIT_SIZE                 2   /**< 16 bits UUID size. */
 #define UUID_128BIT_SIZE                16  /**< 128 bits UUID size. */
 
-#define ATT_ATTRIBUTE_MAX_LENGTH        512 /**< Attribute Max length. */
+#define ATT_ATTRIBUTE_MAX_LENGTH        512 /**< Attribute Maximum length. */
 
 #define HI_WORD(x)  ((uint8_t)((x & 0xFF00) >> 8))
 #define LO_WORD(x)  ((uint8_t)(x))
-/**
- * End of GATT_UUID_SIZE
- * \}
+/** End of GATT_UUID_SIZE
+ * @}
  */
 
 
@@ -257,15 +210,10 @@ Extended Properties Descriptor. */
  * GATT server attribute descriptor
  *--------------------------------------------------------------------------*/
 
-/**
- * gatt.h
- *
- * \defgroup  GATT_ATTRIBUTE_FLAG   GATT Attribute Flag
- * \brief     GATT attribute flag.
- * \anchor    GATT_ATTRIBUTE_FLAG
- * \ingroup   GATT_ATTRIBUTE
- * \{
- */
+/** @defgroup  GATT_ATTRIBUTE_FLAG   GATT Attribute Flag
+  * @brief     GATT attribute flag.
+  * @{
+  */
 #define ATTRIB_FLAG_VOID           0x0000 /**< Attribute value neither supplied by application
 nor included following 16bit UUID. Attribute value is pointed by p_value_context
 and value_len shall be set to the length of attribute value. */
@@ -276,23 +224,16 @@ and value_len shall be set to the length of attribute value. */
 #define ATTRIB_FLAG_CCCD_APPL      0x0010 /**< Application will be informed about CCCD value is changed. */
 #define ATTRIB_FLAG_CCCD_NO_FILTER 0x0020 /**< Application will be informed about CCCD value
 when CCCD is write by client, no matter it is changed or not. */
-#define ATTRIB_FLAG_INCLUDE_MULTI  0x0040
 #define ATTRIB_FLAG_LE             0x0800 /**< Used only for primary service declaration attributes if GATT over Bluetooth LE is supported. */
 #define ATTRIB_FLAG_BREDR          0x0400 /**< Used only for primary service declaration attributes if GATT over BR/EDR is supported. */
-/**
- * End of GATT_ATTRIBUTE_FLAG
- * \}
+/** End of GATT_ATTRIBUTE_FLAG
+ * @}
  */
 
-/**
- * gatt.h
- *
- * \defgroup  GATT_ATTRIBUTE_APPL   GATT Attribute Definition
- * \brief     GATT attribute definition.
- * \anchor    GATT_ATTRIBUTE_APPL
- * \ingroup   GATT_ATTRIBUTE
- * \{
- */
+/** @defgroup  GATT_ATTRIBUTE_APPL   GATT Attribute Definition
+  * @brief     GATT attribute definition.
+  * @{
+  */
 typedef struct
 {
     uint16_t    flags;              /**< Attribute flags @ref GATT_ATTRIBUTE_FLAG. */
@@ -302,19 +243,16 @@ typedef struct
     and @ref ATTRIB_FLAG_VALUE_APPL not set. */
     uint32_t    permissions;        /**< Attribute permission @ref GATT_ATTRIBUTE_PERMISSIONS. */
 } T_ATTRIB_APPL;
-/**
- * End of GATT_ATTRIBUTE_APPL
- * \}
+/** End of GATT_ATTRIBUTE_APPL
+ * @}
  */
 
-/**
- * End of GATT_ATTRIBUTE
- * \}
+/** End of GATT_ATTRIBUTE
+ * @}
  */
 
-/**
- * End of GATT_SERVER_API
- * \}
+/** End of GATT_SERVER_API
+ * @}
  */
 
 #ifdef __cplusplus

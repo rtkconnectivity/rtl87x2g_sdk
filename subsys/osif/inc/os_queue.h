@@ -1,6 +1,15 @@
-/*
- * Copyright (c) 2015, Realtek Semiconductor Corporation. All rights reserved.
- */
+/**
+*********************************************************************************************************
+*               Copyright(c) 2024, Realtek Semiconductor Corporation. All rights reserved.
+*********************************************************************************************************
+* @file      os_queue.h
+* @brief     Header file for os queue API.
+* @details   This file is used for queue init, in, out and peek.
+* @author    rui_yu
+* @date      2024-12-30
+* @version   v1.0
+* *********************************************************************************************************
+*/
 
 #ifndef _OS_QUEUE_H_
 #define _OS_QUEUE_H_
@@ -18,7 +27,7 @@ extern "C" {
  * \brief   Initialize and manage List Queue functions.
  * \details List Queue is designed as a FIFO-like list, which can enqueue, dequeue and peek
  *          the list. While, List Queue also keeps these functionalities such as deleting
- *          and inserting the specified list item.\n
+ *          and inserting the specified list item.
  *
  * \image html OS-queue-overview.jpg "List Queue Overview" width=50px height=28px
  *
@@ -34,7 +43,6 @@ extern "C" {
   */
 
 /**
- * os_queue.h
  *
  * \brief   The element structure of List Queue.
  *
@@ -45,7 +53,6 @@ typedef struct t_os_queue_elem
 } T_OS_QUEUE_ELEM;
 
 /**
- * os_queue.h
  *
  * \brief   The header structure of List Queue.
  *
@@ -71,11 +78,10 @@ typedef struct
   */
 
 /**
- * os_queue.h
  *
  * \brief   Initialize the list queue.
  *
- * \param   p_queue  Pointer to the list queue header.
+ * \param[out]   p_queue  Pointer to the list queue header.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -92,13 +98,12 @@ typedef struct
 extern void (*os_queue_init)(T_OS_QUEUE *p_queue);
 
 /**
- * os_queue.h
  *
- * \brief   Enqueue an element to the back of the list queue.
+ * \brief   Enqueue an element to the end of the list queue.
  *
- * \param   p_queue Pointer to the list queue header.
+ * \param[in]   p_queue Pointer to the list queue header.
  *
- * \param   p_elem  The pointer of list queue element being enqueued.
+ * \param[in]   p_elem  The pointer of list queue element being enqueued.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -127,11 +132,10 @@ extern void (*os_queue_init)(T_OS_QUEUE *p_queue);
 extern void (*os_queue_in)(T_OS_QUEUE *p_queue, void *p_elem);
 
 /**
- * os_queue.h
  *
  * \brief   Dequeue an element from the front of the list queue.
  *
- * \param   p_queue  Pointer to the list queue header.
+ * \param[in]   p_queue  Pointer to the list queue header.
  *
  * \return  The pointer of first element from the list queue. If the returned address is
  *          NULL, the list queue is empty.
@@ -168,11 +172,10 @@ extern void (*os_queue_in)(T_OS_QUEUE *p_queue, void *p_elem);
 extern void *(*os_queue_out)(T_OS_QUEUE *p_queue);
 
 /**
- * os_queue.h
  *
  * \brief  Peek an element from the list queue. The peeked element will not be dequeued.
  *
- * \param   p_queue Pointer to the list queue header.
+ * \param[in]   p_queue Pointer to the list queue header.
  *
  * \param   index   The index of the peeked element.
  *                  When index is a zero or positive number, it refers to the (index+1)th element.
@@ -213,18 +216,16 @@ extern void *(*os_queue_out)(T_OS_QUEUE *p_queue);
 extern void *(*os_queue_peek)(T_OS_QUEUE *p_queue, int32_t index);
 
 /**
- * os_queue.h
  *
  * \brief   Search an element from the list queue.
  *
- * \param   p_queue     Pointer to the list queue header.
+ * \param[in]   p_queue     Pointer to the list queue header.
  *
- * \param   p_elem      The pointer of element to be searched.
+ * \param[in]   p_elem      The pointer of element to be searched.
  *
  * \return          The status of queue element searching.
  * \retval true     Queue element was found successfully.
- * \retval false    Queue element was failed to find when the queue is empty
- *                  or the queue element is not in the queue.
+ * \retval false    Queue element was failed to find. It happens when the queue is empty or the queue element is not in the queue.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -266,15 +267,14 @@ extern void *(*os_queue_peek)(T_OS_QUEUE *p_queue, int32_t index);
 extern bool (*os_queue_search)(T_OS_QUEUE *p_queue, void *p_elem);
 
 /**
- * os_queue.h
  *
  * \brief   Insert an element into the list such that the new element is inserted after a given element already in the list.
  *
- * \param   p_queue     Pointer to the list queue header.
+ * \param[in]   p_queue     Pointer to the list queue header.
  *
- * \param   p_elem      The pointer of element which the new element to be inserted behind.
+ * \param[in]   p_elem      The pointer of element which the new element to be inserted behind.
  *
- * \param   p_new_elem  The pointer of inserted element.
+ * \param[in]   p_new_elem  The pointer of inserted element.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -313,17 +313,16 @@ extern bool (*os_queue_search)(T_OS_QUEUE *p_queue, void *p_elem);
 extern void (*os_queue_insert)(T_OS_QUEUE *p_queue, void *p_elem, void *p_new_elem);
 
 /**
- * os_queue.h
  *
  * \brief   Delete an element from the list queue.
  *
- * \param   p_queue  Pointer to the list queue header.
+ * \param[in]   p_queue  Pointer to the list queue header.
  *
- * \param   p_elem   The pointer of element to be deleted from the list queue.
+ * \param[in]   p_elem   The pointer of element to be deleted from the list queue.
  *
  * \return          The status of queue element deletion.
  * \retval true     Queue element was deleted successfully.
- * \retval false    Queue element was failed to delete when the queue is empty
+ * \retval false    Queue element was failed to delete. It happens when the queue is empty
  *                  or the being deleted queue element is not belonged to the queue.
  *
  * <b>Example usage</b>

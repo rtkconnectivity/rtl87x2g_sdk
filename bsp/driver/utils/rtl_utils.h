@@ -49,8 +49,8 @@ extern "C" {
  */
 typedef enum
 {
-    RESET = 0,
-    SET = !RESET
+    RESET = 0,      //!< Define the constant RESET and assign it the value 0.
+    SET = !RESET    //!< Define the constant SET and assign it the value 1.
 } FlagStatus, ITStatus;
 
 /** End of ITStatus
@@ -64,11 +64,11 @@ typedef enum
  */
 typedef enum
 {
-    DISABLE = 0,
-    ENABLE = !DISABLE
+    DISABLE = 0,         //!< Define the constant DISABLE and assign it the value 0.
+    ENABLE = !DISABLE    //!< Define the constant ENABLE and assign it the value 1.
 } FunctionalState;
 
-#define IS_FUNCTIONAL_STATE(STATE) (((STATE) == DISABLE) || ((STATE) == ENABLE))
+#define IS_FUNCTIONAL_STATE(STATE) (((STATE) == DISABLE) || ((STATE) == ENABLE)) //!< Check if the input parameter is valid.
 
 /** End of FunctionalState
   * \}
@@ -95,7 +95,7 @@ typedef enum
   * \param  expr: If expr is false, it calls assert_failed function which reports
   *         the name of the source file and the source line number of the call
   *         that failed. If expr is true, it returns no value.
-  * \retval None
+  *
   */
 #ifdef USE_FULL_ASSERT
 #define assert_param(expr) ((expr) ? (void)0 : io_assert_failed((uint8_t *)__FILE__, __LINE__))

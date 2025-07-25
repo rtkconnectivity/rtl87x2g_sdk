@@ -4,10 +4,15 @@
 #include <stdint.h>
 //#include "usb_task.h"
 
-/** \defgroup USB_DM USB DM
+/** \addtogroup USB_DM
   * \brief USB device manager.
   * @{
   */
+
+/** @defgroup USB_Dev_Manager_Exported_Constants USB Device Manager Exported Constants
+  * @{
+  */
+
 /**
  * usb_dm.h
  *
@@ -35,11 +40,21 @@ typedef enum  {USB_PDN = 0,
                USB_SUSPENDED = 6,
               } T_USB_POWER_STATE;
 
+/** End of group USB_Dev_Manager_Exported_Constants
+  * @}
+  */
+
+/** @defgroup USB_Dev_Manager_Exported_Types USB Device Manager Exported Types
+  * @{
+  */
+
 /**
  * \brief USB device manager event parameter status indication.
  * \param state: The current state.
  * \param info: Specific information depends on \ref state.
  *              If state is \ref USB_DEFAULT, it indicates the actual enumeration speed.
+ * \param speed:  Indicates the actual enumeration speed.
+ * \param remote_wakeup_en:  Indicates the remote wakeup status.
  *
  */
 typedef struct _usb_dm_evt_param_status_ind
@@ -101,6 +116,14 @@ typedef struct _t_usb_core_config
         uint8_t rsv: 6;
     } class_set;
 } T_USB_CORE_CONFIG;
+
+/** End of group USB_Dev_Manager_Exported_Types
+  * @}
+  */
+
+/** @defgroup USB_Dev_Manager_Exported_Functions USB Device Manager Exported Functions
+  * @{
+  */
 
 /**
  * usb_dm.h
@@ -173,7 +196,7 @@ void usb_dm_cb_register(USB_DM_CB cb);
  */
 void usb_dm_cb_unregister(void);
 
-
+/** @} */ /* End of group USB_Dev_Manager_Exported_Functions */
 /** @}*/
 /** End of USB_DM
 */

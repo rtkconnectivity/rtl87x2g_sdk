@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2017, Realtek Semiconductor Corporation. All rights reserved.
  */
 
@@ -9,23 +9,16 @@
 extern "C" {
 #endif
 
-/**
- * \defgroup    BT_TYPES    Bluetooth Types
- *
- * \brief   Defines Bluetooth related macros for the Bluetooth Host.
- *
- * \{
- */
+/** @defgroup    BT_TYPES    Bluetooth Types
+  * @brief   Defines Bluetooth related macros for the Bluetooth Host.
+  *
+  * @{
+  */
 
-/**
- * bt_types.h
- *
- * \defgroup    BT_COD_MAJOR_CLASS      Bluetooth COD Major Class
- * \brief       Bluetooth Major device class definitions.
- * \anchor      BT_COD_MAJOR_CLASS
- * \ingroup     BT_TYPES
- * \{
- */
+/** @defgroup    BT_COD_MAJOR_CLASS      Bluetooth COD Major Class
+  * @brief       Bluetooth Major device class definitions.
+  * @{
+  */
 #define MAJOR_DEVICE_CLASS_MISCELLANEOUS          ((uint32_t)0x000000)
 #define MAJOR_DEVICE_CLASS_COMPUTER               ((uint32_t)0x000100)
 #define MAJOR_DEVICE_CLASS_PHONE                  ((uint32_t)0x000200)
@@ -35,75 +28,51 @@ extern "C" {
 #define MAJOR_DEVICE_CLASS_IMAGING                ((uint32_t)0x000600)
 #define MAJOR_DEVICE_CLASS_HEALTH                 ((uint32_t)0x000900)
 #define MAJOR_DEVICE_CLASS_UNCLASSIFIED           ((uint32_t)0x001F00)
-/**
- * End of BT_COD_MAJOR_CLASS
- * \}
+/** End of BT_COD_MAJOR_CLASS
+ * @}
  */
 
-/**
- * bt_types.h
- *
- * \defgroup    BT_UNCLASSIFIED_MINOR_CLASS     Bluetooth Unclassified Minor Class
- * \brief       Bluetooth Unclassified minor device class definition.
- * \anchor      BT_UNCLASSIFIED_MINOR_CLASS
- * \ingroup     BT_TYPES
- * \{
- */
+/** @defgroup    BT_UNCLASSIFIED_MINOR_CLASS     Bluetooth Unclassified Minor Class
+  * @brief       Bluetooth Unclassified minor device class definition.
+  * @{
+  */
 #define MINOR_DEVICE_CLASS_UNCLASSIFIED           ((uint32_t)0x000000)
-/**
- * End of BT_UNCLASSIFIED_MINOR_CLASS
- * \}
+/** End of BT_UNCLASSIFIED_MINOR_CLASS
+ * @}
  */
 
-/**
- * bt_types.h
- *
- * \defgroup    BT_COMPUTER_MINOR_CLASS     Bluetooth COMPUTER Minor Class
- * \brief       Bluetooth Minor device class definitions for major class COMPUTER.
- * \anchor      BT_COMPUTER_MINOR_CLASS
- * \ingroup     BT_TYPES
- * \{
- */
+/** @defgroup    BT_COMPUTER_MINOR_CLASS     Bluetooth COMPUTER Minor Class
+  * @brief       Bluetooth Minor device class definitions for major class COMPUTER.
+  * @{
+  */
 #define MINOR_DEVICE_CLASS_DESKTOP_WORKSTATION    ((uint32_t)0x000004)
 #define MINOR_DEVICE_CLASS_SERVER_CLASS_COMPUTER  ((uint32_t)0x000008)
 #define MINOR_DEVICE_CLASS_LAPTOP                 ((uint32_t)0x00000C)
 #define MINOR_DEVICE_CLASS_HANDHELD               ((uint32_t)0x000010)
 #define MINOR_DEVICE_CLASS_PALM_SIZED             ((uint32_t)0x000014)
 #define MINOR_DEVICE_CLASS_WEARABLE_COMPUTER      ((uint32_t)0x000018)
-/**
- * End of BT_COMPUTER_MINOR_CLASS
- * \}
+/** End of BT_COMPUTER_MINOR_CLASS
+ * @}
  */
 
-/**
- * bt_types.h
- *
- * \defgroup    BT_PHONE_MINOR_CLASS    Bluetooth PHONE Minor Class
- * \brief       Bluetooth Minor device class definitions for major class PHONE.
- * \anchor      BT_PHONE_MINOR_CLASS
- * \ingroup     BT_TYPES
- * \{
- */
+/** @defgroup    BT_PHONE_MINOR_CLASS    Bluetooth PHONE Minor Class
+  * @brief       Bluetooth Minor device class definitions for major class PHONE.
+  * @{
+  */
 #define MINOR_DEVICE_CLASS_CELLULAR               ((uint32_t)0x000004)
 #define MINOR_DEVICE_CLASS_CORDLESS               ((uint32_t)0x000008)
 #define MINOR_DEVICE_CLASS_SMART_PHONE            ((uint32_t)0x00000C)
 #define MINOR_DEVICE_CLASS_WIRED_MODEM            ((uint32_t)0x000010)
 #define MINOR_DEVICE_CLASS_VOICE_GATEWAY          ((uint32_t)0x000010)
 #define MINOR_DEVICE_CLASS_ISDN_GATEWAY           ((uint32_t)0x000014)
-/**
- * End of BT_PHONE_MINOR_CLASS
- * \}
+/** End of BT_PHONE_MINOR_CLASS
+ * @}
  */
 
-/**
- * bt_types.h
- *
- * \defgroup    BT_LAN_ACCESS_POINT_MINOR_CLASS     Bluetooth LAN_ACCESS_POINT Minor Class
- * \brief       Bluetooth Minor device class definitions for major class LAN_ACCESS_POINT.
- * \anchor      BT_LAN_ACCESS_POINT_MINOR_CLASS
- * \ingroup     BT_TYPES
- * \{
- */
+/** @defgroup    BT_LAN_ACCESS_POINT_MINOR_CLASS     Bluetooth LAN_ACCESS_POINT Minor Class
+  * @brief       Bluetooth Minor device class definitions for major class LAN_ACCESS_POINT.
+  * @{
+  */
 #define MINOR_DEVICE_CLASS_FULLY_AVAILABLE        ((uint32_t)0x000000)
 #define MINOR_DEVICE_CLASS_1_17_PERCENT_UTILIZED  ((uint32_t)0x000020)
 #define MINOR_DEVICE_CLASS_17_33_PERCENT_UTILIZED ((uint32_t)0x000040)
@@ -112,20 +81,14 @@ extern "C" {
 #define MINOR_DEVICE_CLASS_67_83_PERCENT_UTILIZED ((uint32_t)0x0000A0)
 #define MINOR_DEVICE_CLASS_83_99_PERCENT_UTILIZED ((uint32_t)0x0000C0)
 #define MINOR_DEVICE_CLASS_NO_SERVICE_AVAILABLE   ((uint32_t)0x0000E0)
-/**
- * End of BT_LAN_ACCESS_POINT_MINOR_CLASS
- * \}
+/** End of BT_LAN_ACCESS_POINT_MINOR_CLASS
+ * @}
  */
 
-/**
- * bt_types.h
- *
- * \defgroup    BT_AV_MINOR_CLASS       Bluetooth AUDIO/VIDEO Minor Class
- * \brief       Bluetooth Minor device class definitions for major class AUDIO/VIDEO.
- * \anchor      BT_AV_MINOR_CLASS
- * \ingroup     BT_TYPES
- * \{
- */
+/** @defgroup    BT_AV_MINOR_CLASS       Bluetooth AUDIO/VIDEO Minor Class
+  * @brief       Bluetooth Minor device class definitions for major class AUDIO/VIDEO.
+  * @{
+  */
 #define MINOR_DEVICE_CLASS_HEADSET                ((uint32_t)0x000004)
 #define MINOR_DEVICE_CLASS_HANDSFREE              ((uint32_t)0x000008)
 #define MINOR_DEVICE_CLASS_MICROPHONE             ((uint32_t)0x000010)
@@ -142,20 +105,14 @@ extern "C" {
 #define MINOR_DEVICE_CLASS_VIDEODISPLAYSPEAKER    ((uint32_t)0x00003c)
 #define MINOR_DEVICE_CLASS_VIDEOCONFERENCING      ((uint32_t)0x000040)
 #define MINOR_DEVICE_CLASS_GAMINGTOY              ((uint32_t)0x000048)
-/**
- * End of BT_AV_MINOR_CLASS
- * \}
+/** End of BT_AV_MINOR_CLASS
+ * @}
  */
 
-/**
- * bt_types.h
- *
- * \defgroup    BT_PERIPHERAL_MINOR_CLASS       Bluetooth PERIPHERAL Minor Class
- * \brief       Bluetooth Minor device class definitions for major class PERIPHERAL.
- * \anchor      BT_PERIPHERAL_MINOR_CLASS
- * \ingroup     BT_TYPES
- * \{
- */
+/** @defgroup    BT_PERIPHERAL_MINOR_CLASS       Bluetooth PERIPHERAL Minor Class
+  * @brief       Bluetooth Minor device class definitions for major class PERIPHERAL.
+  * @{
+  */
 #define MINOR_DEVICE_CLASS_KEYBOARD               ((uint32_t)0x000040)
 #define MINOR_DEVICE_CLASS_POINTING_DEVICE        ((uint32_t)0x000080)
 #define MINOR_DEVICE_CLASS_COMBO_KEY_POINTING     ((uint32_t)0x0000C0)
@@ -166,38 +123,26 @@ extern "C" {
 #define MINOR_DEVICE_CLASS_PERIMULT_SENSING       ((uint32_t)0x000010)
 #define MINOR_DEVICE_CLASS_PERIMULT_DIGITIZER     ((uint32_t)0x000014)
 #define MINOR_DEVICE_CLASS_PERIMULT_CARDREADER    ((uint32_t)0x000018)
-/**
- * End of BT_PERIPHERAL_MINOR_CLASS
- * \}
+/** End of BT_PERIPHERAL_MINOR_CLASS
+ * @}
  */
 
-/**
- * bt_types.h
- *
- * \defgroup    BT_IMAGING_MINOR_CLASS      Bluetooth IMAGING Minor Class
- * \brief       Bluetooth Minor device class definitions for major class IMAGING. May be combined use as mask.
- * \anchor      BT_IMAGING_MINOR_CLASS
- * \ingroup     BT_TYPES
- * \{
- */
+/** @defgroup    BT_IMAGING_MINOR_CLASS      Bluetooth IMAGING Minor Class
+  * @brief       Bluetooth Minor device class definitions for major class IMAGING. May be combined use as mask.
+  * @{
+  */
 #define MINOR_DEVICE_IMAGE_DISPLAY                ((uint32_t)0x000010)
 #define MINOR_DEVICE_IMAGE_CAMERA                 ((uint32_t)0x000020)
 #define MINOR_DEVICE_IMAGE_SCANNER                ((uint32_t)0x000040)
 #define MINOR_DEVICE_IMAGE_PRINTER                ((uint32_t)0x000080)
-/**
- * End of BT_IMAGING_MINOR_CLASS
- * \}
+/** End of BT_IMAGING_MINOR_CLASS
+ * @}
  */
 
-/**
- * bt_types.h
- *
- * \defgroup    BT_HEALTH_MINOR_CLASS       Bluetooth HEALTH Minor Class
- * \brief       Bluetooth Minor device class definitions for major class HEALTH.
- * \anchor      BT_HEALTH_MINOR_CLASS
- * \ingroup     BT_TYPES
- * \{
- */
+/** @defgroup    BT_HEALTH_MINOR_CLASS       Bluetooth HEALTH Minor Class
+  * @brief       Bluetooth Minor device class definitions for major class HEALTH.
+  * @{
+  */
 #define MINOR_DEVICE_HEALTH_BLOODPRESSURE         ((uint32_t)0x0004)
 #define MINOR_DEVICE_HEALTH_THERMOMETER           ((uint32_t)0x0008)
 #define MINOR_DEVICE_HEALTH_WEIGHINGSCALE         ((uint32_t)0x000C)
@@ -206,20 +151,14 @@ extern "C" {
 #define MINOR_DEVICE_HEALTH_HEARTPULSERATE        ((uint32_t)0x0018)
 #define MINOR_DEVICE_HEALTH_DATADISPLAY           ((uint32_t)0x001C)
 #define MINOR_DEVICE_HEALTH_STEPCOUNTER           ((uint32_t)0x0020)
-/**
- * End of BT_HEALTH_MINOR_CLASS
- * \}
+/** End of BT_HEALTH_MINOR_CLASS
+ * @}
  */
 
-/**
- * bt_types.h
- *
- * \defgroup    BT_SERVICE_CLASS    Bluetooth Service Class
- * \brief       Bluetooth Service class definitions.
- * \anchor      BT_SERVICE_CLASS
- * \ingroup     BT_TYPES
- * \{
- */
+/** @defgroup    BT_SERVICE_CLASS    Bluetooth Service Class
+  * @brief       Bluetooth Service class definitions.
+  * @{
+  */
 #define SERVICE_CLASS_LIMITED_DISCOVERABLE_MODE   ((uint32_t)0x002000)
 #define SERVICE_CLASS_RESERVED1                   ((uint32_t)0x004000)
 #define SERVICE_CLASS_RESERVED2                   ((uint32_t)0x008000)
@@ -231,36 +170,24 @@ extern "C" {
 #define SERVICE_CLASS_AUDIO                       ((uint32_t)0x200000)
 #define SERVICE_CLASS_TELEPHONY                   ((uint32_t)0x400000)
 #define SERVICE_CLASS_INFORMATION                 ((uint32_t)0x800000)
-/**
- * End of BT_SERVICE_CLASS
- * \}
+/** End of BT_SERVICE_CLASS
+ * @}
  */
 
-/**
- * bt_types.h
- *
- * \defgroup    BT_COD_MASK     Bluetooth COD Mask
- * \brief       Bluetooth Device and service bitmask in COD.
- * \anchor      BT_COD_MASK
- * \ingroup     BT_TYPES
- * \{
- */
+/** @defgroup    BT_COD_MASK     Bluetooth COD Mask
+  * @brief       Bluetooth Device and service bitmask in COD.
+  * @{
+  */
 #define SERVICE_CLASS_DEVICE_MASK                 ((uint32_t)0x00001FFF)
 #define SERVICE_CLASS_SERVICE_MASK                ((uint32_t)0x00FFE000)
-/**
- * End of BT_COD_MASK
- * \}
+/** End of BT_COD_MASK
+ * @}
  */
 
-/**
- * bt_types.h
- *
- * \defgroup    BT_UUID     Bluetooth Protocol/Profile UUID
- * \brief       Bluetooth Protocol/Profile UUID definitions.
- * \anchor      BT_UUID
- * \ingroup     BT_TYPES
- * \{
- */
+/** @defgroup    BT_UUID     Bluetooth Protocol/Profile UUID
+  * @brief       Bluetooth Protocol/Profile UUID definitions.
+  * @{
+  */
 #define UUID_SDP                            0x0001
 #define UUID_UDP                            0x0002
 #define UUID_RFCOMM                         0x0003
@@ -350,20 +277,14 @@ extern "C" {
 #define UUID_HDP_PROFILE_SINK               0x1402
 #define UUID_GAP                            0x1800
 #define UUID_GATT                           0x1801
-/**
- * End of BT_UUID
- * \}
+/** End of BT_UUID
+ * @}
  */
 
-/**
- * bt_types.h
- *
- * \defgroup    BT_PSM      Bluetooth Protocol/Service Multiplexer
- * \brief       Bluetooth Protocol/Service Multiplexer definitions.
- * \anchor      BT_PSM
- * \ingroup     BT_TYPES
- * \{
- */
+/** @defgroup    BT_PSM      Bluetooth Protocol/Service Multiplexer
+  * @brief       Bluetooth Protocol/Service Multiplexer definitions.
+  * @{
+  */
 #define PSM_SDP                             0x0001
 #define PSM_RFCOMM                          0x0003
 #define PSM_BNEP                            0x000F
@@ -375,45 +296,33 @@ extern "C" {
 #define PSM_ATT                             0x001F
 #define PSM_RDTP                            0x00D1
 #define PSM_EATT                            0x0027
-/**
- * End of BT_PSM
- * \}
+/** End of BT_PSM
+ * @}
  */
 
-/**
- * bt_types.h
- *
- * \defgroup    BT_SDP_HEADER   Bluetooth SDP Header
- * \brief       Bluetooth SDP Header definitions.
- * \anchor      BT_SDP_HEADER
- * \ingroup     BT_TYPES
- * \{
- */
-#define SDP_UUID16_HDR                      0x19  /**< 00011 001 type:3 UUID; size: 2 bytes. */
-#define SDP_UUID32_HDR                      0x1a  /**< 00011 010 type:3 UUID; size: 4 bytes. */
-#define SDP_UUID128_HDR                     0x1c  /**< 00011 010 type:3 UUID; size: 16 bytes. */
-#define SDP_DATA_ELEM_SEQ_HDR               0x35  /**< 00110 101 type:6 size:5(next byte). */
-#define SDP_DATA_ELEM_SEQ_HDR_2BYTE         0x36  /**< 00110 110 type:6 size:6(next two bytes). */
+/** @defgroup    BT_SDP_HEADER   Bluetooth SDP Header
+  * @brief       Bluetooth SDP Header definitions.
+  * @{
+  */
+#define SDP_UUID16_HDR                      0x19  /**< 00011 001 type:3 UUID; size: 2 octets. */
+#define SDP_UUID32_HDR                      0x1a  /**< 00011 010 type:3 UUID; size: 4 octets. */
+#define SDP_UUID128_HDR                     0x1c  /**< 00011 010 type:3 UUID; size: 16 octets. */
+#define SDP_DATA_ELEM_SEQ_HDR               0x35  /**< 00110 101 type:6 size:5(next octet). */
+#define SDP_DATA_ELEM_SEQ_HDR_2BYTE         0x36  /**< 00110 110 type:6 size:6(next two octets). */
 #define SDP_STRING_HDR                      0x25
 
 #define SDP_UNSIGNED_ONE_BYTE               0x08
 #define SDP_UNSIGNED_TWO_BYTE               0x09
 #define SDP_UNSIGNED_FOUR_BYTE              0x0A
 #define SDP_BOOL_ONE_BYTE                   0x28
-/**
- * End of BT_SDP_HEADER
- * \}
+/** End of BT_SDP_HEADER
+ * @}
  */
 
-/**
- * bt_types.h
- *
- * \defgroup    BT_SDP_ATTRIBUTES       Bluetooth SDP Attributes
- * \brief       Bluetooth SDP Attribute definitions.
- * \anchor      BT_SDP_ATTRIBUTES
- * \ingroup     BT_TYPES
- * \{
- */
+/** @defgroup    BT_SDP_ATTRIBUTES       Bluetooth SDP Attributes
+  * @brief       Bluetooth SDP Attribute definitions.
+  * @{
+  */
 #define SDP_ATTR_SRV_RECORD_HANDLE          0x0000
 #define SDP_ATTR_SRV_CLASS_ID_LIST          0x0001
 #define SDP_ATTR_SRV_RECORD_STATE           0x0002
@@ -439,23 +348,17 @@ extern "C" {
 #define SDP_ATTR_SRV_DB_STATE               0x0201
 
 #define SDP_BASE_LANG_OFFSET                0x0100  /**< Offset to base language. */
-#define SDP_LANG_ENGLISH                    0x656e  /**< This is "en", according to ISO 639:1988. */
-#define SDP_LANG_GERMAN                     0x6465  /**< This is "de", according to ISO 639:1988. */
+#define SDP_LANG_ENGLISH                    0x656e  /**< This is 'en', according to ISO 639:1988. */
+#define SDP_LANG_GERMAN                     0x6465  /**< This is 'de', according to ISO 639:1988. */
 #define SDP_CHARACTER_UTF8                  106     /**< UTF8 encoding, cf. http://www.isi.edu/in-notes/iana/assignments/character-sets . */
-/**
- * End of BT_SDP_ATTRIBUTES
- * \}
+/** End of BT_SDP_ATTRIBUTES
+ * @}
  */
 
-/**
- * bt_types.h
- *
- * \defgroup    BT_SDP_PROFILE_ATTRIBUTES   Bluetooth SDP Profile Attributes
- * \brief       Bluetooth SDP Profile Attribute definitions.
- * \anchor      BT_SDP_PROFILE_ATTRIBUTES
- * \ingroup     BT_TYPES
- * \{
- */
+/** @defgroup    BT_SDP_PROFILE_ATTRIBUTES   Bluetooth SDP Profile Attributes
+  * @brief       Bluetooth SDP Profile Attribute definitions.
+  * @{
+  */
 #define SDP_ATTR_L2C_PSM                    0x0200
 
 #define SDP_ATTR_SRV_VER                    0x0300
@@ -509,35 +412,23 @@ extern "C" {
 #define SDP_ATTR_DIP_PRODUCT_VERSION        0x0203
 #define SDP_ATTR_DIP_PRIMARY_RECORD         0x0204
 #define SDP_ATTR_DIP_VENDOR_ID_SOURCE       0x0205
-/**
- * End of BT_SDP_PROFILE_ATTRIBUTES
- * \}
+/** End of BT_SDP_PROFILE_ATTRIBUTES
+ * @}
  */
 
-/**
- * bt_types.h
- *
- * \defgroup    BT_LE_L2CAP_FIXED_CID      Bluetooth LE L2CAP Fixed CID
- * \brief       Bluetooth LE L2CAP Fixed CID definitions.
- * \anchor      BT_LE_L2CAP_FIXED_CID
- * \ingroup     BT_TYPES
- * \{
- */
+/** @defgroup    BT_LE_L2CAP_FIXED_CID      Bluetooth LE L2CAP Fixed CID
+  * @brief       Bluetooth LE L2CAP Fixed CID definitions.
+  * @{
+  */
 #define L2C_FIXED_CID_ATT                   0x0004
-/**
- * End of BT_LE_L2CAP_FIXED_CID
- * \}
+/** End of BT_LE_L2CAP_FIXED_CID
+ * @}
  */
 
-/**
- * bt_types.h
- *
- * \defgroup    BT_LE_LOCAL_SUPPORTED_FEATURES  Bluetooth LE Local Supported Features
- * \brief       Bluetooth LE Local Supported Features definitions.
- * \anchor      BT_LE_LOCAL_SUPPORTED_FEATURES
- * \ingroup     BT_TYPES
- * \{
- */
+/** @defgroup    BT_LE_LOCAL_SUPPORTED_FEATURES  Bluetooth LE Local Supported Features
+  * @brief       Bluetooth LE Local Supported Features definitions.
+  * @{
+  */
 #define LE_SUPPORT_FEATURES_MASK_ARRAY_INDEX0                           0
 
 #define LE_SUPPORT_FEATURES_ENCRYPTION_MASK_BIT                         ((uint8_t)0x01)
@@ -588,40 +479,28 @@ extern "C" {
 #define LE_SUPPORT_FEATURES_LE_POWER_CONTROL_REQUEST_MASK_BIT           ((uint8_t)0x02)
 #define LE_SUPPORT_FEATURES_LE_POWER_CHANGE_INDICATION_MASK_BIT         ((uint8_t)0x04)
 #define LE_SUPPORT_FEATURES_LE_PATH_LOSS_MONITORING_MASK_BIT            ((uint8_t)0x08)
-/**
- * End of BT_LE_LOCAL_SUPPORTED_FEATURES
- * \}
+/** End of BT_LE_LOCAL_SUPPORTED_FEATURES
+ * @}
  */
 
-/**
- * bt_types.h
- *
- * \defgroup    BT_LE_SET_HOST_FEATURE      Bluetooth LE Set Host Feature
- * \brief       Bluetooth LE Set Host Feature definitions.
- * \anchor      BT_LE_SET_HOST_FEATURE
- * \ingroup     BT_TYPES
- * \{
- */
+/** @defgroup    BT_LE_SET_HOST_FEATURE      Bluetooth LE Set Host Feature
+  * @brief       Bluetooth LE Set Host Feature definitions.
+  * @{
+  */
 #define LE_SET_HOST_FEATURE_BIT_VALUE_DISABLE                            ((uint8_t)0x00)
 #define LE_SET_HOST_FEATURE_BIT_VALUE_ENABLE                             ((uint8_t)0x01)
 #define LE_SET_HOST_FEATURE_BIT_VALUE_RFU                                ((uint8_t)0xFF)
 
 #define LE_SET_HOST_FEATURE_BIT_NUMBER_CIS_HOST_SUPPORT                  ((uint8_t)0x20)
 #define LE_SET_HOST_FEATURE_BIT_NUMBER_RFU                               ((uint8_t)0xFF)
-/**
- * End of BT_LE_SET_HOST_FEATURE
- * \}
+/** End of BT_LE_SET_HOST_FEATURE
+ * @}
  */
 
-/**
- * bt_types.h
- *
- * \defgroup    BT_HOST_MODULE_ERROR   Bluetooth Host Module Error Code
- * \brief       Bluetooth Host module error code mask.
- * \anchor      BT_HOST_MODULE_ERROR
- * \ingroup     BT_TYPES
- * \{
- */
+/** @defgroup    BT_HOST_MODULE_ERROR   Bluetooth Host Module Error Code
+  * @brief       Bluetooth Host module error code mask.
+  * @{
+  */
 #define GAP_ERR                 0x0000
 #define HCI_ERR                 0x0100
 #define L2C_ERR                 0x0200
@@ -632,112 +511,111 @@ extern "C" {
 #define RFC_ERR                 0x0B00
 #define GATT_ERR                0x0C00
 #define APP_ERR                 0x0D00
-/**
- * End of BT_HOST_MODULE_ERROR
- * \}
+/** End of BT_HOST_MODULE_ERROR
+ * @}
  */
 
-/**
- * bt_types.h
- *
- * \defgroup    BT_HCI_ERROR    Bluetooth HCI Error Code
- * \brief       Bluetooth HCI error code definitions.
- * \anchor      BT_HCI_ERROR
- * \ingroup     BT_TYPES
- * \{
- */
-#define HCI_SUCCESS                             0x00
-#define HCI_ERR_UNKNOWN_CMD                     0x01
-#define HCI_ERR_UNKNOWN_CONN_ID                 0x02
-#define HCI_ERR_HARDWARE_FAIL                   0x03
-#define HCI_ERR_PAGE_TIMEOUT                    0x04
-#define HCI_ERR_AUTHEN_FAIL                     0x05
-#define HCI_ERR_KEY_MISSING                     0x06
-#define HCI_ERR_MEMORY_FULL                     0x07
-#define HCI_ERR_CONN_TIMEOUT                    0x08
-#define HCI_ERR_MAX_NUM_CONN                    0x09
-#define HCI_ERR_MAX_NUM_SCO_CONN                0x0A  /* 10 */
-#define HCI_ERR_ACL_CONN_EXIST                  0x0B  /* 11 */
-#define HCI_ERR_CMD_DISALLOWED                  0x0C  /* 12 */
-#define HCI_ERR_REJECT_LIMITED_RESOURCE         0x0D  /* 13 */
-#define HCI_ERR_REJECT_SECURITY_REASON          0x0E  /* 14 */
-#define HCI_ERR_REJECT_UNACCEPTABLE_ADDR        0x0F  /* 15 */
-#define HCI_ERR_HOST_TIMEOUT                    0x10  /* 16 */
-#define HCI_ERR_UNSUPPORTED_PARAM               0x11  /* 17 */
-#define HCI_ERR_INVALID_PARAM                   0x12  /* 18 */
-#define HCI_ERR_REMOTE_USER_TERMINATE           0x13  /* 19 */
-#define HCI_ERR_REMOTE_LOW_RESOURCE             0x14  /* 20 */
-#define HCI_ERR_REMOTE_POWER_OFF                0x15  /* 21 */
-#define HCI_ERR_LOCAL_HOST_TERMINATE            0x16  /* 22 */
-#define HCI_ERR_REPEATED_ATTEMPTS               0x17  /* 23 */
-#define HCI_ERR_PARING_NOT_ALLOWED              0x18  /* 24 */
-#define HCI_ERR_UNKNOWN_LMP_PDU                 0x19  /* 25 */
-#define HCI_ERR_UNSUPPORTED_REMOTE_FEAT         0x1A  /* 26 */
-#define HCI_ERR_SCO_OFFSET_REJECTED             0x1B  /* 27 */
-#define HCI_ERR_SCO_INTERVAL_REJECTED           0x1C  /* 28 */
-#define HCI_ERR_SCO_AIR_MODE_REJECTED           0x1D  /* 29 */
-#define HCI_ERR_INVALID_LMP_PARAM               0x1E  /* 30 */
-#define HCI_ERR_UNSPECIFIED_ERROR               0x1F  /* 31 */
-#define HCI_ERR_UNSUPPORTED_LMP_PARAM           0x20  /* 32 */
-#define HCI_ERR_ROLE_CHANGE_NOT_ALLOWED         0x21  /* 33 */
-#define HCI_ERR_LMP_RESPONSE_TIMEOUT            0x22  /* 34 */
-#define HCI_ERR_LMP_ERROR_TRANS_COLLISION       0x23  /* 35 */
-#define HCI_ERR_LMP_PDU_NOT_ALLOWED             0x24  /* 36 */
-#define HCI_ERR_ENCRYPT_MODE_NOT_ACCEPTABLE     0x25  /* 37 */
-#define HCI_ERR_UNIT_KEY_USED                   0x26  /* 38 */
-#define HCI_ERR_QOS_NOT_SUPPORTED               0x27  /* 39 */
-#define HCI_ERR_INSTANT_PASSED                  0x28  /* 40 */
-#define HCI_ERR_PAIR_UNIT_KEY_NOT_SUPPORT       0x29  /* 41 */
-#define HCI_ERR_DIFF_TRANS_COLLISION            0x2A  /* 42 */
-#define HCI_ERR_QOS_UNACCEPTABLE_PARAM          0x2C  /* 44 */
-#define HCI_ERR_QOS_REJECT                      0x2D  /* 45 */
-#define HCI_ERR_CHANN_ASSESS_NOT_SUPPORT        0x2E  /* 46 */
-#define HCI_ERR_INSUFFICIENT_SECURITY           0x2F  /* 47 */
-#define HCI_ERR_PARAM_OUT_OF_RANGE              0x30  /* 48 */
-#define HCI_ERR_ROLE_SWITCH_PENDING             0x32  /* 50 */
-#define HCI_ERR_RESERVED_SLOT_VIOLATION         0x34  /* 52 */
-#define HCI_ERR_ROLE_SWITCH_FAILED              0x35  /* 53 */
-#define HCI_ERR_EXT_INQUIRY_RSP_TOO_LARGE       0x36  /* 54 */
-#define HCI_ERR_SSP_NOT_SUPPORTED_BY_HOST       0x37  /* 55 */
-#define HCI_ERR_HOST_BUSY_PAIRING               0x38  /* 56 */
-#define HCI_ERR_REJECT_NO_SUITABLE_CHANN        0x39  /* 57 */
-#define HCI_ERR_CONTROLLER_BUSY                 0x3A  /* 58 */
-#define HCI_ERR_UNACCEPTABLE_CONN_PARAMS        0x3B  /* 59 */
-#define HCI_ERR_DIRECTED_ADV_TIMEOUT            0x3C  /* 60 */
-#define HCI_ERR_MIC_FAILURE                     0x3D  /* 61 */
-#define HCI_ERR_FAIL_TO_ESTABLISH_CONN          0x3E  /* 62 */
-#define HCI_ERR_MAC_CONN_FAIL                   0x3F  /* 63 */
-#define HCI_ERR_COARSE_CLOCK_ADJUST_REJECTED    0x40
-#define HCI_ERR_TYPE0_SUBMAP_NOT_DEFINED        0x41
-#define HCI_ERR_UNKNOWN_ADVERTISING_IDENTIFIER  0x42
-#define HCI_ERR_LIMIT_REACHED                   0x43
-#define HCI_ERR_OPERATION_CANCELLED_BY_HOST     0x44
-#define HCI_ERR_OPERATION_PACKET_TOO_LONG       0x45
+/** @defgroup    BT_HCI_ERROR    Bluetooth HCI Error Code
+  * @brief       Bluetooth HCI error code definitions.
+  * @{
+  */
+#define HCI_SUCCESS                             0x00        /**< Success. */
+#define HCI_ERR_UNKNOWN_CMD                     0x01        /**< The Controller does not understand the HCI Command packet opcode that the Host sent. */
+#define HCI_ERR_UNKNOWN_CONN_ID                 0x02        /**< Command sent from the Host should identify a connection, but that connection does not exist or does not identify the correct type of connection. */
+#define HCI_ERR_HARDWARE_FAIL                   0x03        /**< Something in the Controller has failed in a manner that cannot be described with any other error code. */
+#define HCI_ERR_PAGE_TIMEOUT                    0x04        /**< A page timed out because of the Page Timeout configuration parameter. This error code may occur only with the HCI_Remote_Name_Request and HCI_Create_Connection commands. */
+#define HCI_ERR_AUTHEN_FAIL                     0x05        /**< Pairing or authentication failed due to incorrect results in the pairing or authentication procedure. This could be due to an incorrect PIN or Link Key. */
+#define HCI_ERR_KEY_MISSING                     0x06        /**< Pairing failed because of a missing PIN, or authentication failed because of a missing Key. */
+#define HCI_ERR_MEMORY_FULL                     0x07        /**< The Controller has run out of memory to store new parameters. */
+#define HCI_ERR_CONN_TIMEOUT                    0x08        /**< Either the link supervision timeout has expired for a given connection or that the synchronization timeout has expired for a given broadcast. */
+#define HCI_ERR_MAX_NUM_CONN                    0x09        /**< An attempt to create another connection failed because the Controller is already at its limit of the number of connections it can support. */
+#define HCI_ERR_MAX_NUM_SCO_CONN                0x0A        /**< The Controller has reached the limit to the number of synchronous connections that can be achieved to a device. */
+#define HCI_ERR_ACL_CONN_EXIST                  0x0B        /**< An attempt was made to create a new Connection to a device when there is already a connection to this device and multiple connections to the same device are not permitted. */
+#define HCI_ERR_CMD_DISALLOWED                  0x0C        /**< The command requested cannot be executed because the Controller is in a state where it cannot process this command at this time. This error shall not be used for command opcodes where the error code Unknown HCI Command is valid. */
+#define HCI_ERR_REJECT_LIMITED_RESOURCE         0x0D        /**< A connection was rejected due to limited resources. */
+#define HCI_ERR_REJECT_SECURITY_REASON          0x0E        /**< A connection was rejected due to security requirements not being fulfilled, like authentication or pairing. */
+#define HCI_ERR_REJECT_UNACCEPTABLE_ADDR        0x0F        /**< A connection was rejected because this device does not accept the BD_ADDR. This may be because the device will only accept connections from specific BD_ADDRs. */
+#define HCI_ERR_HOST_TIMEOUT                    0x10        /**< The Connection Accept Timeout has been exceeded for this connection attempt. */
+#define HCI_ERR_UNSUPPORTED_PARAM               0x11        /**< A feature or parameter value in the HCI command is not supported. This error code shall not be used in an LMP PDU. */
+#define HCI_ERR_INVALID_PARAM                   0x12        /**< At least one of the HCI command parameters is invalid. This shall be used when:
+* - the parameter total length is invalid.
+* - a command parameter is an invalid type.
+* - a connection identifier does not match the corresponding event.
+* - a parameter is odd when it is required to be even.
+* - a parameter is outside of the specified range.
+* - two or more parameter values have inconsistent values. */
+#define HCI_ERR_REMOTE_USER_TERMINATE           0x13        /**< The user on the remote device either terminated the connection or stopped broadcasting packets. */
+#define HCI_ERR_REMOTE_LOW_RESOURCE             0x14        /**< The remote device terminated the connection because of low resources. */
+#define HCI_ERR_REMOTE_POWER_OFF                0x15        /**< The remote device terminated the connection because the device is about to power off. */
+#define HCI_ERR_LOCAL_HOST_TERMINATE            0x16        /**< Either the local device terminated the connection, terminated synchronization with a broadcaster, or terminated broadcasting packets. */
+#define HCI_ERR_REPEATED_ATTEMPTS               0x17        /**< The Controller is disallowing an authentication or pairing procedure because too little time has elapsed since the last authentication or pairing attempt failed. */
+#define HCI_ERR_PARING_NOT_ALLOWED              0x18        /**< The device does not allow pairing. */
+#define HCI_ERR_UNKNOWN_LMP_PDU                 0x19        /**< The Controller has received an unknown LMP opcode. */
+#define HCI_ERR_UNSUPPORTED_REMOTE_FEAT         0x1A        /**< The remote device does not support the feature associated with the issued command, LMP PDU, or Link Layer Control PDU. */
+#define HCI_ERR_SCO_OFFSET_REJECTED             0x1B        /**< The offset requested in the
+* LMP_SCO_LINK_REQ PDU has been rejected. */
+#define HCI_ERR_SCO_INTERVAL_REJECTED           0x1C        /**< The interval requested in the LMP_SCO_LINK_REQ PDU has been rejected. */
+#define HCI_ERR_SCO_AIR_MODE_REJECTED           0x1D        /**< The air mode requested in the LMP_SCO_LINK_REQ PDU has been rejected. */
+#define HCI_ERR_INVALID_LMP_PARAM               0x1E        /**< Some LMP PDU or LL Control PDU parameters were invalid. This shall be used when:
+* - the PDU length is invalid.
+* - a parameter is odd when it is required to be even.
+* - a parameter is outside of the specified range.
+* - two or more parameters have inconsistent values. */
+#define HCI_ERR_UNSPECIFIED_ERROR               0x1F        /**< No other error code specified is appropriate to use. */
+#define HCI_ERR_UNSUPPORTED_LMP_PARAM           0x20        /**< An LMP PDU or an LL Control PDU contains at least one parameter value that is not supported by the Controller at this time. This is normally used after a long negotiation procedure, for example during an
+* LMP_HOLD_REQ, LMP_SNIFF_REQ and LMP_ENCRYPTION_KEY_SIZE_REQ PDU exchanges. This may be used by the Link Layer, for example during the Connection Parameters Request Link Layer Control procedure. */
+#define HCI_ERR_ROLE_CHANGE_NOT_ALLOWED         0x21        /**< A Controller will not allow a role change at this time. */
+#define HCI_ERR_LMP_RESPONSE_TIMEOUT            0x22        /**< An LMP transaction failed to respond within the LMP response timeout or an LL transaction failed to respond within the LL response timeout. */
+#define HCI_ERR_LMP_ERROR_TRANS_COLLISION       0x23        /**< An LMP transaction or LL procedure has collided with the same transaction or procedure that is already in progress. */
+#define HCI_ERR_LMP_PDU_NOT_ALLOWED             0x24        /**< A Controller sent an LMP PDU with an opcode that was not allowed. */
+#define HCI_ERR_ENCRYPT_MODE_NOT_ACCEPTABLE     0x25        /**< The requested encryption mode is not acceptable at this time. */
+#define HCI_ERR_UNIT_KEY_USED                   0x26        /**< A link key cannot be changed because a fixed unit key is being used. */
+#define HCI_ERR_QOS_NOT_SUPPORTED               0x27        /**< The requested Quality of Service is not supported. */
+#define HCI_ERR_INSTANT_PASSED                  0x28        /**< An LMP PDU or LL PDU that includes an instant cannot be performed because the instant when this would have occurred has passed. */
+#define HCI_ERR_PAIR_UNIT_KEY_NOT_SUPPORT       0x29        /**< It was not possible to pair as a unit key was requested and it is not supported. */
+#define HCI_ERR_DIFF_TRANS_COLLISION            0x2A        /**< An LMP transaction or LL Procedure was started that collides with an ongoing transaction. */
+#define HCI_ERR_QOS_UNACCEPTABLE_PARAM          0x2C        /**< The specified quality of service parameters could not be accepted at this time, but other parameters may be acceptable. */
+#define HCI_ERR_QOS_REJECT                      0x2D        /**< The specified quality of service parameters cannot be accepted and QoS negotiation should be terminated. */
+#define HCI_ERR_CHANN_ASSESS_NOT_SUPPORT        0x2E        /**< The Controller cannot perform channel assessment because it is not supported. */
+#define HCI_ERR_INSUFFICIENT_SECURITY           0x2F        /**< The HCI command or LMP PDU sent is only possible on an encrypted link. */
+#define HCI_ERR_PARAM_OUT_OF_RANGE              0x30        /**< A parameter value requested is outside the mandatory range of parameters for the given HCI command or LMP PDU and the recipient does not accept that value. */
+#define HCI_ERR_ROLE_SWITCH_PENDING             0x32        /**< A Role Switch is pending. This can be used when an HCI command or LMP PDU cannot be accepted because of a pending role switch. This can also be used to notify a peer device about a pending role switch. */
+#define HCI_ERR_RESERVED_SLOT_VIOLATION         0x34        /**< The current Synchronous negotiation was terminated with the negotiation state set to Reserved Slot Violation. */
+#define HCI_ERR_ROLE_SWITCH_FAILED              0x35        /**< A role switch was attempted but it failed and the original piconet structure is restored. The switch may have failed because the TDD switch or piconet switch failed. */
+#define HCI_ERR_EXT_INQUIRY_RSP_TOO_LARGE       0x36        /**< The extended inquiry response, with the requested requirements for FEC, is too large to fit in any of the packet types supported by the Controller. */
+#define HCI_ERR_SSP_NOT_SUPPORTED_BY_HOST       0x37        /**< The IO capabilities request or response was rejected because the sending Host does not support Secure Simple Pairing even though the receiving Link Manager does. */
+#define HCI_ERR_HOST_BUSY_PAIRING               0x38        /**< The Host is busy with another pairing operation and unable to support the requested pairing. The receiving device should retry pairing again later. */
+#define HCI_ERR_REJECT_NO_SUITABLE_CHANN        0x39        /**< The Controller could not calculate an appropriate value for the Channel selection operation. */
+#define HCI_ERR_CONTROLLER_BUSY                 0x3A        /**< The operation was rejected because the Controller was busy and unable to process the request. */
+#define HCI_ERR_UNACCEPTABLE_CONN_PARAMS        0x3B        /**< The remote device either terminated the connection or rejected a request because of one or more unacceptable connection parameters. */
+#define HCI_ERR_DIRECTED_ADV_TIMEOUT            0x3C        /**< Advertising for a fixed duration completed or, for directed advertising, that advertising completed without a connection being created. */
+#define HCI_ERR_MIC_FAILURE                     0x3D        /**< Either the connection or the synchronization was terminated because the Message Integrity Check (MIC) failed on a received packet. */
+#define HCI_ERR_FAIL_TO_ESTABLISH_CONN          0x3E        /**< The LL initiated a connection or initiated synchronization to periodic advertising but the connection has failed to be established or the Link Layer failed to synchronize with the periodic advertising within 6 periodic advertising events of the first attempt. */
+#define HCI_ERR_COARSE_CLOCK_ADJUST_REJECTED    0x40        /**< The Central, at this time, is unable to make a coarse adjustment to the piconet clock, using the supplied parameters. Instead the Central will attempt to move the clock using clock dragging. */
+#define HCI_ERR_TYPE0_SUBMAP_NOT_DEFINED        0x41        /**< The LMP PDU is rejected because the Type 0 submap is not currently defined. */
+#define HCI_ERR_UNKNOWN_ADVERTISING_IDENTIFIER  0x42        /**< A command was sent from the Host that should identify an Advertising or Sync handle, but the Advertising or Sync handle does not exist. */
+#define HCI_ERR_LIMIT_REACHED                   0x43        /**< Number of operations requested has been reached and has indicated the completion of the activity (e.g., advertising or scanning). */
+#define HCI_ERR_OPERATION_CANCELLED_BY_HOST     0x44        /**< A request to the Controller issued by the Host and still pending was successfully canceled. */
+#define HCI_ERR_OPERATION_PACKET_TOO_LONG       0x45        /**< An attempt was made to send or receive a packet that exceeds the maximum allowed packet length. */
 
 /* HCI local error code */
-#define HCI_ERR_INVALID_ADDR                    0x64  /* 100 */
-#define HCI_ERR_TIMEOUT                         0x65  /* 101 */
-#define HCI_ERR_OUT_OF_SYNC                     0x66  /* 102 */
-#define HCI_ERR_NO_DESCRIPTOR                   0x67  /* 103 */
-#define HCI_ERR_NO_MEMORY                       0x68  /* 104 */
-#define HCI_ERR_INVALID_STATE                   0x69  /* 105 */
-#define HCI_ERR_LOCAL_KEY_MISSING               0x6A  /* 106 */
-#define HCI_ERR_AUDIO_STOP                      0xFE  /* 254 */
-#define HCI_ERR_CONN_ROLESWAP                   0xFF  /* 255 */
-/**
- * End of BT_HCI_ERROR
- * \}
+#define HCI_ERR_INVALID_ADDR                    0x64        /**< Invalid address. */
+#define HCI_ERR_TIMEOUT                         0x65        /**< HCI if error timeout. */
+#define HCI_ERR_OUT_OF_SYNC                     0x66        /**< HCI if error out of sync. */
+#define HCI_ERR_NO_DESCRIPTOR                   0x67        /**< HCI allocates no descriptor of link when handle HCI_LE_Connection_Complete event. */
+#define HCI_ERR_NO_MEMORY                       0x68        /**< HCI has run out of memory. */
+#define HCI_ERR_INVALID_STATE                   0x69        /**< Invalid state. */
+#define HCI_ERR_LOCAL_KEY_MISSING               0x6A        /**< Local link key is missing. */
+#define HCI_ERR_AUDIO_STOP                      0xFE        /**< Stop sniffing link audio. */
+#define HCI_ERR_CONN_ROLESWAP                   0xFF        /**< Disconnect because of link role swap. */
+/** End of BT_HCI_ERROR
+ * @}
  */
 
-/**
- * bt_types.h
- *
- * \defgroup    BT_L2CAP_ERROR      Bluetooth L2CAP Error Code
- * \brief       Bluetooth L2CAP error code definitions.
- * \anchor      BT_L2CAP_ERROR
- * \ingroup     BT_TYPES
- * \{
- */
+/** @defgroup    BT_L2CAP_ERROR      Bluetooth L2CAP Error Code
+  * @brief       Bluetooth L2CAP error code definitions.
+  * @{
+  */
 #define L2C_SUCCESS                             0x00
 
 #define L2C_CONN_ACCEPT                         0x0000
@@ -849,20 +727,14 @@ extern "C" {
 #define L2C_ERR_VND_INVALID_MODE                (L2C_ERR_VND_BASE + 0x07)
 #define L2C_ERR_VND_REMOTE_DISCONNECT           (L2C_ERR_VND_BASE + 0x08)
 #define L2C_ERR_VND_INVALID_PARAM               (L2C_ERR_VND_BASE + 0x09)
-/**
- * End of BT_L2CAP_ERROR
- * \}
+/** End of BT_L2CAP_ERROR
+ * @}
  */
 
-/**
- * bt_types.h
- *
- * \defgroup    BT_SDP_ERROR    Bluetooth SDP Error Code
- * \brief       Bluetooth SDP error code definitions.
- * \anchor      BT_SDP_ERROR
- * \ingroup     BT_TYPES
- * \{
- */
+/** @defgroup    BT_SDP_ERROR    Bluetooth SDP Error Code
+  * @brief       Bluetooth SDP error code definitions.
+  * @{
+  */
 #define SDP_ERR_INVALID_VERSION                 0x01
 #define SDP_ERR_INVALID_SRV_RECORD_HANDLE       0x02
 #define SDP_ERR_INVALID_REQ_SYNTAX              0x03
@@ -878,20 +750,14 @@ extern "C" {
 #define SDP_ERR_TIMEOUT                         0x65
 #define SDP_ERR_INVALID_RSP_SYNTAX              0x66
 #define SDP_ERR_NOT_FOUND                       0xC8
-/**
- * End of BT_SDP_ERROR
- * \}
+/** End of BT_SDP_ERROR
+ * @}
  */
 
-/**
- * bt_types.h
- *
- * \defgroup    BT_ATT_ERROR    Bluetooth ATT Error Code
- * \brief       Bluetooth ATT error code definitions.
- * \anchor      BT_ATT_ERROR
- * \ingroup     BT_TYPES
- * \{
- */
+/** @defgroup    BT_ATT_ERROR    Bluetooth ATT Error Code
+  * @brief       Bluetooth ATT error code definitions.
+  * @{
+  */
 #define ATT_SUCCESS                         0    /**< Success. */
 #define ATT_ERR_INVALID_HANDLE              0x01 /**< Attribute handle value given was not valid on this attribute server. */
 #define ATT_ERR_READ_NOT_PERMITTED          0x02 /**< Attribute cannot be read. */
@@ -916,50 +782,38 @@ extern "C" {
 /* Application Error 0x80 - 0x9F */
 #define ATT_ERR_INVALID_VALUE               0x80 /**< The attribute value is invalid for the operation. */
 
-/* Manufacturer specific error codes that are "missing" in GATT spec. >= 0xC0:   */
+/* Manufacturer specific error codes that are 'missing' in GATT spec. >= 0xC0:   */
 #define ATT_ERR_INVALID_CCC_BITS            0xC0 /**< Invalid client characteristic config bits. */
 #define ATT_ERR_INVALID_SIGNED_COUNT        0xC1 /**< Invalid sign count. */
-#define ATT_ERR_INVALID_SIGNED_MAC_FAILED   0xC2 /**< Invalid sign mac value. */
-#define ATT_ERR_MIN_APPLIC_CODE             0xC3
+#define ATT_ERR_INVALID_SIGNED_MAC_FAILED   0xC2 /**< Invalid sign MAC value. */
+#define ATT_ERR_MIN_APPLIC_CODE             0xC3 /**< ATT error occurs due to application code. */
 
 /* Common profile and service error codes >= 0xE0 (CSS)*/
 #define ATT_ERR_WRITE_REQUEST_REJECTED      0xFC /**< Write Request Rejected. */
 #define ATT_ERR_CCCD_IMPROPERLY_CONFIGURED  0xFD /**< CCCD improperly configured. */
 #define ATT_ERR_PROC_ALREADY_IN_PROGRESS    0xFE /**< Procedure Already in Progress. */
 #define ATT_ERR_OUT_OF_RANGE                0xFF /**< An attribute value is out of range as defined by a profile or service specification. */
-/**
- * End of BT_ATT_ERROR
- * \}
+/** End of BT_ATT_ERROR
+ * @}
  */
 
-/**
- * bt_types.h
- *
- * \defgroup    BT_RFC_ERROR    Bluetooth RFCOMM Error Code
- * \brief       Bluetooth RFCOMM error code definitions.
- * \anchor      BT_RFC_ERROR
- * \ingroup     BT_TYPES
- * \{
- */
+/** @defgroup    BT_RFC_ERROR    Bluetooth RFCOMM Error Code
+  * @brief       Bluetooth RFCOMM error code definitions.
+  * @{
+  */
 #define RFC_SUCCESS                     0x00
 #define RFC_ERR_TIMEOUT                 0x01
 #define RFC_ERR_NSC                     0x02
 #define RFC_ERR_INVALID_STATE           0x03
 #define RFC_ERR_REJECT_SECURITY         0x04
-/**
- * End of BT_RFC_ERROR
- * \}
+/** End of BT_RFC_ERROR
+ * @}
  */
 
-/**
- * bt_types.h
- *
- * \defgroup    BT_GATT_ERROR   Bluetooth GATT Error Code
- * \brief       Bluetooth GATT error code definitions.
- * \anchor      BT_GATT_ERROR
- * \ingroup     BT_TYPES
- * \{
- */
+/** @defgroup    BT_GATT_ERROR   Bluetooth GATT Error Code
+  * @brief       Bluetooth GATT error code definitions.
+  * @{
+  */
 #define GATT_SUCCESS                        0x00
 #define GATT_ERR_OUT_OF_RESOURCE            0x01
 #define GATT_ERR_UNSUPPORTED                0x02
@@ -978,68 +832,58 @@ extern "C" {
 #define GATT_ERR_NOT_AUTHENTICATED          0x0F
 #define GATT_ERR_NOT_ENCRYPTED              0x10
 #define GATT_ERR_PROC_FAIL                  0x11
-/**
- * End of BT_GATT_ERROR
- * \}
+/** End of BT_GATT_ERROR
+ * @}
  */
 
-/**
- * bt_types.h
- *
- * \defgroup    BT_SM_ERROR     Bluetooth SM Error Code
- * \brief       Bluetooth SM error code definitions.
- * \anchor      BT_SM_ERROR
- * \ingroup     BT_TYPES
- * \{
- */
+/** @defgroup    BT_SM_ERROR     Bluetooth SM Error Code
+  * @brief       Bluetooth SM error code definitions.
+  * @{
+  */
 /* SM error code */
-#define SM_SUCCESS                          0x00
+#define SM_SUCCESS                          0x00        /**< Success. */
 /* SMP_OP_PAIRING_FAILED causes */
-#define SMP_ERR_SUCCESS                         0x00
-#define SMP_ERR_PASSKEY_ENTRY_FAIL              0x01
-#define SMP_ERR_OOB_NOT_AVAIABLE                0x02
-#define SMP_ERR_AUTHEN_REQUIREMENTS             0x03
-#define SMP_ERR_CFM_VALUE_FAILED                0x04
-#define SMP_ERR_PAIRING_NOT_SUPPORTED           0x05
-#define SMP_ERR_ENCRYPTION_KEY_SIZE             0x06
-#define SMP_ERR_CMD_NOT_SUPPORTED               0x07
-#define SMP_ERR_UNSPECIFIED_REASON              0x08
-#define SMP_ERR_REPEATED_ATTEMPTS               0x09
-#define SMP_ERR_INVALID_PARAM                   0x0A
-#define SMP_ERR_DHKEY_CHECK_FAILED              0x0B
-#define SMP_ERR_NUMERIC_COMPARISION_FAIL        0x0C
-#define SMP_ERR_BREDR_PAIRING_IN_PROGRESS       0x0D
-#define SMP_ERR_CRS_TRANS_KEY_GEN_NOT_ALLOW     0x0E
+#define SMP_ERR_SUCCESS                         0x00    /**< Success. */
+#define SMP_ERR_PASSKEY_ENTRY_FAIL              0x01    /**< The user input of passkey failed, for example, the user cancelled the operation. */
+#define SMP_ERR_OOB_NOT_AVAIABLE                0x02    /**< The OOB data is not available. */
+#define SMP_ERR_AUTHEN_REQUIREMENTS             0x03    /**< The pairing procedure cannot be performed as authentication requirements cannot be met due to IO capabilities of one or both devices. */
+#define SMP_ERR_CFM_VALUE_FAILED                0x04    /**< The confirm value does not match the calculated compare value. */
+#define SMP_ERR_PAIRING_NOT_SUPPORTED           0x05    /**< Pairing is not supported by the device. */
+#define SMP_ERR_ENCRYPTION_KEY_SIZE             0x06    /**< The resultant encryption key size is not long enough for the security requirements of this device. */
+#define SMP_ERR_CMD_NOT_SUPPORTED               0x07    /**< The SMP command received is not supported on this device. */
+#define SMP_ERR_UNSPECIFIED_REASON              0x08    /**< Pairing failed due to an unspecified reason. */
+#define SMP_ERR_REPEATED_ATTEMPTS               0x09    /**< Pairing or authentication procedure is disallowed because too little time has elapsed since last pairing request or security request. */
+#define SMP_ERR_INVALID_PARAM                   0x0A    /**< The Invalid Parameters error code indicates that the command length is invalid or that a parameter is outside of the specified range. */
+#define SMP_ERR_DHKEY_CHECK_FAILED              0x0B    /**< Indicates to the remote device that the DHKey Check value received doesn't match the one calculated by the local device. */
+#define SMP_ERR_NUMERIC_COMPARISION_FAIL        0x0C    /**< Indicates that the confirm values in the numeric comparison protocol do not match. */
+#define SMP_ERR_BREDR_PAIRING_IN_PROGRESS       0x0D    /**< Indicates that the pairing over the LE transport failed due to a Pairing Request sent over the BR/EDR transport in progress. */
+#define SMP_ERR_CRS_TRANS_KEY_GEN_NOT_ALLOW     0x0E    /**< Indicates that the BR/EDR Link Key generated on the BR/EDR transport cannot be used to derive and distribute keys for the LE transport or the LE LTK generated on the LE transport cannot be used to derive a key for the BR/EDR transport. */
 
-#define SM_ERR_NO_ENTRY                         0xE1
-#define SM_ERR_DB_FULL                          0xE2
-#define SM_ERR_INVALID_PARAM                    0xE3
-#define SM_ERR_INSUFFICIENT_LINK_KEY            0xE4
-#define SM_ERR_LE_ADDR_NOT_RESOLVED             0xE5
-#define SM_ERR_INVALID_STATE                    0xE6
-#define SM_ERR_NO_RESOURCE                      0xE7
-#define SM_ERR_LINK_KEY_MISSING                 0xE8
-#define SM_ERR_DISCONNECT                       0xE9
-#define SM_ERR_PARING_NOT_ALLOWED               0xEA
-#define SM_ERR_KEY_SAVE_FAILED                  0xEB
-#define SM_ERR_TIMEOUT                          0xEC
-#define SM_ERR_UNKNOWN                          0xED
-#define SM_ERR_LINK_DEACTIVATED                 0xEE
-#define SM_ERR_NO_PAIRABLE_MODE                 0xEF
-/**
- * End of BT_SM_ERROR
- * \}
+#define SM_ERR_NO_ENTRY                         0xE1    /**< Host find no corresponding entry in the security database. */
+#define SM_ERR_DB_FULL                          0xE2    /**< The security database is full. */
+#define SM_ERR_INVALID_PARAM                    0xE3    /**< At least one of the SM parameters is invalid. This shall be used when:
+* - LE Secure Simple Pairing parameter to set is invalid.
+* - found key entry is invalid.
+* - a connection identifier does not match the corresponding event. */
+#define SM_ERR_INSUFFICIENT_LINK_KEY            0xE4    /**< Link key is insufficiently secured. */
+#define SM_ERR_INVALID_STATE                    0xE6    /**< Invalid link state. */
+#define SM_ERR_NO_RESOURCE                      0xE7    /**< The security database has run out of resources. */
+#define SM_ERR_LINK_KEY_MISSING                 0xE8    /**< Host find no corresponding Link Key in the security database. */
+#define SM_ERR_DISCONNECT                       0xE9    /**< Pairing failed due to disconnection during the procedure. */
+#define SM_ERR_PARING_NOT_ALLOWED               0xEA    /**< Pairing is not allowed when device is the Central. */
+#define SM_ERR_KEY_SAVE_FAILED                  0xEB    /**< Failed to save key to the security database. */
+#define SM_ERR_TIMEOUT                          0xEC    /**< If the Security Manager Timer reaches 30 seconds, the procedure shall be considered to have failed. */
+#define SM_ERR_UNKNOWN                          0xED    /**< No other error code is appropriate to use. */
+#define SM_ERR_LINK_DEACTIVATED                 0xEE    /**< Pairing failed because the link is deactivated. */
+#define SM_ERR_NO_PAIRABLE_MODE                 0xEF    /**< Pairing is not allowed when device is the Peripheral. */
+/** End of BT_SM_ERROR
+ * @}
  */
 
-/**
- * bt_types.h
- *
- * \defgroup    BT_BTIF_ERROR   Bluetooth BTIF Error Code
- * \brief       Bluetooth BTIF error code definitions.
- * \anchor      BT_BTIF_ERROR
- * \ingroup     BT_TYPES
- * \{
- */
+/** @defgroup    BT_BTIF_ERROR   Bluetooth BTIF Error Code
+  * @brief       Bluetooth BTIF error code definitions.
+  * @{
+  */
 #define BTIF_ERR                0x0000
 #define BTIF_SUCCESS                        0x00
 #define BTIF_ACCEPT                         0x01
@@ -1059,20 +903,14 @@ extern "C" {
 
 #define BTIF_ERR_UNSPECIFIED                0xFD
 #define BTIF_ERR_NOT_SUPPORTED              0xFE
-/**
- * End of BT_BTIF_ERROR
- * \}
+/** End of BT_BTIF_ERROR
+ * @}
  */
 
-/**
- * bt_types.h
- *
- * \defgroup    BT_GAP_ERROR    Bluetooth GAP Error Code
- * \brief       Bluetooth GAP error code definitions.
- * \anchor      BT_GAP_ERROR
- * \ingroup     BT_TYPES
- * \{
- */
+/** @defgroup    BT_GAP_ERROR    Bluetooth GAP Error Code
+  * @brief       Bluetooth GAP error code definitions.
+  * @{
+  */
 #define GAP_SUCCESS                         0x00
 #define GAP_ACCEPT                          0x01
 #define GAP_ERR_REJECT                      0x02
@@ -1093,39 +931,27 @@ extern "C" {
 #define GAP_ERR_SW_RESET                    0xFC
 #define GAP_ERR_UNSPECIFIED                 0xFD
 #define GAP_ERR_NOT_SUPPORTED               0xFE
-/**
- * End of BT_GAP_ERROR
- * \}
+/** End of BT_GAP_ERROR
+ * @}
  */
 
-/**
- * bt_types.h
- *
- * \defgroup    BT_APP_ERROR    Bluetooth APP Error Code
- * \brief       Bluetooth APP error code definitions.
- * \anchor      BT_APP_ERROR
- * \ingroup     BT_TYPES
- * \{
- */
+/** @defgroup    BT_APP_ERROR    Bluetooth APP Error Code
+  * @brief       Bluetooth APP error code definitions.
+  * @{
+  */
 #define APP_SUCCESS                             0x00
 #define APP_ERR_PENDING                         0x01
 #define APP_ERR_ACCEPT                          0x03
 #define APP_ERR_REJECT                          0x04
 #define APP_ERR_NOT_RELEASE                     0x05
-/**
- * End of BT_APP_ERROR
- * \}
+/** End of BT_APP_ERROR
+ * @}
  */
 
-/**
- * bt_types.h
- *
- * \defgroup    BT_BYTE_ORDER       Bluetooth Byte-order
- * \brief       Bluetooth buffer/array byte-order utility macros.
- * \anchor      BT_BYTE_ORDER
- * \ingroup     BT_TYPES
- * \{
- */
+/** @defgroup    BT_BYTE_ORDER       Bluetooth Byte-order
+  * @brief       Bluetooth buffer/array byte-order utility macros.
+  * @{
+  */
 /** Calculate integer bit count of b'1. */
 #define INT_BIT_COUNT(integer, count)   {               \
         count = 0;                                      \
@@ -1472,18 +1298,16 @@ extern "C" {
         *((uint8_t *)(a) + 6) = (uint8_t)((u64) >>  8); \
         *((uint8_t *)(a) + 7) = (uint8_t)((u64) >>  0); \
     }
-/**
- * End of BT_BYTE_ORDER
- * \}
+/** End of BT_BYTE_ORDER
+ * @}
  */
 
 #ifdef __cplusplus
 }
 #endif
 
-/**
- * End of BT_TYPES
- * \}
+/** End of BT_TYPES
+ * @}
  */
 
 #endif /* _BT_TYPES_H_ */

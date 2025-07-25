@@ -21,19 +21,17 @@
 #include "io_uart.h"
 
 /* Private typedef -----------------------------------------------------------*/
-const UART_BaudRate_TypeDef BaudRate_Table[11] =
+const UART_BaudRate_TypeDef BaudRate_Table[9] =
 {
-    {271, 10, 0x24A}, // BAUD_RATE_9600
-    {150, 8,  0x3EF}, // BAUD_RATE_19200
-    {20, 12,  0x252}, // BAUD_RATE_115200
-    {11,  10, 0x3BB}, // BAUD_RATE_230400
-    {11,  9,  0x084}, // BAUD_RATE_256000
-    {7,   9,  0x3EF}, // BAUD_RATE_384000
-    {6,   9,  0x0AA}, // BAUD_RATE_460800
-    {3,   9,  0x0AA}, // BAUD_RATE_921600
-    {4,   5,  0},     // BAUD_RATE_1000000
-    {2,   5,  0},     // BAUD_RATE_2000000
-    {1,   8,  0x292}, // BAUD_RATE_3000000
+    {0x341, 0, 0}, // BAUD_RATE_9600
+    {0x150, 1, 3}, // BAUD_RATE_19200
+    {0x38,  1, 3}, // BAUD_RATE_115200
+    {0x1C,  1, 3}, // BAUD_RATE_230400
+    {0xE,   1, 3}, // BAUD_RATE_460800
+    {0x7,   1, 3}, // BAUD_RATE_921600
+    {0x8,   0, 0}, // BAUD_RATE_1000000
+    {0x4,   0, 0}, // BAUD_RATE_2000000
+    {0x1,   8, 0x92}, // BAUD_RATE_3000000
 };
 
 uint8_t String_Buf[100];

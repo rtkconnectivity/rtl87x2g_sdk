@@ -35,12 +35,12 @@ extern "C" {
   * @{
   */
 
-/** @defgroup GAPS_Write_PROPERTY GAP Service Write Property
+/** @defgroup GAPS_WRITE_PROPERTY GAP Service Write Property
   * @brief  GAP service write property.
   * @{
   */
-#define GAPS_PROPERTY_WRITE_DISABLE                   0
-#define GAPS_PROPERTY_WRITE_ENABLE                    1
+#define GAPS_PROPERTY_WRITE_DISABLE                   0 //!< Characteristics contained in GAP Service do not support writable property.
+#define GAPS_PROPERTY_WRITE_ENABLE                    1 //!< Characteristics contained in GAP Service support writable property.
 /** @} */
 
 
@@ -48,11 +48,17 @@ extern "C" {
   * @brief  GAP and GATT Service Write Type.
   * @{
   */
-#define GAPS_WRITE_DEVICE_NAME            1
-#define GAPS_WRITE_APPEARANCE             2
-#define GATT_SERVICE_CHANGE_CCCD_ENABLE   3
-#define GATT_SERVICE_CHANGE_CCCD_DISABLE  4
-#define GATT_SERVICE_WRITE_CLIENT_SUPPORTED_FEATURES 5
+#define GAPS_WRITE_DEVICE_NAME            1                 /**< Information for writing Device Name. The structure of p_value in callback data
+                                                                 @ref T_GAPS_UPSTREAM_MSG_DATA is @ref T_LOCAL_NAME.
+                                                                 When receiving this opcode, if returned value of callback is @ref APP_RESULT_SUCCESS,
+                                                                 APP shall call @ref flash_save_local_name. */
+#define GAPS_WRITE_APPEARANCE             2                 /**< Information for writing Appearance. The structure of p_value in callback data
+                                                                 @ref T_GAPS_UPSTREAM_MSG_DATA is @ref T_LOCAL_APPEARANCE.
+                                                                 When receiving this opcode, if returned value of callback is @ref APP_RESULT_SUCCESS,
+                                                                 APP shall call @ref flash_save_local_appearance. */
+#define GATT_SERVICE_CHANGE_CCCD_ENABLE   3                 /**< Information for enabling CCCD for Service Changed characteristic. */
+#define GATT_SERVICE_CHANGE_CCCD_DISABLE  4                 /**< Information for disabling CCCD for Service Changed characteristic. */
+#define GATT_SERVICE_WRITE_CLIENT_SUPPORTED_FEATURES 5      /**< Information for writing Client Supported Features characteristic. */
 /** @} */
 
 
@@ -71,34 +77,37 @@ extern "C" {
 /** @brief GAPS parameter type */
 typedef enum
 {
-    GAPS_PARAM_DEVICE_NAME = 0x00,                  //!< GAPS parameter device name, range of value length is from 0 to (GAP_DEVICE_NAME_LEN - 1).
-    GAPS_PARAM_APPEARANCE  = 0x01,                  //!< GAPS parameter appearance, value length is 2.
-    GAPS_PARAM_CENTRAL_ADDRESS_RESOLUTION = 0x02,   //!< GAPS parameter central address resolution, value length is 1.
-    GAPS_PARAM_DEVICE_NAME_PROPERTY = 0x03,         //!< GAPS parameter device name property, value length is 1.
-    GAPS_PARAM_APPEARANCE_PROPERTY = 0x04,          //!< GAPS parameter appearance property, value length is 1.
+    GAPS_PARAM_DEVICE_NAME = 0x00,                  /**< Device Name characteristic value. Write only. Range of value length is from 0 to (@ref GAP_DEVICE_NAME_LEN - 1). */
+    GAPS_PARAM_APPEARANCE  = 0x01,                  /**< Appearance characteristic value. Write only. Size is 2 octets. Value is @ref GAP_LE_APPEARANCE_VALUES.
+                                                         Default value is @ref GAP_GATT_APPEARANCE_UNKNOWN. */
+    GAPS_PARAM_CENTRAL_ADDRESS_RESOLUTION = 0x02,   /**< Central Address Resolution characteristic value. Whether to support Central Address Resolution.
+                                                         Write only. Size is 1 octet.
+                                                         Default value is 0 (disabled). */
+    GAPS_PARAM_DEVICE_NAME_PROPERTY = 0x03,         /**< Whether Device Name characteristic value can be writable. Write only. Size is 1 octet.
+                                                         Value is @ref GAPS_WRITE_PROPERTY. Default value is @ref GAPS_PROPERTY_WRITE_DISABLE. */
+    GAPS_PARAM_APPEARANCE_PROPERTY = 0x04,          /**< Whether Appearance characteristic value can be writable. Write only. Size is 1 octet.
+                                                         Value is @ref GAPS_WRITE_PROPERTY. Default value is @ref GAPS_PROPERTY_WRITE_DISABLE. */
 } T_GAPS_PARAM_TYPE;
 
 /** @brief Builtin services data struct for notification data to application. */
 typedef struct
 {
-    uint8_t  opcode; //!< ref: @ref GAPS_WRITE_TYPE.
-    uint16_t len;
-    uint8_t  *p_value;
+    uint8_t  opcode; //!<  @ref GAPS_WRITE_TYPE.
+    uint16_t len;    //!<  Length of data to be sent to APP.
+    uint8_t  *p_value;  //!<  Pointer to data to be sent to APP.
 } T_GAPS_UPSTREAM_MSG_DATA;
 
 /** @brief Builtin services callback data to inform application. */
 typedef struct
 {
-    T_SERVICE_CALLBACK_TYPE     msg_type;
-    uint8_t
-    conn_id;     //!< This parameter can use when parameter use_ext of the server_cfg_use_ext_api is false.
-#if F_BT_GATT_SERVER_EXT_API
-    uint16_t
-    conn_handle; //!< This parameter can use when parameter use_ext of the server_cfg_use_ext_api is true.
-    uint16_t
-    cid;         //!< This parameter can use when parameter use_ext of the server_cfg_use_ext_api is true.
-#endif
-    T_GAPS_UPSTREAM_MSG_DATA    msg_data;
+    T_SERVICE_CALLBACK_TYPE     msg_type; //!<  @ref T_SERVICE_CALLBACK_TYPE.
+    uint8_t conn_id;     /**< Connection ID. This parameter will only be used when in the default situation,
+                              or @ref server_cfg_use_ext_api (false) has been called. */
+    uint16_t conn_handle; /**< Connection handle. This parameter will only be used
+                               when @ref server_cfg_use_ext_api (true) has been called. */
+    uint16_t cid;         /**< Channel Identifier. This parameter will only be used
+                               when @ref server_cfg_use_ext_api (true) has been called. */
+    T_GAPS_UPSTREAM_MSG_DATA    msg_data; //!<  @ref T_GAPS_UPSTREAM_MSG_DATA.
 } T_GAPS_CALLBACK_DATA;
 
 /** End of GAP_GATT_SERVICE_Exported_Types
@@ -115,8 +124,7 @@ typedef struct
 /**
  * @brief  Register callback to builtin services.
  *
- * @param[in] p_func   Callback to notify APP.
- * @return void.
+ * @param[in] p_func   Pointer to callback to notify APP.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -178,12 +186,16 @@ void gatt_register_callback(void *p_func);
 /**
  * @brief  Set GAP service parameter.
  *
- * @param[in] param_type   Parameter type to set: @ref T_GAPS_PARAM_TYPE.
- * @param[in] length       Value length to be set.
- * @param[in] p_value      Value to set.
- * @return The result of set parameter operation.
- * @retval true Set parameter operation is successful.
- * @retval false Set parameter operation is failed.
+ * This function can be called with a GAP service parameter type @ref T_GAPS_PARAM_TYPE and it will set the GAP service parameter.
+ * The 'p_value' field must point to an appropriate data type that meets the requirements for the corresponding parameter type.
+ * (For example: if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
+ *
+ * @param[in] param_type   GAP service parameter type @ref T_GAPS_PARAM_TYPE.
+ * @param[in] length       Length of data to write.
+ * @param[in] p_value      Pointer to data to write.
+ * @return Operation result.
+ * @retval true    Operation success.
+ * @retval false   Operation failure.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -200,35 +212,24 @@ bool gaps_set_parameter(T_GAPS_PARAM_TYPE param_type, uint8_t length, void *p_va
 
 
 /**
-  * @brief  Set the preferred connection parameter.
+  * @brief  Set the preferred connection parameter of the Peripheral.
   *
-  * @param[in] conn_interval_min   Defines minimum value for the connection interval in the
-                                    following manner:
-                                    connIntervalmin = Conn_Interval_Min * 1.25 ms.
-                                    Conn_Interval_Min range: 0x0006 to 0x0C80.
-                                    Value of 0xFFFF indicates no specific minimum.
-                                    Values outside the range (except 0xFFFF) are reserved for
-                                    future use.
-  * @param[in] conn_interval_max   Defines maximum value for the connection interval in the
-                                    following manner:
-                                    connIntervalmax = Conn_Interval_Max * 1.25 ms.
-                                    Conn_Interval_Max range: 0x0006 to 0x0C80.
-                                    Shall be equal to or greater than the Conn_Interval_Min.
-                                    Value of 0xFFFF indicates no specific maximum.
-                                    Values outside the range (except 0xFFFF) are reserved for
-                                    future use.
-  * @param[in] slave_latency        Defines the slave latency for the connection in number of
-                                    connection events.
-                                    Slave latency range: 0x0000 to 0x01F3.
-                                    Values outside the range are reserved for future use.
-  * @param[in] supervision_timeout  Defines the connection supervisor timeout multiplier as a multiple of 10ms.
-                                    @arg Range: 0xFFFF indicates no specific value requested.
-                                    @arg Range: 0x000A to 0x0C80.
-                                    @arg Time = N * 10 ms.
-                                    @arg Time Range: 100 ms to 32 seconds.
-                                    Values outside the range (except 0xFFFF) are reserved for
-                                    future use.
-  * @return void.
+  * @param[in] conn_interval_min    Value:
+  *                                 - 0xXXXX: Minimum value of connection interval.
+  *                                   Range: 0x0006 to 0x0C80. Units: 1.25 ms.
+  *                                 - 0xFFFF: No specific value is requested.
+  * @param[in] conn_interval_max    Value:
+  *                                 - 0xXXXX: Maximum value of connection interval.
+  *                                   Range: 0x0006 to 0x0C80. Units: 1.25 ms.
+  *                                 - 0xFFFF: No specific value is requested.
+  * @param[in] slave_latency        Value:
+  *                                 - 0xXXXX: Peripheral latency for the connection in number of
+  *                                           connection events. Range: 0x0000 to 0x01F3.
+  *                                 - 0xFFFF: No specific value is requested.
+  * @param[in] supervision_timeout  Value:
+  *                                 - 0xXXXX: Supervision timeout for the connection.
+  *                                   Range: 0x000A to 0x0C80. Units: 10 ms.
+  *                                 - 0xFFFF: No specific value is requested.
   */
 void gaps_set_peripheral_preferred_conn_param(uint16_t conn_interval_min,
                                               uint16_t conn_interval_max,
@@ -236,15 +237,20 @@ void gaps_set_peripheral_preferred_conn_param(uint16_t conn_interval_min,
                                               uint16_t supervision_timeout);
 
 /**
- * @brief  Send service changed indication.
- *         Applications can use this API when parameter use_ext of the server_cfg_use_ext_api is false.
+ * @brief  Send indication for Service Changed characteristic.
+ *
+ * Applications can use this API when in the default situation,
+ * or @ref server_cfg_use_ext_api (false) has been called.
+ *
+ * If sending request operation is successful, the sending result will be returned by callback
+ * registered by @ref server_register_app_cb with event ID @ref PROFILE_EVT_SEND_DATA_COMPLETE.
  *
  * @param[in] conn_id      Connection ID.
  * @param[in] start_handle Start of Affected Attribute Handle Range.
  * @param[in] end_handle   End of Affected Attribute Handle Range.
- * @return The result of sending operation.
- * @retval true Sending request is successful.
- * @retval false Sending request is failed.
+ * @return The result of sending request.
+ * @retval true Sending request operation is successful.
+ * @retval false Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -258,18 +264,21 @@ void gaps_set_peripheral_preferred_conn_param(uint16_t conn_interval_min,
  */
 bool gatts_service_changed_indicate(uint8_t conn_id, uint16_t start_handle, uint16_t end_handle);
 
-#if F_BT_GATT_SERVER_EXT_API
 /**
- * @brief  Send service changed indication.
- *         Applications can use this API when parameter use_ext of the server_cfg_use_ext_api is true.
+ * @brief  Send indication for Service Changed characteristic.
+ *
+ * Applications can use this API when @ref server_cfg_use_ext_api (true) has been called.
+ *
+ * If sending request operation is successful, the sending result will be returned by callback
+ * registered by @ref server_ext_register_app_cb with event ID @ref PROFILE_EVT_SEND_DATA_COMPLETE.
  *
  * @param[in] conn_handle  Connection handle of the ACL link.
  * @param[in] cid          Local Channel Identifier assigned by Bluetooth Host.
  * @param[in] start_handle Start of Affected Attribute Handle Range.
  * @param[in] end_handle   End of Affected Attribute Handle Range.
- * @return The result of sending operation.
- * @retval true Sending request is successful.
- * @retval false Sending request is failed.
+ * @return The result of sending request.
+ * @retval true Sending request operation is successful.
+ * @retval false Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -283,7 +292,6 @@ bool gatts_service_changed_indicate(uint8_t conn_id, uint16_t start_handle, uint
  */
 bool gatts_ext_service_changed_indicate(uint16_t conn_handle, uint16_t cid, uint16_t start_handle,
                                         uint16_t end_handle);
-#endif
 
 /** End of GAP_GATT_SERVICE_Exported_Functions
 * @}

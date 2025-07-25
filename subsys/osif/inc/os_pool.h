@@ -1,6 +1,15 @@
-/*
- * Copyright (c) 2015, Realtek Semiconductor Corporation. All rights reserved.
- */
+/**
+*********************************************************************************************************
+*               Copyright(c) 2024, Realtek Semiconductor Corporation. All rights reserved.
+*********************************************************************************************************
+* @file      os_pool.h
+* @brief     Header file for os pool API.
+* @details   This file is used for pool create, put and get.
+* @author    rui_yu
+* @date      2024-12-30
+* @version   v1.0
+* *********************************************************************************************************
+*/
 
 #ifndef _OS_POOL_H_
 #define _OS_POOL_H_
@@ -14,30 +23,40 @@ extern "C" {
 #endif
 
 /**
- * \defgroup OS_POOL Pool Management
+ * \defgroup OS_POOL    Pool Management
  *
  * \brief   Manage task-safe and fixed-size blocks of dynamic memory.
  * \details Memory pools are fixed-size blocks of memory that are task-safe. They operate much
  *          faster than the dynamically allocated heap and do not suffer from fragmentation.
- *          Being task-safe, they can be accessed from tasks and ISRs alike.\n
+ *          Being task-safe, they can be accessed from tasks and ISRs alike.
+ *
  *          Shared memory is one of the basic models to exchange information between tasks.
  *          Using memory pools for exchanging data, more complex objects can be shared between
  *          tasks compared to the Message Queue. Memory pool management functions are used to
- *          define and manage such fixed-sized memory pools.\n
+ *          define and manage such fixed-sized memory pools.
  *
  * \image html OS-pool-overview.jpg "Memory Pool Overview" width=50px height=40px
  *
  */
 
+/*============================================================================*
+*                              Types
+*============================================================================*/
+/** @defgroup OS_POOL_Exported_Types OS Pool Exported Types
+  * \ingroup  OS_POOL
+  * @{
+  */
 
 /**
- * os_pool.h
  *
- * \brief The invalid pool handle. Valid pool handles should be less than OS_POOL_INVALID_HANDLE.
+ * \brief The invalid pool handle. Valid pool handles should be less than 0xFF.
  *
- * \ingroup Pool
  */
 #define OS_POOL_INVALID_HANDLE  0xFF
+
+/** End of group OS_POOL_Exported_Types
+  * @}
+  */
 
 extern bool (*os_pool_create_intern)(uint8_t *p_handle, RAM_TYPE ram_type, uint16_t buf_size,
                                      uint16_t buf_count, const char *p_func, uint32_t file_line);
@@ -61,25 +80,21 @@ extern bool (*os_buffer_put_intern)(void *p_buf, const char *p_func, uint32_t fi
   */
 
 /**
- * os_pool.h
  *
  * \brief   Creates and initializes a memory pool.
  *
- * \param  p_handle   Used to pass back a handle by which the memory pool
+ * \param[out]  p_handle   Used to pass back a handle by which the memory pool
  *                         can be referenced.
  *
- * \param   ram_type            RAM type for the memory pool buffer.
- * \arg \c  RAM_TYPE_DATA_ON        Data RAM type.
- * \arg \c  RAM_TYPE_BUFFER_ON      BUFFER RAM type.
- * \arg \c  RAM_TYPE_EXT_DATA_SRAM  EXT_DATA_SRAM type.
+ * \param[in]   ram_type            RAM type for the memory pool buffer, refer to @ref RAM_TYPE.
  *
- * \param   buf_size   The pool buffer size in bytes.
+ * \param[in]   buf_size   The pool buffer size in bytes.
  *
- * \param   buf_count  The number of pool buffers allocated.
+ * \param[in]   buf_count  The number of pool buffers allocated.
  *
  * \return           The status of the memory pool creation.
  * \retval true      Pool was created successfully.
- * \retval false     Pool creation failed.
+ * \retval false     Pool creation failed. It happens when parameters are not valid or there is not enough heap to malloc.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -110,20 +125,19 @@ extern bool (*os_buffer_put_intern)(void *p_buf, const char *p_func, uint32_t fi
     os_pool_create_intern(p_handle, ram_type, buf_size, buf_count, __func__, __LINE__)
 
 /**
- * os_pool.h
  *
  * \brief   Extend a set of buffers to the created memory pool. The extended pool
  *          buffers have the same RAM type as the created buffers.
  *
- * \param   handle     The handle of the created memory pool.
+ * \param[in]   handle     The handle of the created memory pool.
  *
- * \param   buf_size   The pool buffer size in bytes.
+ * \param[in]   buf_size   The pool buffer size in bytes.
  *
- * \param   buf_count  The number of pool buffers allocated.
+ * \param[in]   buf_count  The number of pool buffers allocated.
  *
  * \return           The status of the memory pool extension.
  * \retval true      Pool was extended successfully.
- * \retval false     Pool extension failed.
+ * \retval false     Pool extension failed. It happens when parameters are not valid or there is not enough heap to malloc.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -159,15 +173,14 @@ extern bool (*os_buffer_put_intern)(void *p_buf, const char *p_func, uint32_t fi
     os_pool_extend_intern(handle, buf_size, buf_count, __func__, __LINE__)
 
 /**
- * os_pool.h
  *
  * \brief   Delete a memory pool.
  *
- * \param  handle   The handle of the memory pool to be deleted.
+ * \param[in]  handle   The handle of the memory pool to be deleted.
  *
  * \return           The status of the memory pool deletion.
  * \retval true      Pool was deleted successfully.
- * \retval false     Pool deletion failed.
+ * \retval false     Pool deletion failed. It happens when parameters are not valid or pool is not created.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -200,17 +213,15 @@ extern bool (*os_buffer_put_intern)(void *p_buf, const char *p_func, uint32_t fi
 #define os_pool_delete(handle)  os_pool_delete_intern(handle, __func__, __LINE__)
 
 /**
- * os_pool.h
  *
  * \brief   Allocate a pool buffer from the specified memory pool. The allocated pool
  *          buffer size must be larger than or equal to the required size.
  *
- * \param  handle     The handle of the created memory pool.
+ * \param[in]  handle     The handle of the created memory pool.
  *
- * \param  buf_size   The least required size for the pool buffer size in bytes.
+ * \param[in]  buf_size   The least required size for the pool buffer size in bytes.
  *
- * \return           The address of the allocated pool buffer. If the address is NULL,
- *                   the buffer allocation failed.
+ * \return           The address of the allocated pool buffer. If the address is NULL, the buffer allocation failed. It happens when parameters are not valid , pool is not created or pool buffer size is less than the required size.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -251,16 +262,15 @@ extern bool (*os_buffer_put_intern)(void *p_buf, const char *p_func, uint32_t fi
     os_buffer_get_intern(handle, buf_size, __func__, __LINE__)
 
 /**
- * os_pool.h
  *
  * \brief   Free and return the pool buffer to the specified memory pool.
  *
- * \param   p_buf   The address of the pool buffer allocated by os_buffer_get()
+ * \param[in]   p_buf   The address of the pool buffer allocated by os_buffer_get()
  *                      API function.
  *
  * \return           The status of the pool buffer freeing.
  * \retval true      Pool buffer was freed successfully.
- * \retval false     Pool buffer freeing failed.
+ * \retval false     Pool buffer freeing failed. It happens when parameters are not valid or buffer is not allocated.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -304,11 +314,10 @@ extern bool (*os_buffer_put_intern)(void *p_buf, const char *p_func, uint32_t fi
     os_buffer_put_intern(p_buf, __func__, __LINE__)
 
 /**
- * os_pool.h
  *
  * \brief   Dump the pool buffers of the specified memory pool.
  *
- * \param   handle  The handle of the memory pool buffer to be dumped. If the
+ * \param[in]   handle  The handle of the memory pool buffer to be dumped. If the
  *                      memory pool handle is invalid, all created memory pools
  *                      will be dumped.
  *

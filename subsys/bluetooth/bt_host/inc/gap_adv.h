@@ -40,7 +40,7 @@ extern "C"
   * @brief
   * @{
   */
-#define GAP_MAX_ADV_LEN                   31    //!< Bluetooth LE Maximum Advertising or Scan Response Packet Length
+#define GAP_MAX_ADV_LEN                   31    //!< Bluetooth LE Maximum Advertising or Scan Response Data Length.
 
 /** End of GAP_Broadcaster_Exported_Macros
 * @}
@@ -57,16 +57,26 @@ extern "C"
 /** @brief LE advertising parameter types */
 typedef enum
 {
-    GAP_PARAM_ADV_LOCAL_ADDR_TYPE  = 0x260,//!< Advertisement used local Bluetooth device address type. Read/Write. Size is uint8.
-    GAP_PARAM_ADV_DATA             = 0x261,//!< Advertisement Data. Read/Write. Max size is uint8[GAP_MAX_ADV_LEN]. Default is "02:01:05", which means that it is a Limited Discoverable Advertisement.
-    GAP_PARAM_SCAN_RSP_DATA        = 0x262,//!< Scan Response Data. Read/Write. Max size is uint8[GAP_MAX_ADV_LEN]. Defaults to all 0.
-    GAP_PARAM_ADV_EVENT_TYPE       = 0x263,//!< Advertisement Type. Read/Write. Size is uint8. Default is GAP_ADTYPE_ADV_IND (@ref T_GAP_ADTYPE).
-    GAP_PARAM_ADV_DIRECT_ADDR_TYPE = 0x264,//!< Direct Advertisement Address Type. Read/Write. Size is uint8.
-    GAP_PARAM_ADV_DIRECT_ADDR      = 0x265,//!< Direct Advertisement Address. Read/Write. Size is uint8[GAP_BD_ADDR_LEN]. Default is NULL.
-    GAP_PARAM_ADV_CHANNEL_MAP      = 0x266,//!< Which channels to advertise on. Read/Write. Size is uint8. Default is GAP_ADVCHAN_ALL (@ref ADV_CHANNEL_MAP).
-    GAP_PARAM_ADV_FILTER_POLICY    = 0x267,//!< Filter Policy. Ignored when directed advertising is used. Read/Write. Size is uint8. Default is GAP_ADV_FILTER_ANY (@ref T_GAP_ADV_FILTER_POLICY).
-    GAP_PARAM_ADV_INTERVAL_MIN     = 0x268,//!< Minimum advertising interval for undirected and low duty cycle directed advertising. Value range: 0x0020 - 0x4000 (20ms - 10240ms 0.625ms/step), Read/Write. Size is uint16_t.
-    GAP_PARAM_ADV_INTERVAL_MAX     = 0x269,//!< Maximum advertising interval for undirected and low duty cycle directed advertising. Value range: 0x0020 - 0x4000 (20ms - 10240ms 0.625ms/step), Read/Write. Size is uint16_t.
+    GAP_PARAM_ADV_LOCAL_ADDR_TYPE  = 0x260,/**< The type of local address being used in the advertising packets. Read/Write. Size is 1 octet.
+                                                Value is @ref T_GAP_LOCAL_ADDR_TYPE. Default value is @ref GAP_LOCAL_ADDR_LE_PUBLIC. */
+    GAP_PARAM_ADV_DATA             = 0x261,/**< Advertisement Data. Read/Write. Maximum size is 31 octets @ref GAP_MAX_ADV_LEN.
+                                                Default value is '02:01:05', which means that it is a Limited Discoverable Advertisement. */
+    GAP_PARAM_SCAN_RSP_DATA        = 0x262,/**< Scan Response Data. Read/Write. Maximum size is 31 octets @ref GAP_MAX_ADV_LEN.
+                                                Default value is all zero. */
+    GAP_PARAM_ADV_EVENT_TYPE       = 0x263,/**< Advertisement Type. Read/Write. Size is 1 octet. Value is @ref T_GAP_ADTYPE.
+                                                Default value is @ref GAP_ADTYPE_ADV_IND. */
+    GAP_PARAM_ADV_DIRECT_ADDR_TYPE = 0x264,/**< Direct Advertisement Address Type. Read/Write. Size is 1 octet.
+                                                Value is @ref T_GAP_REMOTE_ADDR_TYPE. Default value is @ref GAP_REMOTE_ADDR_LE_PUBLIC. */
+    GAP_PARAM_ADV_DIRECT_ADDR      = 0x265,/**< Direct Advertisement Address. Read/Write. Size is 6 octets @ref GAP_BD_ADDR_LEN.
+                                                Default value is all zero. */
+    GAP_PARAM_ADV_CHANNEL_MAP      = 0x266,/**< The advertising channel indices that shall be used when transmitting advertising packets.
+                                                Read/Write. Size is 1 octet. Value is @ref ADV_CHANNEL_MAP. Default value is @ref GAP_ADVCHAN_ALL. */
+    GAP_PARAM_ADV_FILTER_POLICY    = 0x267,/**< Filter Policy. Ignored when directed advertising is used. Read/Write. Size is 1 octet.
+                                                Value is @ref T_GAP_ADV_FILTER_POLICY. Default value is @ref GAP_ADV_FILTER_ANY. */
+    GAP_PARAM_ADV_INTERVAL_MIN     = 0x268,/**< Minimum advertising interval for undirected and low duty cycle directed advertising.
+                                                Read/Write. Size is 2 octets. Value range: 0x0020 - 0x4000 (20ms - 10240ms 0.625ms/step). */
+    GAP_PARAM_ADV_INTERVAL_MAX     = 0x269,/**< Maximum advertising interval for undirected and low duty cycle directed advertising.
+                                                Read/Write. Size is 2 octets. Value range: 0x0020 - 0x4000 (20ms - 10240ms 0.625ms/step). */
 } T_LE_ADV_PARAM_TYPE;
 
 /** End of GAP_Broadcaster_Exported_Types
@@ -84,21 +94,17 @@ typedef enum
 /**
  * @brief       Set a GAP advertising parameter.
  *
- * This function can be called with an advertising parameter type and it will set the
- *                      advertising parameter. Advertising parameters are defined in @ref T_LE_ADV_PARAM_TYPE.
- *                      If the "len" field is set to the size of "uint16_t", the
- *                      "p_value" field must point to data of type "uint16_t".
+ * This function can be called with an advertising parameter type @ref T_LE_ADV_PARAM_TYPE and it will set the advertising parameter.
+ * The 'p_value' field must point to an appropriate data type that meets the requirements for the corresponding parameter type.
+ * (For example: if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
  *
- * @param[in]   param   LE advertising parameter type: @ref T_LE_ADV_PARAM_TYPE.
+ * @param[in]   param   @ref T_LE_ADV_PARAM_TYPE.
  * @param[in]   len     Length of data to write.
- * @param[in]   p_value Pointer to data to write.  This is dependent on
- *                      the parameter type and will be cast to the appropriate
- *                      data type (For example: if the data type of param is uint16_t, p_value will be cast to
- *                      a pointer of uint16_t).
+ * @param[in]   p_value Pointer to data to write.
  *
  * @return Operation result.
  * @retval GAP_CAUSE_SUCCESS Operation success.
- * @retval GAP_CAUSE_INVALID_PARAM Operation failure.
+ * @retval Others Operation failure.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -131,19 +137,16 @@ T_GAP_CAUSE le_adv_set_param(T_LE_ADV_PARAM_TYPE param, uint8_t len, void *p_val
 /**
  * @brief   Get a GAP advertising parameter.
  *
- * This function can be called with an advertising parameter type and it will get an
- *          advertising parameter. Advertising parameters are defined in @ref T_LE_ADV_PARAM_TYPE.
- *          Also, the "p_value" field must point to data of type "uint16_t".
+ * This function can be called with an advertising parameter type @ref T_LE_ADV_PARAM_TYPE and it will get the advertising parameter.
+ * The 'p_value' field must point to an appropriate data type that meets the requirements for the corresponding parameter type.
+ * (For example: if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
  *
- * @param[in]   param Advertising parameter type: @ref T_LE_ADV_PARAM_TYPE.
- * @param[in,out]  p_value Pointer to the location to get the parameter value.  This is dependent on
- *                      the parameter type and will be cast to the appropriate
- *                      data type (For example: if the data type of param is uint16_t, p_value will be cast to
- *                      a pointer of uint16_t).
+ * @param[in]   param @ref T_LE_ADV_PARAM_TYPE.
+ * @param[in,out]  p_value Pointer to location to get the value.
  *
  * @return Operation result.
  * @retval GAP_CAUSE_SUCCESS Operation success.
- * @retval GAP_CAUSE_INVALID_PARAM Operation failure.
+ * @retval Others Operation failure.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -159,13 +162,20 @@ T_GAP_CAUSE le_adv_get_param(T_LE_ADV_PARAM_TYPE param, void *p_value);
 /**
  * @brief  Start advertising with parameters set by @ref le_adv_set_param.
  *
- * Applications can only call this API after the Bluetooth Host is ready. \n
- *                Explanation: If the Bluetooth Host is ready, the application will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE
- *                             with new_state about gap_init_state which is configured as @ref GAP_INIT_STATE_STACK_READY.
+ * If sending request operation is successful, the starting result will be returned in one of the following ways:
+ * - In the default situation, or when @ref le_gap_msg_info_way (true) has been called, APP will be notified
+ *   by message @ref GAP_MSG_LE_DEV_STATE_CHANGE with new_state about gap_adv_state @ref GAP_ADV_STATE.
+ * - When @ref le_gap_msg_info_way (false) has been called, APP will be notified with the callback registered
+ *   by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_GAP_STATE_MSG.
  *
- * @return Operation result.
- * @retval GAP_CAUSE_SUCCESS Start request success.
- * @retval other Start request failed.
+ * Applications can only call this API after the Bluetooth Host is ready.
+ *
+ * Explanation: If the Bluetooth Host is ready, the application will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE
+ * with new_state about gap_init_state which is configured as @ref GAP_INIT_STATE_STACK_READY.
+ *
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -227,25 +237,6 @@ T_GAP_CAUSE le_adv_get_param(T_LE_ADV_PARAM_TYPE param, void *p_value);
 
         gap_dev_state = new_state;
     }
-
-    //When the link was established, app_gap_callback will be called with callback type GAP_MSG_LE_CREATE_CONN_IND
-    T_APP_RESULT app_gap_callback(uint8_t cb_type, void *p_cb_data)
-    {
-        T_APP_RESULT result = APP_RESULT_SUCCESS;
-        T_LE_CB_DATA cb_data;
-        memcpy(&cb_data, p_cb_data, sizeof(T_LE_CB_DATA));
-        APP_PRINT_TRACE1("app_gap_callback: cb_type %d", cb_type);
-        switch (cb_type)
-        {
-        ...
-        case GAP_MSG_LE_CREATE_CONN_IND:
-           APP_PRINT_INFO0("GAP_MSG_LE_CREATE_CONN_IND");
-           result = APP_RESULT_ACCEPT;
-           break;
-        ...
-        }
-    }
-
  * \endcode
  */
 T_GAP_CAUSE le_adv_start(void);
@@ -253,13 +244,20 @@ T_GAP_CAUSE le_adv_start(void);
 /**
  * @brief  Stop advertising. When the device is in advertising state, the application can call this API to stop advertising.
  *
- * Applications can only call this API after the Bluetooth Host is ready. \n
- *                Explanation: If the Bluetooth Host is ready, the application will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE
- *                             with new_state about gap_init_state which is configured as @ref GAP_INIT_STATE_STACK_READY.
+ * If sending request operation is successful, the stopping result will be returned in one of the following ways:
+ * - In the default situation, or when @ref le_gap_msg_info_way (true) has been called, APP will be notified
+ *   by message @ref GAP_MSG_LE_DEV_STATE_CHANGE with new_state about gap_adv_state @ref GAP_ADV_STATE.
+ * - When @ref le_gap_msg_info_way (false) has been called, APP will be notified with the callback registered
+ *   by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_GAP_STATE_MSG.
  *
- * @return Operation result.
- * @retval GAP_CAUSE_SUCCESS Operation success.
- * @retval Others Operation failure.
+ * Applications can only call this API after the Bluetooth Host is ready.
+ *
+ * Explanation: If the Bluetooth Host is ready, the application will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE
+ * with new_state about gap_init_state which is configured as @ref GAP_INIT_STATE_STACK_READY.
+ *
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -313,13 +311,17 @@ T_GAP_CAUSE le_adv_stop(void);
  *         which parameter shall be updated. If the GAP ADV state is not @ref GAP_ADV_STATE_IDLE, the application can only update
  *         advertising data and scan response data.
  *
- * Applications can only call this API after the Bluetooth Host is ready. \n
- *                Explanation: If the Bluetooth Host is ready, the application will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE
- *                             with new_state about gap_init_state which is configured as @ref GAP_INIT_STATE_STACK_READY.
+ * If sending request operation is successful, the updating result will be returned by callback
+ * registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_ADV_UPDATE_PARAM.
  *
- * @return Operation result.
- * @retval GAP_CAUSE_SUCCESS Operation success.
- * @retval Others Operation failure.
+ * Applications can only call this API after the Bluetooth Host is ready.
+ *
+ * Explanation: If the Bluetooth Host is ready, the application will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE
+ * with new_state about gap_init_state which is configured as @ref GAP_INIT_STATE_STACK_READY.
+ *
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -353,13 +355,17 @@ T_GAP_CAUSE le_adv_update_param(void);
 /**
  * @brief  Read advertising transmit power.
  *
- * Applications can only call this API after Bluetooth Host is ready. \n
- *                Explanation: If Bluetooth Host is ready, the application will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE
- *                             with new_state about gap_init_state which is configured as @ref GAP_INIT_STATE_STACK_READY.
+ * If sending request operation is successful, the reading result will be returned by callback
+ * registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_ADV_READ_TX_POWER.
  *
- * @return Operation result.
- * @retval GAP_CAUSE_SUCCESS Operation success.
- * @retval Others Operation failure.
+ * Applications can only call this API after Bluetooth Host is ready.
+ *
+ * Explanation: If Bluetooth Host is ready, the application will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE
+ * with new_state about gap_init_state which is configured as @ref GAP_INIT_STATE_STACK_READY.
+ *
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -390,7 +396,7 @@ T_GAP_CAUSE le_adv_update_param(void);
 T_GAP_CAUSE le_adv_read_tx_power(void);
 
 /** @} */ /* End of group GAP_Broadcaster_Exported_Functions */
-/** @} */ /* End of group GAP_Broadcaster_Role */
+/** @} */ /* End of group GAP_BROADCASTER_Role */
 
 
 #ifdef __cplusplus

@@ -13,22 +13,23 @@
 
 /**
  * \addtogroup USB_HAL
- * @{
- * This section introduces the definition and the usage of the USB HAL APIs.
+ * \brief This section introduces the definition and the usage of the USB HAL APIs.
  *
  * |Terms         |Details                                               |
  * |--------------|------------------------------------------------------|
  * |\b HAL        |Hardware Abstraction Layer                            |
  * |\b URB        |USB Request Block                                     |
- *@}
+ *
+ * @{
  */
 /**
- * \addtogroup USB_HAL
+ * \defgroup HAL_Usage_Chapter How to Use USB HAL
  * @{
  *
- * \section HAL_Usage_Chapter How to Use USB HAL
+ * \brief This section provides a detailed explanation on utilizing USB HAL,
+ *        accompanied by sample code for better understanding.
  *
- * \par Hardware Setup
+ * \section HAL_HW_SETUP Hardware Setup
  *  - Call \ref hal_usb_speed_set to set the target speed for USB.
  *  - Call \ref hal_usb_init to initialize HAL software resources.
  *  - Call \ref hal_usb_phy_power_on to power on the USB PHY.
@@ -45,7 +46,7 @@
  *      }
  * \endcode
  *
- * \par Prepare to Enumerate
+ * \section HAL_PREPARE_TO_ENUM Prepare to Enumerate
  *  - Set up the hardware as required above.
  *  - Implement the HAL USB composite driver.
  *  - Create task to handle interrupts.
@@ -90,7 +91,7 @@
  *          {
  *              if receive msg from USB common ISR
  *              {
- *                  process common ISR
+ *                  //process common ISR
  *              }
  *              isr_pending--;
  *              if(isr_pending == 0)
@@ -119,13 +120,13 @@
  *          usb_isr_init();//Initialize interrupts
  *          hal_usb_soft_attach();//USB soft connect
  *
- *          os scheduler start
+ *          //os scheduler start
  *      }
  * \endcode
  *
- * \par Endpoint Setup
- *   The endpoint should be enabled when receiving 'set_alt' request and the alternate setting contains the endpoint.
- *   Please refer to 'Prepare to Enumerate' to know how to receive setup packets. \n
+ * \section HAL_EP_SETUP Endpoint Setup
+ *   The endpoint should be enabled when receiving `set_alt` request and the alternate setting contains the endpoint.
+ *   Please refer to `Prepare to Enumerate` to know how to receive setup packets.
  *
  * \par Example
  * \code
@@ -141,14 +142,14 @@
  *                  // bulk & interrupt endpoints
  *                  //if endpoint direction is OUT, allocate URB
  *                  T_HAL_USB_REQUEST_BLOCK *ep_urb = hal_usb_urb_alloc(len);
- *                  ...initialize URB...(refer to 'Data Transfer')
+ *                  ...initialize URB...(refer to Data Transfer)
  *                  //prepare to receive data
  *                  hal_usb_ep_rx(ep_handle, ep_urb);
  *
  *                  // isochronous endpoints
  *                  //allocate URB
  *                  T_HAL_USB_ISO_REQUEST_BLOCK *ep_urb = hal_usb_iso_urb_alloc(len);
- *                  ...initialize URB...(refer to 'Data Transfer')
+ *                  ...initialize URB...(refer to Data Transfer)
  *                  //start transfer--For both send and receive
  *                  hal_usb_iso_ep_start(ep_handle, ep_urb);
  *              }
@@ -164,11 +165,12 @@
  *      }
  * \endcode
  *
- * \par Data Transfer
+ * \section HAL_DATA_TRANSFER Data Transfer
  *  Data transfer entity is defined in \ref T_HAL_USB_REQUEST_BLOCK for control/interrupt/bulk transfers
- *  and \ref T_HAL_USB_ISO_REQUEST_BLOCK for isochronous transfer. \n
+ *  and \ref T_HAL_USB_ISO_REQUEST_BLOCK for isochronous transfer.
+ *
  *  To setup data transfer:
- *  - Setup endpoint, refer to 'Endpoint Setup' in \ref HAL_Usage_Chapter.
+ *  - Setup endpoint, refer to `Endpoint Setup` in \ref HAL_Usage_Chapter.
  *  - Allocate URB.
  *  - Start transfer.
  *
@@ -279,10 +281,10 @@
  *     hal_usb_iso_ep_start(ep_handle, iso_ep_urb);
  * \endcode
  *
- * \par Power manager
+ * \section HAL_POWER_MANAGER Power Manager
  *  To limit power consumption, the USB PHY will partially power down when the device suspends by calling
  *  \ref hal_usb_suspend_enter in \ref HAL_USB_COMMON_ISR_SUSPEND. If you quit the suspend state, a suspendn
- *  interrupt will be triggered, and \ref hal_usb_suspend_exit should be called in the suspendn interrupt,
+ *  interrupt will be triggered, and \ref hal_usb_suspend_exit \b should be called in the suspendn interrupt,
  *  followed by \ref HAL_USB_COMMON_ISR_RESUME.
  *
  * \par Example
@@ -307,18 +309,16 @@
  *          .handler = usb_suspendn_isr_handler,
  *          .exit = NULL,
  *      };
- *      enable suspendn interrupt
+ *      //enable suspendn interrupt
  *      hal_usb_suspendn_isr_handler_update(&usb_suspendn_isr_hooks);
  * \endcode
  */
 /** @}*/
-/**
- * \addtogroup USB_HAL
- * @{
- *
- * \section USB_HAL_Definitions Definitions
- *
-*/
+
+/** @defgroup USB_HAL_Exported_Constants USB HAL Exported Constants
+  * @{
+  */
+
 /**
  * \brief USB speed type.
  *
@@ -326,7 +326,35 @@
 typedef enum {HAL_USB_SPEED_FULL, HAL_USB_SPEED_HIGH, HAL_USB_SPEED_UNSUPPORTED} T_HAL_USB_SPEED;
 
 /**
- * \brief USB request block--USB data transfer entity.
+ * \brief USB common ISR type.
+ * \param HAL_USB_COMMON_ISR_RESET: The interrupt when the device resets.
+ * \param HAL_USB_COMMON_ISR_ENUM_DONE: The interrupt when speed enumeration is done.
+ * \param HAL_USB_COMMON_ISR_SETUP: The interrupt when the setup packet is received.
+ * \param HAL_USB_COMMON_ISR_SUSPEND: The interrupt when the device suspends.
+ * \param HAL_USB_COMMON_ISR_RESUME: The interrupt when the device resumes.
+ * \param HAL_USB_COMMON_ISR_XFER_DONE: If the operation is not completed within the interrupt handler (i.e., when complete_in_isr is set to 0), the HAL_USB_COMMON_ISR_XFER_DONE interrupt will be triggered when transfer completion.
+ *
+ */
+typedef enum
+{
+    HAL_USB_COMMON_ISR_RESET,
+    HAL_USB_COMMON_ISR_ENUM_DONE,
+    HAL_USB_COMMON_ISR_SETUP,
+    HAL_USB_COMMON_ISR_SUSPEND,
+    HAL_USB_COMMON_ISR_RESUME,
+    HAL_USB_COMMON_ISR_XFER_DONE,
+} T_HAL_USB_COMMON_ISR;
+
+/** End of group USB_HAL_Exported_Constants
+  * @}
+  */
+
+/** @defgroup USB_HAL_Exported_Types USB HAL Exported Types
+  * @{
+  */
+
+/**
+ * \brief USB request block-USB data transfer entity.
  *
  * \param length The length of data that will be sent or received.
  * \param actual The actual length of data that has been sent or received.
@@ -444,25 +472,6 @@ typedef union _hal_usb_isr_param
 
 } T_HAL_USB_ISR_PARAM;
 
-/**
- * \brief USB common ISR type.
- * \param HAL_USB_COMMON_ISR_RESET: The interrupt when the device resets.
- * \param HAL_USB_COMMON_ISR_ENUM_DONE: The interrupt when speed enumeration is done.
- * \param HAL_USB_COMMON_ISR_SETUP: The interrupt when the setup packet is received.
- * \param HAL_USB_COMMON_ISR_SUSPEND: The interrupt when the device suspends.
- * \param HAL_USB_COMMON_ISR_RESUME: The interrupt when the device resumes.
- * \param HAL_USB_COMMON_ISR_XFER_DONE: The interrupt when non-isochronous data transfer is done, and \ref complete_in_isr of the URB is 0.
- *
- */
-typedef enum
-{
-    HAL_USB_COMMON_ISR_RESET,
-    HAL_USB_COMMON_ISR_ENUM_DONE,
-    HAL_USB_COMMON_ISR_SETUP,
-    HAL_USB_COMMON_ISR_SUSPEND,
-    HAL_USB_COMMON_ISR_RESUME,
-    HAL_USB_COMMON_ISR_XFER_DONE,
-} T_HAL_USB_COMMON_ISR;
 
 /**
  * \brief The entrance of common ISR.
@@ -546,11 +555,19 @@ typedef HAL_USB_ISR_HOOKS(common, HAL_USB_COMMON_ISR_ENTER, HAL_USB_COMMON_ISR_H
 typedef HAL_USB_ISR_HOOKS(suspend, HAL_USB_SUSPENDN_ISR_ENTER, HAL_USB_SUSPENDN_ISR_HANDLER,
                           HAL_USB_SUSPENDN_ISR_EXIT) HAL_USB_SUSPENDN_ISR_HOOKS;
 
+/** End of group USB_HAL_Exported_Types
+  * @}
+  */
+
+/** @defgroup USB_HAL_Exported_Functions USB HAL Exported Functions
+  * @{
+  */
+
 /**
  * \brief Update the common ISR handlers.
  *
  * \param hooks: The hooks to process common ISR.
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  */
 int hal_usb_common_isr_handler_update(HAL_USB_COMMON_ISR_HOOKS *hooks);
 
@@ -558,7 +575,7 @@ int hal_usb_common_isr_handler_update(HAL_USB_COMMON_ISR_HOOKS *hooks);
  * \brief Update suspendn ISR handlers.
  *
  * \param hooks: The hooks to process suspendn ISR.
- * \return Refer to \ref 'rtl_errno.h'.
+ * \return Refer to \ref `rtl_errno.h`.
  */
 int hal_usb_suspendn_isr_handler_update(HAL_USB_SUSPENDN_ISR_HOOKS *hooks);
 
@@ -566,7 +583,7 @@ int hal_usb_suspendn_isr_handler_update(HAL_USB_SUSPENDN_ISR_HOOKS *hooks);
  * \brief Set the USB device address, the function should be called to process `set_address` request.
  *
  * \param addr The device address.
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  *
  * \par Example
  * \code
@@ -605,7 +622,7 @@ T_HAL_USB_REQUEST_BLOCK *hal_usb_urb_alloc(uint32_t buf_len);
  * \brief Free the URB allocated by \ref hal_usb_urb_alloc.
  *
  * \param urb Allocated by \ref hal_usb_urb_alloc.
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  */
 int hal_usb_urb_free(T_HAL_USB_REQUEST_BLOCK *urb);
 
@@ -625,7 +642,7 @@ T_HAL_USB_ISO_REQUEST_BLOCK *hal_usb_iso_urb_alloc(uint32_t buf_len);
  * \brief Free isochronous URB allocated by \ref hal_usb_iso_urb_alloc.
  *
  * \param urb Allocated by \ref hal_usb_iso_urb_alloc
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  *
  */
 int hal_usb_iso_urb_free(T_HAL_USB_ISO_REQUEST_BLOCK *urb);
@@ -644,11 +661,11 @@ int hal_usb_iso_urb_free(T_HAL_USB_ISO_REQUEST_BLOCK *urb);
 void *hal_usb_ep_handle_get(uint8_t addr);
 
 /**
- * \brief Enable the endpoint, the function should be called when receiving a 'set_alt' request.
+ * \brief Enable the endpoint, the function should be called when receiving a `set_alt` request.
  *
  * \param ep_handle Returned by \ref hal_usb_ep_handle_get
  * \param desc The endpoint descriptor.
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  *
  * \par Example
  * Please refer to 'Endpoint Setup' in \ref HAL_Usage_Chapter.
@@ -657,10 +674,10 @@ void *hal_usb_ep_handle_get(uint8_t addr);
 int hal_usb_ep_enable(void *ep_handle, void *desc);
 
 /**
- * \brief Disable endpoint, the function should be called when receiving a 'set_alt' request.
+ * \brief Disable endpoint, the function should be called when receiving a `set_alt` request.
  *
  * \param ep_handle Returned by \ref hal_usb_ep_handle_get.
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  *
  * \par Example
  * Please refer to 'Data transfer' in \ref HAL_Usage_Chapter.
@@ -673,7 +690,7 @@ int hal_usb_ep_disable(void *ep_handle);
  *
  * \param ep_handle The handle of endpoint 0.
  * \param urb The URB returned by \ref hal_usb_urb_alloc.
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  *
  * \par Example
  * Please refer to 'Data transfer' in \ref HAL_Usage_Chapter.
@@ -686,7 +703,7 @@ int hal_usb_ep0_trx(void *ep_handle, T_HAL_USB_REQUEST_BLOCK *urb);
  *
  * \param ep_handle The handle of the endpoint, returned by \ref hal_usb_ep_handle_get.
  * \param urb The URB returned by \ref hal_usb_urb_alloc.
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  *
  * \par Example
  * Please refer to 'Data transfer' in \ref HAL_Usage_Chapter.
@@ -699,7 +716,7 @@ int hal_usb_ep_tx(void *ep_handle, T_HAL_USB_REQUEST_BLOCK *urb);
  *
  * \param ep_handle The handle of the endpoint.
  * \param urb The URB returned by \ref hal_usb_urb_alloc.
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  *
  * \par Example
  * Please refer to 'Data transfer' in \ref HAL_Usage_Chapter
@@ -715,7 +732,7 @@ int hal_usb_ep_rx(void *ep_handle, T_HAL_USB_REQUEST_BLOCK *urb);
  *
  * \param ep_handle The endpoint handle, returned by \ref hal_usb_ep_handle_get.
  * \param err Error that causes a stall.
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  *
  * \par Example
  * \code
@@ -750,7 +767,7 @@ int hal_usb_ep_stall_set(void *ep_handle, int err);
  * \brief Clear endpoint halt when processing the ClearFeature(ENDPOINT_HALT) request.
  *
  * \param ep_handle The endpoint handle, returned by \ref hal_usb_ep_handle_get.
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  *
  * \par Example
  * \code
@@ -805,7 +822,7 @@ uint16_t hal_usb_ep_stall_status_get(void *ep_handle);
  *
  * \param ep_handle The isochronous endpoint, returned by \ref hal_usb_ep_handle_get.
  * \param iso_urb The isochronous URB, returned by \ref hal_usb_iso_urb_alloc.
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  * \par Example
  * Please refer to 'Data transfer' in \ref HAL_Usage_Chapter.
  *
@@ -817,7 +834,7 @@ int hal_usb_iso_ep_start(void *ep_handle, T_HAL_USB_ISO_REQUEST_BLOCK *iso_urb);
  *
  * \param ep_handle The isochronous endpoint, returned by \ref hal_usb_ep_handle_get.
  * \param iso_urb The isochronous URB, returned by \ref hal_usb_iso_urb_alloc.
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  * \par Example
  * Please refer to 'Data transfer' in \ref HAL_Usage_Chapter.
  *
@@ -826,7 +843,7 @@ int hal_usb_iso_ep_stop(void *ep_handle, T_HAL_USB_ISO_REQUEST_BLOCK *iso_urb);
 
 /**
  * \brief Initialize HAL software resources.
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  *
  * \par Example
  * Please refer to 'Hardware Setup' in \ref HAL_Usage_Chapter.
@@ -836,7 +853,7 @@ int hal_usb_init(void);
 
 /**
  * \brief Deinit HAL software resources.
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  *
  */
 int hal_usb_deinit(void);
@@ -845,7 +862,7 @@ int hal_usb_deinit(void);
  * \brief Set USB default speed, which is used to initialize hardware.
  *
  * \param speed Refer to \ref T_HAL_USB_SPEED.
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  *
  * \par Example
  * Please refer to 'Hardware Setup' in \ref HAL_Usage_Chapter.
@@ -856,7 +873,7 @@ int hal_usb_speed_set(T_HAL_USB_SPEED speed);
 /**
  * \brief Remote wakeup the host, if the bmAttributes in the configure descriptor support remote wakeup.
  *
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  *
  */
 int hal_usb_remote_wakeup(void);
@@ -864,7 +881,7 @@ int hal_usb_remote_wakeup(void);
 /**
  * \brief Initialize USB MAC.
  *
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  * \par Example
  * Please refer to 'Hardware Setup' in \ref HAL_Usage_Chapter.
  *
@@ -874,7 +891,7 @@ int hal_usb_mac_init(void);
 /**
  * \brief deinit USB MAC
  *
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  *
  */
 int hal_usb_mac_deinit(void);
@@ -882,7 +899,7 @@ int hal_usb_mac_deinit(void);
 /**
  * \brief Power on USB PHY.
  *
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  * \par Example
  * Please refer to 'Hardware Setup' in \ref HAL_Usage_Chapter.
  *
@@ -892,7 +909,7 @@ int hal_usb_phy_power_on(void);
 /**
  * \brief Power down USB PHY.
  *
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  *
  */
 int hal_usb_phy_power_down(void);
@@ -900,7 +917,7 @@ int hal_usb_phy_power_down(void);
 /**
  * \brief Generate a connect signal to the host.
  *
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  * \par Example
  * Please refer to 'Hardware Setup' in \ref HAL_Usage_Chapter.
  *
@@ -910,7 +927,7 @@ int hal_usb_soft_attach(void);
 /**
  * \brief Generate a disconnect signal to the host.
  *
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  *
  */
 int hal_usb_soft_detach(void);
@@ -942,21 +959,21 @@ void hal_usb_global_isr_enable(void);
 /**
  * \brief USB PHY enters suspend mode.
  *
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  */
 int hal_usb_suspend_enter(void);
 
 /**
  * \brief USB PHY exits suspend mode.
  *
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  */
 int hal_usb_suspend_exit(void);
 
 /**
  * \brief USB PHY sets status.
  *
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  */
 int hal_usb_wakeup_status_clear(void);
 
@@ -971,9 +988,10 @@ int hal_usb_wakeup_status_get(void);
  * \brief USB processes test mode requests.
  *
  * \param sel Test mode selector.
- * \return Refer to 'rtl_errno.h'.
+ * \return Refer to `rtl_errno.h`.
  */
 int hal_usb_do_test_mode(uint8_t sel);
+/** @} */ /* End of group USB_HAL_Exported_Functions */
 /** @}*/
 
 #endif

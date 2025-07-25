@@ -77,6 +77,8 @@ void LPC_Init(LPC_TypeDef *LPCx, LPC_InitTypeDef *LPC_InitStruct)
     /* LPC single mode output */
     lpc_reg_0x00.b.lpcomp0_single_output_en = 0x1;
 
+    lpc_reg_0x00.b.lpcomp0_deb_sel = 0;
+
     if (LPC_InitStruct->LPC_DebouncEn != DISABLE)
     {
         lpc_reg_0x00.b.lpcomp0_single_output_en = 0x0;

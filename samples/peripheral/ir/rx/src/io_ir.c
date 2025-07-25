@@ -15,7 +15,7 @@
 #include "io_ir.h"
 #include "trace.h"
 #include <string.h>
-
+#include "utils.h"
 
 /* Globals ------------------------------------------------------------------*/
 IR_Data_TypeDef IR_Rx_Data;
@@ -45,6 +45,13 @@ void board_ir_init(void)
     Pad_Config(IR_RX_PIN, PAD_PINMUX_MODE, PAD_IS_PWRON, PAD_PULL_NONE, PAD_OUT_DISABLE, PAD_OUT_LOW);
 
     Pinmux_Config(IR_RX_PIN, IRDA_RX);
+}
+
+void board_pwm_init(void)
+{
+    Pad_Config(PWM_OUT_PIN, PAD_PINMUX_MODE, PAD_IS_PWRON, PAD_PULL_NONE, PAD_OUT_ENABLE, PAD_OUT_HIGH);
+
+    Pinmux_Config(PWM_OUT_PIN, PWM_OUT_PIN_PINMUX);
 }
 
 
@@ -88,6 +95,22 @@ void driver_ir_init(void)
 
 }
 
+void driver_pwm_init(void)
+{
+    /* TIMER peripheral clock enable */
+    RCC_PeriphClockCmd(APBPeriph_TIMER, APBPeriph_TIMER_CLOCK, ENABLE);
+
+    /* Configure TIMER parameters */
+    TIM_TimeBaseInitTypeDef TIM_InitStruct;
+    TIM_StructInit(&TIM_InitStruct);
+    TIM_InitStruct.TIM_Mode = TIM_Mode_UserDefine;
+    TIM_InitStruct.TIM_PWM_En         = ENABLE;
+    TIM_InitStruct.TIM_PWM_High_Count = PWM_HIGH_COUNT;
+    TIM_InitStruct.TIM_PWM_Low_Count  = PWM_LOW_COUNT;
+    TIM_TimeBaseInit(PWM_TIMER_NUM, &TIM_InitStruct);
+
+}
+
 /**
   * @brief  Demo code of ir send data.
   * @param  No parameter.
@@ -99,6 +122,14 @@ void ir_demo(void)
     /* Enable IR counter threshold interrupt to stop receiving data */
     IR_INTConfig(IR_INT_RF_LEVEL | IR_INT_RX_CNT_THR, ENABLE);
     IR_MaskINTConfig(IR_INT_RF_LEVEL | IR_INT_RX_CNT_THR, DISABLE);
+    for (uint32_t i = 0; i < 50; i++)
+    {
+        TIM_Cmd(PWM_TIMER_NUM, ENABLE);
+        platform_delay_us(500);
+        TIM_Cmd(PWM_TIMER_NUM, DISABLE);
+        platform_delay_us(500);
+    }
+
 }
 
 /**
@@ -125,7 +156,7 @@ void IR_Handler(void)
         IR_Rx_Data.DataLen += len;
         IR_RX_Count += len;
 
-//        IR_ClearRxFIFO();
+        IR_ClearRxFIFO();
 
 //        for (uint16_t i = 0; i < IR_RX_Count; i++)
 //        {
@@ -150,7 +181,6 @@ void IR_Handler(void)
 
         for (uint16_t i = 0; i < IR_RX_Count; i++)
         {
-//          APP_PRINT_INFO2("[io_ir]io_handle_ir_msg: IR RX data[%d] = 0x%x", i, IR_Rx_Data.DataBuf[i]);
             DBG_DIRECT("[io_ir]io_handle_ir_msg: IR RX data[%d] = 0x%x", i, IR_Rx_Data.DataBuf[i]);
         }
         memset(&IR_Rx_Data, 0, sizeof(IR_Rx_Data));

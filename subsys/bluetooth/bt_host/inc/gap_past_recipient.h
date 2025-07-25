@@ -74,26 +74,27 @@ extern "C"
 typedef enum
 {
     PERIODIC_ADV_SYNC_TRANSFER_MODE_NO_ATTEMPT_TO_SYNCHRONIZE = 0x00,                                   /**< No attempt is made to synchronize to the periodic advertising and
-                                                                                                             no GAP_MSG_LE_PAST_RECIPIENT_PERIODIC_ADV_SYNC_TRANSFER_RECEIVED_INFO is sent (default). */
-    PERIODIC_ADV_SYNC_TRANSFER_MODE_PERIODIC_ADV_REPORT_DISABLED = 0x01,                                /**< GAP_MSG_LE_PAST_RECIPIENT_PERIODIC_ADV_SYNC_TRANSFER_RECEIVED_INFO is sent.
-                                                                                                             GAP_MSG_LE_PERIODIC_ADV_REPORT_INFO will be disabled. */
-    PERIODIC_ADV_SYNC_TRANSFER_MODE_PERIODIC_ADV_REPORT_ENABLED_WITH_DUPLICATE_FILTER_DISABLED = 0x02,  /**< GAP_MSG_LE_PAST_RECIPIENT_PERIODIC_ADV_SYNC_TRANSFER_RECEIVED_INFO is sent.
-                                                                                                             GAP_MSG_LE_PERIODIC_ADV_REPORT_INFO will be enabled with duplicate filtering disabled. */
-    PERIODIC_ADV_SYNC_TRANSFER_MODE_PERIODIC_ADV_REPORT_ENABLED_WITH_DUPLICATE_FILTER_ENABLED = 0x03,   /**< GAP_MSG_LE_PAST_RECIPIENT_PERIODIC_ADV_SYNC_TRANSFER_RECEIVED_INFO is sent.
-                                                                                                             GAP_MSG_LE_PERIODIC_ADV_REPORT_INFO will be enabled with duplicate filtering enabled. */
+                                                                                                             no @ref GAP_MSG_LE_PAST_RECIPIENT_PERIODIC_ADV_SYNC_TRANSFER_RECEIVED_INFO is sent (default). */
+    PERIODIC_ADV_SYNC_TRANSFER_MODE_PERIODIC_ADV_REPORT_DISABLED = 0x01,                                /**< @ref GAP_MSG_LE_PAST_RECIPIENT_PERIODIC_ADV_SYNC_TRANSFER_RECEIVED_INFO is sent.
+                                                                                                             @ref GAP_MSG_LE_PERIODIC_ADV_REPORT_INFO will be disabled. */
+    PERIODIC_ADV_SYNC_TRANSFER_MODE_PERIODIC_ADV_REPORT_ENABLED_WITH_DUPLICATE_FILTER_DISABLED = 0x02,  /**< @ref GAP_MSG_LE_PAST_RECIPIENT_PERIODIC_ADV_SYNC_TRANSFER_RECEIVED_INFO is sent.
+                                                                                                             @ref GAP_MSG_LE_PERIODIC_ADV_REPORT_INFO will be enabled with duplicate filtering disabled. */
+    PERIODIC_ADV_SYNC_TRANSFER_MODE_PERIODIC_ADV_REPORT_ENABLED_WITH_DUPLICATE_FILTER_ENABLED = 0x03,   /**< @ref GAP_MSG_LE_PAST_RECIPIENT_PERIODIC_ADV_SYNC_TRANSFER_RECEIVED_INFO is sent.
+                                                                                                             @ref GAP_MSG_LE_PERIODIC_ADV_REPORT_INFO will be enabled with duplicate filtering enabled. */
 } T_GAP_PAST_RECIPIENT_PERIODIC_ADV_SYNC_TRANSFER_MODE;
 
 /** @brief  Definition of GAP PAST recipient periodic advertising sync transfer parameter. */
 typedef struct
 {
-    T_GAP_PAST_RECIPIENT_PERIODIC_ADV_SYNC_TRANSFER_MODE mode;
+    T_GAP_PAST_RECIPIENT_PERIODIC_ADV_SYNC_TRANSFER_MODE
+    mode;  /**< @ref T_GAP_PAST_RECIPIENT_PERIODIC_ADV_SYNC_TRANSFER_MODE. */
     uint8_t cte_type;                                           /**< @ref PAST_RECIPIENT_PERIODIC_ADV_SYNC_TRANSFER_CTE_TYPE. */
     uint16_t skip;                                              /**< The maximum number of periodic advertising events that can be skipped after a successful receive.
-                                                                     @arg Range: 0x0000 to 0x01F3. */
+                                                                     - Range: 0x0000 to 0x01F3. */
     uint16_t sync_timeout;                                      /**< Synchronization timeout for the periodic advertising train.
-                                                                     @arg Range: 0x000A to 0x4000.
-                                                                     @arg Time = N*10 ms.
-                                                                     @arg Time Range: 100 ms to 163.84 s. */
+                                                                     - Range: 0x000A to 0x4000.
+                                                                     - Time = N*10 ms.
+                                                                     - Time Range: 100 ms to 163.84 s. */
 } T_GAP_PAST_RECIPIENT_PERIODIC_ADV_SYNC_TRANSFER_PARAM;
 /** End of GAP_LE_PAST_RECIPIENT_Exported_Types
   * @}
@@ -109,25 +110,28 @@ typedef struct
 /**
  * @brief       Specify the initial value for PAST recipient periodic advertising sync transfer parameter to be used
  *              for all subsequent connections.
- *              @note This function does not affect any existing connection.
  *
- * This function can be called after Bluetooth Host is ready. \n
- *              Explanation: If Bluetooth Host is ready, the application will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE
- *                           with new_state about gap_init_state which is configured as @ref GAP_INIT_STATE_STACK_READY.
+ * @note This function does not affect any existing connection.
+ *
+ * This function can be called after Bluetooth Host is ready.
+ *
+ * Explanation: If Bluetooth Host is ready, the application will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE
+ * with new_state about gap_init_state which is configured as @ref GAP_INIT_STATE_STACK_READY.
  *
  * If sending request operation is successful, the result of setting parameters will be returned by
- *              @ref app_gap_callback with cb_type @ref GAP_MSG_LE_PAST_RECIPIENT_SET_DEFAULT_PERIODIC_ADV_SYNC_TRANSFER_PARAMS.
+ * the callback function with msg type @ref GAP_MSG_LE_PAST_RECIPIENT_SET_DEFAULT_PERIODIC_ADV_SYNC_TRANSFER_PARAMS.
  *
- * Reception of periodic advertising synchronization information will be returned by @ref app_gap_callback with
- *              cb_type @ref GAP_MSG_LE_PAST_RECIPIENT_PERIODIC_ADV_SYNC_TRANSFER_RECEIVED_INFO.
- *              GAP PA synchronization states will be returned by @ref app_gap_callback with cb_type @ref GAP_MSG_LE_PA_SYNC_STATE_CHANGE_INFO.
- *              Periodic advertisement will be returned by @ref app_gap_callback with cb_type @ref GAP_MSG_LE_PERIODIC_ADV_REPORT_INFO.
+ * Reception of periodic advertising synchronization information will be returned by the callback function with
+ * msg type @ref GAP_MSG_LE_PAST_RECIPIENT_PERIODIC_ADV_SYNC_TRANSFER_RECEIVED_INFO.
+ * GAP PA synchronization states will be returned by the callback function with msg type @ref GAP_MSG_LE_PA_SYNC_STATE_CHANGE_INFO.
+ * Periodic advertisement will be returned by the callback function with msg type @ref GAP_MSG_LE_PERIODIC_ADV_REPORT_INFO.
  *
- * @param[in]   p_periodic_adv_sync_transfer_param    PAST recipient periodic advertising sync transfer parameter. @ref T_GAP_PAST_RECIPIENT_PERIODIC_ADV_SYNC_TRANSFER_PARAM.
+ * @param[in]   p_periodic_adv_sync_transfer_param    Pointer to PAST recipient periodic advertising sync transfer parameter
+ *                                                    @ref T_GAP_PAST_RECIPIENT_PERIODIC_ADV_SYNC_TRANSFER_PARAM.
  *
- * @return Send request operation.
- * @retval GAP_CAUSE_SUCCESS  Send request operation success.
- * @retval Others             Send request operation failure.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -213,7 +217,7 @@ typedef struct
             break;
 
         case GAP_MSG_LE_PERIODIC_ADV_REPORT_INFO:
-            APP_PRINT_INFO7("GAP_MSG_LE_PERIODIC_ADV_REPORT_INFO: sync_id %d, sync_handle 0x%x, tx_power %d, rssi %d, cte_type %d, data_status 0x%x, data_len %d",
+            APP_PRINT_INFO7("GAP_MSG_LE_PERIODIC_ADV_REPORT_INFO: sync_id %d, sync_handle 0x%x, tx_power %d, RSSI %d, cte_type %d, data_status 0x%x, data_len %d",
                             p_data->p_le_periodic_adv_report_info->sync_id,
                             p_data->p_le_periodic_adv_report_info->sync_handle,
                             p_data->p_le_periodic_adv_report_info->tx_power,
@@ -234,19 +238,20 @@ T_GAP_CAUSE le_past_recipient_set_default_periodic_adv_sync_transfer_params(
  *              from the device identified by conn_id.
  *
  * If sending request operation is success, the result of setting parameters will be returned by
- *              @ref app_gap_callback with cb_type @ref GAP_MSG_LE_PAST_RECIPIENT_SET_PERIODIC_ADV_SYNC_TRANSFER_PARAMS.
+ *              the callback function with msg type @ref GAP_MSG_LE_PAST_RECIPIENT_SET_PERIODIC_ADV_SYNC_TRANSFER_PARAMS.
  *
- * Reception of periodic advertising synchronization information will be returned by @ref app_gap_callback with
- *              cb_type @ref GAP_MSG_LE_PAST_RECIPIENT_PERIODIC_ADV_SYNC_TRANSFER_RECEIVED_INFO.
- *              GAP PA synchronization states will be returned by @ref app_gap_callback with cb_type @ref GAP_MSG_LE_PA_SYNC_STATE_CHANGE_INFO.
- *              Periodic advertisement will be returned by @ref app_gap_callback with cb_type @ref GAP_MSG_LE_PERIODIC_ADV_REPORT_INFO.
+ * Reception of periodic advertising synchronization information will be returned by the callback function with
+ *              msg type @ref GAP_MSG_LE_PAST_RECIPIENT_PERIODIC_ADV_SYNC_TRANSFER_RECEIVED_INFO.
+ *              GAP PA synchronization states will be returned by the callback function with msg type @ref GAP_MSG_LE_PA_SYNC_STATE_CHANGE_INFO.
+ *              Periodic advertisement will be returned by the callback function with msg type @ref GAP_MSG_LE_PERIODIC_ADV_REPORT_INFO.
  *
  * @param[in]   conn_id                               Used to identify a connection.
- * @param[in]   p_periodic_adv_sync_transfer_param    PAST recipient periodic advertising sync transfer parameter. @ref T_GAP_PAST_RECIPIENT_PERIODIC_ADV_SYNC_TRANSFER_PARAM.
+ * @param[in]   p_periodic_adv_sync_transfer_param    Pointer to PAST recipient periodic advertising sync transfer parameter
+ *                                                    @ref T_GAP_PAST_RECIPIENT_PERIODIC_ADV_SYNC_TRANSFER_PARAM.
  *
- * @return Send request operation.
- * @retval GAP_CAUSE_SUCCESS  Send request operation success.
- * @retval Others             Send request operation failure.
+ * @return The result of sending request.
+ * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+ * @retval Others Sending request operation is failed.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -333,7 +338,7 @@ T_GAP_CAUSE le_past_recipient_set_default_periodic_adv_sync_transfer_params(
             break;
 
         case GAP_MSG_LE_PERIODIC_ADV_REPORT_INFO:
-            APP_PRINT_INFO7("GAP_MSG_LE_PERIODIC_ADV_REPORT_INFO: sync_id %d, sync_handle 0x%x, tx_power %d, rssi %d, cte_type %d, data_status 0x%x, data_len %d",
+            APP_PRINT_INFO7("GAP_MSG_LE_PERIODIC_ADV_REPORT_INFO: sync_id %d, sync_handle 0x%x, tx_power %d, RSSI %d, cte_type %d, data_status 0x%x, data_len %d",
                             p_data->p_le_periodic_adv_report_info->sync_id,
                             p_data->p_le_periodic_adv_report_info->sync_handle,
                             p_data->p_le_periodic_adv_report_info->tx_power,

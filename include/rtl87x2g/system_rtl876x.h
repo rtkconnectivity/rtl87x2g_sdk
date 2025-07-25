@@ -42,8 +42,10 @@ extern "C" {
 /** @defgroup SYSTEM_RTL876X_Exported_types System RTL876x Exported types
   * @{
   */
-
+/* @brief Application main entry point function prototype. */
 typedef bool (*APP_MAIN_FUNC)();
+
+/* @brief Generic user callback function prototype */
 typedef void (*USER_CALL_BACK)();
 
 /** End of SYSTEM_RTL876X_Exported_types
@@ -56,12 +58,19 @@ typedef void (*USER_CALL_BACK)();
 /** @defgroup SYSTEM_RTL876X_Exported_Variables System RTL876x Exported Variables
   * @{
   */
+/* @brief System core clock frequency in Hz. */
 extern uint32_t SystemCoreClock;
 
+/* @brief Pre-main application initialization function pointer. */
 extern APP_MAIN_FUNC app_pre_main;
+
+/* @brief Main application entry function pointer. */
 extern APP_MAIN_FUNC app_main;
 
+/* @brief Pre-main callback function pointer. */
 extern USER_CALL_BACK app_pre_main_cb;
+
+/* @brief OS patch initialization callback. */
 extern USER_CALL_BACK os_patch_init;
 
 /** End of SYSTEM_RTL876X_Exported_Variables

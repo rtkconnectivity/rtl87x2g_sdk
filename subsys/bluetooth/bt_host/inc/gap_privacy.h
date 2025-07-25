@@ -45,29 +45,39 @@ extern "C"
   */
 
 /* Define the privacy callback type. */
-#define GAP_MSG_LE_PRIVACY_RESOLUTION_STATUS_INFO       0x00 //!< Notification msg type for resolution status.
-#define GAP_MSG_LE_PRIVACY_SET_RESOLV_PRIV_ADDR_TIMEOUT 0x01 //!< Response msg type for le_privacy_set_resolv_priv_addr_timeout.
-#define GAP_MSG_LE_PRIVACY_MODIFY_RESOLV_LIST           0x02 //!< Response msg type for le_privacy_modify_resolv_list.
-#define GAP_MSG_LE_PRIVACY_READ_PEER_RESOLV_ADDR        0x03 //!< Response msg type for le_privacy_read_peer_resolv_addr.
-#define GAP_MSG_LE_PRIVACY_READ_LOCAL_RESOLV_ADDR       0x04 //!< Response msg type for le_privacy_read_local_resolv_addr.
-#define GAP_MSG_LE_PRIVACY_SET_MODE                     0x05 //!< Response msg type for le_privacy_set_mode.
+#define GAP_MSG_LE_PRIVACY_RESOLUTION_STATUS_INFO       0x00 /**< Information msg type for resolution status.
+                                                                  The structure of callback data is @ref T_LE_PRIVACY_RESOLUTION_STATUS_INFO. */
+#define GAP_MSG_LE_PRIVACY_SET_RESOLV_PRIV_ADDR_TIMEOUT 0x01 /**< Response msg type for @ref le_privacy_set_resolv_priv_addr_timeout.
+                                                                  The structure of callback data is @ref T_LE_PRIVACY_SET_RESOLV_PRIV_ADDR_TIMEOUT_RSP. */
+#define GAP_MSG_LE_PRIVACY_MODIFY_RESOLV_LIST           0x02 /**< Response msg type for @ref le_privacy_modify_resolv_list.
+                                                                  The structure of callback data is @ref T_LE_PRIVACY_MODIFY_RESOLV_LIST_RSP. */
+#define GAP_MSG_LE_PRIVACY_READ_PEER_RESOLV_ADDR        0x03 /**< Response msg type for @ref le_privacy_read_peer_resolv_addr.
+                                                                  The structure of callback data is @ref T_LE_PRIVACY_READ_PEER_RESOLV_ADDR_RSP. */
+#define GAP_MSG_LE_PRIVACY_READ_LOCAL_RESOLV_ADDR       0x04 /**< Response msg type for @ref le_privacy_read_local_resolv_addr.
+                                                                  The structure of callback data is @ref T_LE_PRIVACY_READ_LOCAL_RESOLV_ADDR_RSP. */
+#define GAP_MSG_LE_PRIVACY_SET_MODE                     0x05 /**< Response msg type for @ref le_privacy_set_mode.
+                                                                  The structure of callback data is @ref T_LE_PRIVACY_SET_MODE_RSP. */
 
 
-/** @brief Define the subtype of Message IO_MSG_TYPE_BT_STATUS */
+/** @brief Define the privacy parameter type */
 typedef enum
 {
-    GAP_PARAM_PRIVACY_TIMEOUT           = 0x300, //!< Timeout value for privacy
-    GAP_PARAM_PRIVACY_RESOLUTION_STATE  = 0x301, //!< Resolution state
-    GAP_PARAM_PRIVACY_RESOLV_LIST_SIZE  = 0x302, //!< Resolvable list size
+    GAP_PARAM_PRIVACY_TIMEOUT           = 0x300, /**< Time Controller uses a Resolvable Private Address before a new resolvable
+                                                      private address is generated and starts being used. Read/Write.
+                                                      Size is 2 octets. Value range: 0x0001 to 0x0E10 (1 s to 1 hour). Units: Second.
+                                                      Default value is 0x0384 (900 s or 15 minutes). */
+    GAP_PARAM_PRIVACY_RESOLUTION_STATE  = 0x301, //!< Resolution state. Read only. Size is 1 octet. Value is @ref T_LE_PRIVACY_STATE.
+    GAP_PARAM_PRIVACY_RESOLV_LIST_SIZE  = 0x302, /**< Total number of entries in the resolving list that can be
+                                                      stored in Controller. Read only. Size is 1 octet. */
 } T_LE_PRIVACY_PARAM_TYPE;
 
 /** @brief Define the privacy state */
 typedef enum
 {
-    LE_PRIVACY_RESOLUTION_DISABLED,     //!< Resolution disabled
-    LE_PRIVACY_RESOLUTION_DISABLING,    //!< Resolution disabling
-    LE_PRIVACY_RESOLUTION_ENABLING,     //!< Resolution enabling
-    LE_PRIVACY_RESOLUTION_ENABLED       //!< Resolution enabled
+    LE_PRIVACY_RESOLUTION_DISABLED,     //!< Resolution disabled.
+    LE_PRIVACY_RESOLUTION_DISABLING,    //!< Resolution disabling.
+    LE_PRIVACY_RESOLUTION_ENABLING,     //!< Resolution enabling.
+    LE_PRIVACY_RESOLUTION_ENABLED       //!< Resolution enabled.
 } T_LE_PRIVACY_STATE;
 
 /** @brief LE resolution status info */
@@ -133,7 +143,7 @@ typedef union
   */
 
 /**
-  * @brief Callback for gap to notify APP.
+  * @brief Callback for GAP to notify APP.
   * @param[in] msg_type Callback msg type.
   * @param[in] msg_data Message data @ref T_LE_PRIVACY_CB_DATA.
   * @return    Result.
@@ -144,10 +154,11 @@ typedef T_APP_RESULT(*P_FUN_PRIVACY_CB)(uint8_t msg_type, T_LE_PRIVACY_CB_DATA m
 /**
   * @brief  Set a LE privacy parameter.
   *
-  * This function can be called with a LE Privacy Parameter type and it will set the
-  *         LE Privacy Parameter.  LE Privacy Parameters are defined in @ref T_LE_PRIVACY_PARAM_TYPE.
+  * This function can be called with a LE privacy parameter type @ref T_LE_PRIVACY_PARAM_TYPE and it will set the privacy parameter.
+  * The 'p_value' field must point to an appropriate data type that meets the requirements for the corresponding parameter type.
+  * (For example: if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
   *
-  * @param[in]  param LE Privacy parameter type: @ref T_LE_PRIVACY_PARAM_TYPE.
+  * @param[in]  param LE privacy parameter type @ref T_LE_PRIVACY_PARAM_TYPE.
   * @param[in]  len Length of data to write.
   * @param[in]  p_value Pointer to data to write.
   * @return Operation result.
@@ -159,14 +170,13 @@ T_GAP_CAUSE le_privacy_set_param(T_LE_PRIVACY_PARAM_TYPE param, uint8_t len, voi
 /**
   * @brief  Get an LE privacy parameter.
   *
-  * This function can be called with an LE Privacy Parameter type and it will get an
-  *         LE Privacy Parameter. LE Privacy Parameters are defined in @ref T_LE_PRIVACY_PARAM_TYPE.
+  * This function can be called with a LE privacy parameter type @ref T_LE_PRIVACY_PARAM_TYPE and it will get the privacy parameter.
+  * The 'p_value' field must point to an appropriate data type that meets the requirements for the corresponding parameter type.
+  * (For example: if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
   *
-  * @param[in]  param GAP parameter type: @ref T_LE_PRIVACY_PARAM_TYPE.
-  * @param[in,out]  p_value Pointer to location to get the parameter value. This is dependent on
-  *                  the parameter ID and will be cast to the appropriate
-  *                  data type (For example: if the data type of param is uint16_t, p_value will be cast to
-  *                      a pointer of uint16_t).
+  * @param[in]  param LE privacy parameter type @ref T_LE_PRIVACY_PARAM_TYPE.
+  * @param[in,out]  p_value Pointer to location to get the parameter value.
+  *
   * @return Operation result.
   * @retval GAP_CAUSE_SUCCESS Operation success.
   * @retval Others Operation failure.
@@ -176,66 +186,90 @@ T_GAP_CAUSE le_privacy_get_param(T_LE_PRIVACY_PARAM_TYPE param, void *p_value);
 /**
   * @brief  Register privacy callback to Bluetooth Host.
   * @param[in] p_privacy_cb Callback function provided by the APP to handle LE privacy messages sent from the Bluetooth Host.
-  *              @arg NULL -> Not send GAP privacy messages to APP.
-  *              @arg Other -> Use application-defined callback function.
-  * @return void.
+  *              - NULL -> Not send GAP privacy messages to APP.
+  *              - Other -> Use application-defined callback function.
   */
 void        le_privacy_register_cb(P_FUN_PRIVACY_CB p_privacy_cb);
 
 /**
-  * @brief  Enable/disable LE privacy address resolution mode.
+  * @brief  Enable or disable LE privacy address resolution mode.
+  *
+  * If sending request operation is successful, the enabling or disabling result will be returned by callback
+  * registered by @ref le_privacy_register_cb with msg type @ref GAP_MSG_LE_PRIVACY_RESOLUTION_STATUS_INFO.
+  *
   * @param[in] enable Enable or disable address resolution.
-  * @return Operation result.
-  * @retval GAP_CAUSE_SUCCESS Operation success.
-  * @retval Others Operation failure.
+  *                   - true: Enable address resolution.
+  *                   - false: Disable address resolution.
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   */
 T_GAP_CAUSE le_privacy_set_addr_resolution(bool enable);
 
 /**
-  * @brief  Read peer resolvable random address.
-  * @param[in] peer_identity_address_type Peer identity address type.
-  * @param[in] peer_identity_address Peer identity address.
-  * @return Operation result.
-  * @retval GAP_CAUSE_SUCCESS Operation success.
-  * @retval Others Operation failure.
+  * @brief  Read peer Resolvable Private Address.
+  *
+  * If sending request operation is successful, the reading result will be returned by callback
+  * registered by @ref le_privacy_register_cb with msg type @ref GAP_MSG_LE_PRIVACY_READ_PEER_RESOLV_ADDR.
+  *
+  * @param[in] peer_identity_address_type Peer identity address type @ref T_GAP_IDENT_ADDR_TYPE.
+  * @param[in] peer_identity_address Pointer to peer identity address.
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   */
 T_GAP_CAUSE le_privacy_read_peer_resolv_addr(T_GAP_IDENT_ADDR_TYPE peer_identity_address_type,
                                              uint8_t *peer_identity_address);
 
 /**
-  * @brief  Read local resolvable random address.
-  * @param[in] peer_identity_address_type Peer identity address type.
-  * @param[in] peer_identity_address Peer identity address.
-  * @return Operation result.
-  * @retval GAP_CAUSE_SUCCESS Operation success.
-  * @retval Others Operation failure.
+  * @brief  Read local Resolvable Private Address.
+  *
+  * If sending request operation is successful, the reading result will be returned by callback
+  * registered by @ref le_privacy_register_cb with msg type @ref GAP_MSG_LE_PRIVACY_READ_LOCAL_RESOLV_ADDR.
+  *
+  * @param[in] peer_identity_address_type Peer identity address type @ref T_GAP_IDENT_ADDR_TYPE.
+  * @param[in] peer_identity_address Pointer to peer identity address.
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   */
 T_GAP_CAUSE le_privacy_read_local_resolv_addr(T_GAP_IDENT_ADDR_TYPE peer_identity_address_type,
                                               uint8_t *peer_identity_address);
 
 /**
-  * @brief  Set resolvable private address timeout.
-  * @return Operation result.
-  * @retval GAP_CAUSE_SUCCESS Operation success.
-  * @retval Others Operation failure.
+  * @brief  Set resolvable private address timeout with value set by @ref le_privacy_set_param
+  *         with parameter @ref GAP_PARAM_PRIVACY_TIMEOUT.
+  *
+  * If sending request operation is successful, the setting result will be returned by callback
+  * registered by @ref le_privacy_register_cb with msg type @ref GAP_MSG_LE_PRIVACY_SET_RESOLV_PRIV_ADDR_TIMEOUT.
+  *
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   */
 T_GAP_CAUSE le_privacy_set_resolv_priv_addr_timeout(void);
 
 
 /**
-  * @brief  Modify local resolvable device list.
-  *         @note This function can be called to add, remove, or clear the resolvable list.
+  * @brief  Modify local resolving list.
   *
-  * When operation equals @ref GAP_RESOLV_LIST_OP_ADD, this function cannot be used
-  *               if local device uses different local addresses to bond with the same remote
-  *               device. In this situation, @ref le_privacy_add_resolv_list shall be called.
+  * When add device to local resolving list, APP shall select API based on the situation:
+  * - In the default situation or when @ref gap_config_le_key_storage_flag is called to set
+  *   @ref LE_KEY_STORE_LOCAL_BD_BIT to 1, @ref le_privacy_modify_resolv_list with parameter
+  *   @ref GAP_RESOLV_LIST_OP_ADD shall not be called, and @ref le_privacy_add_resolv_list shall be called.
+  * - When @ref gap_config_le_key_storage_flag is called to set @ref LE_KEY_STORE_LOCAL_BD_BIT to 0,
+  *   @ref le_privacy_modify_resolv_list with parameter @ref GAP_RESOLV_LIST_OP_ADD
+  *   or @ref le_privacy_add_resolv_list can be called.
   *
-  * @param[in] operation type, @ref T_GAP_RESOLV_LIST_OP.
-  * @param[in] peer_identity_address_type Peer identity address type.
-  * @param[in] peer_identity_address Peer identity address.
-  * @return Operation result.
-  * @retval GAP_CAUSE_SUCCESS Operation success.
-  * @retval Others Operation failure.
+  * If sending request operation is successful, the modifying result will be returned by callback
+  * registered by @ref le_privacy_register_cb with msg type @ref GAP_MSG_LE_PRIVACY_MODIFY_RESOLV_LIST.
+  *
+  * @param[in] operation @ref T_GAP_RESOLV_LIST_OP.
+  * @param[in] peer_identity_address_type Peer identity address type @ref T_GAP_IDENT_ADDR_TYPE.
+  * @param[in] peer_identity_address Pointer to peer identity address.
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   */
 T_GAP_CAUSE le_privacy_modify_resolv_list(T_GAP_RESOLV_LIST_OP operation,
                                           T_GAP_IDENT_ADDR_TYPE peer_identity_address_type,
@@ -244,28 +278,35 @@ T_GAP_CAUSE le_privacy_modify_resolv_list(T_GAP_RESOLV_LIST_OP operation,
 /**
   * @brief  Add device to local resolving list.
   *
-  * @param[in] peer_identity_address_type Peer identity address type.
-  * @param[in] peer_identity_address Peer identity address.
-  * @param[in] peer_irk              Pointer to peer IRK (16 octets). \n
-                                     NULL: no peer IRK, use all-zero IRK.
+  * If sending request operation is successful, the adding result will be returned by callback
+  * registered by @ref le_privacy_register_cb with msg type @ref GAP_MSG_LE_PRIVACY_MODIFY_RESOLV_LIST.
+  *
+  * @param[in] peer_identity_address_type Peer identity address type @ref T_GAP_IDENT_ADDR_TYPE.
+  * @param[in] peer_identity_address Pointer to peer identity address.
+  * @param[in] peer_irk              Pointer to peer IRK (16 octets).
+                                     - NULL: No peer IRK, use all-zero IRK.
   * @param[in] use_local_irk         Indicates whether local IRK has been distributed to the peer device.
-                                     False: local IRK has not been distributed to the peer device
-                                     True: local IRK has been distributed to the peer device.
-  * @return Operation result.
-  * @retval GAP_CAUSE_SUCCESS Operation success.
-  * @retval Others Operation failure.
+                                     - false: Local IRK has not been distributed to the peer device
+                                     - true: Local IRK has been distributed to the peer device.
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   */
 T_GAP_CAUSE le_privacy_add_resolv_list(T_GAP_IDENT_ADDR_TYPE peer_identity_address_type,
                                        uint8_t *peer_identity_address, uint8_t *peer_irk, bool use_local_irk);
 
 /**
   * @brief  Set privacy mode.
-  * @param[in] peer_identity_address_type Peer identity address type.
-  * @param[in] peer_identity_address Peer identity address.
+  *
+  * If sending request operation is successful, the setting result will be returned by callback
+  * registered by @ref le_privacy_register_cb with msg type @ref GAP_MSG_LE_PRIVACY_SET_MODE.
+  *
+  * @param[in] peer_identity_address_type Peer identity address type @ref T_GAP_IDENT_ADDR_TYPE.
+  * @param[in] peer_identity_address Pointer to peer identity address.
   * @param[in] privacy_mode Privacy mode @ref T_GAP_PRIVACY_MODE.
-  * @return Operation result.
-  * @retval GAP_CAUSE_SUCCESS Operation success.
-  * @retval GAP_CAUSE_SEND_REQ_FAILED Operation failure.
+  * @return The result of sending request.
+  * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.
+  * @retval Others Sending request operation is failed.
   */
 T_GAP_CAUSE le_privacy_set_mode(T_GAP_IDENT_ADDR_TYPE peer_identity_address_type,
                                 uint8_t *peer_identity_address,

@@ -4,11 +4,9 @@
 #include "pm.h"
 #include "usb_dm.h"
 #include "trace.h"
-#include "app_section.h"
 #include "os_msg.h"
 #include "app_msg.h"
 #include "os_task.h"
-#include "usb_msg.h"
 #include "usb_dev.h"
 #include "usb_hid.h"
 

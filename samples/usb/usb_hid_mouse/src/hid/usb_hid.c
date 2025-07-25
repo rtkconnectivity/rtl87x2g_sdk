@@ -1,7 +1,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include "os_queue.h"
-#include "os_sync.h"
 #include "usb_hid_driver.h"
 #include "usb_hid_desc.h"
 #include "usb_spec20.h"
@@ -10,7 +9,6 @@
 #include "usb_hid.h"
 #include "usb_pipe.h"
 #include "rtl_gpio.h"
-#include "rtl_pinmux.h"
 #if F_APP_CFU_FEATURE_SUPPORT
 #include "app_hid_descriptor.h"
 #endif

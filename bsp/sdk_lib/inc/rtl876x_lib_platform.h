@@ -48,44 +48,36 @@ typedef void (*WDG_APP_CB)(void);
   * @{
   */
 /**
-    * @brief    sdk lib funtion pointer init
-    * @param    void
-    * @return   void
+    * @brief Initialize SDK library function pointer.
     */
 void patch_func_ptr_init(void);
 
 /**
-    * @brief    get usb efuse infomation
-    * @param    pointer to data
-    * @return   void
+    * @brief    Get USB eFuse information.
+    * @param[out]  data   Pointer to where the retrieved information will be stored.
     */
 void usb_info_get(uint8_t *data);
 
 /**
-    * @brief    whether ota support dual bank merge
-    * @param    void
-    * @return   ture:support ; false: not support
+    * @brief    Determine if OTA supports dual bank merging.
+    * @return   Returns true if dual bank merge is supported; otherwise, false.
     */
 bool is_ota_support_dual_bank_merge(void);
 
 /**
-    * @brief    print sdk lib version
-    * @param    void
-    * @return   void
+    * @brief    Print sdk lib version.
     */
 void print_sdk_lib_version(void);
 
 /**
-    * @brief    register watchdog app callback
-    * @param    callback function
-    * @return   void
+    * @brief    Register watchdog app callback.
+    * @param[in]    func The callback function to register.
     */
 void wdg_register_app_cb(WDG_APP_CB func);
 
 /**
- * @brief  get ic type
- * @param  none
- * @return uint8_t, ic type:
+ * @brief  Get ic type.
+ * @return A uint8_t value representing the IC type.
  * @code
  * #define RTL8762GTP              0x03
  * #define RTL8762GKH              0x07
@@ -108,47 +100,47 @@ void wdg_register_app_cb(WDG_APP_CB func);
 uint8_t get_ic_type(void);
 
 /**
- * @brief  get 14 bytes EUID
- * @param  none
- * @return uint8_t *, the pointer to a copy of EUID.
+ * @brief  Get 14 bytes EUID.
+ * @return A pointer to a copy of the EUID.
   */
 uint8_t *get_ic_euid(void);
 
 /**
-   * @brief    init I-cache/D-cache hit rate and miss rate
-   * @param    void
-   * @return   void
+   * @brief    Init I-cache/D-cache hit rate and miss rate.
    */
 void init_pmu_counter(void);
 
 /**
-   * @brief    print I-cache/D-cache hit rate and miss rate
-   * @param    void
-   * @return   void
+   * @brief    Print I-cache/D-cache hit rate and miss rate.
    */
 void pmu_print_counter(void);
 
 /**
- * @brief  disable swd pin
- * @param  none
- * @return none
+ * @brief  Disable swd pin.
 */
 void swd_pin_disable(void);
 
 /**
- * @brief  bypass pmu check for wfi
- * @param  none
- * @return none
+ * @brief  Bypass pmu check for wfi.
+ * @param[in]  enable   A boolean value indicating whether to bypass the PMU check.
 */
 void bypass_pmu_check_for_wfi(bool enable);
 
 /**
- * @brief  enable xtal power in dlps
- * @param  none
- * @return none
+ * @brief  Enable xtal power in dlps.
+ * @param[in]  enable   A boolean value indicating whether to keep xtal power on.
 */
 void set_xtal_power_in_dlps(bool enable);
 
+/**
+ * @brief  Disable RXI300 interrupt for debug hardfault.
+*/
+void disable_RXI300_interrupt(void);
+
+/**
+ * @brief  Enable or disable XIP (eXecute In Place) access.
+ * @param  set    A boolean value indicating whether to disable XIP access.
+ */
 void disable_xip_access(bool set);
 /** End of RTL876X_LIB_PLATFORM_Exported_Functions
   * @}

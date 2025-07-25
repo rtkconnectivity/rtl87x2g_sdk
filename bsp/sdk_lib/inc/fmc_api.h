@@ -20,34 +20,78 @@
   * @{
   */
 
-/** @defgroup FMC_API_Exported_Constants  FMC API Exported Constants
-  * @brief
-  * @{
-  */
-#define FMC_SEC_SECTION_LEN     0x1000
-
-/** End of FMC_API_Exported_Constants
-  * @}
-  */
 
 /** @defgroup FMC_API_Exported_Types  FMC API Exported Types
   * @brief
   * @{
   */
+
+
+/**
+ * @brief FMC index
+ *
+ */
 typedef enum
 {
-    FMC_FLASH_NOR_IDX0,
-    FMC_FLASH_NOR_IDX1,
-    FMC_FLASH_NOR_IDX2,
-    FMC_FLASH_NOR_IDX3
+    FMC_FLASH_NOR_IDX0, /**< FMC index0*/
+    FMC_FLASH_NOR_IDX1, /**< FMC index1 */
+    FMC_FLASH_NOR_IDX2, /**< FMC index2 */
+    FMC_FLASH_NOR_IDX3 /**< FMC index3 */
 } FMC_FLASH_NOR_IDX_TYPE;
 
+
+/**
+ * @brief Nor flash erase mode
+ *
+ */
 typedef enum
 {
-    FMC_FLASH_NOR_ERASE_CHIP   = 1,
-    FMC_FLASH_NOR_ERASE_SECTOR = 2,
-    FMC_FLASH_NOR_ERASE_BLOCK  = 4,
+    FMC_FLASH_NOR_ERASE_CHIP   = 1, /**< Chip erase*/
+    FMC_FLASH_NOR_ERASE_SECTOR = 2, /**< Sector erase*/
+    FMC_FLASH_NOR_ERASE_BLOCK  = 4, /**< Block erase*/
 } FMC_FLASH_NOR_ERASE_MODE;
+
+/**
+ * @brief Size of PSRAM refresh area in half sleep mode
+ *
+ */
+typedef enum
+{
+    FMC_PSRAM_WB_REFRESH_FULL       = 0, /**< Refresh full area*/
+    FMC_PSRAM_WB_REFRESH_BOTTOM_1_2 = 1, /**< Refresh bottom 1/2 area*/
+    FMC_PSRAM_WB_REFRESH_BOTTOM_1_4 = 2, /**< Refresh bottom 1/4 area*/
+    FMC_PSRAM_WB_REFRESH_BOTTOM_1_8 = 3, /**< Refresh bottom 1/8 area*/
+    FMC_PSRAM_WB_REFRESH_NONE       = 4, /**< Refresh none area*/
+    FMC_PSRAM_WB_REFRESH_TOP_1_2    = 5, /**< Refresh top 1/2 area*/
+    FMC_PSRAM_WB_REFRESH_TOP_1_4    = 6, /**< Refresh top 1/4 area*/
+    FMC_PSRAM_WB_REFRESH_TOP_1_8    = 7, /**< Refresh top 1/8 area*/
+} FMC_PSRAM_WB_PARTIAL_ARRAY_REFRESH;
+
+/**
+ * @brief PSRAM low power mode
+ *
+ */
+typedef enum
+{
+    FMC_PSRAM_LPM_STANDBY_MODE, /**< Standby mode*/
+    FMC_PSRAM_LPM_HALF_SLEEP_MODE, /**< Half sleep mode*/
+    FMC_PSRAM_LPM_DEEP_POWER_DOWN_MODE, /**< Deep power down mode*/
+} FMC_PSRAM_LPM_TYPE;
+
+
+/**
+  * \cond     private
+  * \defgroup FMC_API_Private_Type
+  * \{
+  */
+
+
+/** @defgroup FMC_API_Flash_Callback_Definition  FMC API Flash Callback Definition
+  * @ingroup FMC_API_Exported_Types
+  * @brief
+  * @{
+  */
+typedef void (*FMC_FLASH_NOR_ASYNC_CB)(void);
 
 typedef enum
 {
@@ -91,41 +135,23 @@ typedef enum _FLASH_IMG_ID
 
 typedef enum
 {
-    FMC_PSRAM_WB_REFRESH_FULL       = 0,
-    FMC_PSRAM_WB_REFRESH_BOTTOM_1_2 = 1,
-    FMC_PSRAM_WB_REFRESH_BOTTOM_1_4 = 2,
-    FMC_PSRAM_WB_REFRESH_BOTTOM_1_8 = 3,
-    FMC_PSRAM_WB_REFRESH_NONE       = 4,
-    FMC_PSRAM_WB_REFRESH_TOP_1_2    = 5,
-    FMC_PSRAM_WB_REFRESH_TOP_1_4    = 6,
-    FMC_PSRAM_WB_REFRESH_TOP_1_8    = 7,
-} FMC_PSRAM_WB_PARTIAL_ARRAY_REFRESH;
-
-typedef enum
-{
     PSRAM_WB_PARTIAL_ARRAY_SET,
     PSRAM_WB_ENTER_LMP_MODE,
     PSRAM_WB_EXIT_LMP_MODE,
 } PSRAM_LMP_CTRL_FUNCTION_CALL;
 
-typedef enum
-{
-    FMC_PSRAM_LPM_STANDBY_MODE,
-    FMC_PSRAM_LPM_HALF_SLEEP_MODE,
-    FMC_PSRAM_LPM_DEEP_POWER_DOWN_MODE,
-} FMC_PSRAM_LPM_TYPE;
-
-
-/** @defgroup FMC_API_Flash_Callback_Definition  FMC API Flash Callback Definition
-  * @ingroup FMC_API_Exported_Types
-  * @brief
-  * @{
-  */
-typedef void (*FMC_FLASH_NOR_ASYNC_CB)(void);
 
 /** End of FMC_API_Flash_Callback_Definition
  * @}
  */
+
+/**
+*  End of FMC_Private_type
+* \}
+* \endcond
+*/
+
+
 /** End of FMC_API_Exported_Types
  * @}
  */
@@ -137,46 +163,160 @@ typedef void (*FMC_FLASH_NOR_ASYNC_CB)(void);
   */
 
 /**
- * @brief           task-safe nor flash read
- * @param addr      the ram address mapping of nor flash going to be read
- * @param data      data buffer to be read into
- * @param len       read data length
- * @return          true if read successful, otherwise false
+ * @brief               Task-safe nor flash read
+ * @param[in] addr      The ram address mapping of nor flash going to be read
+ * @param[in] data      Data buffer to be read into
+ * @param[in] len       Read data length
+ * @return          Read result
+ * @retval          True Success.
+ * @retval          False Failed.
  */
 bool fmc_flash_nor_read(uint32_t addr, void *data, uint32_t len);
 
 /**
- * @brief           task-safe nor flash written
- * @param addr      the ram address mapping of nor flash going to be written
- * @param data      data buffer to be written into
- * @param len       write data length
- * @return          true if write successful, otherwise false
+ * @brief               Task-safe nor flash written
+ * @param[in] addr      The ram address mapping of nor flash going to be written
+ * @param[in] data      Data buffer to be written into
+ * @param[in] len       Write data length
+ * @return          Write result
+ * @retval          True Success.
+ * @retval          False Failed.
  */
 bool fmc_flash_nor_write(uint32_t addr, void *data, uint32_t len);
 
 /**
- * @brief           task-safe nor flash erase
- * @param addr      the ram address mapping of nor flash going to be erased
- * @param mode      erase mode defined as @ref FMC_FLASH_NOR_ERASE_MODE
- * @return          true if erase successful, otherwise false
+ * @brief           Task-safe nor flash erase
+ * @param[in] addr      The ram address mapping of nor flash going to be erased
+ * @param[in] mode      Erase mode defined as @ref FMC_FLASH_NOR_ERASE_MODE
+ * @return          Erase result
+ * @retval          True Success.
+ * @retval          False Failed.
  */
 bool fmc_flash_nor_erase(uint32_t addr, FMC_FLASH_NOR_ERASE_MODE mode);
 
 /**
- * @brief           set block protect level with lock
- * @param addr      nor flash addr
- * @param bp_lv     nor flash BP level to be set
- * @return          true if set bp successful, otherwise false
+ * @brief           Set block protect level with lock
+ * @param addr      Nor flash addr
+ * @param bp_lv     Nor flash BP level to be set
+ * @return          Set BP result
+ * @retval          True Success.
+ * @retval          False Failed.
  */
 bool fmc_flash_nor_set_bp_lv(uint32_t addr, uint8_t bp_lv);
 
 /**
- * @brief           get block protect level with lock
- * @param addr      nor flash addr
- * @param bp_lv     nor flash BP level to be retrieved.
- * @return          true if get bp successful, otherwise false
+ * @brief           Get block protect level with lock
+ * @param addr      Nor flash addr
+ * @param bp_lv     Nor flash BP level to be retrieved.
+ * @return          Get BP result
+ * @retval          True Success.
+ * @retval          False Failed.
  */
 bool fmc_flash_nor_get_bp_lv(uint32_t addr, uint8_t *bp_lv);
+
+
+//bool fmc_flash_nor_clock_switch(FMC_FLASH_NOR_IDX_TYPE idx, uint32_t required_mhz,
+//                                uint32_t *actual_mhz);
+
+/**
+ * @brief           Get psram power status
+ * @return          Power status
+ * @retval          True power on.
+ * @retval          False powe off.
+ */
+bool fmc_get_psram_power_status(void);
+
+/**
+ * @brief           Ctrl fmc pad in lps mode
+ * @param[in] id        FMC idx number
+ * @param[in] enable    True if enter lps mode, otherwise false
+ */
+void fmc_pad_ctrl_in_lps_mode(FMC_FLASH_NOR_IDX_TYPE idx, bool enable);
+
+/**
+ * @brief           Set psram retention partition
+ * @param[in] idx       Specific psram
+ * @param[in] partial   PSRAM  retention partition
+ * @return          Set result
+ * @retval          True Success.
+ * @retval          False Failed.
+ */
+bool fmc_psram_wb_set_partial_refresh(FMC_FLASH_NOR_IDX_TYPE idx,
+                                      FMC_PSRAM_WB_PARTIAL_ARRAY_REFRESH partial);
+
+/**
+ * @brief           PSRAM enter low power mode
+ * @param[in] idx       Specific psram
+ * @param[in] lpm_mode  PSRAM low power mode
+ * @return          Result of enter power mode
+ * @retval          True Success.
+ * @retval          False Failed.
+ */
+bool fmc_psram_enter_lpm(FMC_FLASH_NOR_IDX_TYPE idx, FMC_PSRAM_LPM_TYPE lpm_mode);
+
+/**
+ * @brief           PSRAM exit low power mode
+ * @param[in] idx       Specific psram
+ * @param[in] lpm_mode  PSRAM low power mode
+ * @return          Result of exit power mode
+ * @retval          True Success.
+ * @retval          False Failed.
+ */
+bool fmc_psram_exit_lpm(FMC_FLASH_NOR_IDX_TYPE idx, FMC_PSRAM_LPM_TYPE lpm_mode);
+
+/**
+ * @brief           Flash set 4 byte address mode
+ * @param[in] idx       Specific flash
+ * @param[in] enable    True if enter 4 byte address mode; otherwise, enter 3-byte address mode
+ * @return          Result of enter 4 byte address mode
+ * @retval          True Success.
+ * @retval          False Failed.
+ */
+bool fmc_flash_set_4_byte_address_mode(FMC_FLASH_NOR_IDX_TYPE idx, bool enable);
+
+//bool fmc_psram_clock_switch(CLK_FREQ_TYPE clk);
+
+/**
+ * @brief           Flash set default bp level
+ * @param[in] enable    True if set default bp level; otherwise, set bp_lv to 0
+ */
+void fmc_flash_set_default_bp_lv(bool enable);
+
+/** End of FMC_API_Exported_Functions
+  * @}
+  */
+
+
+/**
+ * \cond     private
+ * \defgroup FMC_Private_Constants
+ * \{
+ */
+
+#define FMC_SEC_SECTION_LEN     0x1000
+
+/**
+*  End of FMC_Private_Constants
+* \}
+* \endcond
+*/
+
+/**
+ * \cond     private
+ * \defgroup FMC_Private_Functions
+ * \{
+ */
+
+/**
+ * @brief           task-safe nor flash auto dma read with sequential transaction enabled
+ * @param src       the ram address mapping of nor flash going to be read from
+ * @param dst       the ram address going to be written to
+ * @param len       dma data length
+ * @param cb        call back function which is to be executed when dma finishing
+ * @return          true if read successful, otherwise false
+ */
+bool fmc_flash_nor_auto_dma_read(uint32_t src, uint32_t dst, uint32_t len,
+                                 FMC_FLASH_NOR_ASYNC_CB cb);
 
 /**
  * @brief           get flash partition addr
@@ -205,86 +345,6 @@ uint32_t flash_cur_bank_img_payload_addr_get(FLASH_IMG_ID id);
  * @return          true if get image header flash addr success, otherwise false
  */
 uint32_t flash_cur_bank_img_header_addr_get(FLASH_IMG_ID id);
-
-//bool fmc_flash_nor_clock_switch(FMC_FLASH_NOR_IDX_TYPE idx, uint32_t required_mhz,
-//                                uint32_t *actual_mhz);
-
-/**
- * @brief           get psram power status
- * @param void
- * @return          true if psram power on
- */
-bool get_psram_power_status(void);
-
-/**
- * @brief           ctrl fmc pad in lps mode
- * @param id        fmc idx number
- * @param enable    true if enter lps mode, otherwise false
- */
-void fmc_pad_ctrl_in_lps_mode(FMC_FLASH_NOR_IDX_TYPE idx, bool enable);
-
-/**
- * @brief           set psram retention partition
- * @param idx       specific psram
- * @param partial   psram  retention partition
- * @return          true if set success
- */
-bool fmc_psram_wb_set_partial_refresh(FMC_FLASH_NOR_IDX_TYPE idx,
-                                      FMC_PSRAM_WB_PARTIAL_ARRAY_REFRESH partial);
-
-/**
- * @brief           psram enter low power mode
- * @param idx       specific psram
- * @param lpm_mode  psram low power mode
- * @return          true if enter low power mode success
- */
-bool fmc_psram_enter_lpm(FMC_FLASH_NOR_IDX_TYPE idx, FMC_PSRAM_LPM_TYPE lpm_mode);
-
-/**
- * @brief           psram exit low power mode
- * @param idx       specific psram
- * @param lpm_mode  psram low power mode
- * @return          true if exit low power mode success
- */
-bool fmc_psram_exit_lpm(FMC_FLASH_NOR_IDX_TYPE idx, FMC_PSRAM_LPM_TYPE lpm_mode);
-
-/**
- * @brief           flash set 4 byte address mode
- * @param idx       specific flash
- * @param enable    true if enter 4 byte address mode; otherwise, enter 3-byte address mode
- * @return          true if enter 4 byte address mode success
- */
-bool fmc_flash_set_4_byte_address_mode(FMC_FLASH_NOR_IDX_TYPE idx, bool enable);
-
-//bool fmc_psram_clock_switch(CLK_FREQ_TYPE clk);
-
-/**
- * @brief           flash set default bp level
- * @param enable    true if set default bp level; otherwise, set bp_lv to 0
- * @return          none
- */
-void fmc_flash_set_default_bp_lv(bool enable);
-
-/** End of FMC_API_Exported_Functions
-  * @}
-  */
-
-/**
- * \cond     private
- * \defgroup FMC_Private_Functions
- * \{
- */
-
-/**
- * @brief           task-safe nor flash auto dma read with sequential transaction enabled
- * @param src       the ram address mapping of nor flash going to be read from
- * @param dst       the ram address going to be written to
- * @param len       dma data length
- * @param cb        call back function which is to be executed when dma finishing
- * @return          true if read successful, otherwise false
- */
-bool fmc_flash_nor_auto_dma_read(uint32_t src, uint32_t dst, uint32_t len,
-                                 FMC_FLASH_NOR_ASYNC_CB cb);
 
 /**
 *  End of FMC_Private_Functions
