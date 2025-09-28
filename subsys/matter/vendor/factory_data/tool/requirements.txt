@@ -1,0 +1,10 @@
+bitarray
+cffi
+click
+construct
+cryptography
+pillow
+protobuf
+pycparser
+python-stdnum
+qrcode

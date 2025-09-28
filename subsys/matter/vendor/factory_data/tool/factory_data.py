@@ -16,6 +16,10 @@
 #    limitations under the License.
 #
 
+# "-p", "20202021", "-d", "3840", "--spake2p_path=./spake2p", "--vendor-id", "0x1316", 
+# "--vendor-name", "Realtech", "--product-id", "0x1A25", "--product-name", "bee4", "--serial-num", 
+# "000000000001B66E", "--hw-ver", "1", "--hw-ver-str", "1.0", "--rd-id-uid", "00112233445566778899aabbccddeeff", 
+
 import os
 import sys
 import logging
@@ -130,42 +134,80 @@ def populate_factory_data(args, spake2p_params):
     FACTORY_DATA.cdata.spake2_salt.length = len(spake2p_params['Salt'])
     FACTORY_DATA.cdata.spake2_verifier.value = spake2p_params['Verifier'].encode('UTF-8')
     FACTORY_DATA.cdata.spake2_verifier.length = len(spake2p_params['Verifier'])
-    f = open(os.path.abspath(args.dac_cert), 'rb')
-    temp_data = f.read()
-    FACTORY_DATA.dac.dac_cert.value = temp_data
-    FACTORY_DATA.dac.dac_cert.length = len(temp_data)
-    # FACTORY_DATA.dac.dac_cert.value = bytes(DAC)
-    # FACTORY_DATA.dac.dac_cert.length = len(DAC)
-    f.close()
-
-    f = open(os.path.abspath(args.pai_cert), 'rb')
-    temp_data = f.read()
-    FACTORY_DATA.dac.pai_cert.value = temp_data
-    FACTORY_DATA.dac.pai_cert.length = len(temp_data)
-    # FACTORY_DATA.dac.pai_cert.value = bytes(PAI)
-    # FACTORY_DATA.dac.pai_cert.length = len(PAI)
-    f.close()
-
-    f = open(os.path.abspath(args.cd), 'rb')
-    temp_data = f.read()
-    FACTORY_DATA.dac.cd.value = temp_data
-    FACTORY_DATA.dac.cd.length = len(temp_data)
-    # FACTORY_DATA.dac.cd.value = bytes(CD)
-    # FACTORY_DATA.dac.cd.length = len(CD)
-    f.close()
-
-    # split up dac-key files into pub and priv keys, extract only the priv keys
-    if args.dac_key.endswith(".enc"):
-        with open(os.path.abspath(args.dac_key), "rb") as f:
-            dac_priv_key = f.read()
-            print("encrypted dac key")
+    
+    if args.dac_cert:
+        f = open(os.path.abspath(args.dac_cert), 'rb')
+        temp_data = f.read()
+        FACTORY_DATA.dac.dac_cert.value = temp_data
+        FACTORY_DATA.dac.dac_cert.length = len(temp_data)
+        # FACTORY_DATA.dac.dac_cert.value = bytes(DAC)
+        # FACTORY_DATA.dac.dac_cert.length = len(DAC)
+        f.close()
     else:
-        dac_priv_key = get_raw_private_key_der(os.path.abspath(args.dac_key), None)  # password set as None first
-        if dac_priv_key is None:
-            logging.error("Cannot read DAC keys from : {}".format(args.dac_key))
-            sys.exit(-1)
-    FACTORY_DATA.dac.dac_key.value = dac_priv_key
-    FACTORY_DATA.dac.dac_key.length = len(dac_priv_key)
+        FACTORY_DATA.dac.dac_cert.value = b""
+        FACTORY_DATA.dac.dac_cert.length = 0
+        
+
+    if args.pai_cert:
+        f = open(os.path.abspath(args.pai_cert), 'rb')
+        temp_data = f.read()
+        FACTORY_DATA.dac.pai_cert.value = temp_data
+        FACTORY_DATA.dac.pai_cert.length = len(temp_data)
+        # FACTORY_DATA.dac.pai_cert.value = bytes(PAI)
+        # FACTORY_DATA.dac.pai_cert.length = len(PAI)
+        f.close()
+    else:
+        FACTORY_DATA.dac.pai_cert.value = b""
+        FACTORY_DATA.dac.pai_cert.length = 0
+        
+
+    if args.cd:
+        f = open(os.path.abspath(args.cd), 'rb')
+        temp_data = f.read()
+        FACTORY_DATA.dac.cd.value = temp_data
+        FACTORY_DATA.dac.cd.length = len(temp_data)
+        # FACTORY_DATA.dac.cd.value = bytes(CD)
+        # FACTORY_DATA.dac.cd.length = len(CD)
+        f.close()
+    else:
+        FACTORY_DATA.dac.cd.value = b""
+        FACTORY_DATA.dac.cd.length = 0
+        
+    
+    
+    if args.chip_cert:
+        cmd = [
+            args.chip_cert, "validate-att-cert", 
+            '--dac', args.dac_cert, 
+            '--pai', args.pai_cert,
+            '--paa', args.paa_cert,
+        ]
+
+        output = subprocess.run(cmd)
+        # output = output.decode('UTF-8').splitlines()
+        
+        print("populate_factory_data: verification %d" % output.returncode)
+        
+        if output.returncode:
+            raise
+    
+    
+    # split up dac-key files into pub and priv keys, extract only the priv keys
+    if args.dac_key:
+        if args.dac_key.endswith(".enc"):
+            with open(os.path.abspath(args.dac_key), "rb") as f:
+                dac_priv_key = f.read()
+                print("encrypted dac key")
+        else:
+            dac_priv_key = get_raw_private_key_der(os.path.abspath(args.dac_key), None)  # password set as None first
+            if dac_priv_key is None:
+                logging.error("Cannot read DAC keys from : {}".format(args.dac_key))
+                sys.exit(-1)
+        FACTORY_DATA.dac.dac_key.value = dac_priv_key
+        FACTORY_DATA.dac.dac_key.length = len(dac_priv_key)
+    else:
+        FACTORY_DATA.dac.dac_key.value = b""
+        FACTORY_DATA.dac.dac_key.length = 0
 
     if args.vendor_id is not None:
         FACTORY_DATA.dii.vendor_id = args.vendor_id
@@ -216,14 +258,19 @@ def main():
     #                     help="[base64 string] Provide Spake2+ verifier without generating it.")
 
     # These will be used by DeviceAttestationCredentialsProvider
-    parser.add_argument('--dac_cert', type=str, required=True,
+    parser.add_argument('--dac_cert', type=str, required=False,
                         help='The path to the DAC certificate in der format')
-    parser.add_argument('--dac_key', type=str, required=True,
+    parser.add_argument('--dac_key', type=str, required=False,
                         help='The path to the DAC private key in der format')
-    parser.add_argument('--pai_cert', type=str, required=True,
+    parser.add_argument('--pai_cert', type=str, required=False,
                         help='The path to the PAI certificate in der format')
-    parser.add_argument('--cd', type=str, required=True,
+    parser.add_argument('--paa_cert', type=str, required=False,
+                        help='The path to the PAI certificate in der format')
+    parser.add_argument('--cd', type=str, required=False,
                         help='The path to the certificate declaration der format')
+    parser.add_argument('--chip_cert', type=str, required=False,
+                        help='The path to the certificate declaration der format')
+
 
     # These will be used by DeviceInstanceInfoProvider
     parser.add_argument('--vendor-id', type=any_base_int, required=False, help='Vendor id')

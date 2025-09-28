@@ -21,7 +21,8 @@ extern "C" {
 #include "aes_api.h"
 #include "matter_utils.h"
 
-#if CONFIG_DAC_KEY_ENC
+
+#if (CONFIG_DAC_KEY_ENC) && (!defined(FEATURE_TRUSTZONE_ENABLE) || (FEATURE_TRUSTZONE_ENABLE != 1))
 const char private_key[] =
     "-----BEGIN PRIVATE KEY-----\n"
     "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC2/En1Wp8OXujD\n"
@@ -53,85 +54,134 @@ const char private_key[] =
     "-----END PRIVATE KEY-----\n";
 #endif
 
+#define MEMBER_SIZE(type, member) sizeof(((type *)0)->member)
+
+#define BUFFER_SIZE (1024)
+
 bool store_string_spake2_salt(pb_istream_t *stream, const pb_field_t *field, void **arg)
 {
     FactoryData *fdp = *(FactoryData **) arg;
-    uint8_t buffer[1024] = {0};
+    bool ret = false;
+    uint8_t *buffer;
+
+    buffer = calloc(1, BUFFER_SIZE);
+    if (buffer == NULL)
+    {
+        goto exit;
+    }
 
     /* We could read block-by-block to avoid the large buffer... */
     size_t data_length = stream->bytes_left;
-    if (stream->bytes_left > sizeof(buffer) - 1)
+    if (stream->bytes_left > BUFFER_SIZE - 1)
     {
-        return false;
+        goto exit;
     }
 
     if (!pb_read(stream, buffer, stream->bytes_left))
     {
-        return false;
+        goto exit;
     }
 
     if (data_length > sizeof(fdp->cdata.spake2_salt.value))
     {
-        return false;
+        goto exit;
     }
 
     memcpy(fdp->cdata.spake2_salt.value, buffer, data_length);
     fdp->cdata.spake2_salt.len = data_length;
-    return true;
+
+    ret = true;
+
+exit:
+    if (buffer)
+    {
+        free(buffer);
+    }
+    return ret;
 }
 
 bool store_string_spake2_verifier(pb_istream_t *stream, const pb_field_t *field, void **arg)
 {
     FactoryData *fdp = *(FactoryData **) arg;
-    uint8_t buffer[1024] = {0};
+    bool ret = false;
+    uint8_t *buffer;
+
+    buffer = calloc(1, BUFFER_SIZE);
+    if (buffer == NULL)
+    {
+        goto exit;
+    }
 
     /* We could read block-by-block to avoid the large buffer... */
     size_t data_length = stream->bytes_left;
-    if (stream->bytes_left > sizeof(buffer) - 1)
+    if (stream->bytes_left > BUFFER_SIZE - 1)
     {
-        return false;
+        goto exit;
     }
 
     if (!pb_read(stream, buffer, stream->bytes_left))
     {
-        return false;
+        goto exit;
     }
 
     if (data_length > sizeof(fdp->cdata.spake2_verifier.value))
     {
-        return false;
+        goto exit;
     }
 
     memcpy(fdp->cdata.spake2_verifier.value, buffer, data_length);
     fdp->cdata.spake2_verifier.len = data_length;
-    return true;
+
+    ret = true;
+
+exit:
+    if (buffer)
+    {
+        free(buffer);
+    }
+    return ret;
 }
 
 bool store_string_dac_cert(pb_istream_t *stream, const pb_field_t *field, void **arg)
 {
     FactoryData *fdp = *(FactoryData **) arg;
-    uint8_t buffer[1024] = {0};
+    bool ret = false;
+    uint8_t *buffer;
+
+    buffer = calloc(1, BUFFER_SIZE);
+    if (buffer == NULL)
+    {
+        goto exit;
+    }
 
     /* We could read block-by-block to avoid the large buffer... */
     size_t data_length = stream->bytes_left;
-    if (stream->bytes_left > sizeof(buffer) - 1)
+    if (stream->bytes_left > BUFFER_SIZE - 1)
     {
-        return false;
+        goto exit;
     }
 
     if (!pb_read(stream, buffer, stream->bytes_left))
     {
-        return false;
+        goto exit;
     }
 
     if (data_length > sizeof(fdp->dac.dac_cert.value))
     {
-        return false;
+        goto exit;
     }
 
     memcpy(fdp->dac.dac_cert.value, buffer, data_length);
     fdp->dac.dac_cert.len = data_length;
-    return true;
+
+    ret = true;
+
+exit:
+    if (buffer)
+    {
+        free(buffer);
+    }
+    return ret;
 }
 
 
@@ -179,38 +229,36 @@ int app_entropy_source(void *data, unsigned char *output, size_t len, size_t *ol
 
 bool store_string_dac_key(pb_istream_t *stream, const pb_field_t *field, void **arg)
 {
-#define BUFFER_SIZE (1024)
     FactoryData *fdp = *(FactoryData **) arg;
-    uint8_t *buffer = malloc(BUFFER_SIZE);
-    int ret = true;
+    bool ret = false;
+    uint8_t *buffer;
 
-    if(buffer)
+    buffer = malloc(BUFFER_SIZE);
+    if (buffer)
     {
         /* We could read block-by-block to avoid the large buffer... */
         size_t data_length = stream->bytes_left;
         if (stream->bytes_left > BUFFER_SIZE - 1)
         {
-            ret = false;
-            goto exit;            
+            goto exit;
         }
-        
+
         if (!pb_read(stream, buffer, stream->bytes_left))
         {
-            ret = false;
-            goto exit;            
+            goto exit;
         }
 
-        MATTER_PRINT_INFO2("store_string_dac_key:  len %d, key_encrypted %b", data_length, TRACE_BINARY(16,
-                           buffer));
+        MATTER_PRINT_INFO2("store_string_dac_key: len %d, key_encrypted %b", data_length,
+                           TRACE_BINARY(16, buffer));
 
-#if CONFIG_DAC_KEY_ENC
+#define OUT_MAX_LEN (sizeof(fdp->dac.dac_key.value))
+
+#if (CONFIG_DAC_KEY_ENC) && (!defined(FEATURE_TRUSTZONE_ENABLE) || (FEATURE_TRUSTZONE_ENABLE != 1))
         mbedtls_pk_context pk;
         mbedtls_entropy_context entropy;
         mbedtls_ctr_drbg_context ctr_drbg;
         size_t olen = 0;
-#define OUT_MAX_LEN (sizeof(fdp->dac.dac_key.value))
-        char *dac_key_decrypted[OUT_MAX_LEN] = {0};
-
+        char dac_key_decrypted[OUT_MAX_LEN] = {0};
 
         mbedtls_ctr_drbg_init(&ctr_drbg);
         mbedtls_entropy_init(&entropy);
@@ -225,267 +273,386 @@ bool store_string_dac_key(pb_istream_t *stream, const pb_field_t *field, void **
                                                  mbedtls_ctr_drbg_random, &ctr_drbg);
 
         int decrypt_ret = mbedtls_rsa_pkcs1_decrypt(mbedtls_pk_rsa(pk), mbedtls_ctr_drbg_random, &ctr_drbg,
-                                                    &olen, buffer, dac_key_decrypted,
-                                                    OUT_MAX_LEN);
+                                                    &olen, buffer, dac_key_decrypted, OUT_MAX_LEN);
 
-
-        if(olen < fdp->dac.dac_key.value)
+        if (olen < OUT_MAX_LEN)
         {
             memcpy(fdp->dac.dac_key.value, dac_key_decrypted, olen);
         }
-        else 
+        else
         {
-            memcpy(fdp->dac.dac_key.value, dac_key_decrypted, sizeof(fdp->dac.dac_key.value));
+            memcpy(fdp->dac.dac_key.value, dac_key_decrypted, OUT_MAX_LEN);
         }
 
         fdp->dac.dac_key.len = olen;
 
-        MATTER_PRINT_INFO3("store_string_dac_key:  ret %d, key_parse_ret %d, decrypt_ret %d", ret,
+        MATTER_PRINT_INFO3("store_string_dac_key: ret %d, key_parse_ret %d, decrypt_ret %d", ret,
                            key_parse_ret, decrypt_ret);
 
-        MATTER_PRINT_INFO2("store_string_dac_key:  len %d, key_decrypted %b", olen, TRACE_BINARY(16,
+        MATTER_PRINT_INFO2("store_string_dac_key: len %d, key_decrypted %b", olen, TRACE_BINARY(16,
                            fdp->dac.dac_key.value));
-
 
         mbedtls_entropy_free(&entropy);
         mbedtls_pk_free(&pk);
         mbedtls_ctr_drbg_free(&ctr_drbg);
-    #else
-        if(data_length < sizeof(fdp->dac.dac_key.value))
+#else
+        if (data_length < OUT_MAX_LEN)
         {
             memcpy(fdp->dac.dac_key.value, buffer, data_length);
         }
-        else 
+        else
         {
-            memcpy(fdp->dac.dac_key.value, buffer, sizeof(fdp->dac.dac_key.value));
+            memcpy(fdp->dac.dac_key.value, buffer, OUT_MAX_LEN);
         }
 
         fdp->dac.dac_key.len = data_length;
 #endif //CONFIG_DAC_KEY_ENC
-
-
     }
 
+    ret = true;
+
 exit:
-    if(buffer)
+    if (buffer)
+    {
         free(buffer);
+    }
     return ret;
 }
 
 bool store_string_pai_cert(pb_istream_t *stream, const pb_field_t *field, void **arg)
 {
     FactoryData *fdp = *(FactoryData **) arg;
-    uint8_t buffer[1024] = {0};
+    bool ret = false;
+    uint8_t *buffer;
+
+    buffer = calloc(1, BUFFER_SIZE);
+    if (buffer == NULL)
+    {
+        goto exit;
+    }
 
     /* We could read block-by-block to avoid the large buffer... */
     size_t data_length = stream->bytes_left;
-    if (stream->bytes_left > sizeof(buffer) - 1)
+    if (stream->bytes_left > BUFFER_SIZE - 1)
     {
-        return false;
+        goto exit;
     }
 
     if (!pb_read(stream, buffer, stream->bytes_left))
     {
-        return false;
+        goto exit;
     }
 
     if (data_length > sizeof(fdp->dac.pai_cert.value))
     {
-        return false;
+        goto exit;
     }
 
     memcpy(fdp->dac.pai_cert.value, buffer, data_length);
     fdp->dac.pai_cert.len = data_length;
-    return true;
+
+    ret = true;
+
+exit:
+    if (buffer)
+    {
+        free(buffer);
+    }
+    return ret;
 }
 
 bool store_string_cd(pb_istream_t *stream, const pb_field_t *field, void **arg)
 {
     FactoryData *fdp = *(FactoryData **) arg;
-    uint8_t buffer[1024] = {0};
+    bool ret = false;
+    uint8_t *buffer;
+
+    buffer = calloc(1, BUFFER_SIZE);
+    if (buffer == NULL)
+    {
+        goto exit;
+    }
 
     /* We could read block-by-block to avoid the large buffer... */
     size_t data_length = stream->bytes_left;
-    if (stream->bytes_left > sizeof(buffer) - 1)
+    if (stream->bytes_left > BUFFER_SIZE - 1)
     {
-        return false;
+        goto exit;
     }
 
     if (!pb_read(stream, buffer, stream->bytes_left))
     {
-        return false;
+        goto exit;
     }
 
     if (data_length > sizeof(fdp->dac.cd.value))
     {
-        return false;
+        goto exit;
     }
 
     memcpy(fdp->dac.cd.value, buffer, data_length);
     fdp->dac.cd.len = data_length;
-    return true;
+
+    ret = true;
+
+exit:
+    if (buffer)
+    {
+        free(buffer);
+    }
+    return ret;
 }
 
 bool store_string_vendor_name(pb_istream_t *stream, const pb_field_t *field, void **arg)
 {
     FactoryData *fdp = *(FactoryData **) arg;
-    uint8_t buffer[1024] = {0};
+    bool ret = false;
+    uint8_t *buffer;
+
+    buffer = calloc(1, BUFFER_SIZE);
+    if (buffer == NULL)
+    {
+        goto exit;
+    }
 
     /* We could read block-by-block to avoid the large buffer... */
     size_t data_length = stream->bytes_left;
-    if (stream->bytes_left > sizeof(buffer) - 1)
+    if (stream->bytes_left > BUFFER_SIZE - 1)
     {
-        return false;
+        goto exit;
     }
 
     if (!pb_read(stream, buffer, stream->bytes_left))
     {
-        return false;
+        goto exit;
     }
 
     if (data_length > sizeof(fdp->dii.vendor_name.value))
     {
-        return false;
+        goto exit;
     }
 
     memcpy(fdp->dii.vendor_name.value, buffer, data_length);
     fdp->dii.vendor_name.len = data_length;
-    return true;
+
+    ret = true;
+
+exit:
+    if (buffer)
+    {
+        free(buffer);
+    }
+    return ret;
 }
 
 bool store_string_product_name(pb_istream_t *stream, const pb_field_t *field, void **arg)
 {
     FactoryData *fdp = *(FactoryData **) arg;
-    uint8_t buffer[1024] = {0};
+    bool ret = false;
+    uint8_t *buffer;
+
+    buffer = calloc(1, BUFFER_SIZE);
+    if (buffer == NULL)
+    {
+        goto exit;
+    }
 
     /* We could read block-by-block to avoid the large buffer... */
     size_t data_length = stream->bytes_left;
-    if (stream->bytes_left > sizeof(buffer) - 1)
+    if (stream->bytes_left > BUFFER_SIZE - 1)
     {
-        return false;
+        goto exit;
     }
 
     if (!pb_read(stream, buffer, stream->bytes_left))
     {
-        return false;
+        goto exit;
     }
 
     if (data_length > sizeof(fdp->dii.product_name.value))
     {
-        return false;
+        goto exit;
     }
 
     memcpy(fdp->dii.product_name.value, buffer, data_length);
     fdp->dii.product_name.len = data_length;
-    return true;
+
+    ret = true;
+
+exit:
+    if (buffer)
+    {
+        free(buffer);
+    }
+    return ret;
 }
 
 bool store_string_hw_ver_string(pb_istream_t *stream, const pb_field_t *field, void **arg)
 {
     FactoryData *fdp = *(FactoryData **) arg;
-    uint8_t buffer[1024] = {0};
+    bool ret = false;
+    uint8_t *buffer;
+
+    buffer = calloc(1, BUFFER_SIZE);
+    if (buffer == NULL)
+    {
+        goto exit;
+    }
 
     /* We could read block-by-block to avoid the large buffer... */
     size_t data_length = stream->bytes_left;
-    if (stream->bytes_left > sizeof(buffer) - 1)
+    if (stream->bytes_left > BUFFER_SIZE - 1)
     {
-        return false;
+        goto exit;
     }
 
     if (!pb_read(stream, buffer, stream->bytes_left))
     {
-        return false;
+        goto exit;
     }
 
     if (data_length > sizeof(fdp->dii.hw_ver_string.value))
     {
-        return false;
+        goto exit;
     }
 
     memcpy(fdp->dii.hw_ver_string.value, buffer, data_length);
     fdp->dii.hw_ver_string.len = data_length;
-    return true;
+
+    ret = true;
+
+exit:
+    if (buffer)
+    {
+        free(buffer);
+    }
+    return ret;
 }
 
 bool store_string_mfg_date(pb_istream_t *stream, const pb_field_t *field, void **arg)
 {
     FactoryData *fdp = *(FactoryData **) arg;
-    uint8_t buffer[1024] = {0};
+    bool ret = false;
+    uint8_t *buffer;
+
+    buffer = calloc(1, BUFFER_SIZE);
+    if (buffer == NULL)
+    {
+        goto exit;
+    }
 
     /* We could read block-by-block to avoid the large buffer... */
     size_t data_length = stream->bytes_left;
-    if (stream->bytes_left > sizeof(buffer) - 1)
+    if (stream->bytes_left > BUFFER_SIZE - 1)
     {
-        return false;
+        goto exit;
     }
 
     if (!pb_read(stream, buffer, stream->bytes_left))
     {
-        return false;
+        goto exit;
     }
 
     if (data_length > sizeof(fdp->dii.mfg_date.value))
     {
-        return false;
+        goto exit;
     }
 
     memcpy(fdp->dii.mfg_date.value, buffer, data_length);
     fdp->dii.mfg_date.len = data_length;
-    return true;
+
+    ret = true;
+
+exit:
+    if (buffer)
+    {
+        free(buffer);
+    }
+    return ret;
 }
 
 bool store_string_serial_num(pb_istream_t *stream, const pb_field_t *field, void **arg)
 {
     FactoryData *fdp = *(FactoryData **) arg;
-    uint8_t buffer[1024] = {0};
+    bool ret = false;
+    uint8_t *buffer;
+
+    buffer = calloc(1, BUFFER_SIZE);
+    if (buffer == NULL)
+    {
+        goto exit;
+    }
 
     /* We could read block-by-block to avoid the large buffer... */
     size_t data_length = stream->bytes_left;
-    if (stream->bytes_left > sizeof(buffer) - 1)
+    if (stream->bytes_left > BUFFER_SIZE - 1)
     {
-        return false;
+        goto exit;
     }
 
     if (!pb_read(stream, buffer, stream->bytes_left))
     {
-        return false;
+        goto exit;
     }
 
     if (data_length > sizeof(fdp->dii.serial_num.value))
     {
-        return false;
+        goto exit;
     }
 
     memcpy(fdp->dii.serial_num.value, buffer, data_length);
     fdp->dii.serial_num.len = data_length;
-    return true;
+
+    ret = true;
+
+exit:
+    if (buffer)
+    {
+        free(buffer);
+    }
+    return ret;
 }
 
 bool store_string_rd_id_uid(pb_istream_t *stream, const pb_field_t *field, void **arg)
 {
     FactoryData *fdp = *(FactoryData **) arg;
-    uint8_t buffer[1024] = {0};
+    bool ret = false;
+    uint8_t *buffer;
+
+    buffer = calloc(1, BUFFER_SIZE);
+    if (buffer == NULL)
+    {
+        goto exit;
+    }
 
     /* We could read block-by-block to avoid the large buffer... */
     size_t data_length = stream->bytes_left;
-    if (stream->bytes_left > sizeof(buffer) - 1)
+    if (stream->bytes_left > BUFFER_SIZE - 1)
     {
-        return false;
+        goto exit;
     }
 
     if (!pb_read(stream, buffer, stream->bytes_left))
     {
-        return false;
+        goto exit;
     }
 
     if (data_length > sizeof(fdp->dii.rd_id_uid.value))
     {
-        return false;
+        goto exit;
     }
 
     memcpy(fdp->dii.rd_id_uid.value, buffer, data_length);
     fdp->dii.rd_id_uid.len = data_length;
-    return true;
+
+    ret = true;
+
+exit:
+    if (buffer)
+    {
+        free(buffer);
+    }
+    return ret;
 }
 
 
@@ -507,9 +674,7 @@ int32_t ReadFactory(uint8_t *buffer, uint32_t buffer_len, uint16_t *pfactorydata
 
     MATTER_PRINT_INFO1("ReadFactory: encrypted data %b", TRACE_BINARY(16, img_ptr));
 
-
     aes128_ctr_decrypt_with_load_key(img_ptr, AES128_KEY_ID, img_hdr.buf, LENGTH_BYTES);
-
 
     MATTER_PRINT_INFO2("ReadFactory: length %d, block data %b", img_hdr.length,
                        TRACE_BINARY(LENGTH_BYTES, img_hdr.buf));

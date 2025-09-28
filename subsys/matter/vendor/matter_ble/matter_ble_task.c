@@ -11,6 +11,7 @@
 #include <app_msg.h>
 #include "matter_ble.h"
 #include "matter_ble_service.h"
+#include "mem_config.h"
 
 #if (SUPPORT_BLE_OTA == 1)
 #include "ota_service.h"
@@ -20,9 +21,13 @@
 #ifndef EXTERNAL_BLE
 
 #define APP_TASK_PRIORITY             4         //!< Task priorities
-#define APP_TASK_STACK_SIZE           1024 * 4   //!<  Task stack size
-#define MAX_NUMBER_OF_GAP_MESSAGE     0x20      //!<  GAP message queue size
-#define MAX_NUMBER_OF_IO_MESSAGE      0x20      //!<  IO message queue size
+#ifdef ENABLE_RAM_REDUCE
+#define APP_TASK_STACK_SIZE           1024      //!<  Task stack size
+#else
+#define APP_TASK_STACK_SIZE           (1024 * 4)  //!<  Task stack size
+#endif
+#define MAX_NUMBER_OF_GAP_MESSAGE     0x10      //!<  GAP message queue size
+#define MAX_NUMBER_OF_IO_MESSAGE      0x10      //!<  IO message queue size
 #define MAX_NUMBER_OF_EVENT_MESSAGE   (MAX_NUMBER_OF_GAP_MESSAGE + MAX_NUMBER_OF_IO_MESSAGE)    //!< Event message queue size
 
 static void *bt_matter_app_task_handle;   //!< APP Task handle
@@ -50,7 +55,6 @@ void matter_ble_profile_init(void)
 void matter_ble_gap_init(void)
 {
     /* Device name and device appearance */
-    //uint8_t  device_name[GAP_DEVICE_NAME_LEN] = "Ameba_xxyyzz";
     uint16_t appearance = GAP_GATT_APPEARANCE_UNKNOWN;
     uint8_t  slave_init_mtu_req = true;
 
@@ -73,7 +77,6 @@ void matter_ble_gap_init(void)
     uint16_t auth_sec_req_flags = GAP_AUTHEN_BIT_BONDING_FLAG;
 
     /* Set device name and device appearance */
-    //le_set_gap_param(GAP_PARAM_DEVICE_NAME, GAP_DEVICE_NAME_LEN, device_name);
     le_set_gap_param(GAP_PARAM_APPEARANCE, sizeof(appearance), &appearance);
     le_set_gap_param(GAP_PARAM_SLAVE_INIT_GATT_MTU_REQ, sizeof(slave_init_mtu_req),
                      &slave_init_mtu_req);
@@ -98,9 +101,6 @@ void matter_ble_gap_init(void)
     le_bond_set_param(GAP_PARAM_BOND_SEC_REQ_REQUIREMENT, sizeof(auth_sec_req_flags),
                       &auth_sec_req_flags);
 
-    /* register gap message callback */
-    //le_register_app_cb(bt_matter_adapter_app_gap_callback);
-
     uint8_t bd_addr[GAP_BD_ADDR_LEN];
     uint8_t local_bd_type = GAP_LOCAL_ADDR_LE_RANDOM;
 
@@ -120,8 +120,8 @@ void bt_matter_adapter_app_main_task(void *p_param)
     (void) p_param;
     uint8_t event;
 
-#if defined(configENABLE_TRUSTZONE) && (configENABLE_TRUSTZONE == 1)
-    osif_create_secure_context(configMINIMAL_SECURE_STACK_SIZE + 256);
+#if defined(FEATURE_TRUSTZONE_ENABLE) && (FEATURE_TRUSTZONE_ENABLE == 1)
+    os_alloc_secure_ctx(1024);
 #endif
 
     os_msg_queue_create(&bt_matter_io_queue_handle, "ioQ", MAX_NUMBER_OF_IO_MESSAGE, sizeof(T_IO_MSG));
@@ -187,7 +187,6 @@ int matter_ble_init(uint8_t link_num)
     //Wait BT init complete*
     do
     {
-        //os_delay(100);
         le_get_gap_param(GAP_PARAM_DEV_STATE, &new_state);
     }
     while (new_state.gap_init_state != GAP_INIT_STATE_STACK_READY);
