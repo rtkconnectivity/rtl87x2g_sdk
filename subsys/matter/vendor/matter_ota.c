@@ -7,6 +7,7 @@ extern "C" {
 #include "trace.h"
 #include "bt_types.h"
 #include "os_mem.h"
+#include "fmc_api.h"
 #include "dfu_common.h"
 #include "matter_ota.h"
 
@@ -226,16 +227,19 @@ bool rtk_matter_ota_process_mp_header()
             memmove(matter_ota_db->p_buf, matter_ota_db->p_buf + MP_HEADER_SIZE, tmp_buf_left);
             matter_ota_db->buf_offset = tmp_buf_left;
 
-            if ((matter_ota_db->active_bank == OTA_BANK0 &&
-                 matter_ota_db->cur_image_index < matter_ota_db->sub_image_num / 2) ||
-                (matter_ota_db->active_bank == OTA_BANK1 &&
-                 matter_ota_db->cur_image_index >= matter_ota_db->sub_image_num / 2))
+            if (is_ota_support_bank_switch())
             {
-                matter_ota_db->is_data_valid = false;
-            }
-            else
-            {
-                matter_ota_db->is_data_valid = true;
+                if ((matter_ota_db->active_bank == OTA_BANK0 &&
+                     matter_ota_db->cur_image_index < matter_ota_db->sub_image_num / 2) ||
+                    (matter_ota_db->active_bank == OTA_BANK1 &&
+                     matter_ota_db->cur_image_index >= matter_ota_db->sub_image_num / 2))
+                {
+                    matter_ota_db->is_data_valid = false;
+                }
+                else
+                {
+                    matter_ota_db->is_data_valid = true;
+                }
             }
 
             matter_ota_db->cur_download_size = 0;
@@ -261,8 +265,24 @@ bool rtk_matter_ota_process_payload()
         if (matter_ota_db->cur_download_size + matter_ota_db->buf_offset <
             matter_ota_db->cur_image_payload_size)
         {
-            if (matter_ota_db->is_data_valid)
+            if (is_ota_support_bank_switch())
             {
+                if (matter_ota_db->is_data_valid)
+                {
+                    if (dfu_write_data_to_flash(matter_ota_db->cur_image_id,
+                                                matter_ota_db->cur_download_size,
+                                                0,
+                                                matter_ota_db->buf_offset,
+                                                matter_ota_db->p_buf) != 0)
+                    {
+                        ret = 1;
+                        goto fail_write_data;
+                    }
+                }
+            }
+            else
+            {
+                //OTA temp
                 if (dfu_write_data_to_flash(matter_ota_db->cur_image_id,
                                             matter_ota_db->cur_download_size,
                                             0,
@@ -285,8 +305,30 @@ bool rtk_matter_ota_process_payload()
 
             last_pkt_len = matter_ota_db->cur_image_payload_size - matter_ota_db->cur_download_size;
 
-            if (matter_ota_db->is_data_valid)
+            if (is_ota_support_bank_switch())
             {
+                if (matter_ota_db->is_data_valid)
+                {
+                    if (dfu_write_data_to_flash(matter_ota_db->cur_image_id,
+                                                matter_ota_db->cur_download_size,
+                                                0,
+                                                last_pkt_len,
+                                                matter_ota_db->p_buf) != 0)
+                    {
+                        ret = 2;
+                        goto fail_write_data;
+                    }
+
+                    if (dfu_checksum(matter_ota_db->cur_image_id, 0) == false)
+                    {
+                        ret = 3;
+                        goto fail_check_crc;
+                    }
+                }
+            }
+            else
+            {
+                //OTA temp
                 if (dfu_write_data_to_flash(matter_ota_db->cur_image_id,
                                             matter_ota_db->cur_download_size,
                                             0,
@@ -398,10 +440,24 @@ uint8_t rtk_matter_ota_finalize(void)
 
     for (i = 0; i < matter_ota_db->sub_image_num; i++)
     {
-        if ((matter_ota_db->active_bank == OTA_BANK0 && i >= matter_ota_db->sub_image_num / 2) ||
-            (matter_ota_db->active_bank == OTA_BANK1 && i < matter_ota_db->sub_image_num / 2))
+        if (is_ota_support_bank_switch())
         {
-            dfu_set_ready((T_IMG_HEADER_FORMAT *)matter_ota_db->p_sub_image_header[i].download_addr);
+            if ((matter_ota_db->active_bank == OTA_BANK0 && i >= matter_ota_db->sub_image_num / 2) ||
+                (matter_ota_db->active_bank == OTA_BANK1 && i < matter_ota_db->sub_image_num / 2))
+            {
+                dfu_set_ready((T_IMG_HEADER_FORMAT *)matter_ota_db->p_sub_image_header[i].download_addr);
+            }
+        }
+        else
+        {
+            //OTA temp
+            uint32_t base_addr = flash_partition_addr_get(PARTITION_FLASH_OTA_TMP);
+            T_IMG_HEADER_FORMAT *p_header = (T_IMG_HEADER_FORMAT *)base_addr;
+
+            if (p_header)
+            {
+                dfu_set_ready(p_header);
+            }
         }
     }
 

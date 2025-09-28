@@ -153,8 +153,8 @@ T_MATTER_LED_HANDLE matter_led_create(uint8_t index, bool dimmable, uint16_t bri
 
     if (dimmable)
     {
-        Pad_Config(LED_PIN[index], PAD_PINMUX_MODE, PAD_IS_PWRON, PAD_PULL_NONE, PAD_OUT_ENABLE,
-                   PAD_OUT_LOW);
+        Pad_Config(LED_PIN[index], PAD_PINMUX_MODE, PAD_IS_PWRON, PAD_PULL_DOWN, PAD_OUT_DISABLE, 
+                   PAD_OUT_HIGH);
         Pinmux_Config(LED_PIN[index], PIN_FUNC[index]);
         /* TIM */
         TIM_TimeBaseInitTypeDef TIM_InitStruct;
@@ -181,7 +181,7 @@ T_MATTER_LED_HANDLE matter_led_create(uint8_t index, bool dimmable, uint16_t bri
     }
     else
     {
-        Pad_Config(LED_PIN[index], PAD_PINMUX_MODE, PAD_IS_PWRON, PAD_PULL_NONE, PAD_OUT_ENABLE,
+        Pad_Config(LED_PIN[index], PAD_PINMUX_MODE, PAD_IS_PWRON, PAD_PULL_DOWN, PAD_OUT_DISABLE, 
                    PAD_OUT_HIGH);
         Pinmux_Config(LED_PIN[index], DWGPIO);
 

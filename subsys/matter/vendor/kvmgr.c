@@ -7,7 +7,12 @@
 #include "os_queue.h"
 #include "kvmgr.h"
 
+#if defined(CONFIG_ENABLE_RAM_REDUCE) && (CONFIG_ENABLE_RAM_REDUCE == 1)
+#define MAPPING_TABLE_ENABLE 0
+#else
 #define MAPPING_TABLE_ENABLE 1
+#endif
+
 #ifdef MAPPING_TABLE_ENABLE
 #define MAPPING_TABLE_ITEM_MAX 200
 
@@ -153,20 +158,11 @@ static uint8_t utils_crc8(uint8_t *buf, uint16_t length)
 #define FLASH_PAGE_SIZE 4096
 #define FLASH_WORD_SIZE 4
 
-static uint8_t page_cache[FLASH_PAGE_SIZE];
-
 static int raw_read(uint32_t offset, void *buf, size_t size)
 {
-    uint32_t dst_addr;
-    uint8_t *src_addr;
-
     if (size > 0)
     {
-        dst_addr = g_kv_mgr.kv_addr + offset;
-        src_addr = (uint8_t *)buf;
-
-        flash_nor_read_locked(dst_addr, page_cache, size);
-        memcpy(src_addr, page_cache, size);
+        flash_nor_read_locked(g_kv_mgr.kv_addr + offset, (uint8_t *)buf, size);
     }
 
     return 0;
@@ -174,16 +170,9 @@ static int raw_read(uint32_t offset, void *buf, size_t size)
 
 static int raw_write(uint32_t offset, const void *data, size_t size)
 {
-    uint32_t dst_addr;
-    uint8_t *src_addr;
-
     if (size > 0)
     {
-        dst_addr = g_kv_mgr.kv_addr + offset;
-        src_addr = (uint8_t *)data;
-
-        memcpy(page_cache, src_addr, size);
-        flash_nor_write_locked(dst_addr, page_cache, size);
+        flash_nor_write_locked(g_kv_mgr.kv_addr + offset, (uint8_t *)data, size);
     }
 
     return RES_OK;
@@ -209,8 +198,6 @@ static void trigger_gc(void)
     //APP_PRINT_INFO0(">> aos_kv_gc");
     aos_kv_gc(NULL);
     //APP_PRINT_INFO0("<< aos_kv_gc");
-    //APP_PRINT_INFO0("trigger_gc");
-    //os_task_notify_give(g_kv_mgr.gc_task_handle);
 }
 
 static void kv_item_free(kv_item_t *item)
@@ -731,6 +718,7 @@ static int kv_item_store(const char *key, const void *val, int len, uint16_t ori
     store.p = (char *)malloc(store.len);
     if (!store.p)
     {
+        APP_PRINT_INFO0("RES_MALLOC_FAILED");
         return RES_MALLOC_FAILED;
     }
 
@@ -760,6 +748,7 @@ static int kv_item_store(const char *key, const void *val, int len, uint16_t ori
     }
     else
     {
+        APP_PRINT_INFO0("RES_NO_SPACE");
         store.ret = RES_NO_SPACE;
     }
 
@@ -908,10 +897,6 @@ void aos_kv_gc(void *arg)
     uint8_t gc_copy = 0;
     uint16_t origin_pos;
 
-    //while (1)
-    //{
-    //os_task_notify_take(1, 0xffffffff, &notify);
-
     os_mutex_take(g_kv_mgr.kv_mutex, 0xffffffff);
 
     origin_pos = g_kv_mgr.write_pos;
@@ -976,9 +961,6 @@ exit:
     {
         os_sem_give(g_kv_mgr.gc_sem);
     }
-
-    //}
-    //os_task_delete(NULL);
 }
 
 int aos_kv_del(const char *key)
@@ -999,7 +981,6 @@ int aos_kv_del(const char *key)
     os_mutex_give(g_kv_mgr.kv_mutex);
     return ret;
 }
-//EXPORT_SYMBOL_K(1, aos_kv_del, "int aos_kv_del(const char *key)")
 
 int aos_kv_set(const char *key, const void *val, int len, int sync)
 {
@@ -1032,7 +1013,6 @@ int aos_kv_set(const char *key, const void *val, int len, int sync)
     os_mutex_give(g_kv_mgr.kv_mutex);
     return ret;
 }
-//EXPORT_SYMBOL_K(1, aos_kv_set, "int aos_kv_set(const char *key, const void *val, int len, int sync)")
 
 #if (MAPPING_TABLE_ENABLE == 1)
 void *aos_key_find(const char *key)
@@ -1221,7 +1201,6 @@ int aos_kv_get(const char *key, void *buffer, int *buffer_len)
     return RES_OK;
 }
 #endif
-//EXPORT_SYMBOL_K(1, aos_kv_get, "int aos_kv_get(const char *key, void *buffer, int *buffer_len)")
 
 /* CLI Support */
 #if 1
@@ -1368,8 +1347,6 @@ int aos_kv_init(uint32_t kv_addr)
 
     g_kv_mgr.kv_initialize = 1;
 
-    //os_task_create(&g_kv_mgr.gc_task_handle, "kv-gc", aos_kv_gc, NULL, KV_GC_STACK_SIZE, 6);
-
 #if (MAPPING_TABLE_ENABLE == 1)
     kv_mapping_table_init();
 #endif
@@ -1390,11 +1367,6 @@ void aos_kv_deinit(uint32_t kv_addr)
 #if (MAPPING_TABLE_ENABLE == 1)
     kv_mapping_table_deinit();
 #endif
-
-    //if (g_kv_mgr.gc_task_handle)
-    //{
-    //    os_task_delete(g_kv_mgr.gc_task_handle);
-    //}
 
     g_kv_mgr.kv_initialize = 0;
     g_kv_mgr.kv_addr = kv_addr;

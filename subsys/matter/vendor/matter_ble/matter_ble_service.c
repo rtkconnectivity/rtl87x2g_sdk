@@ -6,7 +6,6 @@
 
 #define BTCONFIG_READ_V1                                1
 #define BTCONFIG_WRITE_V1                               1
-#define BT_MATTER_ADAPTER_READ_V1_MAX_LEN               300
 #define MATTER_BLE_SERVICE_CHAR_V1_READ_WRITE_INDEX      0x02
 #define MATTER_BLE_SERVICE_CHAR_INDICATE_CCCD_INDEX      0x05
 #define MATTER_BLE_SERVICE_C3_INDEX                      0x07
@@ -16,15 +15,12 @@
 #define UUID_C3     0x04, 0x8F, 0x21, 0x83, 0x8A, 0x74, 0x7D, 0xB8, 0xF2, 0x45, 0x72, 0x87, 0x38, 0x02, 0x63, 0x64
 
 T_SERVER_ID matter_ble_service_id;
-/**<  Value of bt config characteristic. */
-static uint8_t bt_matter_adapter_char_read_value[BT_MATTER_ADAPTER_READ_V1_MAX_LEN];
-static uint16_t bt_matter_adapter_char_read_len = 1;
 
 /**<  Function pointer used to send event to application from matter ble profile. Initiated in matter_ble_add_service. */
 static P_FUN_SERVER_GENERAL_CB pfn_matter_ble_cb = NULL;
 
 /**< @brief  profile/service definition.  */
-T_ATTRIB_APPL matter_ble_service_tbl[] =
+static const T_ATTRIB_APPL matter_ble_service_tbl[] =
 {
     /* <<Primary Service>>, .. */
     {
@@ -145,8 +141,8 @@ T_APP_RESULT matter_ble_service_attr_read_cb(uint8_t conn_id,
             {
                 pfn_matter_ble_cb(service_id, (void *)&callback_data);
             }
-            *pp_value = bt_matter_adapter_char_read_value;
-            *p_length = bt_matter_adapter_char_read_len;
+            *pp_value = NULL;
+            *p_length = 0;
         }
         break;
 

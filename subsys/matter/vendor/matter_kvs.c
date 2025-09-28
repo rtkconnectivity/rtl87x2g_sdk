@@ -7,7 +7,6 @@ extern "C" {
 #include "chip_porting.h"
 #include "mbedtls/sha256.h"
 #include "iot_persistent_config.h"
-#include <openthread/cli.h>
 #include "kvmgr.h"
 #include "aes_api.h"
 

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <trace.h>
+#include <string.h>
 #include <os_msg.h>
 #include <gap.h>
 #include <gap_adv.h>
@@ -28,9 +29,18 @@ void matter_ble_send_msg(uint16_t sub_type, uint32_t param)
     uint8_t event = EVENT_IO_TO_APP;
     T_IO_MSG io_msg;
 
-    io_msg.type = IO_MSG_TYPE_QDECODE;
-    io_msg.subtype = sub_type;
-    io_msg.u.param = param;
+#if MATTER_ENABLE_CFU
+    if (sub_type == MATTER_BLE_MSG_ENTER_CFU)
+    {
+        io_msg.type = IO_MSG_TYPE_UART;
+    }
+    else
+#endif
+    {
+        io_msg.type = IO_MSG_TYPE_QDECODE;
+        io_msg.subtype = sub_type;
+        io_msg.u.param = param;
+    }
 
     if (os_msg_send(matter_ble_io_queue_handle, &io_msg, 0) == false)
     {
@@ -118,9 +128,20 @@ void matter_ble_handle_gap_msg(T_IO_MSG *p_gap_msg)
 }
 #endif
 
+extern bool zbmac_pm_check_inactive(void);
+extern void zbmac_pm_initiate_wakeup(void);
+
+static volatile bool matter_ble_is_connected = false;
+bool matter_ble_check_connected(void)
+{
+    return matter_ble_is_connected;
+}
+
 void matter_ble_handle_io_msg(T_IO_MSG io_msg)
 {
     uint16_t msg_type = io_msg.type;
+    T_LE_GAP_MSG gap_msg;
+    memcpy(&gap_msg, &io_msg.u.param, sizeof(io_msg.u.param));
 
     switch (msg_type)
     {
@@ -129,6 +150,31 @@ void matter_ble_handle_io_msg(T_IO_MSG io_msg)
 #if (SUPPORT_BLE_OTA == 1)
             matter_ble_handle_gap_msg(&io_msg);
 #endif
+            switch (io_msg.subtype)
+            {
+                case GAP_MSG_LE_CONN_STATE_CHANGE:
+                    {
+                        uint16_t conn_id    = gap_msg.msg_data.gap_conn_state_change.conn_id;
+                        uint16_t new_state  = gap_msg.msg_data.gap_conn_state_change.new_state;
+                        uint16_t disc_cause = gap_msg.msg_data.gap_conn_state_change.disc_cause;
+                        if (new_state == GAP_CONN_STATE_CONNECTED)
+                        {
+                            matter_ble_is_connected = true;
+                            if (zbmac_pm_check_inactive())
+                            {
+                                zbmac_pm_initiate_wakeup();
+                            }
+                        }
+                        else if (new_state == GAP_CONN_STATE_DISCONNECTED)
+                        {
+                            matter_ble_is_connected = false;
+                        }
+                    }
+                    break;
+
+                default:
+                    break;
+            }
 
             if (matter_ble_cback)
             {
@@ -162,6 +208,17 @@ void matter_ble_handle_io_msg(T_IO_MSG io_msg)
             }
         }
         break;
+
+#if MATTER_ENABLE_CFU
+    case IO_MSG_TYPE_UART:
+        {
+            extern void enter_to_cfu_mode(const uint8_t *data, uint8_t data_len);
+
+            uint8_t data[] = {0x5d, 0x00, 0x01};
+            enter_to_cfu_mode(data, sizeof(data));
+        }
+        break;
+#endif
 
     default:
         break;
