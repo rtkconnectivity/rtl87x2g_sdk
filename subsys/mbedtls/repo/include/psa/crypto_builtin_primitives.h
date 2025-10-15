@@ -99,14 +99,12 @@ typedef struct
 #define MBEDTLS_PSA_BUILTIN_CIPHER  1
 #endif
 
-typedef struct
-{
+typedef struct {
     /* Context structure for the Mbed TLS cipher implementation. */
     psa_algorithm_t MBEDTLS_PRIVATE(alg);
     uint8_t MBEDTLS_PRIVATE(iv_length);
     uint8_t MBEDTLS_PRIVATE(block_length);
-    union
-    {
+    union {
         unsigned int MBEDTLS_PRIVATE(dummy);
         mbedtls_cipher_context_t MBEDTLS_PRIVATE(cipher);
     } MBEDTLS_PRIVATE(ctx);
@@ -124,19 +122,18 @@ typedef mbedtls_psa_hash_operation_t mbedtls_transparent_test_driver_hash_operat
 #define MBEDTLS_TRANSPARENT_TEST_DRIVER_HASH_OPERATION_INIT MBEDTLS_PSA_HASH_OPERATION_INIT
 
 typedef mbedtls_psa_cipher_operation_t
-mbedtls_transparent_test_driver_cipher_operation_t;
+        mbedtls_transparent_test_driver_cipher_operation_t;
 
-typedef struct
-{
+typedef struct {
     unsigned int initialised : 1;
     mbedtls_transparent_test_driver_cipher_operation_t ctx;
 } mbedtls_opaque_test_driver_cipher_operation_t;
 
 #define MBEDTLS_TRANSPARENT_TEST_DRIVER_CIPHER_OPERATION_INIT \
-    MBEDTLS_PSA_CIPHER_OPERATION_INIT
+     MBEDTLS_PSA_CIPHER_OPERATION_INIT
 
 #define MBEDTLS_OPAQUE_TEST_DRIVER_CIPHER_OPERATION_INIT \
-    { 0, MBEDTLS_TRANSPARENT_TEST_DRIVER_CIPHER_OPERATION_INIT }
+     { 0, MBEDTLS_TRANSPARENT_TEST_DRIVER_CIPHER_OPERATION_INIT }
 
 #endif /* PSA_CRYPTO_DRIVER_TEST */
 

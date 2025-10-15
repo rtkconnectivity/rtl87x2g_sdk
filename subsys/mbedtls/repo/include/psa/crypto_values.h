@@ -546,8 +546,8 @@
 /** Extract the curve from an elliptic curve key type. */
 #define PSA_KEY_TYPE_ECC_GET_FAMILY(type)                        \
     ((psa_ecc_family_t) (PSA_KEY_TYPE_IS_ECC(type) ?             \
-                         ((type) & PSA_KEY_TYPE_ECC_CURVE_MASK) : \
-                         0))
+                        ((type) & PSA_KEY_TYPE_ECC_CURVE_MASK) : \
+                        0))
 
 /** SEC Koblitz curves over prime fields.
  *
@@ -672,8 +672,8 @@
 /** Extract the group from a Diffie-Hellman key type. */
 #define PSA_KEY_TYPE_DH_GET_FAMILY(type)                        \
     ((psa_dh_family_t) (PSA_KEY_TYPE_IS_DH(type) ?              \
-                        ((type) & PSA_KEY_TYPE_DH_GROUP_MASK) :  \
-                        0))
+                       ((type) & PSA_KEY_TYPE_DH_GROUP_MASK) :  \
+                       0))
 
 /** Diffie-Hellman groups defined in RFC 7919 Appendix A.
  *
@@ -1099,7 +1099,7 @@
  */
 #define PSA_ALG_IS_STREAM_CIPHER(alg)            \
     (((alg) & (PSA_ALG_CATEGORY_MASK | PSA_ALG_CIPHER_STREAM_FLAG)) == \
-     (PSA_ALG_CATEGORY_CIPHER | PSA_ALG_CIPHER_STREAM_FLAG))
+        (PSA_ALG_CATEGORY_CIPHER | PSA_ALG_CIPHER_STREAM_FLAG))
 
 /** The stream cipher mode of a stream cipher algorithm.
  *
@@ -1263,7 +1263,7 @@
  */
 #define PSA_ALG_AEAD_GET_TAG_LENGTH(aead_alg)                           \
     (((aead_alg) & PSA_ALG_AEAD_TAG_LENGTH_MASK) >>                     \
-     PSA_AEAD_TAG_LENGTH_OFFSET )
+      PSA_AEAD_TAG_LENGTH_OFFSET )
 
 /** Calculate the corresponding AEAD algorithm with the default tag length.
  *
@@ -1275,10 +1275,10 @@
  */
 #define PSA_ALG_AEAD_WITH_DEFAULT_LENGTH_TAG(aead_alg)                   \
     (                                                                    \
-                                                                         PSA_ALG_AEAD_WITH_DEFAULT_LENGTH_TAG_CASE(aead_alg, PSA_ALG_CCM) \
-                                                                         PSA_ALG_AEAD_WITH_DEFAULT_LENGTH_TAG_CASE(aead_alg, PSA_ALG_GCM) \
-                                                                         PSA_ALG_AEAD_WITH_DEFAULT_LENGTH_TAG_CASE(aead_alg, PSA_ALG_CHACHA20_POLY1305) \
-                                                                         0)
+        PSA_ALG_AEAD_WITH_DEFAULT_LENGTH_TAG_CASE(aead_alg, PSA_ALG_CCM) \
+        PSA_ALG_AEAD_WITH_DEFAULT_LENGTH_TAG_CASE(aead_alg, PSA_ALG_GCM) \
+        PSA_ALG_AEAD_WITH_DEFAULT_LENGTH_TAG_CASE(aead_alg, PSA_ALG_CHACHA20_POLY1305) \
+        0)
 #define PSA_ALG_AEAD_WITH_DEFAULT_LENGTH_TAG_CASE(aead_alg, ref)         \
     PSA_ALG_AEAD_WITH_SHORTENED_TAG(aead_alg, 0) ==                      \
     PSA_ALG_AEAD_WITH_SHORTENED_TAG(ref, 0) ?                            \
@@ -1941,7 +1941,7 @@
  * \return \c 0 if alg is not a composite algorithm that uses a hash.
  */
 #define PSA_ALG_GET_HASH(alg) \
-    (((alg) & 0x000000ff) == 0 ? ((psa_algorithm_t)0) : 0x02000000 | ((alg) & 0x000000ff))
+        (((alg) & 0x000000ff) == 0 ? ((psa_algorithm_t)0) : 0x02000000 | ((alg) & 0x000000ff))
 
 /**@}*/
 
@@ -2090,11 +2090,11 @@
  * \param key_id  Identifier of the key.
  */
 static inline mbedtls_svc_key_id_t mbedtls_svc_key_id_make(
-    unsigned int unused, psa_key_id_t key_id)
+    unsigned int unused, psa_key_id_t key_id )
 {
     (void)unused;
 
-    return (key_id);
+    return( key_id );
 }
 
 /** Compare two key identifiers.
@@ -2104,10 +2104,10 @@ static inline mbedtls_svc_key_id_t mbedtls_svc_key_id_make(
  *
  * \return Non-zero if the two key identifier are equal, zero otherwise.
  */
-static inline int mbedtls_svc_key_id_equal(mbedtls_svc_key_id_t id1,
-                                           mbedtls_svc_key_id_t id2)
+static inline int mbedtls_svc_key_id_equal( mbedtls_svc_key_id_t id1,
+                                            mbedtls_svc_key_id_t id2 )
 {
-    return (id1 == id2);
+    return( id1 == id2 );
 }
 
 /** Check whether a key identifier is null.
@@ -2116,9 +2116,9 @@ static inline int mbedtls_svc_key_id_equal(mbedtls_svc_key_id_t id1,
  *
  * \return Non-zero if the key identifier is null, zero otherwise.
  */
-static inline int mbedtls_svc_key_id_is_null(mbedtls_svc_key_id_t key)
+static inline int mbedtls_svc_key_id_is_null( mbedtls_svc_key_id_t key )
 {
-    return (key == 0);
+    return( key == 0 );
 }
 
 #else /* MBEDTLS_PSA_CRYPTO_KEY_ID_ENCODES_OWNER */
@@ -2133,13 +2133,10 @@ static inline int mbedtls_svc_key_id_is_null(mbedtls_svc_key_id_t key)
  * \param key_id   Identifier of the key.
  */
 static inline mbedtls_svc_key_id_t mbedtls_svc_key_id_make(
-    mbedtls_key_owner_id_t owner_id, psa_key_id_t key_id)
+    mbedtls_key_owner_id_t owner_id, psa_key_id_t key_id )
 {
-    return ((mbedtls_svc_key_id_t)
-    {
-        .MBEDTLS_PRIVATE(key_id) = key_id,
-        .MBEDTLS_PRIVATE(owner) = owner_id
-    });
+    return( (mbedtls_svc_key_id_t){ .MBEDTLS_PRIVATE(key_id) = key_id,
+                                    .MBEDTLS_PRIVATE(owner) = owner_id } );
 }
 
 /** Compare two key identifiers.
@@ -2149,11 +2146,11 @@ static inline mbedtls_svc_key_id_t mbedtls_svc_key_id_make(
  *
  * \return Non-zero if the two key identifier are equal, zero otherwise.
  */
-static inline int mbedtls_svc_key_id_equal(mbedtls_svc_key_id_t id1,
-                                           mbedtls_svc_key_id_t id2)
+static inline int mbedtls_svc_key_id_equal( mbedtls_svc_key_id_t id1,
+                                            mbedtls_svc_key_id_t id2 )
 {
-    return ((id1.MBEDTLS_PRIVATE(key_id) == id2.MBEDTLS_PRIVATE(key_id)) &&
-            mbedtls_key_owner_id_equal(id1.MBEDTLS_PRIVATE(owner), id2.MBEDTLS_PRIVATE(owner)));
+    return( ( id1.MBEDTLS_PRIVATE(key_id) == id2.MBEDTLS_PRIVATE(key_id) ) &&
+            mbedtls_key_owner_id_equal( id1.MBEDTLS_PRIVATE(owner), id2.MBEDTLS_PRIVATE(owner) ) );
 }
 
 /** Check whether a key identifier is null.
@@ -2162,9 +2159,9 @@ static inline int mbedtls_svc_key_id_equal(mbedtls_svc_key_id_t id1,
  *
  * \return Non-zero if the key identifier is null, zero otherwise.
  */
-static inline int mbedtls_svc_key_id_is_null(mbedtls_svc_key_id_t key)
+static inline int mbedtls_svc_key_id_is_null( mbedtls_svc_key_id_t key )
 {
-    return (key.MBEDTLS_PRIVATE(key_id) == 0);
+    return( key.MBEDTLS_PRIVATE(key_id) == 0 );
 }
 
 #endif /* !MBEDTLS_PSA_CRYPTO_KEY_ID_ENCODES_OWNER */

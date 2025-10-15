@@ -64,20 +64,20 @@
  */
 #define PSA_HASH_LENGTH(alg)                                        \
     (                                                               \
-                                                                    PSA_ALG_HMAC_GET_HASH(alg) == PSA_ALG_MD5 ? 16 :            \
-                                                                    PSA_ALG_HMAC_GET_HASH(alg) == PSA_ALG_RIPEMD160 ? 20 :      \
-                                                                    PSA_ALG_HMAC_GET_HASH(alg) == PSA_ALG_SHA_1 ? 20 :          \
-                                                                    PSA_ALG_HMAC_GET_HASH(alg) == PSA_ALG_SHA_224 ? 28 :        \
-                                                                    PSA_ALG_HMAC_GET_HASH(alg) == PSA_ALG_SHA_256 ? 32 :        \
-                                                                    PSA_ALG_HMAC_GET_HASH(alg) == PSA_ALG_SHA_384 ? 48 :        \
-                                                                    PSA_ALG_HMAC_GET_HASH(alg) == PSA_ALG_SHA_512 ? 64 :        \
-                                                                    PSA_ALG_HMAC_GET_HASH(alg) == PSA_ALG_SHA_512_224 ? 28 :    \
-                                                                    PSA_ALG_HMAC_GET_HASH(alg) == PSA_ALG_SHA_512_256 ? 32 :    \
-                                                                    PSA_ALG_HMAC_GET_HASH(alg) == PSA_ALG_SHA3_224 ? 28 :       \
-                                                                    PSA_ALG_HMAC_GET_HASH(alg) == PSA_ALG_SHA3_256 ? 32 :       \
-                                                                    PSA_ALG_HMAC_GET_HASH(alg) == PSA_ALG_SHA3_384 ? 48 :       \
-                                                                    PSA_ALG_HMAC_GET_HASH(alg) == PSA_ALG_SHA3_512 ? 64 :       \
-                                                                    0)
+        PSA_ALG_HMAC_GET_HASH(alg) == PSA_ALG_MD5 ? 16 :            \
+        PSA_ALG_HMAC_GET_HASH(alg) == PSA_ALG_RIPEMD160 ? 20 :      \
+        PSA_ALG_HMAC_GET_HASH(alg) == PSA_ALG_SHA_1 ? 20 :          \
+        PSA_ALG_HMAC_GET_HASH(alg) == PSA_ALG_SHA_224 ? 28 :        \
+        PSA_ALG_HMAC_GET_HASH(alg) == PSA_ALG_SHA_256 ? 32 :        \
+        PSA_ALG_HMAC_GET_HASH(alg) == PSA_ALG_SHA_384 ? 48 :        \
+        PSA_ALG_HMAC_GET_HASH(alg) == PSA_ALG_SHA_512 ? 64 :        \
+        PSA_ALG_HMAC_GET_HASH(alg) == PSA_ALG_SHA_512_224 ? 28 :    \
+        PSA_ALG_HMAC_GET_HASH(alg) == PSA_ALG_SHA_512_256 ? 32 :    \
+        PSA_ALG_HMAC_GET_HASH(alg) == PSA_ALG_SHA3_224 ? 28 :       \
+        PSA_ALG_HMAC_GET_HASH(alg) == PSA_ALG_SHA3_256 ? 32 :       \
+        PSA_ALG_HMAC_GET_HASH(alg) == PSA_ALG_SHA3_384 ? 48 :       \
+        PSA_ALG_HMAC_GET_HASH(alg) == PSA_ALG_SHA3_512 ? 64 :       \
+        0)
 
 /** \def PSA_HASH_MAX_SIZE
  *
@@ -318,8 +318,8 @@
  */
 #define PSA_AEAD_DECRYPT_OUTPUT_SIZE(key_type, alg, ciphertext_length) \
     (PSA_AEAD_NONCE_LENGTH(key_type, alg) != 0 &&                      \
-     (ciphertext_length) > PSA_ALG_AEAD_GET_TAG_LENGTH(alg) ?      \
-     (ciphertext_length) - PSA_ALG_AEAD_GET_TAG_LENGTH(alg) :      \
+         (ciphertext_length) > PSA_ALG_AEAD_GET_TAG_LENGTH(alg) ?      \
+         (ciphertext_length) - PSA_ALG_AEAD_GET_TAG_LENGTH(alg) :      \
      0)
 
 /** A sufficient output buffer size for psa_aead_decrypt(), for any of the
@@ -341,7 +341,7 @@
  *
  */
 #define PSA_AEAD_DECRYPT_OUTPUT_MAX_SIZE(ciphertext_length)     \
-    (ciphertext_length)
+     (ciphertext_length)
 
 /** The default nonce size for an AEAD algorithm, in bytes.
  *
@@ -370,11 +370,11 @@
  */
 #define PSA_AEAD_NONCE_LENGTH(key_type, alg) \
     (PSA_BLOCK_CIPHER_BLOCK_LENGTH(key_type) == 16 ? \
-     MBEDTLS_PSA_ALG_AEAD_EQUAL(alg, PSA_ALG_CCM) ? 13 : \
-     MBEDTLS_PSA_ALG_AEAD_EQUAL(alg, PSA_ALG_GCM) ? 12 : \
-     0 : \
+          MBEDTLS_PSA_ALG_AEAD_EQUAL(alg, PSA_ALG_CCM) ? 13 : \
+          MBEDTLS_PSA_ALG_AEAD_EQUAL(alg, PSA_ALG_GCM) ? 12 : \
+          0 : \
      (key_type) == PSA_KEY_TYPE_CHACHA20 && \
-     MBEDTLS_PSA_ALG_AEAD_EQUAL(alg, PSA_ALG_CHACHA20_POLY1305) ? 12 : \
+          MBEDTLS_PSA_ALG_AEAD_EQUAL(alg, PSA_ALG_CHACHA20_POLY1305) ? 12 : \
      0)
 
 /** The maximum default nonce size among all supported pairs of key types and
@@ -422,9 +422,9 @@
  * implementation to delay the output until it has a full block. */
 #define PSA_AEAD_UPDATE_OUTPUT_SIZE(key_type, alg, input_length)                             \
     (PSA_AEAD_NONCE_LENGTH(key_type, alg) != 0 ?                                             \
-     PSA_ALG_IS_AEAD_ON_BLOCK_CIPHER(alg) ?                                              \
-     PSA_ROUND_UP_TO_MULTIPLE(PSA_BLOCK_CIPHER_BLOCK_LENGTH(key_type), (input_length)) : \
-     (input_length) : \
+         PSA_ALG_IS_AEAD_ON_BLOCK_CIPHER(alg) ?                                              \
+         PSA_ROUND_UP_TO_MULTIPLE(PSA_BLOCK_CIPHER_BLOCK_LENGTH(key_type), (input_length)) : \
+         (input_length) : \
      0)
 
 /** A sufficient output buffer size for psa_aead_update(), for any of the
@@ -463,8 +463,8 @@
  */
 #define PSA_AEAD_FINISH_OUTPUT_SIZE(key_type, alg) \
     (PSA_AEAD_NONCE_LENGTH(key_type, alg) != 0 &&  \
-     PSA_ALG_IS_AEAD_ON_BLOCK_CIPHER(alg) ?    \
-     PSA_BLOCK_CIPHER_BLOCK_LENGTH(key_type) : \
+         PSA_ALG_IS_AEAD_ON_BLOCK_CIPHER(alg) ?    \
+         PSA_BLOCK_CIPHER_BLOCK_LENGTH(key_type) : \
      0)
 
 /** A sufficient ciphertext buffer size for psa_aead_finish(), for any of the
@@ -497,8 +497,8 @@
  */
 #define PSA_AEAD_VERIFY_OUTPUT_SIZE(key_type, alg) \
     (PSA_AEAD_NONCE_LENGTH(key_type, alg) != 0 &&  \
-     PSA_ALG_IS_AEAD_ON_BLOCK_CIPHER(alg) ?    \
-     PSA_BLOCK_CIPHER_BLOCK_LENGTH(key_type) : \
+         PSA_ALG_IS_AEAD_ON_BLOCK_CIPHER(alg) ?    \
+         PSA_BLOCK_CIPHER_BLOCK_LENGTH(key_type) : \
      0)
 
 /** A sufficient plaintext buffer size for psa_aead_verify(), for any of the
@@ -951,14 +951,14 @@
  */
 #define PSA_CIPHER_IV_LENGTH(key_type, alg) \
     (PSA_BLOCK_CIPHER_BLOCK_LENGTH(key_type) > 1 && \
-     ((alg) == PSA_ALG_CTR || \
-      (alg) == PSA_ALG_CFB || \
-      (alg) == PSA_ALG_OFB || \
-      (alg) == PSA_ALG_XTS || \
-      (alg) == PSA_ALG_CBC_NO_PADDING || \
-      (alg) == PSA_ALG_CBC_PKCS7) ? PSA_BLOCK_CIPHER_BLOCK_LENGTH(key_type) : \
+        ((alg) == PSA_ALG_CTR || \
+         (alg) == PSA_ALG_CFB || \
+         (alg) == PSA_ALG_OFB || \
+         (alg) == PSA_ALG_XTS || \
+         (alg) == PSA_ALG_CBC_NO_PADDING || \
+         (alg) == PSA_ALG_CBC_PKCS7) ? PSA_BLOCK_CIPHER_BLOCK_LENGTH(key_type) : \
      (key_type) == PSA_KEY_TYPE_CHACHA20 && \
-     (alg) == PSA_ALG_STREAM_CIPHER ? 12 : \
+         (alg) == PSA_ALG_STREAM_CIPHER ? 12 : \
      0)
 
 /** The maximum IV size for all supported cipher algorithms, in bytes.
@@ -997,7 +997,7 @@
      PSA_CIPHER_IV_LENGTH((key_type), (alg)) :                                  \
      (PSA_ALG_IS_CIPHER(alg) ?                                                  \
       (input_length) + PSA_CIPHER_IV_LENGTH((key_type), (alg)) :                \
-      0))
+     0))
 
 /** A sufficient output buffer size for psa_cipher_encrypt(), for any of the
  *  supported key types and cipher algorithms.
@@ -1077,7 +1077,7 @@
        (alg) == PSA_ALG_CBC_NO_PADDING ||                                       \
        (alg) == PSA_ALG_ECB_NO_PADDING) ?                                       \
       PSA_ROUND_UP_TO_MULTIPLE(PSA_BLOCK_CIPHER_BLOCK_LENGTH(key_type),         \
-                               input_length) :                                 \
+                                input_length) :                                 \
       (input_length)) :                                                         \
      0)
 

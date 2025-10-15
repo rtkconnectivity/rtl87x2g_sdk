@@ -3724,6 +3724,22 @@ int mbedtls_ssl_get_session(const mbedtls_ssl_context *ssl,
 int mbedtls_ssl_handshake(mbedtls_ssl_context *ssl);
 
 /**
+ * \brief          After calling mbedtls_ssl_handshake() to start the SSL
+ *                 handshake you can call this function to check whether the
+ *                 handshake is over for a given SSL context. This function
+ *                 should be also used to determine when to stop calling
+ *                 mbedtls_handshake_step() for that context.
+ *
+ * \param ssl      SSL context
+ *
+ * \return         \c 1 if handshake is over, \c 0 if it is still ongoing.
+ */
+static inline int mbedtls_ssl_is_handshake_over(mbedtls_ssl_context *ssl)
+{
+    return ssl->MBEDTLS_PRIVATE(state) >= MBEDTLS_SSL_HANDSHAKE_OVER;
+}
+
+/**
  * \brief          Perform a single step of the SSL handshake
  *
  * \note           The state of the context (ssl->state) will be at

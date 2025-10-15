@@ -53,8 +53,7 @@ extern "C" {
  * Implementations must include the fields specified here and
  * may include other fields.
  */
-typedef struct
-{
+typedef struct {
     /** A read-only pointer to the driver's persistent data.
      *
      * Drivers typically use this persistent data to keep track of
@@ -321,8 +320,7 @@ typedef psa_status_t (*psa_drv_se_mac_verify_t)(psa_drv_se_context_t *drv_contex
  * `p_update` and at least one of `p_finish` or `p_finish_verify`).
  *
  */
-typedef struct
-{
+typedef struct {
     /**The size in bytes of the hardware-specific secure element MAC context
      * structure
     */
@@ -509,8 +507,7 @@ typedef psa_status_t (*psa_drv_se_cipher_ecb_t)(psa_drv_se_context_t *drv_contex
  * If one of the functions is not implemented (such as
  * `psa_drv_se_cipher_ecb_t`), it should be set to NULL.
  */
-typedef struct
-{
+typedef struct {
     /** The size in bytes of the hardware-specific secure element cipher
      * context structure
      */
@@ -683,8 +680,7 @@ typedef psa_status_t (*psa_drv_se_asymmetric_decrypt_t)(psa_drv_se_context_t *dr
  *
  * If one of the functions is not implemented, it should be set to NULL.
  */
-typedef struct
-{
+typedef struct {
     /** Function that performs an asymmetric sign operation */
     psa_drv_se_asymmetric_sign_t    MBEDTLS_PRIVATE(p_sign);
     /** Function that performs an asymmetric verify operation */
@@ -801,8 +797,7 @@ typedef psa_status_t (*psa_drv_se_aead_decrypt_t)(psa_drv_se_context_t *drv_cont
  *
  * If one of the functions is not implemented, it should be set to NULL.
  */
-typedef struct
-{
+typedef struct {
     /** Function that performs the AEAD encrypt operation */
     psa_drv_se_aead_encrypt_t MBEDTLS_PRIVATE(p_encrypt);
     /** Function that performs the AEAD decrypt operation */
@@ -1124,8 +1119,7 @@ typedef psa_status_t (*psa_drv_se_generate_key_t)(
  *
  * If one of the functions is not implemented, it should be set to NULL.
  */
-typedef struct
-{
+typedef struct {
     /** Function that allocates a slot for a key. */
     psa_drv_se_allocate_key_t   MBEDTLS_PRIVATE(p_allocate);
     /** Function that checks the validity of a slot for a key. */
@@ -1241,7 +1235,7 @@ typedef psa_status_t (*psa_drv_se_key_derivation_collateral_t)(void *op_context,
  * \retval #PSA_SUCCESS
  */
 typedef psa_status_t (*psa_drv_se_key_derivation_derive_t)(void *op_context,
-                                                           psa_key_slot_number_t dest_key);
+                                                          psa_key_slot_number_t dest_key);
 
 /** \brief A function that performs the final step of a secure element key
  * agreement and place the generated key material in a buffer
@@ -1268,8 +1262,7 @@ typedef psa_status_t (*psa_drv_se_key_derivation_export_t)(void *op_context,
  *
  * If one of the functions is not implemented, it should be set to NULL.
  */
-typedef struct
-{
+typedef struct {
     /** The driver-specific size of the key derivation context */
     size_t                           MBEDTLS_PRIVATE(context_size);
     /** Function that performs a key derivation setup */
@@ -1295,8 +1288,7 @@ typedef struct
  * Future versions of this specification may add extra substructures at
  * the end of this structure.
  */
-typedef struct
-{
+typedef struct {
     /** The version of the driver HAL that this driver implements.
      * This is a protection against loading driver binaries built against
      * a different version of this specification.
