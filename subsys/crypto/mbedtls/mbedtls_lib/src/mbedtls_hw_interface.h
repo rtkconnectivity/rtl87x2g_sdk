@@ -15,6 +15,18 @@
 extern "C" {
 #endif
 
+void hw_pke_clock(bool enable);
+void hw_pke_init(bool byte_swap_en, bool word_swap_en, uint32_t word_swap_base);
+bool get_mbedtls_rsa_private_key_blinding_en();
+void hw_rsa_init(uint32_t key_bits);
+void hw_rsa_set_sub_operand(uint32_t operand_addr, uint32_t *operands, uint32_t byte_len);
+bool hw_rsa_set_all_operands(uint32_t *M, uint32_t *e, uint32_t *N, uint32_t exp_byte_size);
+ERR_CODE hw_rsa_compute(uint32_t *result, uint32_t output_addr, uint16_t func_id);
+void hw_ecc_init(uint32_t key_bits, PKE_MODE mode, bool go_to_end_loop, bool RR_mod_n_ready);
+void hw_ecc_set_sub_operand(uint32_t operand_addr, uint32_t *operands, uint32_t byte_len);
+bool hw_ecc_set_all_operands(ECC_GROUP *grp, uint32_t *e, uint32_t e_byte_size);
+ERR_CODE hw_ecc_compute(void *result, uint32_t output_addr, uint16_t func_id);
+
 /* ============================ Patch of RSA and ECC ============================ */
 extern void (*set_pke_clock)(bool enable);
 extern void (*init_pke)(bool byte_swap_en, bool word_swap_en, uint32_t word_swap_base);
