@@ -92,8 +92,8 @@ target_include_directories(
     PUBLIC
 
     ${REALTEK_SDK_INCPATH}
-    ${OT_REALTEK_ROOT}/vendor/${RT_PLATFORM}
-    ${OT_REALTEK_ROOT}/vendor/${RT_PLATFORM}/${BUILD_TARGET}
+    ${OT_REALTEK_ROOT}/src/${RT_PLATFORM}
+    ${OT_REALTEK_ROOT}/src/${RT_PLATFORM}/${BUILD_TARGET}
     "${ARCH_DIR}"
     "${LWIP_ROOT}"
     "${INCLUDE_DIR}"

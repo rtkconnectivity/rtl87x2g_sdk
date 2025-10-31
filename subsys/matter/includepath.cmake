@@ -31,8 +31,8 @@ list (
         # sdk
         "${REALTEK_SDK_INCPATH}"
         # porting
-        "${OT_REALTEK_ROOT}/vendor/${RT_PLATFORM}"
-        "${OT_REALTEK_ROOT}/vendor/${RT_PLATFORM}/${BUILD_TARGET}"
+        "${OT_REALTEK_ROOT}/src/${RT_PLATFORM}"
+        "${OT_REALTEK_ROOT}/src/${RT_PLATFORM}/${BUILD_TARGET}"
         "${REALTEK_SDK_ROOT}/subsys/matter/vendor"
         "${REALTEK_SDK_ROOT}/subsys/matter/vendor/bee4"
         "${REALTEK_SDK_ROOT}/subsys/matter/vendor/matter_ble"

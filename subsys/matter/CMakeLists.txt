@@ -17,14 +17,18 @@
 cmake_minimum_required(VERSION 3.10.2)
 project(rtk-matter VERSION 0.2.0 LANGUAGES C CXX ASM)
 
+if(${BUILD_TARGET} STREQUAL "rtl8777g")
+    set(RT_PLATFORM "bee4" CACHE STRING "")
+endif()
+
 # TODO: Modify according to IC
 set(MATTER_ADAPTER_PATH "${CMAKE_CURRENT_SOURCE_DIR}")
-set(OT_REALTEK_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../openthread")
+set(OT_REALTEK_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../../../../..")
 
 set(openthread_root "${OT_REALTEK_ROOT}/openthread")
-set(bee_matter_root "$ENV{MATTER_EXAMPLE_PATH}/../../../..")
+set(bee_matter_root "${OT_REALTEK_ROOT}/../../..")
 set(matter_output_path ${PROJECT_BINARY_DIR})
-set(matter_example_path $ENV{MATTER_EXAMPLE_PATH})
+set(matter_example_path ${MATTER_EXAMPLE_PATH})
 
 set(RT_PLATFORM_VALUES
     "bee4"
@@ -49,7 +53,7 @@ if(${BUILD_TARGET} STREQUAL "evb" OR ${BUILD_TARGET} STREQUAL "evb_dual")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DBOARD_EVB")
 endif()
 
-set(LD_FILE "${OT_REALTEK_ROOT}/vendor/${RT_PLATFORM}/${BUILD_TARGET}/app.ld.gen")
+set(LD_FILE "${OT_REALTEK_ROOT}/src/${RT_PLATFORM}/${BUILD_TARGET}/app.ld.gen")
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
@@ -100,8 +104,8 @@ endif()
 set(OT_EXTERNAL_MBEDTLS "mbedtls" CACHE STRING "")
 
 # different on Github
-include(${OT_REALTEK_ROOT}/Realtek/${BUILD_TYPE}.cmake)
-include(${OT_REALTEK_ROOT}/Realtek/openthread.cmake)
+include(${OT_REALTEK_ROOT}/script/${BUILD_TYPE}.cmake)
+include(${OT_REALTEK_ROOT}/script/openthread.cmake)
 
 get_filename_component(SDK_ROOT ${REALTEK_SDK_ROOT} REALPATH)
 get_filename_component(CHIP_ROOT ${bee_matter_root} REALPATH)
@@ -215,9 +219,9 @@ endif()
 include(${bee_lwip_path}/lwip.cmake)
 include(includepath.cmake)
 include(${CHIP_ROOT}/src/app/chip_data_model.cmake)
-include($ENV{MATTER_EXAMPLE_PATH}/chip_main.cmake)
+include(${MATTER_EXAMPLE_PATH}/chip_main.cmake)
 include(${CHIP_ROOT}/config/realtek/bee/chip.cmake)
 
 add_dependencies(chip_main chip-gn)
 
-add_subdirectory(${OT_REALTEK_ROOT}/vendor/${RT_PLATFORM} ${CMAKE_CURRENT_BINARY_DIR}/vendor/${RT_PLATFORM})
+add_subdirectory(${OT_REALTEK_ROOT}/src/${RT_PLATFORM} ${CMAKE_CURRENT_BINARY_DIR}/vendor/${RT_PLATFORM})
