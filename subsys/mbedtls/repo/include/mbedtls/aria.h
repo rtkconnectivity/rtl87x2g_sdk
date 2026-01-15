@@ -11,19 +11,7 @@
  */
 /*
  *  Copyright The Mbed TLS Contributors
- *  SPDX-License-Identifier: Apache-2.0
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); you may
- *  not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
  */
 
 #ifndef MBEDTLS_ARIA_H
@@ -41,12 +29,14 @@
 #define MBEDTLS_ARIA_DECRYPT     0 /**< ARIA decryption. */
 
 #define MBEDTLS_ARIA_BLOCKSIZE   16 /**< ARIA block size in bytes. */
-#define MBEDTLS_ARIA_MAX_ROUNDS  16 /**< Maxiumum number of rounds in ARIA. */
+#define MBEDTLS_ARIA_MAX_ROUNDS  16 /**< Maximum number of rounds in ARIA. */
 #define MBEDTLS_ARIA_MAX_KEYSIZE 32 /**< Maximum size of an ARIA key in bytes. */
 
-#define MBEDTLS_ERR_ARIA_BAD_INPUT_DATA -0x005C /**< Bad input data. */
+/** Bad input data. */
+#define MBEDTLS_ERR_ARIA_BAD_INPUT_DATA -0x005C
 
-#define MBEDTLS_ERR_ARIA_INVALID_INPUT_LENGTH -0x005E /**< Invalid data input length. */
+/** Invalid data input length. */
+#define MBEDTLS_ERR_ARIA_INVALID_INPUT_LENGTH -0x005E
 
 #ifdef __cplusplus
 extern "C" {
@@ -59,8 +49,7 @@ extern "C" {
 /**
  * \brief The ARIA context-type definition.
  */
-typedef struct mbedtls_aria_context
-{
+typedef struct mbedtls_aria_context {
     unsigned char MBEDTLS_PRIVATE(nr);           /*!< The number of rounds (12, 14 or 16) */
     /*! The ARIA round keys. */
     uint32_t MBEDTLS_PRIVATE(rk)[MBEDTLS_ARIA_MAX_ROUNDS + 1][MBEDTLS_ARIA_BLOCKSIZE / 4];
@@ -109,6 +98,7 @@ int mbedtls_aria_setkey_enc(mbedtls_aria_context *ctx,
                             const unsigned char *key,
                             unsigned int keybits);
 
+#if !defined(MBEDTLS_BLOCK_CIPHER_NO_DECRYPT)
 /**
  * \brief          This function sets the decryption key.
  *
@@ -127,6 +117,7 @@ int mbedtls_aria_setkey_enc(mbedtls_aria_context *ctx,
 int mbedtls_aria_setkey_dec(mbedtls_aria_context *ctx,
                             const unsigned char *key,
                             unsigned int keybits);
+#endif /* !MBEDTLS_BLOCK_CIPHER_NO_DECRYPT */
 
 /**
  * \brief          This function performs an ARIA single-block encryption or
@@ -258,10 +249,6 @@ int mbedtls_aria_crypt_cfb128(mbedtls_aria_context *ctx,
  * \brief      This function performs an ARIA-CTR encryption or decryption
  *             operation.
  *
- *             This function performs the operation defined in the \p mode
- *             parameter (encrypt/decrypt), on the input data buffer
- *             defined in the \p input parameter.
- *
  *             Due to the nature of CTR, you must use the same key schedule
  *             for both encryption and decryption operations. Therefore, you
  *             must use the context initialized with mbedtls_aria_setkey_enc()
@@ -304,7 +291,7 @@ int mbedtls_aria_crypt_cfb128(mbedtls_aria_context *ctx,
  *             for example, with 96-bit random nonces, you should not encrypt
  *             more than 2**32 messages with the same key.
  *
- *             Note that for both stategies, sizes are measured in blocks and
+ *             Note that for both strategies, sizes are measured in blocks and
  *             that an ARIA block is 16 bytes.
  *
  * \warning    Upon return, \p stream_block contains sensitive data. Its

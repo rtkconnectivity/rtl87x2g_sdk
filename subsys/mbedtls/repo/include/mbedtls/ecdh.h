@@ -14,19 +14,7 @@
  */
 /*
  *  Copyright The Mbed TLS Contributors
- *  SPDX-License-Identifier: Apache-2.0
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); you may
- *  not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
  */
 
 #ifndef MBEDTLS_ECDH_H
@@ -68,8 +56,7 @@ extern "C" {
 /**
  * Defines the source of the imported EC key.
  */
-typedef enum
-{
+typedef enum {
     MBEDTLS_ECDH_OURS,   /**< Our key. */
     MBEDTLS_ECDH_THEIRS, /**< The key of the peer. */
 } mbedtls_ecdh_side;
@@ -81,8 +68,7 @@ typedef enum
  * Later versions of the library may add new variants, therefore users should
  * not make any assumptions about them.
  */
-typedef enum
-{
+typedef enum {
     MBEDTLS_ECDH_VARIANT_NONE = 0,   /*!< Implementation not defined. */
     MBEDTLS_ECDH_VARIANT_MBEDTLS_2_0,/*!< The default Mbed TLS implementation */
 #if defined(MBEDTLS_ECDH_VARIANT_EVEREST_ENABLED)
@@ -97,8 +83,7 @@ typedef enum
  * should not make any assumptions about the structure of
  * mbedtls_ecdh_context_mbed.
  */
-typedef struct mbedtls_ecdh_context_mbed
-{
+typedef struct mbedtls_ecdh_context_mbed {
     mbedtls_ecp_group MBEDTLS_PRIVATE(grp);   /*!< The elliptic curve used. */
     mbedtls_mpi MBEDTLS_PRIVATE(d);           /*!< The private key. */
     mbedtls_ecp_point MBEDTLS_PRIVATE(Q);     /*!< The public key. */
@@ -117,8 +102,7 @@ typedef struct mbedtls_ecdh_context_mbed
  *                  should not be shared between multiple threads.
  * \brief           The ECDH context structure.
  */
-typedef struct mbedtls_ecdh_context
-{
+typedef struct mbedtls_ecdh_context {
 #if defined(MBEDTLS_ECDH_LEGACY_CONTEXT)
     mbedtls_ecp_group MBEDTLS_PRIVATE(grp);   /*!< The elliptic curve used. */
     mbedtls_mpi MBEDTLS_PRIVATE(d);           /*!< The private key. */
@@ -135,28 +119,40 @@ typedef struct mbedtls_ecdh_context
 #endif /* MBEDTLS_ECP_RESTARTABLE */
 #else
     uint8_t MBEDTLS_PRIVATE(point_format);       /*!< The format of point export in TLS messages
-                                  as defined in RFC 4492. */
+                                                    as defined in RFC 4492. */
     mbedtls_ecp_group_id MBEDTLS_PRIVATE(grp_id);/*!< The elliptic curve used. */
     mbedtls_ecdh_variant MBEDTLS_PRIVATE(var);   /*!< The ECDH implementation/structure used. */
-    union
-    {
+    union {
         mbedtls_ecdh_context_mbed   MBEDTLS_PRIVATE(mbed_ecdh);
 #if defined(MBEDTLS_ECDH_VARIANT_EVEREST_ENABLED)
         mbedtls_ecdh_context_everest MBEDTLS_PRIVATE(everest_ecdh);
 #endif
     } MBEDTLS_PRIVATE(ctx);                      /*!< Implementation-specific context. The
-                                  context in use is specified by the \c var
-                                  field. */
+                                                    context in use is specified by the \c var
+                                                    field. */
 #if defined(MBEDTLS_ECP_RESTARTABLE)
     uint8_t MBEDTLS_PRIVATE(restart_enabled);    /*!< The flag for restartable mode. Functions of
-                                  an alternative implementation not supporting
-                                  restartable mode must return
-                                  MBEDTLS_ERR_PLATFORM_FEATURE_UNSUPPORTED error
-                                  if this flag is set. */
+                                                    an alternative implementation not supporting
+                                                    restartable mode must return
+                                                    MBEDTLS_ERR_PLATFORM_FEATURE_UNSUPPORTED error
+                                                    if this flag is set. */
 #endif /* MBEDTLS_ECP_RESTARTABLE */
 #endif /* MBEDTLS_ECDH_LEGACY_CONTEXT */
 }
 mbedtls_ecdh_context;
+
+/**
+ * \brief          Return the ECP group for provided context.
+ *
+ * \note           To access group specific fields, users should use
+ *                 `mbedtls_ecp_curve_info_from_grp_id` or
+ *                 `mbedtls_ecp_group_load` on the extracted `group_id`.
+ *
+ * \param ctx      The ECDH context to parse. This must not be \c NULL.
+ *
+ * \return         The \c mbedtls_ecp_group_id of the context.
+ */
+mbedtls_ecp_group_id mbedtls_ecdh_get_grp_id(mbedtls_ecdh_context *ctx);
 
 /**
  * \brief          Check whether a given group can be used for ECDH.
@@ -193,7 +189,7 @@ int mbedtls_ecdh_can_do(mbedtls_ecp_group_id gid);
  *                  \c MBEDTLS_MPI_XXX error code on failure.
  */
 int mbedtls_ecdh_gen_public(mbedtls_ecp_group *grp, mbedtls_mpi *d, mbedtls_ecp_point *Q,
-                            int (*f_rng)(void *, unsigned char *, size_t),
+                            mbedtls_f_rng_t *f_rng,
                             void *p_rng);
 
 /**
@@ -229,7 +225,7 @@ int mbedtls_ecdh_gen_public(mbedtls_ecp_group *grp, mbedtls_mpi *d, mbedtls_ecp_
  */
 int mbedtls_ecdh_compute_shared(mbedtls_ecp_group *grp, mbedtls_mpi *z,
                                 const mbedtls_ecp_point *Q, const mbedtls_mpi *d,
-                                int (*f_rng)(void *, unsigned char *, size_t),
+                                mbedtls_f_rng_t *f_rng,
                                 void *p_rng);
 
 /**
@@ -294,7 +290,7 @@ void mbedtls_ecdh_free(mbedtls_ecdh_context *ctx);
  */
 int mbedtls_ecdh_make_params(mbedtls_ecdh_context *ctx, size_t *olen,
                              unsigned char *buf, size_t blen,
-                             int (*f_rng)(void *, unsigned char *, size_t),
+                             mbedtls_f_rng_t *f_rng,
                              void *p_rng);
 
 /**
@@ -329,7 +325,7 @@ int mbedtls_ecdh_read_params(mbedtls_ecdh_context *ctx,
  * \brief           This function sets up an ECDH context from an EC key.
  *
  *                  It is used by clients and servers in place of the
- *                  ServerKeyEchange for static ECDH, and imports ECDH
+ *                  ServerKeyExchange for static ECDH, and imports ECDH
  *                  parameters from the EC key information of a certificate.
  *
  * \see             ecp.h
@@ -376,7 +372,7 @@ int mbedtls_ecdh_get_params(mbedtls_ecdh_context *ctx,
  */
 int mbedtls_ecdh_make_public(mbedtls_ecdh_context *ctx, size_t *olen,
                              unsigned char *buf, size_t blen,
-                             int (*f_rng)(void *, unsigned char *, size_t),
+                             mbedtls_f_rng_t *f_rng,
                              void *p_rng);
 
 /**
@@ -432,7 +428,7 @@ int mbedtls_ecdh_read_public(mbedtls_ecdh_context *ctx,
  */
 int mbedtls_ecdh_calc_secret(mbedtls_ecdh_context *ctx, size_t *olen,
                              unsigned char *buf, size_t blen,
-                             int (*f_rng)(void *, unsigned char *, size_t),
+                             mbedtls_f_rng_t *f_rng,
                              void *p_rng);
 
 #if defined(MBEDTLS_ECP_RESTARTABLE)

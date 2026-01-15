@@ -17,19 +17,7 @@
  */
 /*
  *  Copyright The Mbed TLS Contributors
- *  SPDX-License-Identifier: Apache-2.0
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); you may
- *  not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
  */
 
 #ifndef MBEDTLS_NIST_KW_H
@@ -44,8 +32,7 @@
 extern "C" {
 #endif
 
-typedef enum
-{
+typedef enum {
     MBEDTLS_KW_MODE_KW = 0,
     MBEDTLS_KW_MODE_KWP = 1
 } mbedtls_nist_kw_mode_t;
@@ -61,8 +48,7 @@ typedef enum
  * \note     The definition of this type may change in future library versions.
  *           Don't make any assumptions on this context!
  */
-typedef struct
-{
+typedef struct {
     mbedtls_cipher_context_t MBEDTLS_PRIVATE(cipher_ctx);    /*!< The cipher context used. */
 } mbedtls_nist_kw_context;
 

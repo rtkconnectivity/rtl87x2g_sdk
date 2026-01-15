@@ -11,22 +11,17 @@
  *        implementations of these functions, or implementations specific to
  *        their platform, which can be statically linked to the library or
  *        dynamically configured at runtime.
+ *
+ *        When all compilation options related to platform abstraction are
+ *        disabled, this header just defines `mbedtls_xxx` function names
+ *        as aliases to the standard `xxx` function.
+ *
+ *        Most modules in the library and example programs are expected to
+ *        include this header.
  */
 /*
  *  Copyright The Mbed TLS Contributors
- *  SPDX-License-Identifier: Apache-2.0
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); you may
- *  not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
  */
 #ifndef MBEDTLS_PLATFORM_H
 #define MBEDTLS_PLATFORM_H
@@ -62,7 +57,9 @@ extern "C" {
 #if !defined(MBEDTLS_PLATFORM_NO_STD_FUNCTIONS)
 #include <stdio.h>
 #include <stdlib.h>
+#if defined(MBEDTLS_HAVE_TIME)
 #include <time.h>
+#endif
 #if !defined(MBEDTLS_PLATFORM_STD_SNPRINTF)
 #if defined(MBEDTLS_PLATFORM_HAS_NON_CONFORMING_SNPRINTF)
 #define MBEDTLS_PLATFORM_STD_SNPRINTF   mbedtls_platform_win32_snprintf /**< The default \c snprintf function to use.  */
@@ -88,6 +85,9 @@ extern "C" {
 #endif
 #if !defined(MBEDTLS_PLATFORM_STD_FREE)
 #define MBEDTLS_PLATFORM_STD_FREE       free /**< The default \c free function to use. */
+#endif
+#if !defined(MBEDTLS_PLATFORM_STD_SETBUF)
+#define MBEDTLS_PLATFORM_STD_SETBUF   setbuf /**< The default \c setbuf function to use. */
 #endif
 #if !defined(MBEDTLS_PLATFORM_STD_EXIT)
 #define MBEDTLS_PLATFORM_STD_EXIT      exit /**< The default \c exit function to use. */
@@ -118,15 +118,28 @@ extern "C" {
 #endif
 #endif /* MBEDTLS_PLATFORM_NO_STD_FUNCTIONS */
 
+/* Enable certain documented defines only when generating doxygen to avoid
+ * an "unrecognized define" error. */
+#if defined(__DOXYGEN__) && !defined(MBEDTLS_PLATFORM_STD_CALLOC)
+#define MBEDTLS_PLATFORM_STD_CALLOC
+#endif
 
-/* \} name SECTION: Module settings */
+#if defined(__DOXYGEN__) && !defined(MBEDTLS_PLATFORM_STD_FREE)
+#define MBEDTLS_PLATFORM_STD_FREE
+#endif
+
+/** \} name SECTION: Module settings */
 
 /*
  * The function pointers for calloc and free.
+ * Please see MBEDTLS_PLATFORM_STD_CALLOC and MBEDTLS_PLATFORM_STD_FREE
+ * in mbedtls_config.h for more information about behaviour and requirements.
  */
 #if defined(MBEDTLS_PLATFORM_MEMORY)
 #if defined(MBEDTLS_PLATFORM_FREE_MACRO) && \
     defined(MBEDTLS_PLATFORM_CALLOC_MACRO)
+#undef mbedtls_free
+#undef mbedtls_calloc
 #define mbedtls_free       MBEDTLS_PLATFORM_FREE_MACRO
 #define mbedtls_calloc     MBEDTLS_PLATFORM_CALLOC_MACRO
 #else
@@ -148,6 +161,8 @@ int mbedtls_platform_set_calloc_free(void *(*calloc_func)(size_t, size_t),
                                      void (*free_func)(void *));
 #endif /* MBEDTLS_PLATFORM_FREE_MACRO && MBEDTLS_PLATFORM_CALLOC_MACRO */
 #else /* !MBEDTLS_PLATFORM_MEMORY */
+#undef mbedtls_free
+#undef mbedtls_calloc
 #define mbedtls_free       free
 #define mbedtls_calloc     calloc
 #endif /* MBEDTLS_PLATFORM_MEMORY && !MBEDTLS_PLATFORM_{FREE,CALLOC}_MACRO */
@@ -172,6 +187,7 @@ extern int (*mbedtls_fprintf)(FILE *stream, const char *format, ...);
 int mbedtls_platform_set_fprintf(int (*fprintf_func)(FILE *stream, const char *,
                                                      ...));
 #else
+#undef mbedtls_fprintf
 #if defined(MBEDTLS_PLATFORM_FPRINTF_MACRO)
 #define mbedtls_fprintf    MBEDTLS_PLATFORM_FPRINTF_MACRO
 #else
@@ -196,6 +212,7 @@ extern int (*mbedtls_printf)(const char *format, ...);
  */
 int mbedtls_platform_set_printf(int (*printf_func)(const char *, ...));
 #else /* !MBEDTLS_PLATFORM_PRINTF_ALT */
+#undef mbedtls_printf
 #if defined(MBEDTLS_PLATFORM_PRINTF_MACRO)
 #define mbedtls_printf     MBEDTLS_PLATFORM_PRINTF_MACRO
 #else
@@ -231,6 +248,7 @@ extern int (*mbedtls_snprintf)(char *s, size_t n, const char *format, ...);
 int mbedtls_platform_set_snprintf(int (*snprintf_func)(char *s, size_t n,
                                                        const char *format, ...));
 #else /* MBEDTLS_PLATFORM_SNPRINTF_ALT */
+#undef mbedtls_snprintf
 #if defined(MBEDTLS_PLATFORM_SNPRINTF_MACRO)
 #define mbedtls_snprintf   MBEDTLS_PLATFORM_SNPRINTF_MACRO
 #else
@@ -267,12 +285,66 @@ extern int (*mbedtls_vsnprintf)(char *s, size_t n, const char *format, va_list a
 int mbedtls_platform_set_vsnprintf(int (*vsnprintf_func)(char *s, size_t n,
                                                          const char *format, va_list arg));
 #else /* MBEDTLS_PLATFORM_VSNPRINTF_ALT */
+#undef mbedtls_vsnprintf
 #if defined(MBEDTLS_PLATFORM_VSNPRINTF_MACRO)
 #define mbedtls_vsnprintf   MBEDTLS_PLATFORM_VSNPRINTF_MACRO
 #else
 #define mbedtls_vsnprintf   vsnprintf
 #endif /* MBEDTLS_PLATFORM_VSNPRINTF_MACRO */
 #endif /* MBEDTLS_PLATFORM_VSNPRINTF_ALT */
+
+/*
+ * The function pointers for setbuf
+ */
+#if defined(MBEDTLS_PLATFORM_SETBUF_ALT)
+#include <stdio.h>
+/**
+ * \brief                  Function pointer to call for `setbuf()` functionality
+ *                         (changing the internal buffering on stdio calls).
+ *
+ * \note                   The library calls this function to disable
+ *                         buffering when reading or writing sensitive data,
+ *                         to avoid having extra copies of sensitive data
+ *                         remaining in stdio buffers after the file is
+ *                         closed. If this is not a concern, for example if
+ *                         your platform's stdio doesn't have any buffering,
+ *                         you can set mbedtls_setbuf to a function that
+ *                         does nothing.
+ *
+ *                         The library always calls this function with
+ *                         `buf` equal to `NULL`.
+ */
+extern void (*mbedtls_setbuf)(FILE *stream, char *buf);
+
+/**
+ * \brief                  Dynamically configure the function that is called
+ *                         when the mbedtls_setbuf() function is called by the
+ *                         library.
+ *
+ * \param   setbuf_func   The \c setbuf function implementation
+ *
+ * \return                 \c 0
+ */
+int mbedtls_platform_set_setbuf(void (*setbuf_func)(
+                                    FILE *stream, char *buf));
+#else
+#undef mbedtls_setbuf
+#if defined(MBEDTLS_PLATFORM_SETBUF_MACRO)
+/**
+ * \brief                  Macro defining the function for the library to
+ *                         call for `setbuf` functionality (changing the
+ *                         internal buffering on stdio calls).
+ *
+ * \note                   See extra comments on the mbedtls_setbuf() function
+ *                         pointer above.
+ *
+ * \return                 \c 0 on success, negative on error.
+ */
+#define mbedtls_setbuf    MBEDTLS_PLATFORM_SETBUF_MACRO
+#else
+#define mbedtls_setbuf    setbuf
+#endif /* MBEDTLS_PLATFORM_SETBUF_MACRO */
+#endif /* MBEDTLS_PLATFORM_SETBUF_ALT */
 
 /*
  * The function pointers for exit
@@ -291,6 +363,7 @@ extern void (*mbedtls_exit)(int status);
  */
 int mbedtls_platform_set_exit(void (*exit_func)(int status));
 #else
+#undef mbedtls_exit
 #if defined(MBEDTLS_PLATFORM_EXIT_MACRO)
 #define mbedtls_exit   MBEDTLS_PLATFORM_EXIT_MACRO
 #else
@@ -341,8 +414,10 @@ extern int (*mbedtls_nv_seed_write)(unsigned char *buf, size_t buf_len);
 int mbedtls_platform_set_nv_seed(
     int (*nv_seed_read_func)(unsigned char *buf, size_t buf_len),
     int (*nv_seed_write_func)(unsigned char *buf, size_t buf_len)
-);
+    );
 #else
+#undef mbedtls_nv_seed_read
+#undef mbedtls_nv_seed_write
 #if defined(MBEDTLS_PLATFORM_NV_SEED_READ_MACRO) && \
     defined(MBEDTLS_PLATFORM_NV_SEED_WRITE_MACRO)
 #define mbedtls_nv_seed_read    MBEDTLS_PLATFORM_NV_SEED_READ_MACRO
@@ -362,8 +437,7 @@ int mbedtls_platform_set_nv_seed(
  * \note    This structure may be used to assist platform-specific
  *          setup or teardown operations.
  */
-typedef struct mbedtls_platform_context
-{
+typedef struct mbedtls_platform_context {
     char MBEDTLS_PRIVATE(dummy); /**< A placeholder member, as empty structs are not portable. */
 }
 mbedtls_platform_context;

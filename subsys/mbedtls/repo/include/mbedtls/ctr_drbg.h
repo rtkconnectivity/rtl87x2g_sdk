@@ -23,19 +23,7 @@
  */
 /*
  *  Copyright The Mbed TLS Contributors
- *  SPDX-License-Identifier: Apache-2.0
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); you may
- *  not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
  */
 
 #ifndef MBEDTLS_CTR_DRBG_H
@@ -44,16 +32,43 @@
 
 #include "mbedtls/build_info.h"
 
+/* The CTR_DRBG implementation can either directly call the low-level AES
+ * module (gated by MBEDTLS_AES_C) or call the PSA API to perform AES
+ * operations. Calling the AES module directly is the default, both for
+ * maximum backward compatibility and because it's a bit more efficient
+ * (less glue code).
+ *
+ * When MBEDTLS_AES_C is disabled, the CTR_DRBG module calls PSA crypto and
+ * thus benefits from the PSA AES accelerator driver.
+ * It is technically possible to enable MBEDTLS_CTR_DRBG_USE_PSA_CRYPTO
+ * to use PSA even when MBEDTLS_AES_C is enabled, but there is very little
+ * reason to do so other than testing purposes and this is not officially
+ * supported.
+ */
+#if !defined(MBEDTLS_AES_C)
+#define MBEDTLS_CTR_DRBG_USE_PSA_CRYPTO
+#endif
+
+#if defined(MBEDTLS_CTR_DRBG_USE_PSA_CRYPTO)
+#include "psa/crypto.h"
+#else
 #include "mbedtls/aes.h"
+#endif
+
+#include "entropy.h"
 
 #if defined(MBEDTLS_THREADING_C)
 #include "mbedtls/threading.h"
 #endif
 
-#define MBEDTLS_ERR_CTR_DRBG_ENTROPY_SOURCE_FAILED        -0x0034  /**< The entropy source failed. */
-#define MBEDTLS_ERR_CTR_DRBG_REQUEST_TOO_BIG              -0x0036  /**< The requested random buffer length is too big. */
-#define MBEDTLS_ERR_CTR_DRBG_INPUT_TOO_BIG                -0x0038  /**< The input (entropy + additional data) is too large. */
-#define MBEDTLS_ERR_CTR_DRBG_FILE_IO_ERROR                -0x003A  /**< Read or write error in file. */
+/** The entropy source failed. */
+#define MBEDTLS_ERR_CTR_DRBG_ENTROPY_SOURCE_FAILED        -0x0034
+/** The requested random buffer length is too big. */
+#define MBEDTLS_ERR_CTR_DRBG_REQUEST_TOO_BIG              -0x0036
+/** The input (entropy + additional data) is too large. */
+#define MBEDTLS_ERR_CTR_DRBG_INPUT_TOO_BIG                -0x0038
+/** Read or write error in file. */
+#define MBEDTLS_ERR_CTR_DRBG_FILE_IO_ERROR                -0x003A
 
 #define MBEDTLS_CTR_DRBG_BLOCKSIZE          16 /**< The block size used by the cipher. */
 
@@ -73,8 +88,8 @@
  */
 #endif
 
-#define MBEDTLS_CTR_DRBG_KEYBITS            ( MBEDTLS_CTR_DRBG_KEYSIZE * 8 ) /**< The key size for the DRBG operation, in bits. */
-#define MBEDTLS_CTR_DRBG_SEEDLEN            ( MBEDTLS_CTR_DRBG_KEYSIZE + MBEDTLS_CTR_DRBG_BLOCKSIZE ) /**< The seed length, calculated as (counter + AES key). */
+#define MBEDTLS_CTR_DRBG_KEYBITS            (MBEDTLS_CTR_DRBG_KEYSIZE * 8)   /**< The key size for the DRBG operation, in bits. */
+#define MBEDTLS_CTR_DRBG_SEEDLEN            (MBEDTLS_CTR_DRBG_KEYSIZE + MBEDTLS_CTR_DRBG_BLOCKSIZE)   /**< The seed length, calculated as (counter + AES key). */
 
 /**
  * \name SECTION: Module settings
@@ -90,17 +105,14 @@
  * \brief The amount of entropy used per seed by default, in bytes.
  */
 #if !defined(MBEDTLS_CTR_DRBG_ENTROPY_LEN)
-#if defined(MBEDTLS_SHA512_C) && !defined(MBEDTLS_ENTROPY_FORCE_SHA256)
-/** This is 48 bytes because the entropy module uses SHA-512
- * (\c MBEDTLS_ENTROPY_FORCE_SHA256 is disabled).
+#if defined(MBEDTLS_ENTROPY_SHA512_ACCUMULATOR)
+/** This is 48 bytes because the entropy module uses SHA-512.
  */
 #define MBEDTLS_CTR_DRBG_ENTROPY_LEN        48
 
-#else /* defined(MBEDTLS_SHA512_C) && !defined(MBEDTLS_ENTROPY_FORCE_SHA256) */
+#else /* MBEDTLS_ENTROPY_SHA512_ACCUMULATOR */
 
-/** This is 32 bytes because the entropy module uses SHA-256
- * (the SHA512 module is disabled or
- * \c MBEDTLS_ENTROPY_FORCE_SHA256 is enabled).
+/** This is 32 bytes because the entropy module uses SHA-256.
  */
 #if !defined(MBEDTLS_CTR_DRBG_USE_128_BIT_KEY)
 /** \warning To achieve a 256-bit security strength, you must pass a nonce
@@ -108,7 +120,7 @@
  */
 #endif /* !defined(MBEDTLS_CTR_DRBG_USE_128_BIT_KEY) */
 #define MBEDTLS_CTR_DRBG_ENTROPY_LEN        32
-#endif /* defined(MBEDTLS_SHA512_C) && !defined(MBEDTLS_ENTROPY_FORCE_SHA256) */
+#endif /* MBEDTLS_ENTROPY_SHA512_ACCUMULATOR */
 #endif /* !defined(MBEDTLS_CTR_DRBG_ENTROPY_LEN) */
 
 #if !defined(MBEDTLS_CTR_DRBG_RESEED_INTERVAL)
@@ -131,7 +143,7 @@
 /**< The maximum size of seed or reseed buffer in bytes. */
 #endif
 
-/* \} name SECTION: Module settings */
+/** \} name SECTION: Module settings */
 
 #define MBEDTLS_CTR_DRBG_PR_OFF             0
 /**< Prediction resistance is disabled. */
@@ -157,41 +169,51 @@ extern "C" {
  * the entropy source does not provide enough material to form a nonce.
  * See the documentation of mbedtls_ctr_drbg_seed() for more information.
  */
-#define MBEDTLS_CTR_DRBG_ENTROPY_NONCE_LEN ( MBEDTLS_CTR_DRBG_ENTROPY_LEN + 1 ) / 2
+#define MBEDTLS_CTR_DRBG_ENTROPY_NONCE_LEN (MBEDTLS_CTR_DRBG_ENTROPY_LEN + 1) / 2
+#endif
+
+#if defined(MBEDTLS_CTR_DRBG_USE_PSA_CRYPTO)
+typedef struct mbedtls_ctr_drbg_psa_context {
+    mbedtls_svc_key_id_t key_id;
+    psa_cipher_operation_t operation;
+} mbedtls_ctr_drbg_psa_context;
 #endif
 
 /**
  * \brief          The CTR_DRBG context structure.
  */
-typedef struct mbedtls_ctr_drbg_context
-{
+typedef struct mbedtls_ctr_drbg_context {
     unsigned char MBEDTLS_PRIVATE(counter)[16];  /*!< The counter (V). */
     int MBEDTLS_PRIVATE(reseed_counter);         /*!< The reseed counter.
-                                 * This is the number of requests that have
-                                 * been made since the last (re)seeding,
-                                 * minus one.
-                                 * Before the initial seeding, this field
-                                 * contains the amount of entropy in bytes
-                                 * to use as a nonce for the initial seeding,
-                                 * or -1 if no nonce length has been explicitly
-                                 * set (see mbedtls_ctr_drbg_set_nonce_len()).
-                                 */
+                                                  * This is the number of requests that have
+                                                  * been made since the last (re)seeding,
+                                                  * minus one.
+                                                  * Before the initial seeding, this field
+                                                  * contains the amount of entropy in bytes
+                                                  * to use as a nonce for the initial seeding,
+                                                  * or -1 if no nonce length has been explicitly
+                                                  * set (see mbedtls_ctr_drbg_set_nonce_len()).
+                                                  */
     int MBEDTLS_PRIVATE(prediction_resistance);  /*!< This determines whether prediction
-                                     resistance is enabled, that is
-                                     whether to systematically reseed before
-                                     each random generation. */
+                                                    resistance is enabled, that is
+                                                    whether to systematically reseed before
+                                                    each random generation. */
     size_t MBEDTLS_PRIVATE(entropy_len);         /*!< The amount of entropy grabbed on each
-                                     seed or reseed operation, in bytes. */
+                                                    seed or reseed operation, in bytes. */
     int MBEDTLS_PRIVATE(reseed_interval);        /*!< The reseed interval.
-                                 * This is the maximum number of requests
-                                 * that can be made between reseedings. */
+                                                  * This is the maximum number of requests
+                                                  * that can be made between reseedings. */
 
+#if defined(MBEDTLS_CTR_DRBG_USE_PSA_CRYPTO)
+    mbedtls_ctr_drbg_psa_context MBEDTLS_PRIVATE(psa_ctx); /*!< The PSA context. */
+#else
     mbedtls_aes_context MBEDTLS_PRIVATE(aes_ctx);        /*!< The AES context. */
+#endif
 
     /*
      * Callbacks (Entropy)
      */
-    int (*MBEDTLS_PRIVATE(f_entropy))(void *, unsigned char *, size_t);
+    int(*MBEDTLS_PRIVATE(f_entropy))(void *, unsigned char *, size_t);
     /*!< The entropy callback function. */
 
     void *MBEDTLS_PRIVATE(p_entropy);            /*!< The context for the entropy function. */

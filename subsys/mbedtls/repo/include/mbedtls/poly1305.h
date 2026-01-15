@@ -14,19 +14,7 @@
 
 /*
  *  Copyright The Mbed TLS Contributors
- *  SPDX-License-Identifier: Apache-2.0
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); you may
- *  not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
  */
 
 #ifndef MBEDTLS_POLY1305_H
@@ -38,7 +26,8 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#define MBEDTLS_ERR_POLY1305_BAD_INPUT_DATA         -0x0057 /**< Invalid input parameter(s). */
+/** Invalid input parameter(s). */
+#define MBEDTLS_ERR_POLY1305_BAD_INPUT_DATA         -0x0057
 
 #ifdef __cplusplus
 extern "C" {
@@ -46,8 +35,7 @@ extern "C" {
 
 #if !defined(MBEDTLS_POLY1305_ALT)
 
-typedef struct mbedtls_poly1305_context
-{
+typedef struct mbedtls_poly1305_context {
     uint32_t MBEDTLS_PRIVATE(r)[4];      /** The value for 'r' (low 128 bits of the key). */
     uint32_t MBEDTLS_PRIVATE(s)[4];      /** The value for 's' (high 128 bits of the key). */
     uint32_t MBEDTLS_PRIVATE(acc)[5];    /** The accumulator number. */

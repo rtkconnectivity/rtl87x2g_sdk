@@ -45,19 +45,7 @@
  */
 /*
  *  Copyright The Mbed TLS Contributors
- *  SPDX-License-Identifier: Apache-2.0
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); you may
- *  not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
  */
 
 #ifndef MBEDTLS_DHM_H
@@ -70,20 +58,29 @@
 /*
  * DHM Error codes
  */
-#define MBEDTLS_ERR_DHM_BAD_INPUT_DATA                    -0x3080  /**< Bad input parameters. */
-#define MBEDTLS_ERR_DHM_READ_PARAMS_FAILED                -0x3100  /**< Reading of the DHM parameters failed. */
-#define MBEDTLS_ERR_DHM_MAKE_PARAMS_FAILED                -0x3180  /**< Making of the DHM parameters failed. */
-#define MBEDTLS_ERR_DHM_READ_PUBLIC_FAILED                -0x3200  /**< Reading of the public values failed. */
-#define MBEDTLS_ERR_DHM_MAKE_PUBLIC_FAILED                -0x3280  /**< Making of the public value failed. */
-#define MBEDTLS_ERR_DHM_CALC_SECRET_FAILED                -0x3300  /**< Calculation of the DHM secret failed. */
-#define MBEDTLS_ERR_DHM_INVALID_FORMAT                    -0x3380  /**< The ASN.1 data is not formatted correctly. */
-#define MBEDTLS_ERR_DHM_ALLOC_FAILED                      -0x3400  /**< Allocation of memory failed. */
-#define MBEDTLS_ERR_DHM_FILE_IO_ERROR                     -0x3480  /**< Read or write of file failed. */
-#define MBEDTLS_ERR_DHM_SET_GROUP_FAILED                  -0x3580  /**< Setting the modulus and generator failed. */
+/** Bad input parameters. */
+#define MBEDTLS_ERR_DHM_BAD_INPUT_DATA                    -0x3080
+/** Reading of the DHM parameters failed. */
+#define MBEDTLS_ERR_DHM_READ_PARAMS_FAILED                -0x3100
+/** Making of the DHM parameters failed. */
+#define MBEDTLS_ERR_DHM_MAKE_PARAMS_FAILED                -0x3180
+/** Reading of the public values failed. */
+#define MBEDTLS_ERR_DHM_READ_PUBLIC_FAILED                -0x3200
+/** Making of the public value failed. */
+#define MBEDTLS_ERR_DHM_MAKE_PUBLIC_FAILED                -0x3280
+/** Calculation of the DHM secret failed. */
+#define MBEDTLS_ERR_DHM_CALC_SECRET_FAILED                -0x3300
+/** The ASN.1 data is not formatted correctly. */
+#define MBEDTLS_ERR_DHM_INVALID_FORMAT                    -0x3380
+/** Allocation of memory failed. */
+#define MBEDTLS_ERR_DHM_ALLOC_FAILED                      -0x3400
+/** Read or write of file failed. */
+#define MBEDTLS_ERR_DHM_FILE_IO_ERROR                     -0x3480
+/** Setting the modulus and generator failed. */
+#define MBEDTLS_ERR_DHM_SET_GROUP_FAILED                  -0x3580
 
 /** Which parameter to access in mbedtls_dhm_get_value(). */
-typedef enum
-{
+typedef enum {
     MBEDTLS_DHM_PARAM_P,  /*!<  The prime modulus. */
     MBEDTLS_DHM_PARAM_G,  /*!<  The generator. */
     MBEDTLS_DHM_PARAM_X,  /*!<  Our secret value. */
@@ -101,8 +98,7 @@ extern "C" {
 /**
  * \brief          The DHM context structure.
  */
-typedef struct mbedtls_dhm_context
-{
+typedef struct mbedtls_dhm_context {
     mbedtls_mpi MBEDTLS_PRIVATE(P);      /*!<  The prime modulus. */
     mbedtls_mpi MBEDTLS_PRIVATE(G);      /*!<  The generator. */
     mbedtls_mpi MBEDTLS_PRIVATE(X);      /*!<  Our secret value. */
@@ -187,7 +183,7 @@ int mbedtls_dhm_read_params(mbedtls_dhm_context *ctx,
  */
 int mbedtls_dhm_make_params(mbedtls_dhm_context *ctx, int x_size,
                             unsigned char *output, size_t *olen,
-                            int (*f_rng)(void *, unsigned char *, size_t),
+                            mbedtls_f_rng_t *f_rng,
                             void *p_rng);
 
 /**
@@ -254,7 +250,7 @@ int mbedtls_dhm_read_public(mbedtls_dhm_context *ctx,
  */
 int mbedtls_dhm_make_public(mbedtls_dhm_context *ctx, int x_size,
                             unsigned char *output, size_t olen,
-                            int (*f_rng)(void *, unsigned char *, size_t),
+                            mbedtls_f_rng_t *f_rng,
                             void *p_rng);
 
 /**
@@ -285,7 +281,7 @@ int mbedtls_dhm_make_public(mbedtls_dhm_context *ctx, int x_size,
  */
 int mbedtls_dhm_calc_secret(mbedtls_dhm_context *ctx,
                             unsigned char *output, size_t output_size, size_t *olen,
-                            int (*f_rng)(void *, unsigned char *, size_t),
+                            mbedtls_f_rng_t *f_rng,
                             void *p_rng);
 
 /**
@@ -317,7 +313,7 @@ size_t mbedtls_dhm_get_len(const mbedtls_dhm_context *ctx);
  *                 initialized.
  *
  * \return         \c 0 on success.
- * \return         #MBEDTLS_ERR_DHM_BAD_INPUT_DATA if \p field is invalid.
+ * \return         #MBEDTLS_ERR_DHM_BAD_INPUT_DATA if \p param is invalid.
  * \return         An \c MBEDTLS_ERR_MPI_XXX error code if the copy fails.
  */
 int mbedtls_dhm_get_value(const mbedtls_dhm_context *ctx,

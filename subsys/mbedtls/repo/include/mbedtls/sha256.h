@@ -8,19 +8,7 @@
  */
 /*
  *  Copyright The Mbed TLS Contributors
- *  SPDX-License-Identifier: Apache-2.0
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); you may
- *  not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
  */
 #ifndef MBEDTLS_SHA256_H
 #define MBEDTLS_SHA256_H
@@ -31,7 +19,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#define MBEDTLS_ERR_SHA256_BAD_INPUT_DATA                 -0x0074  /**< SHA-256 input data was malformed. */
+/** SHA-256 input data was malformed. */
+#define MBEDTLS_ERR_SHA256_BAD_INPUT_DATA                 -0x0074
 
 #ifdef __cplusplus
 extern "C" {
@@ -48,13 +37,14 @@ extern "C" {
  *                 checksum calculations. The choice between these two is
  *                 made in the call to mbedtls_sha256_starts().
  */
-typedef struct mbedtls_sha256_context
-{
+typedef struct mbedtls_sha256_context {
+    unsigned char MBEDTLS_PRIVATE(buffer)[64];   /*!< The data block being processed. */
     uint32_t MBEDTLS_PRIVATE(total)[2];          /*!< The number of Bytes processed.  */
     uint32_t MBEDTLS_PRIVATE(state)[8];          /*!< The intermediate digest state.  */
-    unsigned char MBEDTLS_PRIVATE(buffer)[64];   /*!< The data block being processed. */
+#if defined(MBEDTLS_SHA224_C)
     int MBEDTLS_PRIVATE(is224);                  /*!< Determines which function to use:
-                                     0: Use SHA-256, or 1: Use SHA-224. */
+                                                    0: Use SHA-256, or 1: Use SHA-224. */
+#endif
 }
 mbedtls_sha256_context;
 
@@ -94,6 +84,10 @@ void mbedtls_sha256_clone(mbedtls_sha256_context *dst,
  * \param ctx      The context to use. This must be initialized.
  * \param is224    This determines which function to use. This must be
  *                 either \c 0 for SHA-256, or \c 1 for SHA-224.
+ *
+ * \note           is224 must be defined accordingly to the enabled
+ *                 MBEDTLS_SHA224_C/MBEDTLS_SHA256_C symbols otherwise the
+ *                 function will return #MBEDTLS_ERR_SHA512_BAD_INPUT_DATA.
  *
  * \return         \c 0 on success.
  * \return         A negative error code on failure.
@@ -166,6 +160,9 @@ int mbedtls_internal_sha256_process(mbedtls_sha256_context *ctx,
  *                 for SHA-256, \c 28 bytes for SHA-224.
  * \param is224    Determines which function to use. This must be
  *                 either \c 0 for SHA-256, or \c 1 for SHA-224.
+ *
+ * \return         \c 0 on success.
+ * \return         A negative error code on failure.
  */
 int mbedtls_sha256(const unsigned char *input,
                    size_t ilen,
@@ -174,13 +171,25 @@ int mbedtls_sha256(const unsigned char *input,
 
 #if defined(MBEDTLS_SELF_TEST)
 
+#if defined(MBEDTLS_SHA224_C)
 /**
- * \brief          The SHA-224 and SHA-256 checkup routine.
+ * \brief          The SHA-224 checkup routine.
+ *
+ * \return         \c 0 on success.
+ * \return         \c 1 on failure.
+ */
+int mbedtls_sha224_self_test(int verbose);
+#endif /* MBEDTLS_SHA224_C */
+
+#if defined(MBEDTLS_SHA256_C)
+/**
+ * \brief          The SHA-256 checkup routine.
  *
  * \return         \c 0 on success.
  * \return         \c 1 on failure.
  */
 int mbedtls_sha256_self_test(int verbose);
+#endif /* MBEDTLS_SHA256_C */
 
 #endif /* MBEDTLS_SELF_TEST */
 

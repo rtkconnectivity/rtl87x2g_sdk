@@ -5,19 +5,7 @@
  */
 /*
  *  Copyright The Mbed TLS Contributors
- *  SPDX-License-Identifier: Apache-2.0
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); you may
- *  not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
  */
 #ifndef MBEDTLS_CAMELLIA_H
 #define MBEDTLS_CAMELLIA_H
@@ -33,9 +21,11 @@
 #define MBEDTLS_CAMELLIA_ENCRYPT     1
 #define MBEDTLS_CAMELLIA_DECRYPT     0
 
-#define MBEDTLS_ERR_CAMELLIA_BAD_INPUT_DATA -0x0024 /**< Bad input data. */
+/** Bad input data. */
+#define MBEDTLS_ERR_CAMELLIA_BAD_INPUT_DATA -0x0024
 
-#define MBEDTLS_ERR_CAMELLIA_INVALID_INPUT_LENGTH -0x0026 /**< Invalid data input length. */
+/** Invalid data input length. */
+#define MBEDTLS_ERR_CAMELLIA_INVALID_INPUT_LENGTH -0x0026
 
 #ifdef __cplusplus
 extern "C" {
@@ -48,8 +38,7 @@ extern "C" {
 /**
  * \brief          CAMELLIA context structure
  */
-typedef struct mbedtls_camellia_context
-{
+typedef struct mbedtls_camellia_context {
     int MBEDTLS_PRIVATE(nr);                     /*!<  number of rounds  */
     uint32_t MBEDTLS_PRIVATE(rk)[68];            /*!<  CAMELLIA round keys    */
 }
@@ -92,6 +81,7 @@ int mbedtls_camellia_setkey_enc(mbedtls_camellia_context *ctx,
                                 const unsigned char *key,
                                 unsigned int keybits);
 
+#if !defined(MBEDTLS_BLOCK_CIPHER_NO_DECRYPT)
 /**
  * \brief          Perform a CAMELLIA key schedule operation for decryption.
  *
@@ -107,6 +97,7 @@ int mbedtls_camellia_setkey_enc(mbedtls_camellia_context *ctx,
 int mbedtls_camellia_setkey_dec(mbedtls_camellia_context *ctx,
                                 const unsigned char *key,
                                 unsigned int keybits);
+#endif /* !MBEDTLS_BLOCK_CIPHER_NO_DECRYPT */
 
 /**
  * \brief          Perform a CAMELLIA-ECB block encryption/decryption operation.
@@ -219,7 +210,7 @@ int mbedtls_camellia_crypt_cfb128(mbedtls_camellia_context *ctx,
  * *note       Due to the nature of CTR mode, you should use the same
  *             key for both encryption and decryption. In particular, calls
  *             to this function should be preceded by a key-schedule via
- *             mbedtls_camellia_setkey_enc() regardless of whether \p mode
+ *             mbedtls_camellia_setkey_enc() regardless of whether the mode
  *             is #MBEDTLS_CAMELLIA_ENCRYPT or #MBEDTLS_CAMELLIA_DECRYPT.
  *
  * \warning    You must never reuse a nonce value with the same key. Doing so
@@ -260,7 +251,7 @@ int mbedtls_camellia_crypt_cfb128(mbedtls_camellia_context *ctx,
  *             encrypted: for example, with 96-bit random nonces, you should
  *             not encrypt more than 2**32 messages with the same key.
  *
- *             Note that for both stategies, sizes are measured in blocks and
+ *             Note that for both strategies, sizes are measured in blocks and
  *             that a CAMELLIA block is \c 16 Bytes.
  *
  * \warning    Upon return, \p stream_block contains sensitive data. Its

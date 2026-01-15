@@ -5,19 +5,7 @@
  */
 /*
  *  Copyright The Mbed TLS Contributors
- *  SPDX-License-Identifier: Apache-2.0
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); you may
- *  not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
  */
 #ifndef MBEDTLS_MEMORY_BUFFER_ALLOC_H
 #define MBEDTLS_MEMORY_BUFFER_ALLOC_H
@@ -38,12 +26,13 @@
 #define MBEDTLS_MEMORY_ALIGN_MULTIPLE       4 /**< Align on multiples of this value */
 #endif
 
-/* \} name SECTION: Module settings */
+/** \} name SECTION: Module settings */
 
 #define MBEDTLS_MEMORY_VERIFY_NONE         0
 #define MBEDTLS_MEMORY_VERIFY_ALLOC        (1 << 0)
 #define MBEDTLS_MEMORY_VERIFY_FREE         (1 << 1)
-#define MBEDTLS_MEMORY_VERIFY_ALWAYS       (MBEDTLS_MEMORY_VERIFY_ALLOC | MBEDTLS_MEMORY_VERIFY_FREE)
+#define MBEDTLS_MEMORY_VERIFY_ALWAYS       (MBEDTLS_MEMORY_VERIFY_ALLOC | \
+                                            MBEDTLS_MEMORY_VERIFY_FREE)
 
 #ifdef __cplusplus
 extern "C" {
@@ -89,6 +78,14 @@ void mbedtls_memory_buffer_set_verify(int verify);
  *          trace if MBEDTLS_MEMORY_BACKTRACE is defined.
  */
 void mbedtls_memory_buffer_alloc_status(void);
+
+/**
+ * \brief   Get the number of alloc/free so far.
+ *
+ * \param alloc_count   Number of allocations.
+ * \param free_count    Number of frees.
+ */
+void mbedtls_memory_buffer_alloc_count_get(size_t *alloc_count, size_t *free_count);
 
 /**
  * \brief   Get the peak heap usage so far

@@ -9,19 +9,7 @@
  */
 /*
  *  Copyright The Mbed TLS Contributors
- *  SPDX-License-Identifier: Apache-2.0
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); you may
- *  not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
  */
 #ifndef MBEDTLS_HMAC_DRBG_H
 #define MBEDTLS_HMAC_DRBG_H
@@ -38,10 +26,14 @@
 /*
  * Error codes
  */
-#define MBEDTLS_ERR_HMAC_DRBG_REQUEST_TOO_BIG              -0x0003  /**< Too many random requested in single call. */
-#define MBEDTLS_ERR_HMAC_DRBG_INPUT_TOO_BIG                -0x0005  /**< Input too large (Entropy + additional). */
-#define MBEDTLS_ERR_HMAC_DRBG_FILE_IO_ERROR                -0x0007  /**< Read/write error in file. */
-#define MBEDTLS_ERR_HMAC_DRBG_ENTROPY_SOURCE_FAILED        -0x0009  /**< The entropy source failed. */
+/** Too many random requested in single call. */
+#define MBEDTLS_ERR_HMAC_DRBG_REQUEST_TOO_BIG              -0x0003
+/** Input too large (Entropy + additional). */
+#define MBEDTLS_ERR_HMAC_DRBG_INPUT_TOO_BIG                -0x0005
+/** Read/write error in file. */
+#define MBEDTLS_ERR_HMAC_DRBG_FILE_IO_ERROR                -0x0007
+/** The entropy source failed. */
+#define MBEDTLS_ERR_HMAC_DRBG_ENTROPY_SOURCE_FAILED        -0x0009
 
 /**
  * \name SECTION: Module settings
@@ -67,7 +59,7 @@
 #define MBEDTLS_HMAC_DRBG_MAX_SEED_INPUT    384     /**< Maximum size of (re)seed buffer */
 #endif
 
-/* \} name SECTION: Module settings */
+/** \} name SECTION: Module settings */
 
 #define MBEDTLS_HMAC_DRBG_PR_OFF   0   /**< No prediction resistance       */
 #define MBEDTLS_HMAC_DRBG_PR_ON    1   /**< Prediction resistance enabled  */
@@ -79,8 +71,7 @@ extern "C" {
 /**
  * HMAC_DRBG context.
  */
-typedef struct mbedtls_hmac_drbg_context
-{
+typedef struct mbedtls_hmac_drbg_context {
     /* Working state: the key K is not stored explicitly,
      * but is implied by the HMAC context */
     mbedtls_md_context_t MBEDTLS_PRIVATE(md_ctx);                    /*!< HMAC context (inc. K)  */
@@ -90,11 +81,11 @@ typedef struct mbedtls_hmac_drbg_context
     /* Administrative state */
     size_t MBEDTLS_PRIVATE(entropy_len);         /*!< entropy bytes grabbed on each (re)seed */
     int MBEDTLS_PRIVATE(prediction_resistance);  /*!< enable prediction resistance (Automatic
-                                     reseed before every random generation) */
+                                                    reseed before every random generation) */
     int MBEDTLS_PRIVATE(reseed_interval);        /*!< reseed interval   */
 
     /* Callbacks */
-    int (*MBEDTLS_PRIVATE(f_entropy))(void *, unsigned char *, size_t); /*!< entropy function */
+    int(*MBEDTLS_PRIVATE(f_entropy))(void *, unsigned char *, size_t);  /*!< entropy function */
     void *MBEDTLS_PRIVATE(p_entropy);            /*!< context for the entropy function        */
 
 #if defined(MBEDTLS_THREADING_C)
@@ -180,8 +171,8 @@ void mbedtls_hmac_drbg_init(mbedtls_hmac_drbg_context *ctx);
  * \param len           The length of the personalization string.
  *                      This must be at most #MBEDTLS_HMAC_DRBG_MAX_INPUT
  *                      and also at most
- *                      #MBEDTLS_HMAC_DRBG_MAX_SEED_INPUT - \p entropy_len * 3 / 2
- *                      where \p entropy_len is the entropy length
+ *                      #MBEDTLS_HMAC_DRBG_MAX_SEED_INPUT - \c entropy_len * 3 / 2
+ *                      where \c entropy_len is the entropy length
  *                      described above.
  *
  * \return              \c 0 if successful.
@@ -200,7 +191,7 @@ int mbedtls_hmac_drbg_seed(mbedtls_hmac_drbg_context *ctx,
                            size_t len);
 
 /**
- * \brief               Initilisation of simpified HMAC_DRBG (never reseeds).
+ * \brief               Initialisation of simplified HMAC_DRBG (never reseeds).
  *
  * This function is meant for use in algorithms that need a pseudorandom
  * input such as deterministic ECDSA.
@@ -310,8 +301,8 @@ int mbedtls_hmac_drbg_update(mbedtls_hmac_drbg_context *ctx,
  * \param len           The length of the additional data.
  *                      This must be at most #MBEDTLS_HMAC_DRBG_MAX_INPUT
  *                      and also at most
- *                      #MBEDTLS_HMAC_DRBG_MAX_SEED_INPUT - \p entropy_len
- *                      where \p entropy_len is the entropy length
+ *                      #MBEDTLS_HMAC_DRBG_MAX_SEED_INPUT - \c entropy_len
+ *                      where \c entropy_len is the entropy length
  *                      (see mbedtls_hmac_drbg_set_entropy_len()).
  *
  * \return              \c 0 if successful.
