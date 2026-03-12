@@ -25,6 +25,10 @@ extern "C" {
  *                        Header Files
  *============================================================================*/
 #include "matter_types.h"
+#include "rtl_gpio.h"
+#include "rtl_pinmux.h"
+#include "rtl_rcc.h"
+#include "rtl_tim.h"
 
 /*============================================================================*
  *                         Types
@@ -34,12 +38,21 @@ extern "C" {
   * @{
   */
 
+#define LED_PWM_FREQ        16000 //!< Hz
+
 /**
  * \brief Define the Matter LED instance handle.
  *
  * \ingroup MATTER_LED_Exported_Types
  */
 typedef void *T_MATTER_LED_HANDLE;
+
+typedef struct
+{
+    uint8_t pin_num;
+    uint8_t pin_func;
+    TIM_TypeDef *timer_type;
+} T_LED_PWM_PARAM;
 
 /** End of MATTER_LED_Exported_Types
   * @}
@@ -59,7 +72,7 @@ typedef void *T_MATTER_LED_HANDLE;
   * @retval true  On success.
   * @retval false On failure.
   */
-bool matter_led_init(void);
+bool matter_led_init(T_LED_PWM_PARAM *led_pwm_list, uint8_t led_pwm_num);
 
 /**
   * @brief  Create a Matter LED instance.
