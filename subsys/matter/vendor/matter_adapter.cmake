@@ -4,18 +4,18 @@
 ##################################################
 
 if(DEFINED ENABLE_PW_RPC AND "${ENABLE_PW_RPC}" STREQUAL "ON")
-    target_compile_definitions(openthread-bee4 PUBLIC "ENABLE_PW_RPC=1")
+    target_compile_definitions(openthread-rtl87x2g PUBLIC "ENABLE_PW_RPC=1")
 else()
-    target_compile_definitions(openthread-bee4 PUBLIC "ENABLE_PW_RPC=0")
+    target_compile_definitions(openthread-rtl87x2g PUBLIC "ENABLE_PW_RPC=0")
 endif()
 
 if(matter_enable_cfu)
-    target_compile_definitions(openthread-bee4 PUBLIC "MATTER_ENABLE_CFU=1" "FEATURE_SUPPORT_CFU=1")
+    target_compile_definitions(openthread-rtl87x2g PUBLIC "MATTER_ENABLE_CFU=1" "FEATURE_SUPPORT_CFU=1")
 else()
-    target_compile_definitions(openthread-bee4 PUBLIC "MATTER_ENABLE_CFU=0")
+    target_compile_definitions(openthread-rtl87x2g PUBLIC "MATTER_ENABLE_CFU=0")
 endif()
 
-target_sources(openthread-bee4
+target_sources(openthread-rtl87x2g
     PRIVATE
     ${REALTEK_SDK_ROOT}/subsys/matter/vendor/kvmgr.c
     ${REALTEK_SDK_ROOT}/subsys/matter/vendor/matter_uart.c
@@ -30,16 +30,16 @@ target_sources(openthread-bee4
     ${REALTEK_SDK_ROOT}/subsys/matter/vendor/matter_ble/matter_ble.c
     ${REALTEK_SDK_ROOT}/subsys/matter/vendor/matter_ble/matter_ble_service.c
     ${REALTEK_SDK_ROOT}/subsys/matter/vendor/matter_ble/matter_ble_task.c
-    ${REALTEK_SDK_ROOT}/subsys/matter/vendor/bee4/matter_gpio.c
+    ${REALTEK_SDK_ROOT}/subsys/matter/vendor/rtl87x2g/matter_gpio.c
 )
 
 if(matter_enable_ota_requestor)
-    target_include_directories(openthread-bee4
+    target_include_directories(openthread-rtl87x2g
         PRIVATE
             ${REALTEK_SDK_ROOT}/subsys/dfu
     )
 
-    target_sources(openthread-bee4
+    target_sources(openthread-rtl87x2g
         PRIVATE
         ${REALTEK_SDK_ROOT}/subsys/dfu/dfu_common.c
         ${REALTEK_SDK_ROOT}/subsys/matter/vendor/matter_ota.c
@@ -47,17 +47,17 @@ if(matter_enable_ota_requestor)
 endif()
 
 if(matter_enable_ble_ota)
-    target_compile_definitions(openthread-bee4 PUBLIC
+    target_compile_definitions(openthread-rtl87x2g PUBLIC
         SUPPORT_BLE_OTA=1
         SUPPORT_NORMAL_OTA=0
     )
 
-    target_include_directories(openthread-bee4
+    target_include_directories(openthread-rtl87x2g
         PRIVATE
             ${REALTEK_SDK_ROOT}/subsys/dfu
     )
 
-    target_sources(openthread-bee4
+    target_sources(openthread-rtl87x2g
         PRIVATE
         ${REALTEK_SDK_ROOT}/subsys/dfu/ble_dfu_transport.c
         ${REALTEK_SDK_ROOT}/subsys/dfu/dfu_app.c
@@ -68,34 +68,34 @@ if(matter_enable_ble_ota)
 endif()
 
 if(matter_factory_data_encryption)
-    target_compile_definitions(openthread-bee4 PUBLIC "CONFIG_FACTORY_DATA_ENCRYPTION=1")
+    target_compile_definitions(openthread-rtl87x2g PUBLIC "CONFIG_FACTORY_DATA_ENCRYPTION=1")
 else()
-    target_compile_definitions(openthread-bee4 PUBLIC "CONFIG_FACTORY_DATA_ENCRYPTION=0")
+    target_compile_definitions(openthread-rtl87x2g PUBLIC "CONFIG_FACTORY_DATA_ENCRYPTION=0")
 endif()
 
 if(matter_dac_key_encryption)
-    target_compile_definitions(openthread-bee4 PUBLIC "CONFIG_DAC_KEY_ENC=1")
+    target_compile_definitions(openthread-rtl87x2g PUBLIC "CONFIG_DAC_KEY_ENC=1")
 endif()
 
 if(matter_enable_ram_reduce)
-    target_compile_definitions(openthread-bee4 PUBLIC "CONFIG_ENABLE_RAM_REDUCE=1")
+    target_compile_definitions(openthread-rtl87x2g PUBLIC "CONFIG_ENABLE_RAM_REDUCE=1")
 endif()
 
-target_link_options(openthread-bee4
+target_link_options(openthread-rtl87x2g
     PUBLIC
         "LINKER:SHELL:-L ${PROJECT_BINARY_DIR}/lib"
         "LINKER:SHELL:-L ${PROJECT_BINARY_DIR}/chip/lib"
 )
 
-target_compile_definitions(openthread-bee4
+target_compile_definitions(openthread-rtl87x2g
     PUBLIC
         "BUILD_MATTER"
 )
 
-target_include_directories(openthread-bee4
+target_include_directories(openthread-rtl87x2g
     PRIVATE
         ${REALTEK_SDK_ROOT}/subsys/matter/vendor
-        ${REALTEK_SDK_ROOT}/subsys/matter/vendor/bee4
+        ${REALTEK_SDK_ROOT}/subsys/matter/vendor/rtl87x2g
         ${REALTEK_SDK_ROOT}/subsys/matter/vendor/matter_ble
 )
 
@@ -113,8 +113,8 @@ if(${OT_CMAKE_NINJA_TARGET} STREQUAL "matter-cli-ftd")
             $<TARGET_PROPERTY:ot-config,INTERFACE_INCLUDE_DIRECTORIES>
             ${REALTEK_SDK_ROOT}/subsys/cfu
             ${REALTEK_SDK_ROOT}/subsys/dfu
-            ${OT_REALTEK_ROOT}/vendor/bee4/internal/cfu
-            ${OT_REALTEK_ROOT}/vendor/bee4/internal/config_param
+            ${OT_REALTEK_ROOT}/vendor/rtl87x2g/internal/cfu
+            ${OT_REALTEK_ROOT}/vendor/bertl87x2ge4/internal/config_param
     )
 
     target_compile_definitions(matter-cli-ftd
@@ -131,7 +131,7 @@ if(${OT_CMAKE_NINJA_TARGET} STREQUAL "matter-cli-ftd")
             PwRpc
             cli_uart
             openthread-cli-ftd
-            openthread-bee4
+            openthread-rtl87x2g
             openthread-ftd
             lwip
             -Wl,--end-group
@@ -145,7 +145,7 @@ if(${OT_CMAKE_NINJA_TARGET} STREQUAL "matter-cli-ftd")
             CHIP
             cli_uart
             openthread-cli-ftd
-            openthread-bee4
+            openthread-rtl87x2g
             openthread-ftd
             lwip
             -Wl,--end-group
@@ -176,14 +176,14 @@ if(${OT_CMAKE_NINJA_TARGET} STREQUAL "matter-cli-mtd")
                 $<TARGET_PROPERTY:ot-config,INTERFACE_COMPILE_DEFINITIONS>
                 "DLPS_EN=1"
         )
-        target_compile_definitions(openthread-bee4 PRIVATE "DLPS_EN=1")
+        target_compile_definitions(openthread-rtl87x2g PRIVATE "DLPS_EN=1")
     else()
         target_compile_definitions(matter-cli-mtd
             PRIVATE
                 $<TARGET_PROPERTY:ot-config,INTERFACE_COMPILE_DEFINITIONS>
                 "DLPS_EN=0"
         )
-        target_compile_definitions(openthread-bee4 PRIVATE "DLPS_EN=0")
+        target_compile_definitions(openthread-rtl87x2g PRIVATE "DLPS_EN=0")
     endif()
 
     target_link_libraries(matter-cli-mtd
@@ -192,30 +192,13 @@ if(${OT_CMAKE_NINJA_TARGET} STREQUAL "matter-cli-mtd")
         CHIP
         cli_uart
         openthread-cli-mtd
-        openthread-bee4
+        openthread-rtl87x2g
         openthread-mtd
         lwip
         -Wl,--end-group
         ot-config-mtd
         ot-config
     )
-
-    if(${BUILD_TYPE} STREQUAL "dev")
-    add_custom_command(
-        TARGET matter-cli-mtd
-        POST_BUILD
-        COMMAND cp -f ${OT_REALTEK_ROOT}/vendor/bee4/common/threading_alt.h ${REALTEK_SDK_ROOT}/subsys/mbedtls/repo/include/
-    # COMMAND cp -f ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libbee4-internal.a ${REALTEK_SDK_ROOT}/subsys/matter/lib/switch/
-        COMMAND cp -f ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libchip_main.a ${REALTEK_SDK_ROOT}/subsys/matter/lib/switch/
-        COMMAND cp -f ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libcli_uart.a ${REALTEK_SDK_ROOT}/subsys/matter/lib/switch/
-        #COMMAND cp -f ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/../liblwip.a ${REALTEK_SDK_ROOT}/subsys/matter/lib/switch/
-        COMMAND cp -f ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libopenthread-bee4.a ${REALTEK_SDK_ROOT}/subsys/matter/lib/switch/
-        COMMAND cp -f ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libopenthread-cli-mtd.a ${REALTEK_SDK_ROOT}/subsys/matter/lib/switch/
-        COMMAND cp -f ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libopenthread-mtd.a ${REALTEK_SDK_ROOT}/subsys/matter/lib/switch/
-        COMMAND cp -f ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libtcplp-mtd.a ${REALTEK_SDK_ROOT}/subsys/matter/lib/switch/
-        COMMAND cp -f ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/../chip/lib/libCHIP.a ${REALTEK_SDK_ROOT}/subsys/matter/lib/switch/
-    )
-    endif()
 endif()
 
 ##################################################
@@ -238,8 +221,8 @@ if(${OT_CMAKE_NINJA_TARGET} STREQUAL "matter-cli-ftd" OR ${OT_CMAKE_NINJA_TARGET
     )
 
     if(DEFINED ENABLE_CLI AND "${ENABLE_CLI}" STREQUAL "ON")
-        target_compile_definitions(openthread-bee4 PUBLIC "ENABLE_CLI=1")
+        target_compile_definitions(openthread-rtl87x2g PUBLIC "ENABLE_CLI=1")
     else()
-        target_compile_definitions(openthread-bee4 PUBLIC "ENABLE_CLI=0")
+        target_compile_definitions(openthread-rtl87x2g PUBLIC "ENABLE_CLI=0")
     endif()
 endif()

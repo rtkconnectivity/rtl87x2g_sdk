@@ -25,7 +25,7 @@
 #  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 #  POSSIBILITY OF SUCH DAMAGE.
 #
-if(${RT_PLATFORM} STREQUAL "bee4")
+if(${RT_PLATFORM} STREQUAL "rtl87x2g")
 list (
     APPEND inc_path
         # sdk
@@ -34,7 +34,7 @@ list (
         "${OT_REALTEK_ROOT}/src/${RT_PLATFORM}"
         "${OT_REALTEK_ROOT}/src/${RT_PLATFORM}/${BUILD_TARGET}"
         "${REALTEK_SDK_ROOT}/subsys/matter/vendor"
-        "${REALTEK_SDK_ROOT}/subsys/matter/vendor/bee4"
+        "${REALTEK_SDK_ROOT}/subsys/matter/vendor/rtl87x2g"
         "${REALTEK_SDK_ROOT}/subsys/matter/vendor/matter_ble"
         "${REALTEK_SDK_ROOT}/subsys/matter/secure"
         # lwip

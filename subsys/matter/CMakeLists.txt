@@ -18,7 +18,7 @@ cmake_minimum_required(VERSION 3.10.2)
 project(rtk-matter VERSION 0.2.0 LANGUAGES C CXX ASM)
 
 if(${BUILD_TARGET} STREQUAL "rtl8777g")
-    set(RT_PLATFORM "bee4" CACHE STRING "")
+    set(RT_PLATFORM "rtl87x2g" CACHE STRING "")
 endif()
 
 # TODO: Modify according to IC
@@ -31,8 +31,8 @@ set(matter_output_path ${PROJECT_BINARY_DIR})
 set(matter_example_path ${MATTER_EXAMPLE_PATH})
 
 set(RT_PLATFORM_VALUES
-    "bee4"
-    "bee3plus"
+    "rtl87x2g"
+    "rtl8752h"
 )
 set_property(CACHE RT_PLATFORM PROPERTY STRINGS ${RT_PLATFORM_VALUES})
 if(NOT RT_PLATFORM IN_LIST RT_PLATFORM_VALUES)
