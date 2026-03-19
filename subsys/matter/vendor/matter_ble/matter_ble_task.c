@@ -20,20 +20,6 @@
 
 #ifndef EXTERNAL_BLE
 
-#define APP_TASK_PRIORITY             4         //!< Task priorities
-#ifdef ENABLE_RAM_REDUCE
-#define APP_TASK_STACK_SIZE           1024      //!<  Task stack size
-#else
-#define APP_TASK_STACK_SIZE           (1024 * 4)  //!<  Task stack size
-#endif
-#define MAX_NUMBER_OF_GAP_MESSAGE     0x10      //!<  GAP message queue size
-#define MAX_NUMBER_OF_IO_MESSAGE      0x10      //!<  IO message queue size
-#define MAX_NUMBER_OF_EVENT_MESSAGE   (MAX_NUMBER_OF_GAP_MESSAGE + MAX_NUMBER_OF_IO_MESSAGE)    //!< Event message queue size
-
-static void *bt_matter_app_task_handle;   //!< APP Task handle
-static void *bt_matter_evt_queue_handle;  //!< Event queue handle
-static void *bt_matter_io_queue_handle;   //!< IO queue handle
-
 /** @brief  Default minimum advertising interval when device is discoverable (units of 625us, 160=100ms) */
 #define DEFAULT_ADVERTISING_INTERVAL_MIN            320
 /** @brief  Default maximum advertising interval */
@@ -115,56 +101,6 @@ void matter_ble_gap_init(void)
     le_adv_set_param(GAP_PARAM_ADV_LOCAL_ADDR_TYPE, sizeof(local_bd_type), &local_bd_type);
 }
 
-void bt_matter_adapter_app_main_task(void *p_param)
-{
-    (void) p_param;
-    uint8_t event;
-
-#if defined(FEATURE_TRUSTZONE_ENABLE) && (FEATURE_TRUSTZONE_ENABLE == 1)
-    os_alloc_secure_ctx(1024);
-#endif
-
-    os_msg_queue_create(&bt_matter_io_queue_handle, "ioQ", MAX_NUMBER_OF_IO_MESSAGE, sizeof(T_IO_MSG));
-    os_msg_queue_create(&bt_matter_evt_queue_handle, "evtQ", MAX_NUMBER_OF_EVENT_MESSAGE,
-                        sizeof(uint8_t));
-
-    gap_start_bt_stack(bt_matter_evt_queue_handle, bt_matter_io_queue_handle,
-                       MAX_NUMBER_OF_GAP_MESSAGE);
-    matter_ble_queue_init(bt_matter_evt_queue_handle, bt_matter_io_queue_handle);
-
-    while (1)
-    {
-        if (os_msg_recv(bt_matter_evt_queue_handle, &event, 0xFFFFFFFF) == true)
-        {
-            if (event == EVENT_IO_TO_APP)
-            {
-                T_IO_MSG io_msg;
-                if (os_msg_recv(bt_matter_io_queue_handle, &io_msg, 0) == true)
-                {
-                    matter_ble_handle_io_msg(io_msg);
-                }
-            }
-            else
-            {
-                gap_handle_msg(event);
-            }
-        }
-    }
-}
-
-void bt_matter_adapter_app_task_init()
-{
-    if (bt_matter_app_task_handle == NULL)
-    {
-        os_task_create(&bt_matter_app_task_handle, "bt_matter_adapter_app", bt_matter_adapter_app_main_task,
-                       0, APP_TASK_STACK_SIZE, APP_TASK_PRIORITY);
-    }
-    else
-    {
-        APP_PRINT_ERROR0("bt_matter_adapter_app_task_init fail");
-    }
-}
-
 int matter_ble_init(uint8_t link_num)
 {
     T_GAP_DEV_STATE new_state;
@@ -182,14 +118,6 @@ int matter_ble_init(uint8_t link_num)
     }
 
     matter_ble_gap_init();
-    bt_matter_adapter_app_task_init();
-
-    //Wait BT init complete*
-    do
-    {
-        le_get_gap_param(GAP_PARAM_DEV_STATE, &new_state);
-    }
-    while (new_state.gap_init_state != GAP_INIT_STATE_STACK_READY);
 
     return 0;
 }

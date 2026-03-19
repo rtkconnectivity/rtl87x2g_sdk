@@ -137,20 +137,20 @@ bool matter_ble_check_connected(void)
     return matter_ble_is_connected;
 }
 
-void matter_ble_handle_io_msg(T_IO_MSG io_msg)
+void matter_ble_handle_io_msg(T_IO_MSG *p_msg)
 {
-    uint16_t msg_type = io_msg.type;
+    uint16_t msg_type = p_msg->type;
     T_LE_GAP_MSG gap_msg;
-    memcpy(&gap_msg, &io_msg.u.param, sizeof(io_msg.u.param));
+    memcpy(&gap_msg, &p_msg->u.param, sizeof(p_msg->u.param));
 
     switch (msg_type)
     {
     case IO_MSG_TYPE_BT_STATUS:
         {
 #if (SUPPORT_BLE_OTA == 1)
-            matter_ble_handle_gap_msg(&io_msg);
+            matter_ble_handle_gap_msg(p_msg);
 #endif
-            switch (io_msg.subtype)
+            switch (p_msg->subtype)
             {
                 case GAP_MSG_LE_CONN_STATE_CHANGE:
                     {
@@ -178,14 +178,14 @@ void matter_ble_handle_io_msg(T_IO_MSG io_msg)
 
             if (matter_ble_cback)
             {
-                matter_ble_cback((void *)&io_msg, 0, CB_GAP_MSG_CALLBACK);
+                matter_ble_cback((void *)p_msg, 0, CB_GAP_MSG_CALLBACK);
             }
         }
         break;
 
     case IO_MSG_TYPE_QDECODE:
         {
-            switch (io_msg.subtype)
+            switch (p_msg->subtype)
             {
             case MATTER_BLE_MSG_ADV_STOP:
                 le_adv_stop();
@@ -197,7 +197,7 @@ void matter_ble_handle_io_msg(T_IO_MSG io_msg)
 
             case MATTER_BLE_MSG_DISCONNECT:
                 {
-                    uint8_t conn_id = io_msg.u.param & 0xFF;
+                    uint8_t conn_id = p_msg->u.param & 0xFF;
 
                     le_disconnect(conn_id);
                 }

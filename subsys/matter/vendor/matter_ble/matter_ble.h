@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include <profile_server.h>
+#include "app_msg.h"
 
 typedef enum
 {
@@ -65,7 +66,7 @@ uint8_t matter_ble_disconnect(uint8_t conn_id);
  */
 T_APP_RESULT matter_ble_profile_callback(T_SERVER_ID service_id, void *p_data);
 
-void matter_ble_handle_io_msg(T_IO_MSG io_msg);
+void matter_ble_handle_io_msg(T_IO_MSG *p_msg);
 
 void matter_ble_handover();
 
