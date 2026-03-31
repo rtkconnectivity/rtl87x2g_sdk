@@ -6,6 +6,7 @@ extern "C" {
 #include "board.h"
 #include "trace.h"
 #include "wdt.h"
+#include "rtl_aon_wdt.h"
 #include "os_msg.h"
 #include "os_timer.h"
 #include "app_section.h"
@@ -42,7 +43,7 @@ void matter_wdt_init(void *io_queue)
 
     if (false == os_timer_create(&watch_dog_reset_dlps_timer, "watch_dog_reset_dlps_timer",
                                  1, \
-                                 WATCH_DOG_TIMEOUT_MS - 1000, true, matter_wdt_timer_callback))
+                                 WATCH_DOG_TIMEOUT_MS - 2000, true, matter_wdt_timer_callback))
     {
         MATTER_PRINT_INFO0("init watch_dog_reset_dlps_timer failed");
     }
@@ -57,9 +58,9 @@ void matter_wdt_watchdog_open()
 {
     if (!is_aon_wdg_enable)
     {
-        WDT_Start(WATCH_DOG_TIMEOUT_MS, RESET_ALL_EXCEPT_AON);
+        AON_WDT_Start(AON_WDT, WATCH_DOG_TIMEOUT_MS, RESET_ALL_EXCEPT_AON);
         is_aon_wdg_enable = true;
-        os_timer_restart(&watch_dog_reset_dlps_timer, WATCH_DOG_TIMEOUT_MS - 1000);
+        os_timer_restart(&watch_dog_reset_dlps_timer, WATCH_DOG_TIMEOUT_MS - 2000);
     }
 }
 
@@ -67,7 +68,7 @@ void matter_wdt_watchdog_close(void)
 {
     if (is_aon_wdg_enable)
     {
-        WDT_Disable();
+        AON_WDT_Disable(AON_WDT);
         is_aon_wdg_enable = false;
         os_timer_stop(&watch_dog_reset_dlps_timer);
     }
@@ -75,7 +76,7 @@ void matter_wdt_watchdog_close(void)
 
 void matter_wdt_watchdog_feed(void)
 {
-    WDT_Kick();
+    AON_WDT_Kick(AON_WDT);
 }
 
 #ifdef __cplusplus

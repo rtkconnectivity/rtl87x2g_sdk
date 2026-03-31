@@ -99,6 +99,10 @@ void matter_gpio_dlps_enter(void);
 
 void matter_gpio_dlps_exit(void);
 
+void matter_gpio_timer_init(void);
+
+void matter_gpio_timer_restart(void);
+
 /**
   * @brief  Initialize the matter GPIO module.
   * @param[in]  func  Callback function.

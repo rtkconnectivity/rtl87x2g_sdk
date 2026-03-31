@@ -7,6 +7,7 @@
 #include <mbedtls/entropy.h>
 #include <mbedtls/ctr_drbg.h>
 #include "utils.h"
+#include "mem_config.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -21,8 +22,7 @@ extern "C" {
 #include "aes_api.h"
 #include "matter_utils.h"
 
-
-#if (CONFIG_DAC_KEY_ENC) && (!defined(FEATURE_TRUSTZONE_ENABLE) || (FEATURE_TRUSTZONE_ENABLE != 1))
+#if (CONFIG_DAC_KEY_ENC) && (!FEATURE_TRUSTZONE_ENABLE)
 const char private_key[] =
     "-----BEGIN PRIVATE KEY-----\n"
     "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC2/En1Wp8OXujD\n"
@@ -234,80 +234,85 @@ bool store_string_dac_key(pb_istream_t *stream, const pb_field_t *field, void **
     uint8_t *buffer;
 
     buffer = malloc(BUFFER_SIZE);
-    if (buffer)
+    if (!buffer)
     {
-        /* We could read block-by-block to avoid the large buffer... */
-        size_t data_length = stream->bytes_left;
-        if (stream->bytes_left > BUFFER_SIZE - 1)
-        {
-            goto exit;
-        }
+        return false;
+    }
 
-        if (!pb_read(stream, buffer, stream->bytes_left))
-        {
-            goto exit;
-        }
+    /* We could read block-by-block to avoid the large buffer... */
+    size_t data_length = stream->bytes_left;
+    if (stream->bytes_left > BUFFER_SIZE - 1)
+    {
+        goto exit;
+    }
 
-        MATTER_PRINT_INFO2("store_string_dac_key: len %d, key_encrypted %b", data_length,
-                           TRACE_BINARY(16, buffer));
+    if (!pb_read(stream, buffer, stream->bytes_left))
+    {
+        goto exit;
+    }
+
+    MATTER_PRINT_INFO2("store_string_dac_key: len %d, key_encrypted %b", data_length,
+                        TRACE_BINARY(16, buffer));
 
 #define OUT_MAX_LEN (sizeof(fdp->dac.dac_key.value))
 
-#if (CONFIG_DAC_KEY_ENC) && (!defined(FEATURE_TRUSTZONE_ENABLE) || (FEATURE_TRUSTZONE_ENABLE != 1))
-        mbedtls_pk_context pk;
-        mbedtls_entropy_context entropy;
-        mbedtls_ctr_drbg_context ctr_drbg;
-        size_t olen = 0;
-        char dac_key_decrypted[OUT_MAX_LEN] = {0};
+    size_t copy_len = (data_length < OUT_MAX_LEN) ? data_length : OUT_MAX_LEN;
 
-        mbedtls_ctr_drbg_init(&ctr_drbg);
-        mbedtls_entropy_init(&entropy);
-        mbedtls_pk_init(&pk);
+#if CONFIG_DAC_KEY_ENC && FEATURE_TRUSTZONE_ENABLE
+    // TrustZone Environment and RTK DAC, 
+    // Secure app decryption , just copy directly.
+    memcpy(fdp->dac.dac_key.value, buffer, copy_len);
+    fdp->dac.dac_key.len = copy_len;
+#elif CONFIG_DAC_KEY_ENC  
+    //No TrustZone Enviroment and RTK DAC,
+    //Decryption required.
+    mbedtls_pk_context pk;
+    mbedtls_entropy_context entropy;
+    mbedtls_ctr_drbg_context ctr_drbg;
+    size_t olen = 0;
+    char dac_key_decrypted[OUT_MAX_LEN] = {0};
 
-        mbedtls_entropy_add_source(&entropy, app_entropy_source, NULL, 1, MBEDTLS_ENTROPY_SOURCE_STRONG);
+    mbedtls_ctr_drbg_init(&ctr_drbg);
+    mbedtls_entropy_init(&entropy);
+    mbedtls_pk_init(&pk);
 
-        int ret = mbedtls_ctr_drbg_seed(&ctr_drbg, mbedtls_entropy_func, &entropy,
-                                        (const unsigned char *) "Realtek", strlen("Realtek"));
+    mbedtls_entropy_add_source(&entropy, app_entropy_source, NULL, 1, MBEDTLS_ENTROPY_SOURCE_STRONG);
 
-        int key_parse_ret = mbedtls_pk_parse_key(&pk, private_key, sizeof(private_key), NULL, 0,
-                                                 mbedtls_ctr_drbg_random, &ctr_drbg);
+    int seed_result = mbedtls_ctr_drbg_seed(&ctr_drbg, mbedtls_entropy_func, &entropy,
+                                    (const unsigned char *) "Realtek", strlen("Realtek"));
 
-        int decrypt_ret = mbedtls_rsa_pkcs1_decrypt(mbedtls_pk_rsa(pk), mbedtls_ctr_drbg_random, &ctr_drbg,
-                                                    &olen, buffer, dac_key_decrypted, OUT_MAX_LEN);
+    int key_parse_ret = mbedtls_pk_parse_key(&pk, private_key, sizeof(private_key), NULL, 0,
+                                            mbedtls_ctr_drbg_random, &ctr_drbg);
 
-        if (olen < OUT_MAX_LEN)
-        {
-            memcpy(fdp->dac.dac_key.value, dac_key_decrypted, olen);
-        }
-        else
-        {
-            memcpy(fdp->dac.dac_key.value, dac_key_decrypted, OUT_MAX_LEN);
-        }
+    int decrypt_ret = mbedtls_rsa_pkcs1_decrypt(mbedtls_pk_rsa(pk), mbedtls_ctr_drbg_random, &ctr_drbg,
+                                                &olen, buffer, dac_key_decrypted, OUT_MAX_LEN);
 
-        fdp->dac.dac_key.len = olen;
-
-        MATTER_PRINT_INFO3("store_string_dac_key: ret %d, key_parse_ret %d, decrypt_ret %d", ret,
-                           key_parse_ret, decrypt_ret);
-
-        MATTER_PRINT_INFO2("store_string_dac_key: len %d, key_decrypted %b", olen, TRACE_BINARY(16,
-                           fdp->dac.dac_key.value));
-
-        mbedtls_entropy_free(&entropy);
-        mbedtls_pk_free(&pk);
-        mbedtls_ctr_drbg_free(&ctr_drbg);
-#else
-        if (data_length < OUT_MAX_LEN)
-        {
-            memcpy(fdp->dac.dac_key.value, buffer, data_length);
-        }
-        else
-        {
-            memcpy(fdp->dac.dac_key.value, buffer, OUT_MAX_LEN);
-        }
-
-        fdp->dac.dac_key.len = data_length;
-#endif //CONFIG_DAC_KEY_ENC
+    if (olen < OUT_MAX_LEN)
+    {
+        memcpy(fdp->dac.dac_key.value, dac_key_decrypted, olen);
     }
+    else
+    {
+        memcpy(fdp->dac.dac_key.value, dac_key_decrypted, OUT_MAX_LEN);
+    }
+
+    fdp->dac.dac_key.len = olen;
+
+    MATTER_PRINT_INFO3("store_string_dac_key: ret %d, key_parse_ret %d, decrypt_ret %d", ret,
+                    key_parse_ret, decrypt_ret);
+
+    MATTER_PRINT_INFO2("store_string_dac_key: len %d, key_decrypted %b", olen, TRACE_BINARY(16,
+                    fdp->dac.dac_key.value));
+
+    mbedtls_entropy_free(&entropy);
+    mbedtls_pk_free(&pk);
+    mbedtls_ctr_drbg_free(&ctr_drbg);
+#else
+    // No trustzone enviroment
+    // No RTK DAC, standard copy process
+    memcpy(fdp->dac.dac_key.value, buffer, copy_len);
+    fdp->dac.dac_key.len = copy_len;
+#endif //CONFIG_DAC_KEY_ENC
 
     ret = true;
 

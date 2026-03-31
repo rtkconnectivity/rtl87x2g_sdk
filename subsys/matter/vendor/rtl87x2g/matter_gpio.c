@@ -15,6 +15,7 @@ extern "C" {
 #include "rtl_nvic.h"
 #include "vector_table.h"
 #include "matter_gpio.h"
+#include "os_timer.h"
 
 #define GPIO_KEY_LEVEL_LOW                  0  /* low level */
 #define GPIO_KEY_LEVEL_HIGH                 1  /* high level */
@@ -24,7 +25,11 @@ static void *matter_gpio_queue = NULL;
 static void *matter_gpio_handle = NULL;
 static P_MATTER_GPIO_CBACK gpio_callback = NULL;
 
-POWER_CheckResult Matter_GPIO_DLPS_Enter_Allowed = POWER_CHECK_FAIL;
+#define GPIO_PRESS_CHECK_TIMEOUT 1000
+typedef void *TimerHandle_t;
+TimerHandle_t gpio_press_check_timer = NULL;
+
+POWER_CheckResult Matter_GPIO_DLPS_Enter_Allowed = POWER_CHECK_PASS;
 
 #ifdef BOARD_RTL8777G
 #define GPIO_NUM  4
@@ -45,7 +50,7 @@ const uint8_t GPIO_PIN_IRQN[GPIO_NUM] = {GPIOB5_IRQn, GPIOB6_IRQn, GPIOA25_IRQn,
 #define GPIO_Pin_Key4_Handler    GPIOB2_Handler
 #else//to add
 #endif
-uint8_t key_trigger_level[GPIO_NUM];
+uint8_t key_trigger_level[GPIO_NUM] = {GPIO_KEY_LEVEL_LOW};
 
 extern void BEE_RadioExternalWakeup(void);
 static void gpio_key_interrupt_handler(uint8_t index)
@@ -72,7 +77,10 @@ static void gpio_key_interrupt_handler(uint8_t index)
         state = MATTER_GPIO_KEY_STATE_RELEASE;
     }
 
-    gpio_callback(index, state);
+    if (gpio_callback)
+    {
+        gpio_callback(index, state);
+    }
 
     GPIO_ClearINTPendingBit(GPIO_GetPort(GPIO_PIN[index]), GPIO_GetPin(GPIO_PIN[index]));
     GPIO_MaskINTConfig(GPIO_GetPort(GPIO_PIN[index]), GPIO_GetPin(GPIO_PIN[index]), DISABLE);
@@ -81,8 +89,10 @@ static void gpio_key_interrupt_handler(uint8_t index)
 #if DLPS_EN
     if (state == MATTER_GPIO_KEY_STATE_RELEASE)
     {
+        os_timer_stop(&gpio_press_check_timer);
         matter_gpio_allow_to_enter_dlps();
     }
+
     BEE_RadioExternalWakeup();
 #endif
 }
@@ -135,11 +145,18 @@ void matter_gpio_dlps_enter(void)
 {
     uint8_t i;
     /* Switch pad to Software mode */
+
     for (i = 0; i < GPIO_NUM; i++)
     {
         Pad_Config(GPIO_PIN[i], PAD_SW_MODE, PAD_IS_PWRON, PAD_PULL_UP, PAD_OUT_DISABLE, PAD_OUT_HIGH);
-
-        System_WakeUpPinEnable(GPIO_PIN[i], PAD_WAKEUP_POL_LOW, PAD_WAKEUP_DEB_DISABLE);
+        if (key_trigger_level[i] == GPIO_KEY_LEVEL_LOW)
+        {
+            System_WakeUpPinEnable(GPIO_PIN[i], PAD_WAKEUP_POL_LOW, PAD_WAKEUP_DEB_DISABLE);
+        }
+        else
+        {
+            System_WakeUpPinEnable(GPIO_PIN[i], PAD_WAKEUP_POL_HIGH, PAD_WAKEUP_DEB_DISABLE);
+        }
     }
 }
 
@@ -156,6 +173,10 @@ void matter_gpio_dlps_exit(void)
 void matter_gpio_init(P_MATTER_GPIO_CBACK func)
 {
     uint8_t i;
+
+#if DLPS_EN
+    matter_gpio_timer_init();
+#endif
 
     for (i = 0; i < GPIO_NUM; i++)
     {
@@ -205,6 +226,20 @@ void matter_gpio_init(P_MATTER_GPIO_CBACK func)
 
     gpio_callback = func;
 
+}
+
+void matter_gpio_timer_init(void)
+{
+    if (false == os_timer_create(&gpio_press_check_timer, "gpio_detection_timer",  1, \
+                                 GPIO_PRESS_CHECK_TIMEOUT, false, matter_gpio_allow_to_enter_dlps))
+    {
+        APP_PRINT_ERROR0("[matter_gpio_timer_init] matter_gpio_timer_init create failed!");
+    }
+}
+
+void matter_gpio_timer_restart(void)
+{
+    os_timer_restart(&gpio_press_check_timer, GPIO_PRESS_CHECK_TIMEOUT);
 }
 
 #ifdef __cplusplus

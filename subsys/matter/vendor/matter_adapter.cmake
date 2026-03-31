@@ -31,7 +31,25 @@ target_sources(openthread-rtl87x2g
     ${REALTEK_SDK_ROOT}/subsys/matter/vendor/matter_ble/matter_ble_service.c
     ${REALTEK_SDK_ROOT}/subsys/matter/vendor/matter_ble/matter_ble_task.c
     ${REALTEK_SDK_ROOT}/subsys/matter/vendor/rtl87x2g/matter_gpio.c
+    ${REALTEK_SDK_ROOT}/subsys/matter/vendor/rtl87x2g/matter_i2c.c
 )
+
+set(CG_SECURE_DAC_LIBS)
+if (matter_enable_cg_secure_dac_vendor)
+    target_include_directories(openthread-rtl87x2g
+        PRIVATE
+        ${REALTEK_SDK_ROOT}/subsys/matter/thirdparty/cg/include
+        ${CGCRYPTO_PATH}
+    )
+    if (CG_SECURE_DAC_TYPE STREQUAL "USERDATA")
+        target_sources(openthread-rtl87x2g
+            PRIVATE
+            ${REALTEK_SDK_ROOT}/subsys/matter/thirdparty/cg/app_s_cg/src/secure_call.c
+        )
+    elseif (CG_SECURE_DAC_TYPE STREQUAL "SQ7131")
+        set(CG_SECURE_DAC_LIBS ${CGCRYPTO_PATH}/libCGCrypto.a)
+    endif()
+endif()
 
 if(matter_enable_ota_requestor)
     target_include_directories(openthread-rtl87x2g
@@ -106,6 +124,7 @@ target_include_directories(openthread-rtl87x2g
 if(${OT_CMAKE_NINJA_TARGET} STREQUAL "matter-cli-ftd")
     add_executable(matter-cli-ftd
         main_ns.c
+
     )
 
     target_include_directories(matter-cli-ftd
@@ -114,7 +133,7 @@ if(${OT_CMAKE_NINJA_TARGET} STREQUAL "matter-cli-ftd")
             ${REALTEK_SDK_ROOT}/subsys/cfu
             ${REALTEK_SDK_ROOT}/subsys/dfu
             ${OT_REALTEK_ROOT}/vendor/rtl87x2g/internal/cfu
-            ${OT_REALTEK_ROOT}/vendor/bertl87x2ge4/internal/config_param
+            ${OT_REALTEK_ROOT}/vendor/rtl87x2g/internal/config_param
     )
 
     target_compile_definitions(matter-cli-ftd
@@ -125,7 +144,9 @@ if(${OT_CMAKE_NINJA_TARGET} STREQUAL "matter-cli-ftd")
 
     if (matter_enable_rpc)
         target_link_libraries(matter-cli-ftd
+        PRIVATE
             -Wl,--start-group
+            ${CG_SECURE_DAC_LIBS}
             chip_main
             CHIP
             PwRpc
@@ -140,7 +161,9 @@ if(${OT_CMAKE_NINJA_TARGET} STREQUAL "matter-cli-ftd")
         )
     else()
         target_link_libraries(matter-cli-ftd
+        PRIVATE
             -Wl,--start-group
+            ${CG_SECURE_DAC_LIBS}
             chip_main
             CHIP
             cli_uart
@@ -168,6 +191,15 @@ if(${OT_CMAKE_NINJA_TARGET} STREQUAL "matter-cli-mtd")
     target_include_directories(matter-cli-mtd
         PRIVATE
             $<TARGET_PROPERTY:ot-config,INTERFACE_INCLUDE_DIRECTORIES>
+            ${REALTEK_SDK_ROOT}/subsys/cfu
+            ${REALTEK_SDK_ROOT}/subsys/dfu
+            ${OT_REALTEK_ROOT}/vendor/rtl87x2g/internal/cfu
+            ${OT_REALTEK_ROOT}/vendor/rtl87x2g/internal/config_param
+    )
+
+    target_include_directories(matter-cli-mtd
+        PRIVATE
+            $<TARGET_PROPERTY:ot-config,INTERFACE_INCLUDE_DIRECTORIES>
     )
 
     if(DEFINED ENABLE_DLPS AND "${ENABLE_DLPS}" STREQUAL "ON")
@@ -187,7 +219,9 @@ if(${OT_CMAKE_NINJA_TARGET} STREQUAL "matter-cli-mtd")
     endif()
 
     target_link_libraries(matter-cli-mtd
+    PRIVATE
         -Wl,--start-group
+        ${CG_SECURE_DAC_LIBS}
         chip_main
         CHIP
         cli_uart
@@ -199,6 +233,21 @@ if(${OT_CMAKE_NINJA_TARGET} STREQUAL "matter-cli-mtd")
         ot-config-mtd
         ot-config
     )
+
+    if(${BUILD_TYPE} STREQUAL "dev")
+        add_custom_command(
+            TARGET matter-cli-mtd
+            POST_BUILD
+            COMMAND cp -f ${OT_REALTEK_ROOT}/vendor/rtl87x2g/common/threading_alt.h ${REALTEK_SDK_ROOT}/subsys/mbedtls/repo/include/
+            COMMAND cp -f ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libchip_main.a ${REALTEK_SDK_ROOT}/subsys/matter/lib/switch/
+            COMMAND cp -f ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libcli_uart.a ${REALTEK_SDK_ROOT}/subsys/matter/lib/switch/
+            COMMAND cp -f ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libopenthread-rtl87x2g.a ${REALTEK_SDK_ROOT}/subsys/matter/lib/switch/
+            COMMAND cp -f ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libopenthread-cli-mtd.a ${REALTEK_SDK_ROOT}/subsys/matter/lib/switch/
+            COMMAND cp -f ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libopenthread-mtd.a ${REALTEK_SDK_ROOT}/subsys/matter/lib/switch/
+            COMMAND cp -f ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libtcplp-mtd.a ${REALTEK_SDK_ROOT}/subsys/matter/lib/switch/
+            COMMAND cp -f ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/../chip/lib/libCHIP.a ${REALTEK_SDK_ROOT}/subsys/matter/lib/switch/
+        )
+    endif()
 endif()
 
 ##################################################

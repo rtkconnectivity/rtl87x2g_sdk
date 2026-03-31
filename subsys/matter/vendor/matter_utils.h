@@ -13,12 +13,21 @@ extern "C" {
 #endif
 
 #include "matter_types.h"
+#include "mem_config.h"
 
 typedef struct
 {
     uint8_t value[68];
     size_t len;
 } FactoryDataString;
+
+#if CONFIG_DAC_KEY_ENC && FEATURE_TRUSTZONE_ENABLE
+typedef struct
+{
+    uint8_t value[256];
+    size_t len;
+} DACKeyEncString;
+#endif
 
 typedef struct
 {
@@ -44,7 +53,11 @@ typedef struct
 typedef struct 
 {
     CertDataString dac_cert;
+#if CONFIG_DAC_KEY_ENC && FEATURE_TRUSTZONE_ENABLE
+    DACKeyEncString dac_key;
+#else
     FactoryDataString dac_key;
+#endif
     CertDataString pai_cert;
     CertDataString cd;
 } DeviceAttestationCredentials;

@@ -37,6 +37,7 @@ list (
         "${REALTEK_SDK_ROOT}/subsys/matter/vendor/rtl87x2g"
         "${REALTEK_SDK_ROOT}/subsys/matter/vendor/matter_ble"
         "${REALTEK_SDK_ROOT}/subsys/matter/secure"
+        "${REALTEK_SDK_ROOT}/subsys/matter/thirdparty"
         # lwip
         "${bee_lwip_path}/arch"
         "${bee_lwip_path}"
@@ -58,18 +59,19 @@ list (
         "${REALTEK_SDK_ROOT}/subsys/mbedtls"
         "${REALTEK_SDK_ROOT}/subsys/mbedtls/repo/include"
         "${REALTEK_SDK_ROOT}/subsys/mbedtls/repo/library"
+        "${REALTEK_SDK_ROOT}/subsys/mbedtls/port/inc"
 )
 endif()
 
-if(${RT_PLATFORM} STREQUAL "bee3plus")
+if(${RT_PLATFORM} STREQUAL "rtl8752h")
 list (
     APPEND inc_path
         # sdk
         "${REALTEK_SDK_INCPATH}"
         # porting
-        "${PROJECT_SOURCE_DIR}/vendor/${RT_PLATFORM}/${BUILD_TARGET}"
+        "${OT_REALTEK_ROOT}/src/${RT_PLATFORM}/${BUILD_TARGET}"
         "${REALTEK_SDK_ROOT}/sdk/subsys/matter/vendor"
-        "${REALTEK_SDK_ROOT}/sdk/subsys/matter/vendor/bee3plus"
+        "${REALTEK_SDK_ROOT}/sdk/subsys/matter/vendor/rtl8752h"
         "${REALTEK_SDK_ROOT}/sdk/subsys/matter/vendor/matter_ble"
         # lwip
         "${bee_lwip_path}/arch"

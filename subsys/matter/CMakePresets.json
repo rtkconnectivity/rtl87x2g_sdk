@@ -16,6 +16,9 @@
           "BUILD_USB": "OFF",
           "ENABLE_PERSISTENTSTORAGE_AUDIT": "OFF",
           "ENABLE_MATTER_MED": "OFF",
+          "ENABLE_ICD_LIT": "OFF",
+          "ENABLE_CG_SECURE_DAC_VENDOR": "OFF",
+          "CG_SECURE_DAC_TYPE": "SQ7131",
           "ENABLE_FACTORY_DATA": "OFF",
           "ENABLE_FACTORY_DATA_ENCRYPTION": "OFF",
           "ENABLE_DAC_KEY_ENCRYPTION": "OFF",
@@ -31,7 +34,6 @@
         "description": "Matter single security configuration",
         "hidden": false,
         "generator": "Ninja",
-        "toolchainFile": "vendor/bee4/arm-none-eabi.cmake",
         "cacheVariables": {
           "CMAKE_BUILD_TYPE": "Release",
           "BUILD_TYPE": "sdk",
@@ -39,14 +41,16 @@
           "BUILD_USB": "OFF",
           "ENABLE_PERSISTENTSTORAGE_AUDIT": "OFF",
           "ENABLE_MATTER_MED": "OFF",
-          "ENABLE_FACTORY_DATA": "OFF",
+          "ENABLE_CG_SECURE_DAC_VENDOR": "OFF",
+          "CG_SECURE_DAC_TYPE": "USERDATA",
+          "ENABLE_FACTORY_DATA": "ON",
           "ENABLE_FACTORY_DATA_ENCRYPTION": "OFF",
           "ENABLE_DAC_KEY_ENCRYPTION": "OFF",
           "ENABLE_CLI": "OFF",
           "ENABLE_PW_RPC": "OFF",
           "ENABLE_SHELL": "OFF",
           "ENABLE_OTA_REQUESTOR": "ON",
-          "ENABLE_DLPS": "OFF"
+          "ENABLE_DLPS": "ON"
         }
       },
       {
@@ -54,7 +58,6 @@
         "description": "Matter configuration with rpc enabled",
         "hidden": false,
         "generator": "Ninja",
-        "toolchainFile": "vendor/bee4/arm-none-eabi.cmake",
         "cacheVariables": {
           "CMAKE_BUILD_TYPE": "Release",
           "BUILD_TYPE": "sdk",
@@ -77,7 +80,6 @@
         "description": "Matter dual bank configuration",
         "hidden": false,
         "generator": "Ninja",
-        "toolchainFile": "vendor/bee4/arm-none-eabi.cmake",
         "cacheVariables": {
           "CMAKE_BUILD_TYPE": "Release",
           "BUILD_TYPE": "sdk",
@@ -102,7 +104,6 @@
         "description": "Matter dual security configuration",
         "hidden": false,
         "generator": "Ninja",
-        "toolchainFile": "vendor/bee4/arm-none-eabi.cmake",
         "cacheVariables": {
           "CMAKE_BUILD_TYPE": "Release",
           "BUILD_TYPE": "sdk",
@@ -126,7 +127,6 @@
         "description": "Matter 2M flash configuration",
         "hidden": false,
         "generator": "Ninja",
-        "toolchainFile": "vendor/bee4/arm-none-eabi.cmake",
         "cacheVariables": {
           "CMAKE_BUILD_TYPE": "Release",
           "BUILD_TYPE": "sdk",

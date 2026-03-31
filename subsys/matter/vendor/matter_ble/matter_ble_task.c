@@ -11,11 +11,12 @@
 #include <app_msg.h>
 #include "matter_ble.h"
 #include "matter_ble_service.h"
-#include "mem_config.h"
 
 #if (SUPPORT_BLE_OTA == 1)
 #include "ota_service.h"
 #include "dfu_service.h"
+
+T_SERVER_ID dfu_srv_id; /**< dfu service id*/
 #endif
 
 #ifndef EXTERNAL_BLE
@@ -30,7 +31,7 @@ void matter_ble_profile_init(void)
 #if (SUPPORT_BLE_OTA == 1)
     server_init(3);
     ota_add_service(NULL);
-    dfu_add_service(matter_ble_profile_callback);
+    dfu_srv_id = dfu_add_service(matter_ble_profile_callback);
 #else
     server_init(1);
 #endif

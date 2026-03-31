@@ -12,6 +12,8 @@
 #if (SUPPORT_BLE_OTA == 1)
 #include "ble_dfu_transport.h"
 #include "dfu_common.h"
+#include "dfu_service.h"
+#include "matter_wdt.h"
 #endif
 
 static void *matter_ble_evt_queue_handle;  //!< Event queue handle
@@ -152,28 +154,28 @@ void matter_ble_handle_io_msg(T_IO_MSG *p_msg)
 #endif
             switch (p_msg->subtype)
             {
-                case GAP_MSG_LE_CONN_STATE_CHANGE:
+            case GAP_MSG_LE_CONN_STATE_CHANGE:
+                {
+                    uint16_t conn_id    = gap_msg.msg_data.gap_conn_state_change.conn_id;
+                    uint16_t new_state  = gap_msg.msg_data.gap_conn_state_change.new_state;
+                    uint16_t disc_cause = gap_msg.msg_data.gap_conn_state_change.disc_cause;
+                    if (new_state == GAP_CONN_STATE_CONNECTED)
                     {
-                        uint16_t conn_id    = gap_msg.msg_data.gap_conn_state_change.conn_id;
-                        uint16_t new_state  = gap_msg.msg_data.gap_conn_state_change.new_state;
-                        uint16_t disc_cause = gap_msg.msg_data.gap_conn_state_change.disc_cause;
-                        if (new_state == GAP_CONN_STATE_CONNECTED)
+                        matter_ble_is_connected = true;
+                        if (zbmac_pm_check_inactive())
                         {
-                            matter_ble_is_connected = true;
-                            if (zbmac_pm_check_inactive())
-                            {
-                                zbmac_pm_initiate_wakeup();
-                            }
-                        }
-                        else if (new_state == GAP_CONN_STATE_DISCONNECTED)
-                        {
-                            matter_ble_is_connected = false;
+                            zbmac_pm_initiate_wakeup();
                         }
                     }
-                    break;
+                    else if (new_state == GAP_CONN_STATE_DISCONNECTED)
+                    {
+                        matter_ble_is_connected = false;
+                    }
+                }
+                break;
 
-                default:
-                    break;
+            default:
+                break;
             }
 
             if (matter_ble_cback)
@@ -230,11 +232,37 @@ void matter_ble_cback_register(P_MATTER_BLE_CBACK cback)
     matter_ble_cback = cback;
 }
 
+extern T_SERVER_ID dfu_srv_id; /**< dfu service id*/
+
 T_APP_RESULT matter_ble_profile_callback(T_SERVER_ID service_id, void *p_data)
 {
-    if (matter_ble_cback)
+#if (SUPPORT_BLE_OTA == 1)
+    if (service_id == dfu_srv_id)
     {
-        matter_ble_cback(p_data, service_id, CB_PROFILE_CALLBACK);
+        T_DFU_CALLBACK_DATA *p_dfu_cb_data = (T_DFU_CALLBACK_DATA *)p_data;
+        switch (p_dfu_cb_data->msg_type)
+        {
+        case SERVICE_CALLBACK_TYPE_INDIFICATION_NOTIFICATION:
+            {
+                if (p_dfu_cb_data->msg_data.notification_indification_index == DFU_CP_NOTIFY_ENABLE)
+                {
+                    MATTER_PRINT_WARN0("matter_ble_profile_callback: disable watchdog before DFU");
+                    matter_wdt_watchdog_close();
+                }
+            }
+            break;
+
+        default:
+            break;
+        }
+    }
+    else
+#endif
+    {
+        if (matter_ble_cback)
+        {
+            matter_ble_cback(p_data, service_id, CB_PROFILE_CALLBACK);
+        }
     }
 
     return APP_RESULT_SUCCESS;

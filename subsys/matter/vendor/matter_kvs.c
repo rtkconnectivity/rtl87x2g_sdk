@@ -86,7 +86,7 @@ int32_t matter_kvs_put(const char *key, const void *value, size_t valueSize)
 
     if (0 != aos_kv_set(key, encrypt_output, valueSize, 1))
     {
-        //APP_PRINT_TRACE1("Bee4_KvsPut kv_set %s failed", TRACE_STRING(key));
+        //APP_PRINT_TRACE1("KvsPut kv_set %s failed", TRACE_STRING(key));
         ret = MATTER_KVS_LOOKUP_NOT_FOUND;
     }
     else
@@ -116,7 +116,7 @@ int32_t matter_kvs_get(const char *key, void *buffer, size_t buffer_size, size_t
 
     if (0 != aos_kv_get(key, decrypt_input, &len))
     {
-        //APP_PRINT_TRACE1("Bee4_KvsGet kv_get %s failed", TRACE_STRING(key));
+        //APP_PRINT_TRACE1("KvsGet kv_get %s failed", TRACE_STRING(key));
         ret = MATTER_KVS_LOOKUP_NOT_FOUND;
     }
     else

@@ -7,11 +7,13 @@ extern "C" {
 
 #include "matter_kvs.h"
 #include "matter_gpio.h"
+#include "matter_i2c.h"
 #include "matter_utils.h"
 #include "matter_uart.h"
 #include <cmsis_compiler.h>
 #include <trace.h>
 #include "wdt.h"
+#include "mem_config.h"
 
 #ifdef __cplusplus
 }
