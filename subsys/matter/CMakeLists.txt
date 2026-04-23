@@ -244,7 +244,7 @@ include(${bee_lwip_path}/lwip.cmake)
 include(includepath.cmake)
 include(${CHIP_ROOT}/src/app/chip_data_model.cmake)
 include(${MATTER_EXAMPLE_PATH}/chip_main.cmake)
-include(${CHIP_ROOT}/config/realtek/bee/chip.cmake)
+include(${CHIP_ROOT}/config/realtek/chip-cmake-freertos/chip.cmake)
 
 add_dependencies(chip_main chip-gn)
 
