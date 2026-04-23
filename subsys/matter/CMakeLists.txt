@@ -26,7 +26,7 @@ set(MATTER_ADAPTER_PATH "${CMAKE_CURRENT_SOURCE_DIR}")
 set(OT_REALTEK_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../../../../..")
 
 set(openthread_root "${OT_REALTEK_ROOT}/openthread")
-set(bee_matter_root "${OT_REALTEK_ROOT}/../../..")
+set(matter_root "${OT_REALTEK_ROOT}/../../..")
 set(matter_output_path ${PROJECT_BINARY_DIR})
 set(matter_example_path ${MATTER_EXAMPLE_PATH})
 
@@ -111,7 +111,7 @@ include(${OT_REALTEK_ROOT}/script/${BUILD_TYPE}.cmake)
 include(${OT_REALTEK_ROOT}/script/openthread.cmake)
 
 get_filename_component(SDK_ROOT ${REALTEK_SDK_ROOT} REALPATH)
-get_filename_component(CHIP_ROOT ${bee_matter_root} REALPATH)
+get_filename_component(CHIP_ROOT ${matter_root} REALPATH)
 
 if(DEFINED BUILD_USB AND "${BUILD_USB}" STREQUAL "ON")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DBUILD_USB")
