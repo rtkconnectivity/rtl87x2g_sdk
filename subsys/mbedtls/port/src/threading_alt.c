@@ -68,6 +68,7 @@ static int alt_mutex_unlock(mbedtls_threading_mutex_t *mutex)
     return 0;
 }
 
+void mbedtls_threading_alt_init(void);  /* Prototype to satisfy -Wmissing-prototypes */
 void mbedtls_threading_alt_init(void)
 {
     mbedtls_threading_set_alt(alt_mutex_init, alt_mutex_free, alt_mutex_lock, alt_mutex_unlock);

@@ -34,6 +34,7 @@ extern "C" {
 
 #if defined(MBEDTLS_ECP_ALT)
 
+/* Hardware-accelerated ECP types - only for use in ecp_alt.c */
 #if ENABLE_HW_ECC_VERIFY == 1
 typedef struct hw_ecp_point
 {

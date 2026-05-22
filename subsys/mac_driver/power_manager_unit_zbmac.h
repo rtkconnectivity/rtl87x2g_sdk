@@ -34,6 +34,7 @@
 extern "C" {
 #endif
 
+/* #include "bt_syscall_opcode.h" */ /* Not available in public SDK */
 #include "power_manager_interface.h"
 
 typedef enum zbmac_power_mode_e
@@ -109,15 +110,6 @@ typedef struct zbpm_adapter_s
     zbpm_callback_t exit_callback_app;  /* call application's back function when the wakeup process
                                            is completed, i.e. the restore function is done */
 } zbpm_adapter_t, *pzbpm_adapter_t;
-
-// System Call OP code to Lower Stack, copy from lower stack for power manager adaption
-typedef enum
-{
-    LOWERSTACK_SYSCALL_OPCODE_READ_BT_CLK_INDEX = 1,
-    LOWERSTACK_SYSCALL_OPCODE_SET_ZB_ACTIVE = 10,
-    LOWERSTACK_SYSCALL_OPCODE_GET_ZB_ENTRY_WINDOW = 11,
-    LOWERSTACK_SYSCALL_OPCODE_REGISTER_MAC_LPS_CALLBACK = 14,
-} LOWERSTACK_SYSCALL_OPCODE;
 
 typedef enum
 {
