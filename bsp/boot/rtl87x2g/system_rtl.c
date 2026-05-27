@@ -1,18 +1,9 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2021, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-   * @file
-   * @brief
-   * @details
-   * @author
-   * @date
-   * @version
-   **************************************************************************************
-   * @attention
-   * <h2><center>&copy; COPYRIGHT 2021 Realtek Semiconductor Corporation</center></h2>
-   * *************************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
+
 #include <locale.h>
 #include <string.h>
 #include <stdlib.h>
@@ -48,6 +39,10 @@
 #if (USE_PSRAM == 1)
 #include "psram.h"
 #endif
+#if (SYSTEM_TRACE_ENABLE == 1)
+#include "system_trace.h"
+#include "trace_config.h"
+#endif
 
 #define BOOT_DIRECT_DEBUG        1
 #define DEBUG_WATCHPOINT_ENABLE  0
@@ -56,16 +51,6 @@
 #define USE_ROM_OS      0
 #define USE_FREERTOS    1
 #define USE_RTT         2
-
-#define FreeRTOS_portBYTE_ALIGNMENT    8
-
-typedef struct A_BLOCK_LINK
-{
-    struct A_BLOCK_LINK *pxNextFreeBlock;   /*<< The next free block in the list. */
-    size_t xBlockSize : 28;                 /*<< The size of the free block. */
-    size_t xRamType : 3;
-    size_t xAllocateBit : 1;
-} BlockLink_t;
 
 bool system_init(void) APP_FLASH_TEXT_SECTION;
 
@@ -232,6 +217,22 @@ void debug_monitor_enable(void)
 }
 #endif
 
+__attribute__((weak)) int rtk_main(void)
+{
+#if defined (__ARMCC_VERSION)
+    extern int __main(void);
+    __main();
+#elif defined (__GNUC__)
+    extern int main(void);
+    main();
+#endif
+
+    while (1)
+    {
+        //  "Error: main returned"
+    }
+}
+
 void common_main(void)
 {
     uint32_t cpu_clk = 0;
@@ -288,12 +289,17 @@ void common_main(void)
 
 #if (FTL_POOL == 1)
         extern int32_t ftl_pool_init(uint32_t ftl_pool_startAddr, uint32_t ftl_pool_size,
-                                     uint16_t default_module_logicSize);
+                                     uint16_t default_module_logicSize, uint8_t gc_page_thres);
         uint16_t rom_ftl_size = 0xC00;
         uint8_t ret = 0;
-        ret = ftl_pool_init(flash_nor_get_bank_addr(FLASH_FTL),
-                            flash_nor_get_bank_size(FLASH_FTL),
-                            rom_ftl_size);
+        uint8_t thres = 2; // default threshold val
+
+#ifdef FTL_GC_PAGE_THRES_CUSTOMIZED
+        thres = FTL_GC_PAGE_THRES_CUSTOMIZED
+#endif
+                ret = ftl_pool_init(flash_nor_get_bank_addr(FLASH_FTL),
+                                    flash_nor_get_bank_size(FLASH_FTL),
+                                    rom_ftl_size, thres);
         FLASH_PRINT_INFO1("[FTL] init ret=%d", ret);
 #else
         extern uint32_t (*ftl_init)(uint32_t u32PageStartAddr, uint8_t pagenum);
@@ -319,8 +325,7 @@ void common_main(void)
     extern void __iar_program_start(const int);
     __iar_program_start(0);
 #elif defined (__ARMCC_VERSION)
-    extern int __main(void);
-    __main();
+    rtk_main();
 #elif defined (__GNUC__)
     typedef void (*init_fn_t)(void);
     init_fn_t *fp;
@@ -329,8 +334,7 @@ void common_main(void)
     {
         (*fp)();
     }
-    extern int main(void);
-    main();
+    rtk_main();
 #endif
 }
 
@@ -345,7 +349,6 @@ void ram_init(void)
     unsigned int *section_image_base = 0;
     unsigned int *section_load_base = 0;
     unsigned int section_image_length = 0;
-    unsigned int i = 0;
 
     //copy dtcm ro
 #if defined (__ARMCC_VERSION)
@@ -825,8 +828,8 @@ void pre_main(void)
 
     setlocale(LC_ALL, "C");
 
-    BOOT_PRINT_ERROR1("SDK Ver: %s",
-                      TRACE_STRING(VERSION_BUILD_STR));
+    BOOT_PRINT_INFO1("SDK Ver: %s",
+                     TRACE_STRING(VERSION_BUILD_STR));
 
     AppUpdateVectorTable();
 
@@ -839,6 +842,14 @@ void pre_main(void)
 #else
     fmc_flash_set_default_bp_lv(false);
 #endif
+
+    // flash 4 byte address mode
+    uint32_t flash_id = flash_nor_get_id(FLASH_NOR_IDX_SPIC0);
+    if ((flash_id & 0xF) == 9)
+    {
+        extern bool fmc_flash_set_4_byte_address_mode(FMC_FLASH_NOR_IDX_TYPE idx, bool enable);
+        fmc_flash_set_4_byte_address_mode(FMC_FLASH_NOR_IDX0, 1);
+    }
 
     if (app_pre_main_cb)
     {
@@ -962,6 +973,18 @@ bool system_init(void)
     OTP->log_ram_size = LOG_RAM_SIZE;
 #endif
 
+    /*Debug: config enable write hardfault record to flash*/
+#if (WRITE_HARDFAULT_RECORD_TO_FLASH_ENABLE > 0)
+    OTP->write_info_to_flash_when_hardfault = WRITE_HARDFAULT_RECORD_TO_FLASH_ENABLE;
+    OTP->HardFault_Record_BegAddr = HARDFAULT_RECORD_BEG_ADDR;
+    OTP->HardFault_Record_EndAddr = HARDFAULT_RECORD_END_ADDR;
+    OTP->HardFault_Record_CFG = HARDFAULT_RECORD_CFG;
+#endif
+
+#if (WRITE_HARDFAULT_RECORD_TO_FLASH_ENABLE > 0) && (SYSTEM_TRACE_ENABLE == 1) && (TRACE_HARDFAULT == 1)
+    patch_hardfault_save_to_flash_init();
+#endif
+
     return true;
 }
 
@@ -1060,20 +1083,17 @@ void GPIO_B_24_31_Handler(void)
     GPIOB_Handler(0xFF000000);
 }
 
+#define FreeRTOS_portBYTE_ALIGNMENT    8
 
-/*retarget to weak function to ensure that the application has freedom of redefinition*/
-__WEAK void *malloc(size_t size)
+typedef struct A_BLOCK_LINK
 {
-    return os_mem_alloc(RAM_TYPE_DATA_ON, size);
-}
+    struct A_BLOCK_LINK *pxNextFreeBlock;   /*<< The next free block in the list. */
+    size_t xBlockSize : 28;                 /*<< The size of the free block. */
+    size_t xRamType : 3;
+    size_t xAllocateBit : 1;
+} BlockLink_t;
 
-__WEAK void *calloc(size_t n, size_t size)
-{
-    return os_mem_zalloc(RAM_TYPE_DATA_ON, n * size);
-}
-
-/*only for FreeRTOS*/
-__WEAK void *realloc(void *ptr, size_t size)
+static void *freertos_realloc(void *ptr, size_t size)
 {
     void *new_ptr;
     BlockLink_t *pxLink;
@@ -1115,66 +1135,55 @@ __WEAK void *realloc(void *ptr, size_t size)
     return new_ptr;
 }
 
+#if defined(__ARMCC_VERSION)
+
+/*retarget to weak function to ensure that the application has freedom of redefinition*/
+__WEAK void *malloc(size_t size)
+{
+    return os_mem_alloc(RAM_TYPE_DATA_ON, size);
+}
+
+__WEAK void *calloc(size_t n, size_t size)
+{
+    return os_mem_zalloc(RAM_TYPE_DATA_ON, n * size);
+}
+
+/*only for FreeRTOS*/
+__WEAK void *realloc(void *ptr, size_t size)
+{
+    return freertos_realloc(ptr, size);
+}
+
 __WEAK void free(void *ptr)
 {
     os_mem_free(ptr);
 }
 
-#if defined ( __ARMCC_VERSION   )
-#elif defined ( __GNUC__   )
-extern void *__aeabi_memset(void *s, size_t n, int c);
-void *memset(void *s, int c, size_t n)
-{
-    return  __aeabi_memset(s, n, c);
-}
-#endif
+#else
 
-#if defined ( __ARMCC_VERSION   )
-#elif defined ( __GNUC__   )
-#include <sys/stat.h>
-#include <errno.h>
-#undef errno
-extern int errno;
+/*
+ * The linker will redirect 'malloc' to '__wrap_malloc'
+ * and 'free' to '__wrap_free'.
+ */
 
-int __attribute__((weak)) _close(int file)
+__attribute__((weak)) void *__wrap__malloc_r(struct _reent *r, size_t size)
 {
-    return -1;
+    return os_mem_alloc(RAM_TYPE_DATA_ON, size);
 }
 
-int __attribute__((weak)) _fstat(int file, struct stat *st)
+__attribute__((weak)) void __wrap__free_r(struct _reent *r, void *ptr)
 {
-    st->st_mode = S_IFCHR;
-    return 0;
+    os_mem_free(ptr);
 }
 
-int __attribute__((weak)) _getpid(void)
+__attribute__((weak)) void *__wrap__calloc_r(struct _reent *r, size_t nmemb, size_t size)
 {
-    return 1;
+    return os_mem_zalloc(RAM_TYPE_DATA_ON, nmemb * size);
 }
 
-int __attribute__((weak)) _isatty(int file)
+__attribute__((weak)) void *__wrap__realloc_r(struct _reent *r, void *ptr, size_t size)
 {
-    return 1;
+    return freertos_realloc(ptr, size);
 }
 
-int __attribute__((weak)) _kill(int pid, int sig)
-{
-    errno = EINVAL;
-    return -1;
-}
-
-int __attribute__((weak)) _lseek(int file, int ptr, int dir)
-{
-    return 0;
-}
-
-int __attribute__((weak)) _read(int file, char *ptr, int len)
-{
-    return 0;
-}
-
-int __attribute__((weak)) _write(int file, char *ptr, int len)
-{
-    return len;
-}
 #endif
