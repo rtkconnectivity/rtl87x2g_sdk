@@ -1,12 +1,7 @@
-/**
- * \copyright Copyright (C) 2023 Realtek Semiconductor Corporation.
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
  *
- * \file usb_cdc_driver.h
- * \version 1.0
- * \brief Upper application can used the definitions and APIs to implement CDC function instances.
- *        The driver supports virtual port com to communicate with computer.
- *
- * \note:
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
  */
 #ifndef __USB_CDC_DRIVER_H__
 #define __USB_CDC_DRIVER_H__

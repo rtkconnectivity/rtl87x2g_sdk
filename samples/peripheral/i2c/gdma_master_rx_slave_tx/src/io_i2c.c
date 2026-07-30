@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2018, Realtek Semiconductor Corporation. All rights reserved.
-**********************************************************************************************************
-* @file     main.c
-* @brief    IIC demo GDMA master tx slave rx.
-* @details
-* @author   echo
-* @date     2021-05-27
-* @version  v0.1
-*********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 /* Includes ------------------------------------------------------------------*/
 #include <stdlib.h>
@@ -398,4 +391,4 @@ void I2C0_READ_CMD_GDMA_Channel_Handler(void)
 
 
 
-/******************* (C) COPYRIGHT 2018 Realtek Semiconductor Corporation *****END OF FILE****/
+

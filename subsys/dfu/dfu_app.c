@@ -1,17 +1,8 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-   * @file      dfu_app.c
-   * @brief
-   * @author    Grace
-   * @date      2023-12-06
-   * @version   v1.1
-   **************************************************************************************
-   * @attention
-   * <h2><center>&copy; COPYRIGHT 2023 Realtek Semiconductor Corporation</center></h2>
-   **************************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 /*============================================================================*
  *                              Header Files
@@ -33,7 +24,6 @@
 #include "gap_conn_le.h"
 #include "os_timer.h"
 #include "fmc_api.h"
-#include "trace.h"
 
 
 
@@ -174,11 +164,11 @@ void dfu_periph_handle_dev_state_evt(T_GAP_DEV_STATE new_state, uint16_t cause)
         {
             if (new_state.gap_adv_sub_state == GAP_ADV_TO_IDLE_CAUSE_CONN)
             {
-                DFU_PRINT_INFO0("GAP adv stoped: because connection created");
+                DFU_PRINT_INFO0("GAP adv stopped: because connection created");
             }
             else
             {
-                DFU_PRINT_INFO0("GAP adv stoped");
+                DFU_PRINT_INFO0("GAP adv stopped");
             }
         }
         else if (new_state.gap_adv_state == GAP_ADV_STATE_ADVERTISING)
@@ -215,10 +205,10 @@ void dfu_periph_handle_conn_state_evt(uint8_t conn_id, T_GAP_CONN_STATE new_stat
             {
                 dfu_active_reset_pending = false;
 
-                /*when muti image in temp, need goto OTA mode*/
+                /*when multi image in temp, need goto OTA mode*/
                 if (dfu_active_reset_to_ota_mode)
                 {
-                    DBG_DIRECT("comb Mormal OTA, Reset to OTA Mode");
+                    DBG_DIRECT("comb Normal OTA, Reset to OTA Mode");
                     dfu_active_reset_to_ota_mode = false;
                     dfu_switch_to_ota_mode();
                 }
@@ -347,7 +337,7 @@ void dfu_periph_conn_param_update_evt(uint8_t conn_id, uint8_t status, uint16_t 
             le_get_conn_param(GAP_PARAM_CONN_INTERVAL, &conn_interval, conn_id);
             le_get_conn_param(GAP_PARAM_CONN_LATENCY, &conn_slave_latency, conn_id);
             le_get_conn_param(GAP_PARAM_CONN_TIMEOUT, &conn_supervision_timeout, conn_id);
-            APP_PRINT_INFO3("dfu_periph_handle_conn_param_update_evt update success:conn_interval 0x%x, conn_slave_latency 0x%x, conn_supervision_timeout 0x%x",
+            DFU_PRINT_INFO3("dfu_periph_handle_conn_param_update_evt update success:conn_interval 0x%x, conn_slave_latency 0x%x, conn_supervision_timeout 0x%x",
                             conn_interval, conn_slave_latency, conn_supervision_timeout);
 
             dfu_notify_conn_para_update_req(conn_id, DFU_ARV_SUCCESS);
@@ -356,14 +346,14 @@ void dfu_periph_conn_param_update_evt(uint8_t conn_id, uint8_t status, uint16_t 
 
     case GAP_CONN_PARAM_UPDATE_STATUS_FAIL:
         {
-            APP_PRINT_ERROR1("dfu_periph_handle_conn_param_update_evt update failed: cause 0x%x", cause);
+            DFU_PRINT_ERROR1("dfu_periph_handle_conn_param_update_evt update failed: cause 0x%x", cause);
             dfu_notify_conn_para_update_req(conn_id, DFU_ARV_FAIL_OPERATION);
         }
         break;
 
     case GAP_CONN_PARAM_UPDATE_STATUS_PENDING:
         {
-            APP_PRINT_INFO0("dfu_periph_handle_conn_param_update_evt update pending.");
+            DFU_PRINT_INFO0("dfu_periph_handle_conn_param_update_evt update pending.");
         }
         break;
 
@@ -481,7 +471,7 @@ void dfu_periph_handle_gap_msg(T_IO_MSG *p_gap_msg)
 
 /**
   * @brief Callback for gap le to notify app
-  * @param[in] cb_type callback msy type @ref GAP_LE_MSG_Types.
+  * @param[in] cb_type callback msg type @ref GAP_LE_MSG_Types.
   * @param[in] p_cb_data point to callback data @ref T_LE_CB_DATA.
   * @retval result @ref T_APP_RESULT
   */
@@ -579,7 +569,7 @@ T_APP_RESULT dfu_profile_callback(T_SERVER_ID service_id, void *p_data)
                 else if (p_cb_data->msg_data.notification_indification_index ==
                          DFU_CP_NOTIFY_DISABLE)
                 {
-                    DFU_PRINT_INFO0("Normaldfu notification disable");
+                    DFU_PRINT_INFO0("Normal dfu notification disable");
                 }
             }
             break;

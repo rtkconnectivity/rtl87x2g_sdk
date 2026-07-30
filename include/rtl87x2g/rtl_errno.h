@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 //#ifdef OTG_IP_EN
 #ifndef _GENERIC_ERRNO_H
 #define _GENERIC_ERRNO_H
@@ -55,4 +61,3 @@
 #endif
 
 //#endif
-

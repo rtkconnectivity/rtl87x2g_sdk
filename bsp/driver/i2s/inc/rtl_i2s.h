@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2024, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* \file     rtl_i2s.h
-* \brief    The header file of the peripheral I2S driver.
-* \details  This file provides all I2S firmware functions.
-* \author   echo gao
-* \date     2024-07-24
-* \version  v1.0
-* *******************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 /*============================================================================*
  *               Define to prevent recursive inclusion
@@ -71,23 +64,6 @@ typedef enum
 /** End of I2S_Clock_Source
   * \}
   */
-
-#if I2S_SUPPORT_TRX_INDEPENDENT_CONTROL
-/**
- * \defgroup    I2S_Scheme I2S Scheme
- * \{
- * \ingroup     I2S_Exported_Constants
- */
-typedef enum
-{
-    I2S_SCHEME_SEPARATE,       //!< I2S TX and RX Scheme Separate.
-    I2S_SCHEME_DEPENDENT,      //!< I2S RX Scheme Dependent on TX Scheme.
-} I2SScheme_TypeDef;
-
-/** End of I2S_Scheme
-  * \}
-  */
-#endif
 
 /**
  * \defgroup    I2S_Format_Mode I2S Format Mode
@@ -279,8 +255,7 @@ typedef struct
     I2SSrcClk_TypeDef I2S_ClockSource;        /*!< Specify the I2S clock source.
                                                    This parameter can be a value of \ref I2S_Clock_Source */
 #if I2S_SUPPORT_TRX_INDEPENDENT_CONTROL
-    I2SScheme_TypeDef I2S_Scheme;             /*!< Specify the I2S Scheme.
-                                                   This parameter can be a value of \ref I2S_Scheme */
+
 
     uint32_t I2S_TxBClockMi;                  /*!< Specify the BLCK clock speed. BCLK = 40MHz*(I2S_BClockNi/I2S_BClockMi).
                                                    This parameter must range from 1 to 0xffff. */
@@ -324,9 +299,6 @@ typedef struct
 
     I2SDataWidth_TypeDef I2S_RxChannelWidth;  /*!< Specify the I2S Rx channel width.
                                                    This parameter can be a value of \ref I2S_Data_Width. */
-    FunctionalState
-    I2S_BClockFixEn;                          /*!< Specify the I2S BCLK is fixed at dsp_src_clk/4
-                                                   This parameter can be a value of DISABLE or ENABLE. */
 #else
     uint32_t I2S_BClockMi;                    /*!< Specify the BLCK clock speed. BCLK = 40MHz*(I2S_BClockNi/I2S_BClockMi).
                                                    This parameter must range from 1 to 0xffff. */
@@ -1058,5 +1030,4 @@ FlagStatus I2S_GetBClkStatus(I2S_TypeDef *I2Sx);
 #endif /* RTL_I2S_H */
 
 
-/******************* (C) COPYRIGHT 2024 Realtek Semiconductor Corporation *****END OF FILE****/
 

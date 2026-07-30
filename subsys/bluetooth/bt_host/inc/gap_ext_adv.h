@@ -1,19 +1,9 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2016, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* @file      gap_ext_adv.h
-* @brief     Header file for GAP ext ADV
-* @details   This file defines extended advertising related API.
-* @author    ranhui
-* @date      2016-02-18
-* @version   v1.0
-* *********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
-/*============================================================================*
- *               Define to prevent recursive inclusion
- *============================================================================*/
 #ifndef GAP_EXT_ADV_H
 #define GAP_EXT_ADV_H
 
@@ -173,7 +163,7 @@ T_GAP_CAUSE le_ext_adv_init(uint8_t adv_set_num);
  *
  * This function can be called with an extended advertising parameter type @ref T_LE_EXT_ADV_PARAM_TYPE and it will get the extended advertising parameter.
  * The 'p_value' field must point to an appropriate data type that meets the requirements for the corresponding parameter type.
- * (For example: if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
+ * (For example, if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
  *
  * @param[in]      param   Extended advertising parameter type @ref T_LE_EXT_ADV_PARAM_TYPE.
  * @param[in,out]  p_value Pointer to the location to get the parameter value.
@@ -284,7 +274,7 @@ uint8_t le_ext_adv_get_adv_handle_by_conn_id(uint8_t conn_id);
         T_GAP_REMOTE_ADDR_TYPE peer_address_type = GAP_REMOTE_ADDR_LE_PUBLIC;
         uint8_t p_peer_address[6] = {0};
         T_GAP_ADV_FILTER_POLICY filter_policy = GAP_ADV_FILTER_ANY;
-        int8_t tx_power = 127; //Host has no preference.Range: -127 to +20,Units: dBm,0x7F Host has no preference.
+        int8_t tx_power = 127; //Host has no preference.Range: -127 to +20. Units: dBm. 0x7F: Host has no preference.
         T_GAP_PHYS_PRIM_ADV_TYPE primary_adv_phy = GAP_PHYS_PRIM_ADV_1M;
         uint8_t secondary_adv_max_skip = 0;
         T_GAP_PHYS_TYPE secondary_adv_phy = GAP_PHYS_2M;

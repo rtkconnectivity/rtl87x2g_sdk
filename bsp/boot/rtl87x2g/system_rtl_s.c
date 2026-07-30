@@ -1,18 +1,9 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2021, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-   * @file
-   * @brief
-   * @details
-   * @author
-   * @date
-   * @version
-   **************************************************************************************
-   * @attention
-   * <h2><center>&copy; COPYRIGHT 2021 Realtek Semiconductor Corporation</center></h2>
-   * *************************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
+
 #include <string.h>
 #include "secure_app_section.h"
 #include "patch_header_check.h"
@@ -142,7 +133,7 @@ void ram_init(void)
     memcpy(ro_image_base, ro_load_base, ro_image_length);
 
     DBG_DIRECT("Secure APP copy ro: src 0x%x, dest 0x%x, len %d",
-               (uint32_t)ro_image_base, (uint32_t)ro_load_base, ro_image_length);
+               (uint32_t)ro_load_base, (uint32_t)ro_image_base, ro_image_length);
 
 #endif
 
@@ -190,9 +181,9 @@ void ram_init(void)
 
 }
 
+__WEAK
 void sau_region_init(void)
 {
-
     boot_cfg.sau_region[1].RBAR = SAU_REGION1_BASE_ADDR;
     boot_cfg.sau_region[1].RLAR = SAU_REGION1_END_ADDR;
     boot_cfg.sau_region[1].NSC = 0;
@@ -218,7 +209,7 @@ void sau_region_init(void)
     boot_cfg.sau_region[6].NSC = 0;
 }
 
-/* must ram code because flash not ready this */
+/* must be ram code because flash is not ready at this point */
 APP_RAM_DATA_SECTION
 void idau_region_init(void)
 {
@@ -303,52 +294,122 @@ bool system_init(void)
     return true;
 }
 
-#if defined ( __ARMCC_VERSION   )
-#elif defined ( __GNUC__   )
-#include <sys/stat.h>
-#include <errno.h>
-#undef errno
-extern int errno;
+extern void *pvPortMalloc(size_t xWantedSize);
 
-int __attribute__((weak)) _close(int file)
+extern void vPortFree(void *pv);
+
+#define FreeRTOS_portBYTE_ALIGNMENT    8
+
+typedef struct A_BLOCK_LINK
 {
-    return -1;
+    struct A_BLOCK_LINK *pxNextFreeBlock;   /*<< The next free block in the list. */
+    size_t xBlockSize : 28;                 /*<< The size of the free block. */
+    size_t xRamType : 3;
+    size_t xAllocateBit : 1;
+} BlockLink_t;
+
+static void *freertos_realloc(void *ptr, size_t size)
+{
+    void *new_ptr;
+    BlockLink_t *pxLink;
+    size_t old_size, new_size = 0;
+
+    if (ptr == NULL)
+    {
+        return pvPortMalloc(size);
+    }
+
+    if (size == 0)
+    {
+        vPortFree(ptr);
+        ptr = NULL;
+        return NULL;
+    }
+
+    pxLink = (BlockLink_t *)((uint8_t *)ptr - sizeof(BlockLink_t));
+    old_size = pxLink->xBlockSize;
+
+    if ((old_size - sizeof(BlockLink_t)) ==
+        (size + (FreeRTOS_portBYTE_ALIGNMENT - (size & (FreeRTOS_portBYTE_ALIGNMENT - 1)))))
+    {
+        return ptr;
+    }
+
+    __disable_irq();
+    vPortFree(ptr);
+    new_ptr = pvPortMalloc(size);
+    if (ptr != new_ptr)
+    {
+        pxLink = (BlockLink_t *)((uint8_t *)new_ptr - sizeof(BlockLink_t));
+        new_size = pxLink->xBlockSize;
+        memcpy(new_ptr, ptr, (old_size < new_size) ? (old_size - sizeof(BlockLink_t)) : (new_size - sizeof(
+                    BlockLink_t)));
+    }
+    __enable_irq();
+
+    return new_ptr;
 }
 
-int __attribute__((weak)) _fstat(int file, struct stat *st)
+#if defined(__ARMCC_VERSION)
+
+__WEAK void *malloc(size_t size)
 {
-    st->st_mode = S_IFCHR;
-    return 0;
+    return pvPortMalloc(size);
 }
 
-int __attribute__((weak)) _getpid(void)
+__WEAK void free(void *ptr)
 {
-    return 1;
+    vPortFree(ptr);
 }
 
-int __attribute__((weak)) _isatty(int file)
+__WEAK void *calloc(size_t n, size_t s)
 {
-    return 1;
+    size_t total = n * s;
+    void *ptr = pvPortMalloc(total);
+    if (ptr)
+    {
+        memset(ptr, 0, total);
+    }
+    return ptr;
 }
 
-int __attribute__((weak)) _kill(int pid, int sig)
+__WEAK void *realloc(void *p, size_t s)
 {
-    errno = EINVAL;
-    return -1;
+    return freertos_realloc(p, s);
 }
 
-int __attribute__((weak)) _lseek(int file, int ptr, int dir)
+#else
+
+/*
+ * The linker will redirect 'malloc' to '__wrap_malloc'
+ * and 'free' to '__wrap_free'.
+ */
+
+__attribute__((weak)) void *__wrap__malloc_r(struct _reent *r, size_t size)
 {
-    return 0;
+    return pvPortMalloc(size);
 }
 
-int __attribute__((weak)) _read(int file, char *ptr, int len)
+__attribute__((weak)) void __wrap__free_r(struct _reent *r, void *ptr)
 {
-    return 0;
+    vPortFree(ptr);
 }
 
-int __attribute__((weak)) _write(int file, char *ptr, int len)
+__attribute__((weak)) void *__wrap__calloc_r(struct _reent *r, size_t nmemb, size_t size)
 {
-    return len;
+    size_t total = nmemb * size;
+    void *ptr = pvPortMalloc(total);
+    if (ptr)
+    {
+        memset(ptr, 0, total);
+    }
+    return ptr;
 }
+
+__attribute__((weak)) void *__wrap__realloc_r(struct _reent *r, void *ptr, size_t size)
+{
+    return freertos_realloc(ptr, size);
+}
+
 #endif
+

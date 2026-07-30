@@ -1,14 +1,8 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2022, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-* @file     io_gpio.h
-* @brief    This file provides demo code of gpio input interrupt.
-* @author
-* @date     2023-03-24
-* @version  v1.0
-*****************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 /* Includes ------------------------------------------------------------------*/
 #include "rtl_gpio.h"
@@ -33,4 +27,4 @@ void board_gpio_init(void);
   */
 void driver_gpio_init(void);
 
-/******************* (C) COPYRIGHT 2018 Realtek Semiconductor Corporation *****END OF FILE****/
+

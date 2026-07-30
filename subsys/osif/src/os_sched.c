@@ -1,7 +1,8 @@
-/**
- * Copyright (c) 2015, Realsil Semiconductor Corporation. All rights reserved.
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
  */
-
 #include <stdint.h>
 #include <stdbool.h>
 #include "app_section.h"

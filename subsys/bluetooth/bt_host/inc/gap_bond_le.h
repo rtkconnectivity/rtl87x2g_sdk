@@ -1,20 +1,9 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2016, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-  * @file    gap_bond_le.h
-  * @brief   This file contains all the function prototypes for the GAP bond and pairing
-  *          related functions.
-  * @details
-  * @author  ranhui
-  * @date    2016-02-18
-  * @version v1.0
-  * *************************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
-/*============================================================================*
- *               Define to prevent recursive inclusion
- *============================================================================*/
 #ifndef GAP_BOND_LE_H
 #define GAP_BOND_LE_H
 
@@ -97,7 +86,7 @@ typedef struct
  *
  * This function can be called with a bond parameter type @ref T_LE_BOND_PARAM_TYPE and it will set the bond parameter.
  * The 'p_value' field must point to an appropriate data type that meets the requirements for the corresponding parameter type.
- * (For example: if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
+ * (For example, if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
  *
  * @param[in]   param   @ref T_LE_BOND_PARAM_TYPE.
  * @param[in]   len     Length of data to write.
@@ -134,7 +123,7 @@ T_GAP_CAUSE le_bond_set_param(T_LE_BOND_PARAM_TYPE param, uint8_t len, void *p_v
  *
  * This function can be called with a bond parameter type @ref T_LE_BOND_PARAM_TYPE and it will get the bond parameter.
  * The 'p_value' field must point to an appropriate data type that meets the requirements for the corresponding parameter type.
- * (For example: if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
+ * (For example, if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
  *
  * @param[in]   param   @ref T_LE_BOND_PARAM_TYPE.
  * @param[in,out]  p_value Pointer to location to get the value.
@@ -224,8 +213,8 @@ T_GAP_CAUSE le_bond_pair(uint8_t conn_id);
  * @param[in]     conn_id       Connection ID.
  * @param[in,out] p_value       Pointer to location to get the value.
  *                              Value of LE pair procedure type:
- *                              - 0: LE Legacy Pairing
- *                              - 1: LE Secure Connections
+ *                              - 0: LE Legacy Pairing.
+ *                              - 1: LE Secure Connections.
  *                              - All other values: Reserved for future use.
  *
  * @return Operation result.

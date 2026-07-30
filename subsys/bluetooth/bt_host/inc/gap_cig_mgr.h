@@ -1,19 +1,9 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2021, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* @file      gap_cig_mgr.h
-* @brief     Header file for GAP CIG
-* @details
-* @author
-* @date      2021-07-12
-* @version   v0.8
-* *********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
-/*============================================================================*
- *               Define to prevent recursive inclusion
- *============================================================================*/
 #ifndef _CIG_MGR_H_
 #define _CIG_MGR_H_
 
@@ -457,13 +447,13 @@ typedef struct
     uint16_t max_sdu_s_m;  /**< Maximum size, in octets, of the payload from the Peripheral's Host.
                                 If the CIS is unidirectional from Central to Peripheral, this parameter shall be set to 0. */
     uint8_t  phy_m_s;      /**< Identify which PHY to use for transmission from the Central to the Peripheral.
-                                - bit 0: The transmitter PHY of packets from the Central is LE 1M.
-                                - bit 1: The transmitter PHY of packets from the Central is LE 2M.
-                                - bit 2: The transmitter PHY of packets from the Central is LE Coded. */
+                                - Bit 0: The transmitter PHY of packets from the Central is LE 1M.
+                                - Bit 1: The transmitter PHY of packets from the Central is LE 2M.
+                                - Bit 2: The transmitter PHY of packets from the Central is LE Coded. */
     uint8_t  phy_s_m;      /**< Identify which PHY to use for transmission from the Peripheral to the Central.
-                                - bit 0: The transmitter PHY of packets from the Peripheral is LE 1M.
-                                - bit 1: The transmitter PHY of packets from the Peripheral is LE 2M.
-                                - bit 2: The transmitter PHY of packets from the Peripheral is LE Coded. */
+                                - Bit 0: The transmitter PHY of packets from the Peripheral is LE 1M.
+                                - Bit 1: The transmitter PHY of packets from the Peripheral is LE 2M.
+                                - Bit 2: The transmitter PHY of packets from the Peripheral is LE Coded. */
     uint8_t  rtn_m_s;      /**< Number of times every CIS Data PDU should be retransmitted from the Central to the Peripheral. */
     uint8_t  rtn_s_m;      /**< Number of times every CIS Data PDU should be retransmitted from the Peripheral to the Central. */
 } T_CIS_CFG_PARAM;
@@ -523,14 +513,14 @@ typedef struct
                                            - Range: 0x0000 to 0x00FB. */
     uint8_t             phy_m_s;      /**< Identify which PHY to use for transmission from
                                            the Central to the Peripheral.
-                                           - bit 0: The transmitter PHY of packets from the Central is LE 1M.
-                                           - bit 1: The transmitter PHY of packets from the Central is LE 2M.
-                                           - bit 2: The transmitter PHY of packets from the Central is LE Coded. */
+                                           - Bit 0: The transmitter PHY of packets from the Central is LE 1M.
+                                           - Bit 1: The transmitter PHY of packets from the Central is LE 2M.
+                                           - Bit 2: The transmitter PHY of packets from the Central is LE Coded. */
     uint8_t             phy_s_m;      /**< Identify which PHY to use for transmission from
                                            the Peripheral to the Central.
-                                           - bit 0: The transmitter PHY of packets from the Peripheral is LE 1M.
-                                           - bit 1: The transmitter PHY of packets from the Peripheral is LE 2M.
-                                           - bit 2: The transmitter PHY of packets from the Peripheral is LE Coded. */
+                                           - Bit 0: The transmitter PHY of packets from the Peripheral is LE 1M.
+                                           - Bit 1: The transmitter PHY of packets from the Peripheral is LE 2M.
+                                           - Bit 2: The transmitter PHY of packets from the Peripheral is LE Coded. */
     uint8_t             bn_m_s;       /**< Identify the burst number for Central to Peripheral.
                                            - 0x00: No isochronous data from the Central to the Peripheral.
                                            - 0x01 to 0x0F: The burst number for Central to Peripheral transmission. */
@@ -1905,7 +1895,7 @@ T_GAP_CAUSE cig_mgr_start_setting_test(uint8_t cig_id);
  * Meaning for the return value of @ref MSG_CIG_MGR_CIS_REQUEST_IND by application:
  * - @ref APP_RESULT_ACCEPT : Inform the Controller to accept the request for the CIS.
  *   Result will be notified by msg type @ref MSG_CIG_MGR_ACCEPT_CIS_INFO and @ref MSG_CIG_MGR_CIS_ESTABLISHED_INFO.
- * - neither @ref APP_RESULT_ACCEPT nor @ref APP_RESULT_PENDING : e.g. @ref BT_HCI_ERROR (except @ref HCI_SUCCESS),
+ * - Neither @ref APP_RESULT_ACCEPT nor @ref APP_RESULT_PENDING : e.g. @ref BT_HCI_ERROR (except @ref HCI_SUCCESS),
  *   inform the Controller to reject the request for the CIS. Result will be notified by msg type @ref MSG_CIG_MGR_REJECT_CIS_INFO.
  * - @ref APP_RESULT_PENDING : Applications should call @ref cig_mgr_acceptor_accept_cis to accept or
  *   @ref cig_mgr_acceptor_reject_cis to reject the request for the CIS.

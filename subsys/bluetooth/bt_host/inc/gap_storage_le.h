@@ -1,19 +1,9 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2016, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* @file      gap_storage_le.h
-* @brief     Key storage function.
-* @details
-* @author    Jane
-* @date      2016-02-18
-* @version   v1.0
-* *********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
-/*============================================================================*
- *               Define to prevent recursive inclusion
- *============================================================================*/
 #ifndef     FLASH_KEY_MGR_LE_H
 #define     FLASH_KEY_MGR_LE_H
 
@@ -244,7 +234,7 @@ uint32_t flash_save_local_name(T_LOCAL_NAME *p_data);
  * \code{.c}
     void test(void)
     {
-        uint8_t device_name[GAP_DEVICE_NAME_LEN] = "BB3_GapTest";
+        uint8_t device_name[GAP_DEVICE_NAME_LEN] = "GapTest";
         uint16_t appearance = GAP_GATT_APPEARANCE_UNKNOWN;
         uint8_t appearance_prop = GAPS_PROPERTY_WRITE_ENABLE;
         uint8_t device_name_prop = GAPS_PROPERTY_WRITE_ENABLE;
@@ -337,7 +327,7 @@ uint32_t flash_save_local_appearance(T_LOCAL_APPEARANCE *p_data);
  * \code{.c}
     void test(void)
     {
-        uint8_t device_name[GAP_DEVICE_NAME_LEN] = "BB3_GapTest";
+        uint8_t device_name[GAP_DEVICE_NAME_LEN] = "GapTest";
         uint16_t appearance = GAP_GATT_APPEARANCE_UNKNOWN;
         uint8_t appearance_prop = GAPS_PROPERTY_WRITE_ENABLE;
         uint8_t device_name_prop = GAPS_PROPERTY_WRITE_ENABLE;

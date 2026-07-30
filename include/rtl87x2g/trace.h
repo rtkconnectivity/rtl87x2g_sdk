@@ -1,14 +1,8 @@
-/**
-************************************************************************************************************
-*               Copyright (c) 2017, Realtek Semiconductor Corporation. All rights reserved.
-************************************************************************************************************
-* @file     trace.h
-* @brief    For log print
-* @author   arthur_pan
-* @date     2024-11
-* @version  v1.0
-*************************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 #ifndef _TRACE_H_
 #define _TRACE_H_
@@ -37,6 +31,11 @@ extern "C" {
 /**
  * \cond INTERNAL
 */
+/* Set to 1 to enable float specifier (%f/%g/%e) support in DBG_DIRECT.
+ * GCC (newlib-nano): also requires -u _printf_float at link time.
+ * Keil (AC6): printf natively supports float, no linker change needed. */
+#define CONFIG_LOGGING_FLOAT_DATA_PRINT           0
+
 /* Log Section Definition */
 #define TRACE_DATA __attribute__((section(".TRACE"))) __attribute__((aligned(4))) __attribute__((used))
 /**
@@ -95,23 +94,12 @@ typedef enum
 
     TYPE_PLATFORM_DBG_DIRECT    = 16,   /* Bee1 */
 
-    /* type 32~127 reserved for project id, e.g. bumblebee3, bee2 */
-    TYPE_BUMBLEBEE3             = 32,   /* BBPRO1 (deprecated, use TYPE_BBPRO1 instead) */
-    TYPE_BEE2                   = 33,
-    TYPE_BEE3                   = 35,
-    TYPE_BEE3PRO                = 36,
-    TYPE_BEE3PLUS               = 37,
-    TYPE_BEE4                   = 38,
-
-    TYPE_BBPRO1                 = 64,
-    TYPE_BBPRO2                 = 65,
-    TYPE_BBPRO3                 = 66,
-
-    TYPE_BBLITE1                = 96,
-    TYPE_BBLITE2                = 97,
-
-    TYPE_BB2_A                  = 110,
-    TYPE_BB2                    = 111,
+    /* type 32~127 reserved for project id, e.g. TYPE_RTL8763B, TYPE_RTL8762C */
+    TYPE_RTL8763B             = 32,
+    TYPE_RTL8762C             = 33,
+    TYPE_RTL8762E             = 35,
+    TYPE_RTL8752H             = 37,
+    TYPE_RTL87x2G             = 38,
 
     /* type 128~207 reserved for 3rd party definition */
 
@@ -121,7 +109,7 @@ typedef enum
  * \cond INTERNAL
 */
 /* Log type current ic used */
-#define LOG_TYPE                (TYPE_BEE4)
+#define LOG_TYPE                (TYPE_RTL87x2G)
 /**
  * \endcond
 */
@@ -448,10 +436,20 @@ const char *trace_binary(uint32_t info, uint16_t length, uint8_t *p_data);
 #define DBG_BUFFER(type, sub_type, module, level, fmt, param_num,...)   \
     DBG_BUFFER_##level(type, sub_type, module, fmt, param_num, ##__VA_ARGS__)
 
-#define DBG_DIRECT(...)     do {\
-        log_direct(COMBINE_TRACE_INFO(LOG_TYPE, SUBTYPE_DIRECT, 0, 0), __VA_ARGS__);\
+#if (CONFIG_LOGGING_FLOAT_DATA_PRINT == 1) && \
+    !(defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U))
+extern void log_direct_imp(uint32_t info, const char *fmt, ...);
+#define DBG_DIRECT(...) \
+    do { \
+        log_direct_imp(COMBINE_TRACE_INFO(LOG_TYPE, SUBTYPE_DIRECT, 0, 0), __VA_ARGS__); \
+    } while (0)
+#else
+#define DBG_DIRECT(...) \
+    do { \
+        log_direct(COMBINE_TRACE_INFO(LOG_TYPE, SUBTYPE_DIRECT, 0, 0), __VA_ARGS__); \
     } while (0)
 
+#endif
 
 /**
  * \cond INTERNAL
@@ -460,7 +458,7 @@ const char *trace_binary(uint32_t info, uint16_t length, uint8_t *p_data);
         DBG_BUFFER_INTERNAL(LOG_TYPE, SUBTYPE_FORMAT, MODULE_BOOT, LEVEL_ERROR, fmt, param_num, ##__VA_ARGS__);\
     } while (0)
 
-#if (LOG_TYPE == TYPE_BEE4)
+#if (LOG_TYPE == TYPE_RTL87x2G)
 #define DBG_LOWERSTACK(color, file_num, line_num, str_index, param_num, ...)     do {\
         log_buffer_lowerstack(str_index, param_num, ##__VA_ARGS__);\
     } while (0)

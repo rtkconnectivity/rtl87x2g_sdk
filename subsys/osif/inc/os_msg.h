@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2024, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* @file      os_msg.h
-* @brief     Header file for os message queue API.
-* @details   This file is used for message queue create, send and receive.
-* @author    rui_yu
-* @date      2024-12-30
-* @version   v1.0
-* *********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 #ifndef _OS_MSG_H_
 #define _OS_MSG_H_

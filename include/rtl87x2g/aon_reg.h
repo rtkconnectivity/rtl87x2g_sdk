@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 #ifndef _AON_REG_H
 #define _AON_REG_H
 #include <stdint.h>
@@ -10,9 +16,6 @@
 #define AON_REG8X_FW_GENERAL            0x410
 #define AON_REG10X_FW_GENERAL           0x414
 #define AON_REG12X_FW_GENERAL           0x418
-#define AON_REG14X_FW_GENERAL           0x41C
-#define AON_REG16X_FW_GENERAL           0x420
-#define AON_REG18X_FW_GENERAL           0x424
 #define AON_REG20X_FW_GENERAL           0x428
 #define AON_REG22X_FW_GENERAL           0x42C
 #define AON_REG0X_FUNC_DIS              0x460
@@ -418,105 +421,6 @@ typedef volatile union _AON_REG12X_FW_GENERAL_TYPE
         uint32_t FW_GENERAL_REG13X: 16;
     };
 } AON_REG12X_FW_GENERAL_TYPE;
-
-/* 0x41C    0x4000_041c
-    0       w1o reg_dsp_flash_prot                  1'b0
-    1       w1o reg_aon_hwspi_en_rp                 1'b0
-    2       w1o reg_aon_debug_port_wp               1'b0
-    3       w1o reg_aon_dbg_boot_dis                1'b0
-    11:04   w1o XTAL32K_Reserved16[13:6]            8'h0
-    31:12   w1o RSVD                                20'h0
-
- */
-typedef volatile union _AON_REG14X_FW_GENERAL_TYPE
-{
-    uint32_t d32;
-    struct
-    {
-        uint32_t reg_dsp_flash_prot: 1;
-        uint32_t reg_aon_hwspi_en_rp: 1;
-        uint32_t reg_aon_debug_port_wp: 1;
-        uint32_t reg_aon_dbg_boot_dis: 1;
-        uint32_t XTAL32K_Reserved16_13_6: 8;
-        uint32_t RSVD: 20;
-    };
-} AON_REG14X_FW_GENERAL_TYPE;
-
-/* 0x420    0x4000_0420
-    0       w1o is_efuse_invalid                    1'b0
-    1       w1o is_enable_efuse_bank0_read_protect  1'b0
-    2       w1o is_enable_efuse_bank0_write_protect 1'b0
-    3       w1o is_enable_efuse_bank0_read_protect  1'b0
-    4       w1o is_enable_efuse_bank0_write_protect 1'b0
-    5       w1o is_hw_aes_dma_mode                  1'b0
-    6       w1o is_debug_password_invalid           1'b0
-    7       w1o is_disable_set_reg_by_otp           1'b0
-    8       w1o is_enable_image_auth_when_resume    1'b0
-    9       w1o is_enable_pmc_platform              1'b0
-    10      w1o is_enable_bt_platform               1'b0
-    15:11   w1o reg_aon_w1o_gpr_2                   5'h0
-    31:16   w1o reg_aon_w1o_gpr_3                   16'h0
- */
-typedef volatile union _AON_REG16X_FW_GENERAL_TYPE
-{
-    uint32_t d32;
-    struct
-    {
-        uint32_t is_efuse_invalid: 1;
-        uint32_t is_enable_efuse_bank0_read_protect: 1;
-        uint32_t is_enable_efuse_bank0_write_protect: 1;
-        uint32_t is_enable_efuse_bank1_read_protect: 1;
-        uint32_t is_enable_efuse_bank1_write_protect: 1;
-        uint32_t is_hw_aes_dma_mode: 1;
-        uint32_t is_debug_password_invalid: 1;
-        uint32_t is_disable_set_reg_by_otp: 1;
-        uint32_t is_enable_image_auth_when_resume: 1;
-        uint32_t is_enable_pmc_platform: 1;
-        uint32_t is_enable_bt_platform: 1;
-        uint32_t reg_aon_w1o_gpr_2: 5;
-        uint32_t reg_aon_w1o_gpr_3: 16;
-    };
-} AON_REG16X_FW_GENERAL_TYPE;
-
-/* 0x424    0x4000_0424
-    0       w1o is_disable_hci_read_chip_info       1'b0
-    1       w1o is_disable_hci_mac_rf_access        1'b0
-    2       w1o is_disable_hci_wifi_coexist_func    1'b0
-    3       w1o is_disable_hci_set_uart_baudrate    1'b0
-    4       w1o is_disable_hci_rf_dbg_func          1'b0
-    5       w1o is_disable_hci_bt_extension         1'b0
-    6       w1o is_disable_hci_bt_dbg_func          1'b0
-    7       w1o is_disable_hci_bt_test              1'b0
-    8       w1o is_disable_hci_rf_test              1'b0
-    9       w1o is_disable_mpl_ram_patch            1'b0
-    10      w1o is_disable_mpl_flash_access         1'b0
-    11      w1o is_disable_mpl_system_access        1'b0
-    12      w1o is_disable_mpl_otp_access           1'b0
-    15:13   w1o reg_aon_w1o_gpr_4                   3'h0
-    31:16   w1o reg_aon_w1o_gpr_5                   16'h0
- */
-typedef volatile union _AON_REG18X_FW_GENERAL_TYPE
-{
-    uint32_t d32;
-    struct
-    {
-        uint32_t is_disable_hci_read_chip_info: 1;
-        uint32_t is_disable_hci_mac_rf_access: 1;
-        uint32_t is_disable_hci_wifi_coexist_func: 1;
-        uint32_t is_disable_hci_set_uart_baudrate: 1;
-        uint32_t is_disable_hci_rf_dbg_func: 1;
-        uint32_t is_disable_hci_bt_extension: 1;
-        uint32_t is_disable_hci_bt_dbg_func: 1;
-        uint32_t is_disable_hci_bt_test: 1;
-        uint32_t is_disable_hci_rf_test: 1;
-        uint32_t is_disable_mpl_ram_patch: 1;
-        uint32_t is_disable_mpl_flash_access: 1;
-        uint32_t is_disable_mpl_system_access: 1;
-        uint32_t is_disable_mpl_otp_access: 1;
-        uint32_t reg_aon_w1o_gpr_4: 3;
-        uint32_t reg_aon_w1o_gpr_5: 16;
-    };
-} AON_REG18X_FW_GENERAL_TYPE;
 
 /* 0x428    0x4000_0428
     15:0    R/W FW_GENERAL_REG20X                       16'h0

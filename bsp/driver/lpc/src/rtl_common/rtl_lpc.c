@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* \file     rtl_lpc.c
-* \brief    This file provides all the lpcomp firmware functions.
-* \details
-* \author   echo
-* \date     2023-10-17
-* \version  v1.0
-*********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 /*============================================================================*
  *                        Header Files
@@ -249,6 +242,4 @@ ITStatus LPC_GetINTStatus(LPC_TypeDef *LPCx, uint32_t LPC_INT)
     int_status = LPC_GetINTStatusConfig(LPCx, LPC_INT);
     return  int_status;
 }
-
-/******************* (C) COPYRIGHT 2023 Realtek Semiconductor Corporation *****END OF FILE****/
 

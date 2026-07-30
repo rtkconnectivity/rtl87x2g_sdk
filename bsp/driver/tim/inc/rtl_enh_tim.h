@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2025, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* \file     rtl_enh_tim.h
-* \brief    The header file of the peripheral Enhance ENHTIMER driver.
-* \details  This file provides all Enhance ENHTIMER firmware functions.
-* \author   Grace_yan
-* \date     2025-03-19
-* \version  v1.0
-* *********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 /*============================================================================*
  *               Define to prevent recursive inclusion
@@ -649,6 +642,11 @@ uint32_t ENHTIM_GetCurrentCount(ENHTIM_TypeDef *ENHTIMx);
  * \param[in] ENHTIMx  Select the ENHTIM peripheral. Refer to \ref ENHTIM_Declaration.
  * \param[in] count    Maximum counter value for user-defined PWM mode (legal value: 0 to (2^{32} - 2)).
  *
+ * \note      If it needs a dynamic change of MAX_CNT value, MAX_CNT has a minimum value limit.
+ *            Ex. cpu_clk = 40MHz, ETIMER_CLK = 40MHz, then MAX_CNT should larger than 10.
+ *            Ex. cpu_clk = 40MHz, ETIMER_CLK = 32kHz, then MAX_CNT should larger than 4.
+ *            If in the state where ENHTIM is disabled, there is no such limitation.
+ *
  * <b>Example usage</b>
  * \code{.c}
  *
@@ -666,6 +664,11 @@ void ENHTIM_SetMaxCount(ENHTIM_TypeDef *ENHTIMx, uint32_t count);
  * \param[in] ENHTIMx  Select the ENHTIM peripheral. Refer to \ref ENHTIM_Declaration.
  * \param[in] value    User-defined ENHTIM capture/compare value for PWM manual mode,
  *                     ranging from 0 to 2^31.
+ *
+ * \note      If it needs a dynamic change of CCR value, CCR value has a minimum value limit.
+ *            Ex. cpu_clk = 40MHz, ETIMER_CLK = 40MHz, then CCR value should larger than 10.
+ *            Ex. cpu_clk = 40MHz, ETIMER_CLK = 32kHz, then CCR value should larger than 4.
+ *            If in the state where ENHTIM is disabled, there is no such limitation.
  *
  * <b>Example usage</b>
  * \code{.c}
@@ -989,6 +992,3 @@ bool ENHTIM_ClkGet(ENHTIM_TypeDef *ENHTIMx, ENHTIMClkSrc_TypdDef *ClockSrc,
 #endif
 
 #endif /* RTL_ENH_TIM_H */
-
-
-/******************* (C) COPYRIGHT 2025 Realtek Semiconductor *****END OF FILE****/

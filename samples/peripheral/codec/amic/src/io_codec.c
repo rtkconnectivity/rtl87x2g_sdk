@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2018, Realtek Semiconductor Corporation. All rights reserved.
-**********************************************************************************************************
-* @file     io_codec.c
-* @brief    AMIC demo code
-* @details
-* @author   yuan
-* @date     2018-05-29
-* @version  0.1
-*********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 /* Includes -----------------------------------------------------------------*/
 #include <stdlib.h>
@@ -220,5 +213,5 @@ void GDMA_Channel_AMIC_Handler(void)
     GDMA_Cmd(GDMA_Channel_AMIC_NUM, ENABLE);
 }
 
-/******************* (C) COPYRIGHT 2018 Realtek Semiconductor Corporation *****END OF FILE****/
+
 

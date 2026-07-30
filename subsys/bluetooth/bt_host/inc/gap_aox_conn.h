@@ -1,19 +1,9 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2020, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* @file      gap_aox_conn.h
-* @brief    Header file for GAP AoA/AoD connection
-* @details
-* @author
-* @date      2020-06-18
-* @version   v0.8
-* *********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
-/*============================================================================*
- *               Define to prevent recursive inclusion
- *============================================================================*/
 #ifndef GAP_AOX_CONN_H
 #define GAP_AOX_CONN_H
 

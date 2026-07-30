@@ -1,17 +1,8 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-   * @file      dfu_service.c
-   * @brief     Source file for using DFU service
-   * @author    Grace
-   * @date      2023-12-06
-   * @version   v1.1
-   **************************************************************************************
-   * @attention
-   * <h2><center>&copy; COPYRIGHT 2023 Realtek Semiconductor Corporation</center></h2>
-   **************************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 /*============================================================================*
  *                              Header Files
@@ -308,7 +299,7 @@ T_SERVER_ID dfu_add_service(void *p_func)
                                         sizeof(gatt_extended_service_table),
                                         &dfu_service_cbs))
     {
-        APP_PRINT_ERROR1("ota_add_service: service_id %d", service_id);
+        APP_PRINT_ERROR1("dfu_add_service: service_id %d", service_id);
         service_id = 0xff;
         return service_id;
     }

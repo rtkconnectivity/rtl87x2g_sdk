@@ -1,19 +1,9 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2021, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* @file      bt_direct_msg.h
-* @brief     This file contains all the constants and function prototypes for Bluetooth direct message.
-* @details   This file is used for both BR/EDR and LE.
-* @author
-* @date      2021-07-12
-* @version   v0.8
-* *********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
-/*============================================================================*
- *               Define to prevent recursive inclusion
- *============================================================================*/
 #ifndef BT_DIRECT_MSG_H
 #define BT_DIRECT_MSG_H
 

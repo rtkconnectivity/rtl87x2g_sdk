@@ -944,6 +944,15 @@ bool system_init(void)
     OTP->use_ftl = USE_FTL;
 #endif
 
+#ifndef FTL_POOL
+    //define FTL_LOGIC_ADDR_MAP_BIT_MAP in otp_config.h
+#ifdef FTL_LOGIC_ADDR_MAP_BIT_MAP
+    OTP->ftl_logic_addr_map_bit_num = FTL_LOGIC_ADDR_MAP_BIT_MAP;
+#else
+    OTP->ftl_logic_addr_map_bit_num = 3;
+#endif
+#endif
+
     // swd pinmux config
 #ifdef SWD_PINMUX_ENABLE
     //define SWD_PINMUX_ENABLE in otp_config.h

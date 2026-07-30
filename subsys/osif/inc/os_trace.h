@@ -1,5 +1,7 @@
 /*
- * Copyright (c) 2015, Realtek Semiconductor Corporation. All rights reserved.
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 #ifndef _OS_TRACE_H_

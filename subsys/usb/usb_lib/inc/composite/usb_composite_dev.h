@@ -1,11 +1,7 @@
-/**
- * \copyright Copyright (C) 2023 Realtek Semiconductor Corporation.
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
  *
- * \file usb_composite_driver.h
- * \version 1.0
- * \brief
- *
- * \note:
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
  */
 #ifndef __USB_COMPOSITE_DEV_H__
 #define __USB_COMPOSITE_DEV_H__
@@ -205,6 +201,7 @@ typedef struct _usb_ep
  * \param create The callback to initialize the interface, and it will be called in \ref usb_composite_dev_interface_add.
  *               Also, \ref if_num in the input parameter of the interface may be changed, the interface MUST update
  *               bInterfaceNumber in the interface descriptor to the actual interface number.
+ * \param sof The callback to process SOF interrupt.
  * \param release The callback to release interface-related resources.
  * \param priv Private data.
  *
@@ -225,6 +222,7 @@ typedef struct _usb_interface
     int (*resume)(struct _usb_interface *interface);
     int (*create)(struct _usb_interface *interface);
     int (*release)(struct _usb_interface *interface);
+    int (*sof)(struct _usb_interface *interface);
     void *priv;
 
 } T_USB_INTERFACE;

@@ -1,19 +1,9 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2016, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* @file      gap_config.h
-* @brief     Header file for configuration of Bluetooth Host related features
-* @details   This file defines configuration of Bluetooth Host related features API.
-* @author    ranhui
-* @date      2016-02-18
-* @version   v1.0
-* *********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
-/*============================================================================*
- *               Define to prevent recursive inclusion
- *============================================================================*/
 #ifndef GAP_CONFIG_H
 #define GAP_CONFIG_H
 

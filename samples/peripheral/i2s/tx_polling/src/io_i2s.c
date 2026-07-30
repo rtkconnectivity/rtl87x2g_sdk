@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2018, Realtek Semiconductor Corporation. All rights reserved.
-**********************************************************************************************************
-* @file     main.c
-* @brief    This file provides demo code of i2s send data.
-* @details
-* @author   yuan
-* @date     2018-05-29
-* @version  v0.1
-*********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 /* Includes ------------------------------------------------------------------*/
 #include <stdlib.h>
@@ -94,5 +87,5 @@ void i2s_demo(void)
 }
 
 
-/******************* (C) COPYRIGHT 2018 Realtek Semiconductor Corporation *****END OF FILE****/
+
 

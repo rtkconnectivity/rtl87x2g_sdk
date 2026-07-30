@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 #ifndef ADDRESS_MAP_H
 #define ADDRESS_MAP_H
 
@@ -77,4 +83,4 @@
 #define IDU_REG_BASE                       0x50070000UL
 
 
-#endif //#define ADDRESS_MAP_H 
+#endif //#define ADDRESS_MAP_H

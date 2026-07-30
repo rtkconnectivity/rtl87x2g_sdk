@@ -1,19 +1,9 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2021, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* @file      gap_iso_data.h
-* @brief     Header file for GAP ISO Data
-* @details
-* @author
-* @date      2021-07-12
-* @version   v0.8
-* *********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
-/*============================================================================*
- *               Define to prevent recursive inclusion
- *============================================================================*/
 #ifndef _GAP_ISO_DATA_H_
 #define _GAP_ISO_DATA_H_
 
@@ -92,8 +82,8 @@ bool gap_iso_data_cfm(void *p_buf);
  * @param[in]   handle        Connection handle of the CIS or BIS.
  * @param[in]   iso_sdu_len   Length of the SDU to be sent.
  * @param[in]   ts_flag       Indicates whether it contains time_stamp.
- *                            true: contain time_stamp.
- *                            false: does not contain time_stamp.
+ *                            true: Contain time_stamp.
+ *                            false: Does not contain time_stamp.
  * @param[in]   time_stamp    A time in microseconds. The time_stamp is used when ts_flag is true.
  * @param[in]   pkt_seq_num   The sequence number of the SDU.
  *

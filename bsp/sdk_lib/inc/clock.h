@@ -1,17 +1,8 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2017, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-  * @file    clock.h
-  * @brief   This file provides APIs for the clock manager.
-  * @author  Rui
-  * @date    2025-05-16
-  * @version v1.1
-  * *************************************************************************************
-   * @attention
-   * <h2><center>&copy; COPYRIGHT 2017 Realtek Semiconductor Corporation</center></h2>
-   * *************************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 /*============================================================================*
  *               Define to prevent recursive inclusion
@@ -398,6 +389,28 @@ int32_t pm_spic1_freq_set(uint32_t required_mhz, uint32_t *actual_mhz);
  * @retval Others Fail
 */
 int32_t pm_spic2_freq_set(uint32_t required_mhz, uint32_t *actual_mhz);
+
+/**
+ * @brief Configures the PLL2 output frequency with PPM correction.
+ *
+ * This function calculates and applies the integer and fractional divider parameters
+ * for the Sigma-Delta Modulator (SDM) of PLL2. It takes a base frequency and applies
+ * a Parts Per Million (PPM) offset to achieve high-precision frequency tuning.
+ *
+ * @note
+ * 1. Double precision arithmetic is used to prevent precision loss, ensuring
+ *    accurate calculation for fractional offsets (e.g., distinguishing 160.000160 MHz).
+ * 2. The Fractional Offset Frequency (FOF) targets a 21-bit register width.
+ * 3. Prerequisite: The PLL2 clock must be enabled before calling this function.
+ *    Please ensure the appropriate clock interface API is called first to turn on PLL2.
+ *
+ * @param[in] required_base_mhz  The target base frequency in MHz (e.g., 160).
+ * @param[in] ppm                Frequency deviation in Parts Per Million (PPM).
+ *                               Positive values increase frequency, negative values decrease it.
+ *
+ * @return int32_t  0 on success, -1 if the calculated frequency is invalid.
+ */
+int32_t pm_clock_pll2_freq_set_with_ppm(uint32_t required_base_mhz, int8_t ppm);
 
 /**
   *  End of CLOCK_Private_Functions

@@ -1,19 +1,13 @@
-/**
-************************************************************************************************************
-*               Copyright(c) 2014-2015, Realtek Semiconductor Corporation. All rights reserved.
-************************************************************************************************************
-* @file     compiler_abstraction.h
-* @brief    Compiler specific intrinsics
-* @author   lory_xu
-* @date     2015-03
-* @version  v0.1
-*************************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 #ifndef __COMPILER_ABSTRACTION_H__
 #define __COMPILER_ABSTRACTION_H__
 
-/** @brief Define compilor specific symbol */
+/** @brief Define compiler specific symbol */
 
 #if defined ( __CC_ARM )
 #define __STATIC_INLINE         static __inline

@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* \file     rtl_gpio.h
-* \brief    The header file of the peripheral GPIO driver.
-* \details  This file provides all GPIO firmware functions.
-* \author   Bert
-* \date     2023-10-17
-* \version  v1.0
-* *********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 /*============================================================================*
  *               Define to prevent recursive inclusion
@@ -1104,6 +1097,4 @@ void GPIO_TaskTrigger(GPIO_TypeDef *GPIOx, uint32_t GPIO_Pin, uint32_t Task);
 #endif
 
 #endif /* RTL_GPIO_H */
-
-/******************* (C) COPYRIGHT 2023 Realtek Semiconductor Corporation *****END OF FILE****/
 

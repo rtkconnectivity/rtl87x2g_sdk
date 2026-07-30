@@ -1,17 +1,8 @@
-/**
-*****************************************************************************************
-*     Copyright (c) 2017, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-  * @file    wdt.h
-  * @brief   This file provides APIs for watch dog timer.
-  * @author  Grace
-  * @date    2022-04-27
-  * @version v1.0
-  * *************************************************************************************
-   * @attention
-   * <h2><center>&copy; COPYRIGHT 2017 Realtek Semiconductor Corporation</center></h2>
-   * *************************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 /*============================================================================*
  *               Define to prevent recursive inclusion
@@ -116,9 +107,11 @@ typedef enum
     TRANS_MODE_SWITCH               = 0xDD,
     CLEAR_BOND_INFO                 = 0xDE,
     SWITCH_TO_BLE_FAST_PAIR_TEST_MODE   = 0XDF,
-    SWITCH_TO_PPT_FAST_PAIR_TEST_MODE   = 0xE0,
     SWITCH_TO_TEST_MODE_BY_UART     = 0xE1,
     SWITCH_TO_PPTRF_TEST_MODE       = 0xE2,
+    SWITCH_TO_SINGLE_TONE_MODE      = 0xE3,
+    SWITCH_TO_AUTO_PAIR_WITH_FIX_ADDR_MODE = 0xE4,
+    SWITCH_TO_DATA_UART_TEST_MODE   = 0xE5,
     SW_RESET_APP_END                = 0xFF,
 } T_SW_RESET_REASON;
 

@@ -1,18 +1,8 @@
-/**
-**********************************************************************************************************
-*               Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-**********************************************************************************************************
-* @file     dfu_mian.c
-* @brief    normal ota main
-* @details
-* @author   Grace
-* @date     2023-12-06
-* @version  v1.1
-   **************************************************************************************
-   * @attention
-   * <h2><center>&copy; COPYRIGHT 2023 Realtek Semiconductor Corporation</center></h2>
-   **************************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -129,7 +119,7 @@ void dfu_le_gap_init(void)
 #endif
     uint8_t  auth_use_fix_passkey = false;
     uint32_t auth_fix_passkey = 0;
-    uint8_t  auth_sec_req_enalbe = false;
+    uint8_t  auth_sec_req_enable = false;
     uint16_t auth_sec_req_flags = GAP_AUTHEN_BIT_NONE;
 
     //Set device appearance
@@ -160,7 +150,7 @@ void dfu_le_gap_init(void)
     le_bond_set_param(GAP_PARAM_BOND_FIXED_PASSKEY, sizeof(auth_fix_passkey), &auth_fix_passkey);
     le_bond_set_param(GAP_PARAM_BOND_FIXED_PASSKEY_ENABLE, sizeof(auth_use_fix_passkey),
                       &auth_use_fix_passkey);
-    le_bond_set_param(GAP_PARAM_BOND_SEC_REQ_ENABLE, sizeof(auth_sec_req_enalbe), &auth_sec_req_enalbe);
+    le_bond_set_param(GAP_PARAM_BOND_SEC_REQ_ENABLE, sizeof(auth_sec_req_enable), &auth_sec_req_enable);
     le_bond_set_param(GAP_PARAM_BOND_SEC_REQ_REQUIREMENT, sizeof(auth_sec_req_flags),
                       &auth_sec_req_flags);
 
@@ -230,7 +220,7 @@ void dfu_init(void)
     os_unlock(s);
 }
 /*============================================================================*
- *                              Local Functions
+ *                              Public Functions
  *============================================================================*/
 void dfu_set_rand_addr(void)
 {

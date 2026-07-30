@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2024, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* @file      os_timer.h
-* @brief     Header file for os timer API.
-* @details   This file is used for timer create, start, restart and delete.
-* @author    rui_yu
-* @date      2024-12-30
-* @version   v1.0
-* *********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 #ifndef _OS_TIMER_H_
 #define _OS_TIMER_H_
@@ -497,4 +490,3 @@ extern void (*os_timer_init)(void);
 #endif
 
 #endif /* _OS_TIMER_H_ */
-

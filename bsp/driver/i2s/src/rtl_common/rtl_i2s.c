@@ -1,22 +1,14 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* \file      rtl_i2s.c
-* \brief     This file provides all the I2S interface firmware functions.
-* \details
-* \author    echo gao
-* \date      2023-10-17
-* \version   v1.0
-*********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 /*============================================================================*
  *                        Header Files
  *============================================================================*/
 #include "rtl_i2s.h"
 #include "rtl_rcc.h"
-
 /*============================================================================*
  *                           Public Functions
  *============================================================================*/
@@ -99,7 +91,10 @@ void I2S_Init(I2S_TypeDef *I2Sx, I2S_InitTypeDef *I2S_InitStruct)
 
 
     //trx_parameter_set
-    i2s_reg_0x28.b.trx_same_fs = I2S_InitStruct->I2S_Scheme;
+    i2s_reg_0x28.b.trx_same_fs = ((I2S_InitStruct->I2S_TxBClockMi == I2S_InitStruct->I2S_RxBClockMi) &&
+                                  (I2S_InitStruct->I2S_TxBClockNi == I2S_InitStruct->I2S_RxBClockNi) &&
+                                  (I2S_InitStruct->I2S_TxBClockDiv == I2S_InitStruct->I2S_RxBClockDiv));
+
     i2s_reg_0x28.b.trx_same_ch = I2S_InitStruct->I2S_TxChannelType == I2S_InitStruct->I2S_RxChannelType;
     i2s_reg_0x28.b.trx_same_length = I2S_InitStruct->I2S_TxDataWidth == I2S_InitStruct->I2S_RxDataWidth;
     i2s_reg_0x28.b.trx_same_ch_len = I2S_InitStruct->I2S_TxChannelWidth ==
@@ -157,15 +152,15 @@ void I2S_Init(I2S_TypeDef *I2Sx, I2S_InitTypeDef *I2S_InitStruct)
     {
         I2S_InitStruct->I2S_RxBClockDiv = 255;
     }
-    if (I2S_InitStruct->I2S_BClockFixEn == ENABLE)
+    if (i2s_reg_0x28.b.trx_same_fs == ENABLE)
     {
-        i2s_reg_0x28.b.fixed_bclk = 1;
-        i2s_reg_0x08.b.enable_mclk = 1;
+        i2s_reg_0x28.b.fixed_bclk = 0;
+        i2s_reg_0x08.b.enable_mclk  = 0;
     }
     else
     {
-        i2s_reg_0x28.b.fixed_bclk = 0;
-        i2s_reg_0x08.b.enable_mclk = 0;
+        i2s_reg_0x28.b.fixed_bclk = 1;
+        i2s_reg_0x08.b.enable_mclk  = 1;
     }
 
     i2s_reg_0x20.b.tx_bclk_div_ratio = I2S_InitStruct->I2S_TxBClockDiv;
@@ -218,7 +213,6 @@ void I2S_DeInit(I2S_TypeDef *I2Sx)
 void I2S_StructInit(I2S_InitTypeDef *I2S_InitStruct)
 {
     I2S_InitStruct->I2S_ClockSource      = I2S_CLK_40M;
-    I2S_InitStruct->I2S_Scheme           = I2S_SCHEME_SEPARATE;
     I2S_InitStruct->I2S_TxBClockMi       = 0x271;/* <!BCLK = 16K */
     I2S_InitStruct->I2S_TxBClockNi       = 0x10;
     I2S_InitStruct->I2S_TxBClockDiv      = 0x3F;
@@ -242,7 +236,6 @@ void I2S_StructInit(I2S_InitTypeDef *I2S_InitStruct)
     I2S_InitStruct->I2S_RxFifoUsed       = I2S_FIFO_USE_0_REG_0;
     I2S_InitStruct->I2S_TxWaterlevel     = 16;
     I2S_InitStruct->I2S_RxWaterlevel     = 16;
-    I2S_InitStruct->I2S_BClockFixEn      = DISABLE;
 }
 
 /**
@@ -682,6 +675,4 @@ FlagStatus I2S_GetRxBClkStatus(I2S_TypeDef *I2Sx)
 
     return RESET;
 }
-
-/******************* (C) COPYRIGHT 2023 Realtek Semiconductor Corporation *****END OF FILE****/
 

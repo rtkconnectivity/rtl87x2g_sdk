@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-**********************************************************************************************************
-* @file     io_codec.c
-* @brief    playback demo code
-* @details
-* @author   echo
-* @date     2023-08-28
-* @version  v0.1
-*********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 /* Includes -----------------------------------------------------------------*/
 #include <stdlib.h>
@@ -258,5 +251,5 @@ void CODEC_GDMA_Channel_Handler(void)
     GDMA_Cmd(CODEC_GDMA_Channel_NUM, ENABLE);
 }
 
-/******************* (C) COPYRIGHT 2023 Realtek Semiconductor Corporation *****END OF FILE****/
+
 

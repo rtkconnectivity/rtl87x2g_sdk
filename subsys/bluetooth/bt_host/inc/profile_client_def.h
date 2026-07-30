@@ -1,17 +1,9 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2016, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-  * @file     profile_client_def.h
-  * @brief    Header file for profile client structure.
-  * @details  Common data struct definition.
-  * @author   ethan_su
-  * @date     2016-02-18
-  * @version  v1.0
-  * *************************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
-/* Define to prevent recursive inclusion */
 #ifndef PROFILE_CLIENT_DEF_H
 #define PROFILE_CLIENT_DEF_H
 

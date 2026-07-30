@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2018, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* @file     io_adc.h
-* @brief
-* @details
-* @author   yuan
-* @date     2019-01-11
-* @version  v1.0
-*********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 #ifndef __IO_ADC_H
 #define __IO_ADC_H
@@ -20,7 +13,7 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "rtl876x.h"
-#include "adc_lib.h"
+
 
 #define ADC_SAMPLE_PIN_0                    P2_4
 #define ADC_SAMPLE_CHANNEL_0                ADC_Channel_Index_4

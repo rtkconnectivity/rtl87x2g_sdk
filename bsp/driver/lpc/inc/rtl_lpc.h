@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* \file     rtl_lpc.h
-* \brief    The header file of the peripheral LPC driver.
-* \details  This file provides all LPC firmware functions.
-* \author   echo
-* \date     2023-10-17
-* \version  v1.0
-* *******************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 /*============================================================================*
  *               Define to prevent recursive inclusion
@@ -548,6 +541,4 @@ void LPC_ShortcutCmd(LPC_TypeDef *LPCx, uint32_t Task, uint32_t Event, Functiona
 #endif
 
 #endif /* _RTL_LPC_H_ */
-
-/******************* (C) COPYRIGHT 2023 Realtek Semiconductor Corporation *****END OF FILE****/
 

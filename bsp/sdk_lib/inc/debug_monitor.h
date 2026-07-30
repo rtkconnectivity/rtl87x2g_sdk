@@ -1,17 +1,8 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2020, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-  * @file    debug_monitor.h
-  * @brief   Debug Monitor
-  * @author  Henry_Huang
-  * @date    2020-09-18
-  * @version v1.0
-  * *************************************************************************************
-   * @attention
-   * <h2><center>&copy; COPYRIGHT 2020 Realtek Semiconductor Corporation</center></h2>
-   * *************************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 /*============================================================================*
  *               Define to prevent recursive inclusion

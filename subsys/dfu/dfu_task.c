@@ -1,17 +1,8 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-   * @file      dfu_task.c
-   * @brief     Routines to create App task and handle events & messages
-   * @author    Grace
-   * @date      2023-12-06
-   * @version   v1.1
-   **************************************************************************************
-   * @attention
-   * <h2><center>&copy; COPYRIGHT 2023 Realtek Semiconductor Corporation</center></h2>
-   **************************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 /*============================================================================*
  *                              Header Files
@@ -33,7 +24,7 @@
  *                              Macros
  *============================================================================*/
 #define DFU_TASK_PRIORITY               1
-#define DFU_TASK_STACK_SIZE             512 * 8  //todo: sync with bee2, may modify
+#define DFU_TASK_STACK_SIZE             512 * 8
 
 #define MAX_NUMBER_OF_GAP_MESSAGE     0x20  //!<  GAP message queue size
 #define MAX_NUMBER_OF_IO_MESSAGE      0x20  //!<  IO message queue size
@@ -72,7 +63,7 @@ bool dfu_send_msg_to_dfutask(T_IO_MSG *p_msg)
 
 
 
-void dfu_task_init()
+void dfu_task_init(void)
 {
     os_task_create(&dfu_task_handle, "dfu", dfu_main_task, 0, DFU_TASK_STACK_SIZE,
                    DFU_TASK_PRIORITY);

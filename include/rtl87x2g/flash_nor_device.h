@@ -1,13 +1,7 @@
-/**
- *****************************************************************************************
- *     Copyright(c) 2018, Realtek Semiconductor Corporation. All rights reserved.
- *****************************************************************************************
- * @file    flash_nor_device.h
- * @brief   Nor flash external API header file
- * @author  Yao-Yu
- * @date    2020-08-31
- * @version v0.1
- * ***************************************************************************************
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 #ifndef _FLASH_NOR_DEVICE_H

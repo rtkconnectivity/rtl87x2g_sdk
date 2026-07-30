@@ -1,19 +1,9 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2021, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* @file      ble_isoch_def.h
-* @brief     Header file for LE Isochronous Channels definition
-* @details
-* @author
-* @date      2021-07-12
-* @version   v0.8
-* *********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
-/*============================================================================*
- *               Define to prevent recursive inclusion
- *============================================================================*/
 #ifndef _BLE_ISOCH_DEF_H_
 #define _BLE_ISOCH_DEF_H_
 
@@ -87,7 +77,7 @@ extern "C"
   * @{
   */
 
-/** @brief GAP LE Isochronous Channels CIS connection state. */
+/** @brief GAP LE Isochronous Channels CIS Connection State. */
 typedef enum
 {
     ISOCH_STATE_IDLE,               /**< CIS idle. */
@@ -107,7 +97,7 @@ typedef enum
 /** @brief  Definition of LE Isochronous Channels CIS connection handle. */
 typedef struct
 {
-    T_ISOCH_STATE state;                   /**< CIS Connection state. @ref T_ISOCH_STATE. */
+    T_ISOCH_STATE state;                   /**< CIS Connection State. @ref T_ISOCH_STATE. */
     T_ISOCH_ROLE  role;                    /**< CIS role. @ref T_ISOCH_STATE. */
     uint8_t       data_path_flags;         /**< Specify which directions have been configured.
                                                 @ref LE_ISOC_DEF_DATA_PATH_DIRECTION_FLAG. */

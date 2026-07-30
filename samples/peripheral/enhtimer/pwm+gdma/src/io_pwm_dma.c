@@ -1,14 +1,8 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2024, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-* @file     io_enhtim_pwm.c
-* @brief    This file provides demo code of pwm.
-* @author   Grace_yan
-* @date     2024-07-24
-* @version  v1.0
-*****************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 /* Includes ------------------------------------------------------------------*/
 #include <stdlib.h>
@@ -113,4 +107,4 @@ void driver_gdma_init(void)
     GDMA_Cmd(Enhance_Timer_GDMA_CH_NUM, ENABLE);//FIRST open DMA ,then open timer
 }
 
-/******************* (C) COPYRIGHT 2024 Realtek Semiconductor Corporation *****END OF FILE****/
+

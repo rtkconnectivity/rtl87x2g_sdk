@@ -1,18 +1,15 @@
-/****************************************************************************************************//**
- * @file     trace_port_config.h
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
  *
- * @brief
- *
- * @version  v0.1
- * @date     2018-11-05
- *
- * @note
- *******************************************************************************************************/
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
+
 #ifndef _TRACE_PORT_CONFIG_H_
 #define _TRACE_PORT_CONFIG_H_
 
 #include "mem_config.h"
 #include "mem_types.h"
+#include "trace_config.h"
 
 
 /******************* OS CONFIGURATION  *******************/
@@ -20,7 +17,7 @@
 
 /******************* HEAP CONFIGURATION *******************/
 
-/* Bee2 has 2 types: data and buffer */
+/* RTL87x2G has 2 types: data and buffer */
 #define TRACE_HEAP_TYPE_NUM                       2
 #define TRACE_HEAP_MAX_NUMBER_IN_BLOCK_LIST     ( 16 )
 
@@ -47,5 +44,3 @@ extern "C" {
 #endif
 
 #endif /*_TRACE_PORT_CONFIG_H_*/
-
-/******************* (C) COPYRIGHT 2015 Realtek Semiconductor Corporation *****END OF FILE****/

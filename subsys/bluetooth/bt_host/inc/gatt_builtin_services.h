@@ -1,17 +1,9 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2015, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-  * @file     gatt_builtin_services.h
-  * @brief    Header file for using built-in services, including GAP service and GATT service.
-  * @details  GAPS data structures and external functions declaration.
-  * @author   Jane
-  * @date     2015-5-12
-  * @version  v0.1
-  * *************************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
-/* Define to prevent recursive inclusion */
 #ifndef _BUILTIN_SERVICES_H_
 #define _BUILTIN_SERVICES_H_
 
@@ -188,7 +180,7 @@ void gatt_register_callback(void *p_func);
  *
  * This function can be called with a GAP service parameter type @ref T_GAPS_PARAM_TYPE and it will set the GAP service parameter.
  * The 'p_value' field must point to an appropriate data type that meets the requirements for the corresponding parameter type.
- * (For example: if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
+ * (For example, if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
  *
  * @param[in] param_type   GAP service parameter type @ref T_GAPS_PARAM_TYPE.
  * @param[in] length       Length of data to write.

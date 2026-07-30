@@ -1,11 +1,7 @@
-/**
- * @copyright Copyright (C) 2023 Realtek Semiconductor Corporation.
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
  *
- * @file uac2.h
- * @version 1.0
- * @brief uac 2.0 related definitions
- *
- * @note:
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
  */
 #ifndef __UAC2_H__
 #define __UAC2_H__

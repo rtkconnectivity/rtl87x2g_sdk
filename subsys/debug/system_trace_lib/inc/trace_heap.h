@@ -1,13 +1,9 @@
-/****************************************************************************************************//**
- * @file     trace_heap.h
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
  *
- * @brief
- *
- * @version  v0.1
- * @date     2018-11-05
- *
- * @note
- *******************************************************************************************************/
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
+
 #ifndef _TRACE_HEAP_H_
 #define _TRACE_HEAP_H_
 
@@ -33,12 +29,10 @@ typedef struct _HEAP_INFO
     BLOCK_SIZE_LIST free_size_list;
 } HEAP_INFO;
 
-extern void trace_heap(void);
+void trace_heap(void);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /*_TRACE_HEAP_H_*/
-
-/******************* (C) COPYRIGHT 2015 Realtek Semiconductor Corporation *****END OF FILE****/

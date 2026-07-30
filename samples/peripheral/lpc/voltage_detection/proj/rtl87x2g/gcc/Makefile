@@ -32,6 +32,7 @@ BIN_DIR = bin
 C_SOURCES =  \
 ../../../../../../../bsp/boot/rtl87x2g/startup_rtl.c \
 ../../../../../../../bsp/boot/rtl87x2g/system_rtl.c \
+../../../../../../../bsp/boot/rtl87x2g/stdlib_wrapper.c \
 ../../../../../../../bsp/driver/rcc/src/rtl87x2g/rtl_rcc.c \
 ../../../../../../../bsp/driver/pinmux/src/rtl87x2g/rtl_pinmux.c \
 ../../../../../../../bsp/driver/lpc/src/rtl_common/rtl_lpc.c \
@@ -180,6 +181,13 @@ LIBDIR = \
 # lib_end
 
 LDFLAGS = $(MCU) -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--no-warn-rwx-segments,--gc-sections  -specs=nano.specs
+
+# --- Added by Python Script: RTK & Wraps ---
+LDFLAGS += -u rtk_main
+LDFLAGS += -Wl,--wrap=_malloc_r
+LDFLAGS += -Wl,--wrap=_free_r
+LDFLAGS += -Wl,--wrap=_calloc_r
+LDFLAGS += -Wl,--wrap=_realloc_r
 
 # default action: build all
 .PHONY : all rm_app_bin

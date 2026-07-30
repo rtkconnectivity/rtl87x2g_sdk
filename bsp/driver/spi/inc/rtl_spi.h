@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* \file     rtl_spi.h
-* \brief    The header file of the peripheral SPI driver.
-* \details  This file provides all SPI firmware functions.
-* \author   yuzhuo_liu
-* \date     2023-10-17
-* \version  v1.0
-* *******************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 /*============================================================================*
  *               Define to prevent recursive inclusion
@@ -194,18 +187,6 @@ typedef enum
  * \{
  * \ingroup     SPI_Exported_Constants
  */
-#define SPI_BaudRatePrescaler_2      0x02      //!< Frequency division factor is 2
-#define SPI_BaudRatePrescaler_4      0x04      //!< Frequency division factor is 4
-#define SPI_BaudRatePrescaler_6      0x06      //!< Frequency division factor is 6
-#define SPI_BaudRatePrescaler_8      0x08      //!< Frequency division factor is 8
-#define SPI_BaudRatePrescaler_10     0x0A      //!< Frequency division factor is 10
-#define SPI_BaudRatePrescaler_12     0x0C      //!< Frequency division factor is 12
-#define SPI_BaudRatePrescaler_14     0x0E      //!< Frequency division factor is 14
-#define SPI_BaudRatePrescaler_16     0x10      //!< Frequency division factor is 16
-#define SPI_BaudRatePrescaler_32     0x20      //!< Frequency division factor is 32
-#define SPI_BaudRatePrescaler_64     0x40      //!< Frequency division factor is 64
-#define SPI_BaudRatePrescaler_128    0x80      //!< Frequency division factor is 128
-#define SPI_BaudRatePrescaler_256    0x100     //!< Frequency division factor is 256
 
 #define IS_SPI_BAUDRATE_PRESCALER(PRESCALER) ((PRESCALER) <= 0xFFFF) //!< Check if the input parameter is valid.
 
@@ -971,7 +952,7 @@ void SPI_GDMACmd(SPI_TypeDef *SPIx, SPIGdmaTransferRequests_TypeDef SPI_GDMAReq,
  *
  * void spi_demo(void)
  * {
- *     SPI_ChangeClock(SPI0, SPI_BaudRatePrescaler_2);
+ *     SPI_ChangeClock(SPI0, 2);
  * }
  * \endcode
  */
@@ -1173,6 +1154,4 @@ void SPI_TaskEventStsClear(SPI_TypeDef *SPIx, uint32_t te);
 
 #endif /* RTL_SPI_H */
 
-
-/******************* (C) COPYRIGHT 2023 Realtek Semiconductor Corporation *****END OF FILE****/
 

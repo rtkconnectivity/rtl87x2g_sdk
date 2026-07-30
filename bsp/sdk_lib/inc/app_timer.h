@@ -1,6 +1,9 @@
 /*
- * Copyright (c) 2017, Realtek Semiconductor Corporation. All rights reserved.
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
  */
+
 #ifndef __SW_TIM_H
 #define __SW_TIM_H
 
@@ -69,7 +72,7 @@ int32_t app_timer_reg_cb(P_TIMEOUT_CB callback, uint8_t *p_module_id);
  *
  * \brief   Create a new APP timer and start it. This allocates the storage required by
  *          the new timer, starts this timer if create successfully, and returns a handle
- *          by which the new timer can be referenced. <b>APP timer is always a one-shot timer</b>
+ *          by which the new timer can be referenced. <b>APP timer supports both one-shot and periodic modes</b>
  *
  * \param[out]  p_idx            Used to pass back an index by which the created timer
  *                               can be referenced.
@@ -82,8 +85,8 @@ int32_t app_timer_reg_cb(P_TIMEOUT_CB callback, uint8_t *p_module_id);
  *
  * \param[in]   timer_evt        Timer event assigned by module which starts this timer.
  *
- * \param[in]   param            Paramer assigned by module which start this timer.
- *                               Typically timer event and paramter would be used in the
+ * \param[in]   param            Parameter assigned by module which start this timer.
+ *                               Typically timer event and parameter would be used in the
  *                               timer callback function to identify which timer expired when
  *                               the same callback function is assigned to more than one timer.
  *
@@ -122,7 +125,7 @@ int32_t app_stop_timer(uint8_t *p_idx);
  * \brief   Init APP Timer Module.
  *
  * \param[in]   evt_handle              Event queue handle which represents event queue created by APP task.
- * \param[in]   timer_module_max_num    Number of modules which will be create by APP timer Module.
+ * \param[in]   timer_module_max_num    Number of modules which will be created by APP timer Module.
  *
  * @return      Operation result @ref error.h.
  * @retval      0 Operation success.

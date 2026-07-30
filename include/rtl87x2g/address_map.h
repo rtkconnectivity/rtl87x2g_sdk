@@ -1,9 +1,15 @@
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 #ifndef ADDRESS_MAP_H
 #define ADDRESS_MAP_H
 
 /* ================================================================================ */
 /* ================                  Address Map                   ================ */
-/* ======== Reference: Bee4_AddrMap_IRQs_DmaPorts_20220913v0.xlsx   ============ */
+/* ======== Reference: RTL87x2G_AddrMap_IRQs_DmaPorts_20220913v0.xlsx   ============ */
 /* ================================================================================ */
 
 #define SYSTEM_REG_BASE                    0x40000000UL
@@ -74,7 +80,7 @@
 #define BT_VENDOR_REG_BASE                 0x40058000UL
 #define ZIGBEE_REG_BASE                    0x4005C000UL
 #define SPI0_HS_REG_BASE                   0x40060000UL
-#define IDU_REG_BASE                      0x40070000UL
+#define IDU_REG_BASE                       0x40070000UL
 
 
-#endif //#define ADDRESS_MAP_H 
+#endif /* ADDRESS_MAP_H */

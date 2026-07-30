@@ -1,15 +1,8 @@
-/**
-************************************************************************************************************
-*               Copyright(c) 2016, Realtek Semiconductor Corporation. All rights reserved.
-************************************************************************************************************
-* @file     rtl876x_lib_platform.h
-* @brief
-* @details
-* @author
-* @date
-* @version
-*************************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 #ifndef _RTL876X_LIB_PLATFORM_H_
 #define _RTL876X_LIB_PLATFORM_H_

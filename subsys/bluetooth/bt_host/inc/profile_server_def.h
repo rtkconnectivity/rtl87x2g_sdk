@@ -1,17 +1,9 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2016, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-  * @file     profile_server_def.h
-  * @brief    Header file for server structure.
-  * @details  Common data struct definition.
-  * @author
-  * @date     2017-02-18
-  * @version  v1.0
-  * *************************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
-/* Define to prevent recursive inclusion */
 #ifndef PROFILE_SERVER_DEF_H
 #define PROFILE_SERVER_DEF_H
 

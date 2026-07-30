@@ -1,13 +1,9 @@
-/****************************************************************************************************//**
- * @file     system_trace.h
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
  *
- * @brief
- *
- * @version  v0.1
- * @date     2018-11-05
- *
- * @note
- *******************************************************************************************************/
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
+
 #ifndef _SYSTEM_TRACE_H_
 #define _SYSTEM_TRACE_H_
 
@@ -17,10 +13,8 @@
 #include "trace_timer.h"
 #include "trace_queue.h"
 #include "trace_system_loading.h"
-//#include "trace_dlps.h"
-//#include "trace_task_hang.h"
-//#include "trace_hardfault.h"
-//#include "trace_wdg_timeout.h"
+#include "trace_hardfault.h"
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -31,13 +25,11 @@ extern STACK_INFO stack_info;
 extern TIMER_INFO timer_info;
 extern QUEUE_INFO queue_info[MAX_QUEUE_OBJECTS_NUM];
 
-extern void system_trace_init(void);
-extern void print_system_trace_lib_version(void);
+void system_trace_init(void);
+void print_system_trace_lib_version(void);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /*_SYSTEM_TRACE_H_*/
-
-/******************* (C) COPYRIGHT 2015 Realtek Semiconductor Corporation *****END OF FILE****/

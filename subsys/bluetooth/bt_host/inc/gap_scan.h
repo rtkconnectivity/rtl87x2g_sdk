@@ -1,19 +1,9 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2016, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* @file      gap_scan.h
-* @brief     Header file for GAP Observer role
-* @details
-* @author    Jane
-* @date      2016-02-18
-* @version   v1.0
-* *********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
-/*============================================================================*
- *               Define to prevent recursive inclusion
- *============================================================================*/
 #ifndef GAP_SCAN_H
 #define GAP_SCAN_H
 
@@ -82,7 +72,7 @@ typedef enum
  *
  * This function can be called with a scan parameter type @ref T_LE_SCAN_PARAM_TYPE and it will set the scan parameter.
  * The 'p_value' field must point to an appropriate data type that meets the requirements for the corresponding parameter type.
- * (For example: if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
+ * (For example, if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
  *
  * @param[in]   param Scan parameter type @ref T_LE_SCAN_PARAM_TYPE.
  * @param[in]   len  Length of data to write.
@@ -119,7 +109,7 @@ T_GAP_CAUSE le_scan_set_param(T_LE_SCAN_PARAM_TYPE param, uint8_t len, void *p_v
  *
  * This function can be called with a scan parameter type @ref T_LE_SCAN_PARAM_TYPE and it will get the scan parameter.
  * The 'p_value' field must point to an appropriate data type that meets the requirements for the corresponding parameter type.
- * (For example: if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
+ * (For example, if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
  *
  * @param[in]   param   Scan parameter type @ref T_LE_SCAN_PARAM_TYPE.
  * @param[in,out]  p_value Pointer to location to get the parameter value.

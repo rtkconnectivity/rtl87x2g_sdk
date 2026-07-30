@@ -1,14 +1,8 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-* @file     main_ns.c
-* @brief    This file provides demo code of rtc comparator.
-* @author   Grace_yan
-* @date     2023-03-24
-* @version  v1.0
-*****************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 /* Includes ------------------------------------------------------------------*/
 #include <stdlib.h>
@@ -41,4 +35,4 @@ int main(void)
     while (1);
 }
 
-/******************* (C) COPYRIGHT 2023 Realtek Semiconductor Corporation *****END OF FILE****/
+

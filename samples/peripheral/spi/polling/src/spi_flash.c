@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2015, Realtek Semiconductor Corporation. All rights reserved.
-**********************************************************************************************************
-* @file     main.c
-* @brief    This file provides demo code of spi write and ead data from GD25Q128E flash.
-* @details
-* @author   yuan
-* @date     2019-07-10
-* @version  v1.0
-*********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 #include "spi_flash.h"
 #include "io_spi.h"
 #include "rtl_gpio.h"

@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2015, Realtek Semiconductor Corporation. All rights reserved.
-**********************************************************************************************************
-* @file
-* @brief
-* @details
-* @author
-* @date
-* @version  v0.1
-*********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 #include "trace_config.h"
 #include "system_trace.h"
@@ -22,7 +15,6 @@ extern void *io_queue_handle;
 extern void *evt_queue_handle;
 
 extern BOOL_PATCH_FUNC patch_vTaskSwitchContext;
-extern void *xTimerQueue;
 
 #if (TRACE_HEAP_EN == 1)
 
@@ -30,7 +22,7 @@ void print_heap_info(void)
 {
     for (uint32_t i = 0; i < TRACE_HEAP_TYPE_NUM; ++i)
     {
-        OS_PRINT_TRACE4("heap type: %i, total size: %d, remain size: %d, minumum ever free size: %d",
+        OS_PRINT_TRACE4("heap type: %i, total size: %d, remain size: %d, minimum ever free size: %d",
                         i, heap_info[i].total_size, heap_info[i].curr_remain_size, heap_info[i].minimum_ever_free_size);
 
         OS_PRINT_TRACE1("free list: free block %d.", heap_info[i].free_size_list.number);
@@ -110,7 +102,7 @@ void trace_timer_callback(void *p_timer)
 
 void system_trace_init(void)
 {
-#if (TRACE_HEAP_EN == 1 || TRACE_STACK_EN == 1 || TRACE_TIMER_EN == 1)
+#if (TRACE_HEAP_EN == 1 || TRACE_STACK_EN == 1 || TRACE_TIMER_EN == 1 || TRACE_QUEUE_EN == 1)
     void *p_trace_timer = NULL;
     if (os_timer_create(&p_trace_timer, "trace_timer",  1, \
                         TRACE_PERIOD_TIME, true, trace_timer_callback))
@@ -170,6 +162,36 @@ void system_trace_init(void)
 
 #if (TRACE_SYSTEM_LOADING == 1)
     trace_system_loading_init();
+#endif
+
+#if (TRACE_HARDFAULT == 1)
+    /**
+     * extern void *app_task_handle;
+     * TCB_t *pxTimerTCB =(TCB_t *)xTimerTaskHandle;
+     * TCB_t *pxLowerTCB =(TCB_t *)low_task_handle;
+     * TCB_t *pxUpperTCB =(TCB_t *)upperstack_handle;
+     * TCB_t *pxAppTCB =(TCB_t *)app_task_handle;
+    */
+    /**
+     * @brief  Initializes trace_hardfault save to flash including critical task stack
+     * @param  dump_task_stack_num: number of task
+     * @return if it is successfully initialized , return true
+
+     * For example
+       hardfault_save_to_flash_init(2, &low_task_handle, 1024, &app_task_handle, 1024);
+       @param  2: dump two task stack
+       @param  low_task_handle: lowstack task handler value
+       @param  1024: dump task stack size
+       @param  app_task_handle: app task handler value
+       @param  1024: dump task stack size
+       @note if need dump app task, must call this api after app task created!!!
+           Upperstack handler address is different when used different upperstack img!
+     */
+    extern void *low_task_handle;
+    extern void *xTimerTaskHandle;
+    extern void *xIdleTaskHandle;
+    extern void *app_task_handle;
+    hardfault_save_to_flash_init(2, &low_task_handle, 1024, &app_task_handle, 1024);
 #endif
 }
 

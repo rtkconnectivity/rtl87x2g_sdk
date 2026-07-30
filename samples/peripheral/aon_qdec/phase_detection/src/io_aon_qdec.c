@@ -1,14 +1,8 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-* @file     io_rtc.c
-* @brief    This file provides demo code of qdec.
-* @author
-* @date     2023-03-24
-* @version  v1.0
-*****************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 /* Includes ------------------------------------------------------------------*/
 #include <stdlib.h>
@@ -117,4 +111,4 @@ void AON_QDEC_Handler(void)
                                                                                    AON_QDEC_FLAG_ILLEGAL_STATUS_X));
     }
 }
-/******************* (C) COPYRIGHT 2023 Realtek Semiconductor Corporation *****END OF FILE****/
+

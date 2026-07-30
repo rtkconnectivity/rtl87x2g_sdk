@@ -1,14 +1,8 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-* @file     io_latch_gpio.c
-* @brief    This file provides demo code of pwm.
-* @author   Grace_yan
-* @date     2023-07-21
-* @version  v1.0
-*****************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 /* Includes ------------------------------------------------------------------*/
 #include <stdlib.h>
@@ -116,4 +110,4 @@ void Enhanced_Timer0_Handler()
     //Add user code here
     ENHTIM_Cmd(ENHTIMER_NUM, ENABLE);
 }
-/******************* (C) COPYRIGHT 2023 Realtek Semiconductor Corporation *****END OF FILE****/
+

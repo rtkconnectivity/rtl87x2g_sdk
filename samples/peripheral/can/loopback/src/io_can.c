@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2022, Realtek Semiconductor Corporation. All rights reserved.
-**********************************************************************************************************
-* @file      io_can.c
-* @brief     This file provides all the demo code for CAN bus firmware functions.
-* @details
-* @author
-* @date      2023-07-17
-* @version  v1.0
-*********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 /*============================================================================*
  *                              Header Files
@@ -88,6 +81,7 @@ void can_loopback(uint32_t buf_id, uint8_t frame_type, \
     rx_frame_type.frame_id_mask = CAN_FRAME_ID_MASK_MAX_VALUE;
     rx_frame_type.rx_dma_en = RESET;
     rx_frame_type.auto_reply_bit = RESET;
+    rx_frame_type.rx_msg_buf_enable = SET;
 
     rx_error = CAN_SetMsgBufRxMode(&rx_frame_type);
 
@@ -173,8 +167,7 @@ void can_loopback(uint32_t buf_id, uint8_t frame_type, \
     memset(rx_data, 0, 8);
     CAN_GetRamData(mb_info.data_length, rx_data);
 
-    CANDataFrameSel_TypeDef get_frame_type = CAN_CheckFrameType(mb_info.rtr_bit, mb_info.ide_bit,
-                                                                mb_info.edl_bit);
+    CANDataFrameSel_TypeDef get_frame_type = CAN_CheckFrameType(mb_info.rtr_bit, mb_info.ide_bit);
 
     DBG_DIRECT("[CAN]  rx frame_type %d", get_frame_type);
     DBG_DIRECT("[CAN]  rx frame_id = 0x%x, ext_frame_id = 0x%x", mb_info.standard_frame_id,
@@ -228,5 +221,5 @@ void can_demo(void)
     DBG_DIRECT("[CAN]  end of can loopback demo");
 }
 
-/******************* (C) COPYRIGHT 2022 Realtek Semiconductor Corporation *****END OF FILE****/
+
 

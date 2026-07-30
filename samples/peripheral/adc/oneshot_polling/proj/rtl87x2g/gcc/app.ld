@@ -54,8 +54,10 @@ SECTIONS
     FLASH_TEXT :
     {
         * (.image_entry)
+#if (FEATURE_RAM_CODE == 0)
         *(.text*)
         . = ALIGN(4);
+#endif
         *(.rodata*)
         . = ALIGN(4);
         * (.isr.text)
@@ -88,6 +90,10 @@ SECTIONS
     {
        . = ALIGN(0x20);
         __enter_iram_ns_ro_start__ = .;
+#if (FEATURE_RAM_CODE == 1)
+        *(.text*)
+        . = ALIGN(4);
+#endif
         * (.app.ram.text)
         __enter_iram_ns_ro_end__ = .;
         __enter_iram_ns_rw_start__ = .;

@@ -1,12 +1,7 @@
-/**
- * @copyright Copyright (C) 2022 Realtek Semiconductor Corporation.
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
  *
- * @file usb_audio_driver.h
- * @version 1.0
- * @brief Upper application can used the definitions&APIs to realize Audio function instances.
- *        The driver support multiple audio functions, which have the standalone audio control/streaming
- *
- * @note:
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
  */
 #ifndef _USB_AUDIO_DRIVER_H_
 #define _USB_AUDIO_DRIVER_H_

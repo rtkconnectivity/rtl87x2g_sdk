@@ -1,14 +1,8 @@
-/**
-************************************************************************************************************
-*               Copyright (c) 2017, Realtek Semiconductor Corporation. All rights reserved.
-************************************************************************************************************
-* @file     utils_nsc.h
-* @brief    utility helper function for user application
-* @author   lory_xu
-* @date     2017-02
-* @version  v1.0
-*************************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 #ifndef _UTILS_NSC_H_
 #define _UTILS_NSC_H_
@@ -110,4 +104,3 @@ uint32_t get_extra_occd_size(void);
 #endif
 
 #endif
-

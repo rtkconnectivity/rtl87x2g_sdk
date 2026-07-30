@@ -1,14 +1,8 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2022, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-* @file     main.c
-* @brief    This file provides demo code of gpio output toggle.
-* @author
-* @date     2023-03-24
-* @version  v1.0
-*****************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 /* Includes ------------------------------------------------------------------*/
 #include <stdlib.h>
@@ -81,4 +75,4 @@ void gpio_demo(void)
     }
 }
 
-/******************* (C) COPYRIGHT 2018 Realtek Semiconductor Corporation *****END OF FILE****/
+

@@ -1,13 +1,8 @@
-/**
-****************************************************************************************************
-*               Copyright(c) 2016, Realtek Semiconductor Corporation. All rights reserved.
-****************************************************************************************************
-* @file      otp.h
-* @brief
-* @date      2023-09-18
-* @version   v1.0
-* **************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 #ifndef _OTP_H_
 #define _OTP_H_
@@ -89,9 +84,21 @@ typedef struct otp_struct
     uint16_t ftl_app_start_addr;
     uint16_t flash_task_stack_depth : 2;
     uint16_t use_ftl : 1;
-    uint16_t platform_cfg_rsvd3 : 13;
+    uint16_t write_info_to_flash_when_hardfault: 1;/* write info to flash when hardfault happens */
+    uint16_t platform_cfg_rsvd3 : 5;
+    uint16_t ftl_logic_addr_map_bit_num : 3; /*4bit by step, default value is 3 means 12bit*/
+    uint16_t platform_cfg_rsvd4 : 4;
 
     uint32_t reboot_record_address; /* start address of reboot record */
+
+    uint32_t HardFault_Record_CFG; // default value: 0x7
+    // [0]: 1, enable saving HardFault_Record
+    // [1]: reserved//1, 1 bit slow mode
+    // [2]: 1, dump HardFaultRecord in boot time
+    // [3]: 1, Clean up HardFaultRecord after dumping HardFault_Record
+    // [4]: 1, Clean up HardFaultRecord before saving HardFault_Record
+    uint32_t HardFault_Record_BegAddr;      /* start address of hardfault record */
+    uint32_t HardFault_Record_EndAddr;      /* end address of hardfault record */
     /**************** end platform config ****************/
 }  __attribute__((packed)) T_OTP_CFG;
 /* end otp, addr = 0x00138f80 */
@@ -104,4 +111,3 @@ typedef struct otp_struct
 #endif
 
 #endif  /* _OTP_H_ */
-

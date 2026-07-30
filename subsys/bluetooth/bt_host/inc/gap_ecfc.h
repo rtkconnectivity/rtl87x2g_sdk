@@ -1,19 +1,9 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2021, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-  * @file    gap_ecfc.h
-  * @brief   This file contains all the constants and functions prototypes for L2CAP Enhanced Credit Based Flow Control Mode.
-  * @details
-  * @author  jane
-  * @date    2021-04-06
-  * @version v1.0
-  * *************************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
-/*============================================================================*
- *               Define to prevent recursive inclusion
- *============================================================================*/
 #ifndef __GAP_ECFC_H__
 #define __GAP_ECFC_H__
 
@@ -76,7 +66,7 @@ extern "C" {
   * @{
   */
 
-/** @brief L2CAP ECFC channel connection state*/
+/** @brief L2CAP ECFC channel Connection State*/
 typedef enum
 {
     GAP_ECFC_STATE_DISCONNECTED  = 0, //!< Disconnected.
@@ -88,7 +78,7 @@ typedef enum
 typedef enum
 {
     GAP_ECFC_PARAM_INIT_CREDITS      = 0x430, //!< Local initial credits. Write only. Size is 2 octets. Default value is 4.
-    GAP_ECFC_PARAM_LOCAL_MPS         = 0x431, //!< Local MPS. Write only. Size is 2 octets. Default value is 254.
+    GAP_ECFC_PARAM_LOCAL_MPS         = 0x431, //!< Local MPS. Write only. Size is 2 octets. Default value is 245.
 } T_GAP_ECFC_PARAM_TYPE;
 
 /**
@@ -351,7 +341,7 @@ bool gap_ecfc_init(uint8_t proto_num);
  *
  * This function can be called with a GAP ECFC parameter type @ref T_GAP_ECFC_PARAM_TYPE and it will set the GAP ECFC parameter.
  * The 'p_value' field must point to an appropriate data type that meets the requirements for the corresponding parameter type.
- * (For example: if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
+ * (For example, if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
  *
  * @param[in] param     GAP ECFC parameter type @ref T_GAP_ECFC_PARAM_TYPE
  * @param[in] len       Length of data to write.

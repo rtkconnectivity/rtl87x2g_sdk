@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2022, Realtek Semiconductor Corporation. All rights reserved.
-**********************************************************************************************************
-* @file      io_can.c
-* @brief     This file provides all the demo code for CAN bus firmware functions.
-* @details
-* @author
-* @date      2023-07-17
-* @version  v1.0
-*********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 /*============================================================================*
  *                              Header Files
@@ -146,6 +139,7 @@ void can_rx_auto_reply(void)
     rx_frame_type.frame_id_mask = 0;
     rx_frame_type.rx_dma_en = RESET;
     rx_frame_type.auto_reply_bit = SET;
+    rx_frame_type.rx_msg_buf_enable = SET;
     rx_error = CAN_SetMsgBufRxMode(&rx_frame_type);
 
     CAN_MBRxINTConfig(rx_frame_type.msg_buf_id, ENABLE);
@@ -310,8 +304,7 @@ void CAN_Handler(void)
                 memset(rx_data, 0, 8);
                 CAN_GetRamData(mb_info.data_length, rx_data);
 
-                CANDataFrameSel_TypeDef frame_type = CAN_CheckFrameType(mb_info.rtr_bit, mb_info.ide_bit,
-                                                                        mb_info.edl_bit);
+                CANDataFrameSel_TypeDef frame_type = CAN_CheckFrameType(mb_info.rtr_bit, mb_info.ide_bit);
 
                 DBG_DIRECT("[CAN HANDLER]  frame_type %d, frame_id = 0x%03x, ext_frame_id = 0x%05x", \
                            frame_type, mb_info.standard_frame_id, mb_info.extend_frame_id);
@@ -321,9 +314,7 @@ void CAN_Handler(void)
                     DBG_DIRECT("[CAN HANDLER]  rx_data [%d] 0x%02x", index, rx_data[index]);
                 }
 
-                /* Start rx next time. */
 
-                can_rx_auto_reply();
             }
         }
     }
@@ -341,5 +332,5 @@ void CAN_Handler(void)
     }
 }
 
-/******************* (C) COPYRIGHT 2022 Realtek Semiconductor Corporation *****END OF FILE****/
+
 

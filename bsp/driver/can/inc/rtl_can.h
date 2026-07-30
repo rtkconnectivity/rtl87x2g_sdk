@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* \file     rtl_can.h
-* \brief    The header file of the peripheral CAN driver.
-* \details  This file provides all CAN firmware functions.
-* \author   chenjie jin
-* \date     2023-10-17
-* \version  v1.0
-* *******************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 /*============================================================================*
  *               Define to prevent recursive inclusion
@@ -245,7 +238,7 @@ uint32_t can_ram_lost:
         uint32_t can_ram_rxtx: 1;       //!< Can frame RX or TX, 0 is for RX, 1 is for TX.
         uint32_t can_ram_autoreply: 1;  //!< Set the message buffer with remote frame auto reply function.
         uint32_t RESERVED_1:  1;        //!< Reserved.
-        uint32_t can_ram_edl: 1;        //!< The EDL of CAN.
+        uint32_t reset: 1;              //!< Reserved.
         uint32_t RESERVED_2: 1;         //!< Reserved.
         uint32_t can_ram_esi: 1;        //!< The ESI of CAN.
         uint32_t RESERVED_0:  5;        //!< Reserved.
@@ -302,8 +295,6 @@ typedef struct
     uint8_t CAN_RxFifoEn;                           /*!< Specify Whether the RX FIFO function is enable.
                                                          This parameter can be a value of ENABLE or DISABLE. */
     uint8_t CAN_RxDmaEn;                            /*!< Specify Whether the RX DMA function is enable.
-                                                         This parameter can be a value of ENABLE or DISABLE. */
-    uint8_t CAN_TriSampleEn;                        /*!< Specify Whether the triple sample mode function is enable.
                                                          This parameter can be a value of ENABLE or DISABLE. */
     uint8_t CAN_TestModeSel;                        /*!< Specify the test mode of CAN.
                                                          This parameter can be a value of @ref CANTestModeSel_TypeDef */
@@ -445,6 +436,7 @@ typedef struct
     uint8_t auto_reply_bit;        //!< The auto reply bit of RX frame.
     uint16_t standard_frame_id;    //!< Standard frame ID.
     uint32_t extend_frame_id;      //!< Extend frame ID.
+    bool rx_msg_buf_enable;        //!< Message buffer enable.
 } CANRxFrame_TypeDef;
 
 /**
@@ -463,7 +455,6 @@ typedef struct
     uint8_t rx_lost_bit;                //!< The RX lost bit.
     uint8_t data_length;                //!< The data length.
     uint8_t rx_dma_en;                  //!< The DMA enable bit.
-    CANEdlSel_TypeDef edl_bit;          //!< The edl bit \ref CANEdlSel_TypeDef.
     CANRtrSel_TypeDef rtr_bit;          //!< The rtr bit \ref CANRtrSel_TypeDef.
     CANIdeSel_TypeDef ide_bit;          //!< The ide bit \ref CANIdeSel_TypeDef.
     uint16_t rx_timestamp;              //!< The time stamp.
@@ -922,7 +913,7 @@ void CAN_CLearErrorStatus(uint32_t CAN_ERR_STAT);
  * \endcode
  */
 CANError_TypeDef CAN_SetMsgBufTxMode(CANTxFrame_TypeDef *p_tx_frame_params,
-                                     uint8_t *p_frame_data,
+                                     const uint8_t *p_frame_data,
                                      uint8_t data_len);
 
 /**
@@ -1017,7 +1008,6 @@ CANError_TypeDef CAN_GetRamData(uint8_t data_len, uint8_t *p_data);
  *
  * \param[in]  rtr_bit  Refer to \ref CANRtrSel_TypeDef.
  * \param[in]  ide_bit  Refer to \ref CANIdeSel_TypeDef.
- * \param[in]  edl_bit  Refer to \ref CANEdlSel_TypeDef.
  *
  * \return The type of frame \ref CANDataFrameSel_TypeDef.
  *
@@ -1030,12 +1020,11 @@ CANError_TypeDef CAN_GetRamData(uint8_t data_len, uint8_t *p_data);
  *     uint8_t rx_data[8];
  *     CANMsgBufInfo_TypeDef mb_info;
  *     CAN_GetMsgBufInfo(index, &mb_info);
- *     CANDataFrameSel_TypeDef frame_type = CAN_CheckFrameType(mb_info.rtr_bit, mb_info.ide_bit,
- *                                                                              mb_info.edl_bit);
+ *     CANDataFrameSel_TypeDef frame_type = CAN_CheckFrameType(mb_info.rtr_bit, mb_info.ide_bit);
  * }
  * \endcode
  */
-CANDataFrameSel_TypeDef CAN_CheckFrameType(uint8_t rtr_bit, uint8_t ide_bit, uint8_t edl_bit);
+CANDataFrameSel_TypeDef CAN_CheckFrameType(uint8_t rtr_bit, uint8_t ide_bit);
 
 /**
  * \brief  Config message buffer TX interrupt.
@@ -1554,6 +1543,63 @@ void CAN_SetMBnRxDmaEnFlag(uint8_t message_buffer_index,
                            FunctionalState newState);
 
 /**
+ * \brief  Set test mode for CAN.
+ * \param[in] CANx: selected CAN peripheral.
+ * \param[in] CAN_TestModeSel: Test mode to set.
+ *      This parameter can the following values:
+ *      \arg CAN_TEST_MODE_NONE: Normal tx/rx mode.
+ *      \arg CAN_TEST_MODE_INT_LOOPBACK: Loopback mode.
+ *      \arg CAN_TEST_MODE_SILENCE: Silence mode.
+ * \return none.
+ */
+void CAN_SetTestMode(uint8_t CAN_TestModeSel);
+
+/**
+ * \brief  Enable or disable CAN auto-re-tx function.
+ * \param[in] CANx: selected CAN peripheral.
+ * \param[in] newState: the state of CAN auto-re-tx function.
+ * \return none.
+ */
+void CAN_AutoReTxCmd(FunctionalState NewState);
+
+/**
+ * \brief  Set can bit timing.
+ * \param[in] CANx: selected CAN peripheral.
+ * \param[in] CAN_BitTiming:  Pointer to a CAN_BIT_TIMING_TYPE_TypeDef structure that
+ *            contains the bit timing information for the specified CAN peripheral
+ * \return none.
+ */
+void CAN_SetTiming(CAN_BIT_TIMING_TYPE_TypeDef *CAN_BitTiming);
+
+/**
+ * \brief  Get error passive status.
+ * \param[in] CANx: selected CAN peripheral.
+ * \return The flag of error passive status.
+ */
+FlagStatus CAN_GetErrorPassiveStatus();
+
+/**
+ * \brief  Get error warning status.
+ * \param[in] CANx: selected CAN peripheral.
+ * \return The flag of error warning status.
+ */
+FlagStatus CAN_GetErrorWarningStatus();
+
+/**
+ * \brief  Get tx error counter.
+ * \param[in] CANx: selected CAN peripheral.
+ * \return The counter of tx error.
+ */
+int CAN_GetTxErrorCnt();
+
+/**
+ * \brief  Get rx error counter.
+ * \param[in] CANx: selected CAN peripheral.
+ * \return The counter of rx error.
+ */
+int CAN_GetRxErrorCnt();
+
+/**
  * \brief  Config CAN clock source div.
  *
  * \param[in] div  CAN clock div. Refer to \ref CANClkDIV_TypeDef.
@@ -1628,4 +1674,3 @@ void CAN_ManualWakeup();
 #endif
 #endif /* _RTL_CAN_H_ */
 
-/******************* (C) COPYRIGHT 2023 Realtek Semiconductor *****END OF FILE****/

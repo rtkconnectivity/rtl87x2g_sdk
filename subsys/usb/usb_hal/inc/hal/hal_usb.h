@@ -1,16 +1,12 @@
-/**
- * \copyright Copyright (C) 2023 Realtek Semiconductor Corporation.
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
  *
- * \file hal_usb.h
- * \version 1.0
- * \brief
- *
- * \note:
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
  */
 #ifndef __HAL_USB__
 #define __HAL_USB__
 #include <stdint.h>
-
+#include <stdbool.h>
 /**
  * \addtogroup USB_HAL
  * \brief This section introduces the definition and the usage of the USB HAL APIs.
@@ -332,6 +328,7 @@ typedef enum {HAL_USB_SPEED_FULL, HAL_USB_SPEED_HIGH, HAL_USB_SPEED_UNSUPPORTED}
  * \param HAL_USB_COMMON_ISR_SETUP: The interrupt when the setup packet is received.
  * \param HAL_USB_COMMON_ISR_SUSPEND: The interrupt when the device suspends.
  * \param HAL_USB_COMMON_ISR_RESUME: The interrupt when the device resumes.
+ * \param HAL_USB_COMMON_ISR_SOF: The interrupt when the SOF packet is received.
  * \param HAL_USB_COMMON_ISR_XFER_DONE: If the operation is not completed within the interrupt handler (i.e., when complete_in_isr is set to 0), the HAL_USB_COMMON_ISR_XFER_DONE interrupt will be triggered when transfer completion.
  *
  */
@@ -342,6 +339,7 @@ typedef enum
     HAL_USB_COMMON_ISR_SETUP,
     HAL_USB_COMMON_ISR_SUSPEND,
     HAL_USB_COMMON_ISR_RESUME,
+    HAL_USB_COMMON_ISR_SOF,
     HAL_USB_COMMON_ISR_XFER_DONE,
 } T_HAL_USB_COMMON_ISR;
 
@@ -991,6 +989,20 @@ int hal_usb_wakeup_status_get(void);
  * \return Refer to `rtl_errno.h`.
  */
 int hal_usb_do_test_mode(uint8_t sel);
+
+/**
+ * \brief USB SOF interrupt configuration.
+ *
+ * \param enable Select whether enable the sof interrupt.
+ */
+void hal_usb_sof_interrupt_config(bool enable);
+
+/**
+ * \brief Frame or Microframe Number of the Received SOF.
+ *
+ * \return The returned value range is 0-16383.
+ */
+uint32_t hal_get_usb_frame_number(void);
 /** @} */ /* End of group USB_HAL_Exported_Functions */
 /** @}*/
 

@@ -1,19 +1,9 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2016, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-  * @file    gap_callback_le.h
-  * @brief   This file contains function prototypes for all GAP roles.
-  * @details
-  * @author  ranhui
-  * @date    2016-02-18
-  * @version v0.1
-  * *************************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
-/*============================================================================*
- *               Define to prevent recursive inclusion
- *============================================================================*/
 #ifndef GAP_CALLBACK_LE_H
 #define GAP_CALLBACK_LE_H
 
@@ -561,9 +551,9 @@ typedef struct
 {
     uint8_t     sync_id;          /**< Identify the periodic advertising train. */
     uint16_t    sync_handle;      /**< Sync_Handle identifying the periodic advertising train. */
-    int8_t      tx_power;         /**< - Range: -127 to +20, Units: dBm.
+    int8_t      tx_power;         /**< - Range: -127 to +20. Units: dBm.
                                        - 0x7F: Tx Power information not available. */
-    int8_t      rssi;             /**< - Range: -127 to +20, Units: dBm.
+    int8_t      rssi;             /**< - Range: -127 to +20. Units: dBm.
                                        - 0x7F: RSSI is not available. */
     T_GAP_PERIODIC_ADV_REPORT_CTE_TYPE     cte_type;    /**< @ref T_GAP_PERIODIC_ADV_REPORT_CTE_TYPE. */
     T_GAP_PERIODIC_ADV_REPORT_DATA_STATUS

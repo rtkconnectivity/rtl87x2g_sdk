@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2018, Realtek Semiconductor Corporation. All rights reserved.
-**********************************************************************************************************
-* @file     io_adc.c
-* @brief    This file provides demo code of adc polling.
-* @details
-* @author   yuan
-* @date     2019-01-11
-* @version  v1.0
-*********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 /* Includes ------------------------------------------------------------------*/
 #include <stdlib.h>
@@ -18,7 +11,6 @@
 #include "trace.h"
 
 #include "rtl_adc.h"
-#include "adc_lib.h"
 #include "io_adc.h"
 
 /* Private typedef -----------------------------------------------------------*/

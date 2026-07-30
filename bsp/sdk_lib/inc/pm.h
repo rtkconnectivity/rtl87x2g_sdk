@@ -1,17 +1,8 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2017, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-  * @file    pm.h
-  * @brief   This file provides APIs for power manager.
-  * @author  Grace
-  * @date    2022-04-27
-  * @version v1.0
-  * *************************************************************************************
-   * @attention
-   * <h2><center>&copy; COPYRIGHT 2017 Realtek Semiconductor Corporation</center></h2>
-   * *************************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 /*============================================================================*
  *               Define to prevent recursive inclusion
@@ -334,12 +325,6 @@ POWER_CheckResult power_clock_check_cb(void);
 */
 void usb_set_pon_domain(void);
 
-/**
- * @brief  Force VDDCORE to 1.2V for AUXADC
- * @param  enable Enable or disable force VDDCORE 1.2V
- * @return None
-*/
-void force_vddcore_1v2_for_auxadc(bool enable);
 
 /**
   *  End of POWER_MANAGER_Private_Functions

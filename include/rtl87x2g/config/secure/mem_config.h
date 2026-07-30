@@ -1,16 +1,8 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2017, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-  * @file    mem_config.h
-  * @brief   Memory Configuration
-  * @date    2022.1.28
-  * @version v1.0
-  * *************************************************************************************
-   * @attention
-   * <h2><center>&copy; COPYRIGHT 2017 Realtek Semiconductor Corporation</center></h2>
-   * *************************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 /*============================================================================*
  *               Define to prevent recursive inclusion
@@ -88,10 +80,10 @@ extern "C" {
 /*=======================================================================================*
   *                                 ITCM1 + DTCM0 + DTCM1 layout
   *=====================================================================================*/
-/* RAM(ITCM1):          Bee4 size: 192K
- * RAM(DTCM0):          Bee4 size:  64K
- * RAM(DTCM1):          Bee4 size:  64K
- * Total RAM(TCM):      Bee4 size: 320K
+/* RAM(ITCM1):          RTL87x2G size: 192K
+ * RAM(DTCM0):          RTL87x2G size:  64K
+ * RAM(DTCM1):          RTL87x2G size:  64K
+ * Total RAM(TCM):      RTL87x2G size: 320K
 example:
    a) non-secure total size:                          220K
       1) non-secure upperstack ram         3K (adjustable, depend on used upperstack version, config NS_RAM_UPPERSTACK_SIZE)

@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* \file     rtl_rtc.h
-* \brief    The header file of the peripheral RTC driver.
-* \details  This file provides all RTC firmware functions.
-* \author   grace_yan
-* \date     2023-10-17
-* \version  v1.0
-* *******************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 /*============================================================================*
  *               Define to prevent recursive inclusion
@@ -947,5 +940,4 @@ void RTC_ShortcutCmd(uint32_t Task, uint32_t Event, FunctionalState NewState);
 #endif /* RTL_RTC_H */
 
 
-/******************* (C) COPYRIGHT 2023 Realtek Semiconductor *****END OF FILE****/
 

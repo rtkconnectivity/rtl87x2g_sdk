@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* \file     rtl_spi_def.h
-* \brief    Pinmux related definitions for RTL8762G
-* \details
-* \author   renee
-* \date     2023-11-15
-* \version  v1.1
-* *********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 #ifndef RTL_SPI_DEF_H
 #define RTL_SPI_DEF_H
@@ -125,6 +118,9 @@ typedef struct
 #define IS_SPIS_PERIPH(PERIPH)    (((PERIPH) == SPI0_SLAVE))    //!< Check if the input parameter is valid.
 #define IS_SPI_ALL_PERIPH(PERIPH) (IS_SPIM_PERIPH(PERIPH) || \
                                    IS_SPIS_PERIPH(PERIPH))      //!< Check if the input parameter is valid.
+
+#define SPI_TX_FIFO_ADDR(SPIx)    (uint32_t)(&(((SPI_TypeDef *)(SPIx))->SPI_DR[0]))
+#define SPI_RX_FIFO_ADDR(SPIx)    (uint32_t)(&(((SPI_TypeDef *)(SPIx))->SPI_DR[0]))
 
 /** End of SPI_Declaration
   * \}

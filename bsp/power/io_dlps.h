@@ -1,16 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2015, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* @file      io_dlps.h
-* @brief
-* @details
-* @author    tifnan_ge
-* @date      2015-05-18
-* @version   v1.0
-* *********************************************************************************************************
-*/
-
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 #ifndef IO_DLPS_H
 #define IO_DLPS_H
@@ -28,7 +20,7 @@ extern "C" {
 
 /**
   * @defgroup IO_DLPS IO DLPS
-  * @brief IO DLPS dirver module
+  * @brief IO DLPS driver module
   * @{
   */
 
@@ -66,7 +58,7 @@ extern DLPS_IO_ExitDlpsCB User_IO_ExitDlpsCB;
 
 /**
   * @brief  This API registers a user-defined callback for DLPS exit stage, which allows IO restore action by APP.
-  * @param  func: User-defined DLPS exit stage callback functon.
+  * @param  func: User-defined DLPS exit stage callback function.
   */
 __STATIC_INLINE void DLPS_IORegUserDlpsExitCb(DLPS_IO_ExitDlpsCB func)
 {
@@ -83,7 +75,7 @@ extern DLPS_IO_EnterDlpsCB User_IO_EnterDlpsCB;
   * @brief  This API registers a user-defined callback for DLPS enter stage, which allows IO store action by APP.
   *         Do not perform time-consuming operations in the DLPS enter callback, as it may disturb the DLPS wake-up process.
   *         Since the OS schedule and interrupts are disabled during DLPS, it is forbidden to use OS APIs in the DLPS enter callback function.
-  * @param  func: User-defined DLPS enter stage callback functon.
+  * @param  func: User-defined DLPS enter stage callback function.
   */
 __STATIC_INLINE void DLPS_IORegUserDlpsEnterCb(DLPS_IO_EnterDlpsCB func)
 {
@@ -92,15 +84,13 @@ __STATIC_INLINE void DLPS_IORegUserDlpsEnterCb(DLPS_IO_EnterDlpsCB func)
 
 #endif
 
+/** @} */ /* End of group IO_DLPS_Exported_Functions */
+/** @} */ /* End of group IO_DLPS */
+
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* IO_DLPS_H */
 
-/** @} */ /* End of group IO_DLPS_Exported_Functions */
-/** @} */ /* End of group IO_DLPS */
-
-
-/******************* (C) COPYRIGHT 2015 Realtek Semiconductor *****END OF FILE****/
 

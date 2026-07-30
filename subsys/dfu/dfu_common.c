@@ -1,18 +1,8 @@
-/**
-**********************************************************************************************************
-*               Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-**********************************************************************************************************
-* @file     dfu_common.c
-* @brief    supply dfu common APIs to application
-* @details
-* @author   Grace
-* @date     2023-12-06
-* @version  v1.1
-   **************************************************************************************
-   * @attention
-   * <h2><center>&copy; COPYRIGHT 2023 Realtek Semiconductor Corporation</center></h2>
-   **************************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 /*============================================================================*
  *                              Header Files
@@ -31,8 +21,7 @@
 #include "wdt.h"
 #include "trace.h"
 #include "flash_map.h"
-
-
+#include "rtl_aon_wdt.h"
 /*============================================================================*
  *                              Macros
  *============================================================================*/
@@ -184,7 +173,7 @@ uint32_t get_bank_size_by_img_id(IMG_ID image_id)
     uint32_t bank_size;
 
     T_IMG_HEADER_FORMAT *ota_header = (T_IMG_HEADER_FORMAT *)get_active_ota_bank_addr();
-    bank_size = ota_header->image_info[(image_id - IMG_OTA - 1) * 2 + 1];;
+    bank_size = ota_header->image_info[(image_id - IMG_OTA - 1) * 2 + 1];
 
     return bank_size;
 }
@@ -582,6 +571,7 @@ bool dfu_checksum(IMG_ID img_id, uint32_t offset)
     bool wdt_en = WDT_IsEnable();
     WDTMode_TypeDef wdt_mode = WDT_GetMode();
     uint32_t wdt_timeout = WDT_GetTimeoutMs();
+    bool aon_wdt_en = AON_WDT_IsEnable(AON_WDT);
 
     /*if ota large img, need modify wdg timeout period*/
     if (wdt_en && image_total_length > 0x100000)
@@ -592,6 +582,11 @@ bool dfu_checksum(IMG_ID img_id, uint32_t offset)
         DFU_PRINT_TRACE2("<==dfu_checksum: Change WDG Period to %d ms, image_total_length 0x%x",
                          wdt_period, image_total_length);
         WDT_Start(wdt_period, RESET_ALL);
+    }
+
+    if (aon_wdt_en)
+    {
+        AON_WDT_Disable(AON_WDT);
     }
 
     ret = dfu_check_sha256((T_IMG_HEADER_FORMAT *)base_addr);
@@ -694,4 +689,3 @@ T_USER_DATA_ERROR_TYPE dfu_get_user_data_info(IMG_ID image_id,
     return err_code;
 }
 
-/******************* (C) COPYRIGHT 2023 Realtek Semiconductor Corporation *****END OF FILE****/

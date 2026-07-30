@@ -1,11 +1,7 @@
-/**
- * \copyright Copyright (C) 2023 Realtek Semiconductor Corporation.
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
  *
- * \file usb_hid_driver.h
- * \version 1.0
- * \brief Upper application can used the definitions and APIs to implement HID function instances. The
- *        driver supports multiple HID functions, such as consumer control, mouse, keyboard and so on.
- *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
  */
 #ifndef __USB_HID_DRIVER_H__
 #define __USB_HID_DRIVER_H__

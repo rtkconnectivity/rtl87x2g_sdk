@@ -1,14 +1,8 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2022, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-* @file     io_wdt.c
-* @brief    This file provides demo code of wdt.
-* @author   Grace_yan
-* @date     2023-03-24
-* @version  v1.0
-*****************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 /* Includes ------------------------------------------------------------------*/
 #include "rtl_wdt.h"
@@ -55,4 +49,4 @@ void wdt_feed(void)
 #endif
 }
 
-/******************* (C) COPYRIGHT 2023 Realtek Semiconductor Corporation *****END OF FILE****/
+

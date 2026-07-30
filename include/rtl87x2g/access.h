@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 #ifndef IO_H
 #define IO_H
 
@@ -74,4 +80,4 @@
     HAL_WRITE8(0, addr, (HAL_READ8(0, addr) & ~(mask)) | ((value8) & (mask)))
 
 
-#endif //#define IO_H 
+#endif //#define IO_H

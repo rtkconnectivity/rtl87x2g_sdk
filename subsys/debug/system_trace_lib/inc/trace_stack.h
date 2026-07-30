@@ -1,13 +1,9 @@
-/****************************************************************************************************//**
- * @file     trace_stack.h
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
  *
- * @brief
- *
- * @version  v0.1
- * @date     2018-11-05
- *
- * @note
- *******************************************************************************************************/
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
+
 #ifndef _TRACE_STACK_H_
 #define _TRACE_STACK_H_
 
@@ -34,12 +30,10 @@ typedef struct _STACK_INFO
     TASK_STACK_INFO_BLOCK_t task_stack_info[MAX_TASK_COUNT_FOR_DEBUG];
 } STACK_INFO;
 
-extern void trace_task_stack(void);
+void trace_task_stack(void);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /*_TRACE_STACK_H_*/
-
-/******************* (C) COPYRIGHT 2015 Realtek Semiconductor Corporation *****END OF FILE****/

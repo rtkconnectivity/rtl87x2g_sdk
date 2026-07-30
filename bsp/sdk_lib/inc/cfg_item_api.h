@@ -1,15 +1,8 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2017, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-* @file     cfg_item_api.h
-* @brief    This file provides API for config item operation.
-* @details
-* @author
-* @date     2021-12-9
-* @version  v1.0
-*****************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 /*============================================================================*
  *               Define to prevent recursive inclusion
@@ -57,7 +50,7 @@ typedef enum
     CFG_UPDATE_SUCCESS = 0,                 //!< Update config flash success.
     CFG_UPDATE_UNLOCK_BP_FAIL = 1,          //!< Unlock BP fail.
     CFG_UPDATE_ERASE_FAIL = 2,              //!< Erase config flash fail.
-    CFG_UPDATE_WRITE_FAIL = 3,              //!< Wtite config flash fail.
+    CFG_UPDATE_WRITE_FAIL = 3,              //!< Write config flash fail.
     CFG_UPDATE_LOCK_BP_FAIL = 4,            //!< Lock BP fail.
 } CFG_UPDATE_RESULT_E;
 
@@ -143,7 +136,7 @@ uint32_t cfg_get_size(void *p_cfg_payload);
 
 /**
  * @brief Read back the config data on the flash to the ram buffer.
- * \param[in] address   Specify the sytem config read address, default set as OEM Configuration Data.
+ * \param[in] address   Specify the system config read address, default set as OEM Configuration Data.
  * \param[in] backup_len  Specify the backup config data length.
  *
  * @return The config buffer backup pointer on the heap.

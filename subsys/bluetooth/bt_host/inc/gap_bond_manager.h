@@ -1,20 +1,9 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2021, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-  * @file    gap_bond_manager.h
-  * @brief   This file contains all the function prototypes for the GAP bond manager
-  *          related functions.
-  * @details
-  * @author
-  * @date
-  * @version
-  * *************************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
-/*============================================================================*
- *               Define to prevent recursive inclusion
- *============================================================================*/
 #ifndef GAP_BOND_MANAGER_H
 #define GAP_BOND_MANAGER_H
 

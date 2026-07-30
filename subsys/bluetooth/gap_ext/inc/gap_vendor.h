@@ -1,18 +1,9 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2017, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-  * @file    gap_vendor.h
-  * @brief
-  * @details
-  * @author  ranhui_xia
-  * @date    2017-08-02
-  * @version v1.0
-  ******************************************************************************
-  * @attention
-  * <h2><center>&copy; COPYRIGHT 2017 Realtek Semiconductor Corporation</center></h2>
-  ******************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
+
 #ifndef GAP_VNR_H
 #define GAP_VNR_H
 

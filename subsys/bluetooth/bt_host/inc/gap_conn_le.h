@@ -1,19 +1,9 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2016, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-  * @file    gap_conn_le.h
-  * @brief   This file contains all the constants and function prototypes for the GAP protocol.
-  * @details
-  * @author  jane
-  * @date    2016-02-18
-  * @version v1.0
-  * *************************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
-/*============================================================================*
- *               Define to prevent recursive inclusion
- *============================================================================*/
 #ifndef GAP_CONN_LE_H
 #define GAP_CONN_LE_H
 
@@ -90,25 +80,25 @@ typedef struct
     uint16_t scan_interval;/**< Time interval from when the Controller started its last scan
                                 until it begins the subsequent scan on the primary advertising channel.
                                 In default situation or @ref le_set_gap_param has been called to set
-                                @ref GAP_PARAM_USE_EXTENDED_ADV to false,
+                                @ref GAP_PARAM_USE_EXTENDED_ADV to false:
                                 - Range: 0x0004 to 0x4000.
                                 - Time = N * 0.625 ms.
                                 - Time Range: 2.5 ms to 10.24 s.
 
                                 If @ref le_set_gap_param has been called to set
-                                @ref GAP_PARAM_USE_EXTENDED_ADV to true,
+                                @ref GAP_PARAM_USE_EXTENDED_ADV to true:
                                 - Range: 0x0004 to 0xFFFF.
                                 - Time = N * 0.625 ms.
                                 - Time Range: 2.5 ms to 40.959375 s. */
     uint16_t scan_window;/**< Duration of the scan on the primary advertising channel.
                               In default situation or @ref le_set_gap_param has been called to set
-                              @ref GAP_PARAM_USE_EXTENDED_ADV to false,
+                              @ref GAP_PARAM_USE_EXTENDED_ADV to false:
                               - Range: 0x0004 to 0x4000.
                               - Time = N * 0.625 ms.
                               - Time Range: 2.5 ms to 10.24 s.
 
                               If @ref le_set_gap_param has been called to set
-                              @ref GAP_PARAM_USE_EXTENDED_ADV to true,
+                              @ref GAP_PARAM_USE_EXTENDED_ADV to true:
                               - Range: 0x0004 to 0xFFFF.
                               - Time = N * 0.625 ms.
                               - Time Range: 2.5 ms to 40.959375 s. */
@@ -157,7 +147,7 @@ typedef struct
   *
   * This function can be called with a connection parameter type @ref T_LE_CONN_PARAM_TYPE and it will get the connection parameter.
   * The 'p_value' field must point to an appropriate data type that meets the requirements for the corresponding parameter type.
-  * (For example: if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
+  * (For example, if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
   *
   * @param[in]  param Connection parameter type @ref T_LE_CONN_PARAM_TYPE
   * @param[in,out] p_value Pointer to location to get the value.
@@ -258,7 +248,7 @@ uint8_t     le_get_idle_link_num(void);
  *   When calling the API, if state of connection identified by conn_id is @ref GAP_CONN_STATE_CONNECTING, and link role is @ref GAP_LINK_ROLE_MASTER,
  *   APP will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE with new_state about gap_conn_state @ref GAP_CONN_STATE.
  * - When @ref le_gap_msg_info_way (false) has been called, APP will be notified with the callback registered
- *   by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_GAP_STATE_MSG about connection state.
+ *   by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_GAP_STATE_MSG about Connection State.
  *   When calling the API, if state of connection identified by conn_id is @ref GAP_CONN_STATE_CONNECTING, and link role is @ref GAP_LINK_ROLE_MASTER,
  *   APP will be notified with the callback registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_GAP_STATE_MSG
  *   about device state.
@@ -332,7 +322,7 @@ T_GAP_CAUSE le_disconnect(uint8_t conn_id);
  *   When calling the API, if state of connection identified by conn_id is @ref GAP_CONN_STATE_CONNECTING, and link role is @ref GAP_LINK_ROLE_MASTER,
  *   APP will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE with new_state about gap_conn_state @ref GAP_CONN_STATE.
  * - When @ref le_gap_msg_info_way (false) has been called, APP will be notified with the callback registered
- *   by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_GAP_STATE_MSG about connection state.
+ *   by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_GAP_STATE_MSG about Connection State.
  *   When calling the API, if state of connection identified by conn_id is @ref GAP_CONN_STATE_CONNECTING, and link role is @ref GAP_LINK_ROLE_MASTER,
  *   APP will be notified with the callback registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_GAP_STATE_MSG
  *   about device state.
@@ -727,7 +717,7 @@ T_GAP_CAUSE le_set_conn_param(T_GAP_CONN_PARAM_TYPE type,
  *   by message @ref GAP_MSG_LE_CONN_STATE_CHANGE with new_state @ref T_GAP_CONN_STATE.
  *   And APP will be notified by message @ref GAP_MSG_LE_DEV_STATE_CHANGE with new_state about gap_conn_state @ref GAP_CONN_STATE.
  * - When @ref le_gap_msg_info_way (false) has been called, APP will be notified with the callback registered
- *   by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_GAP_STATE_MSG about connection state.
+ *   by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_GAP_STATE_MSG about Connection State.
  *   And APP will be notified with the callback registered by @ref le_register_app_cb with msg type @ref GAP_MSG_LE_GAP_STATE_MSG
  *   about device state.
  *
@@ -844,8 +834,8 @@ T_GAP_CAUSE le_connect(uint8_t init_phys, uint8_t *remote_bd,
   *                   is @ref APP_RESULT_PENDING.
   *
   * @param[in] conn_id  Connection ID.
-  * @param[in] result   @ref APP_RESULT_SUCCESS : accept.
-  *                     @ref APP_RESULT_REJECT : reject.
+  * @param[in] result   @ref APP_RESULT_SUCCESS.
+  *                     @ref APP_RESULT_REJECT.
   * @return Operation result.
   * @retval GAP_CAUSE_SUCCESS    Operation success.
   * @retval Others   Operation failure.

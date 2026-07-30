@@ -1,20 +1,11 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-   * @file      dfu_app.h
-   * @brief     This file handles BLE peripheral application routines.
-   * @author    Grace
-   * @date      2023-12-06
-   * @version   v1.1
-   **************************************************************************************
-   * @attention
-   * <h2><center>&copy; COPYRIGHT 2023 Realtek Semiconductor Corporation</center></h2>
-   **************************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
-#ifndef _DFU_APP__
-#define _DFU_APP__
+#ifndef _DFU_APP_H_
+#define _DFU_APP_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -57,7 +48,7 @@ T_APP_RESULT dfu_profile_callback(T_SERVER_ID service_id, void *p_data);
 
 /**
   * @brief Callback for gap le to notify app
-  * @param[in] cb_type callback msy type @ref GAP_LE_MSG_Types.
+  * @param[in] cb_type callback msg type @ref GAP_LE_MSG_Types.
   * @param[in] p_cb_data point to callback data @ref T_LE_CB_DATA.
   * @retval result @ref T_APP_RESULT
   */

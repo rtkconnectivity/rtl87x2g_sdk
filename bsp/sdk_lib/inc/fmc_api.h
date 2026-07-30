@@ -1,14 +1,8 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2017, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-* @file    fmc_api.h
-* @brief   This file provides fmc api wrapper for sdk customer.
-* @author  yuhungweng
-* @date    2020-11-26
-* @version v1.0
-* *************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 #ifndef __FMC_API_H_
 #define __FMC_API_H_
@@ -174,7 +168,7 @@ typedef enum
 bool fmc_flash_nor_read(uint32_t addr, void *data, uint32_t len);
 
 /**
- * @brief               Task-safe nor flash written
+ * @brief               Task-safe nor flash write
  * @param[in] addr      The ram address mapping of nor flash going to be written
  * @param[in] data      Data buffer to be written into
  * @param[in] len       Write data length
@@ -222,7 +216,7 @@ bool fmc_flash_nor_get_bp_lv(uint32_t addr, uint8_t *bp_lv);
  * @brief           Get psram power status
  * @return          Power status
  * @retval          True power on.
- * @retval          False powe off.
+ * @retval          False power off.
  */
 bool fmc_get_psram_power_status(void);
 

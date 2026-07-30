@@ -1,17 +1,8 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2024, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-  * @file    crc16btx.h
-  * @brief
-  * @author
-  * @date    2024.7.17
-  * @version v1.0
-   **************************************************************************************
-   * @attention
-   * <h2><center>&copy; COPYRIGHT 2024 Realtek Semiconductor Corporation</center></h2>
-   * *************************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 /*============================================================================*
  *               Define to prevent recursive inclusion
@@ -50,7 +41,7 @@
   */
 /**
 * @brief  Calculate a new FCS given the current FCS and the new data.
-*       Polynomial: X**0 + X**2 + X**15 + X16
+*       Polynomial: X**0 + X**2 + X**15 + X**16
 *
 * @param  fcs: init or good final
 * @param  cp: data point
@@ -93,4 +84,3 @@ extern bool btx_vendor_get_response(uint8_t *data, uint8_t len);
 #endif  /**< #if ! defined (__CRC16BTX_H) */
 
 /** End of CRC16BTX.H */
-

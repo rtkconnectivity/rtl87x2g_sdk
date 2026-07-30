@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-**********************************************************************************************************
-* \file     rtl87x2g_spi.c
-* \brief    This file provides all the SPI firmware internal functions.
-* \details
-* \author   Bert
-* \date     2023-10-17
-* \version  v1.0
-*********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 /*============================================================================*
  *                        Header Files
@@ -243,6 +236,4 @@ void SPI_DLPSExit(void *PeriReg, void *StoreBuf)
     /* Enable the selected SPI peripheral */
     SPIx->SPI_SPIENR    = store_buf->spi_reg[2];
 }
-
-/******************* (C) COPYRIGHT 2023 Realtek Semiconductor Corporation *****END OF FILE****/
 

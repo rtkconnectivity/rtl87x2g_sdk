@@ -179,6 +179,7 @@ void app_main_task(void *p_param)
 
 //    gap_start_bt_stack(evt_queue_handle, io_queue_handle, MAX_NUMBER_OF_GAP_MESSAGE);
 //    test_heap();
+    extern void  app_usb_init(void);
     app_usb_init();
     while (true)
     {

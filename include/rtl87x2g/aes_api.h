@@ -1,19 +1,8 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2017, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-  * @file    aes_api.h
-  * @brief   AES APIs abstracted for encryption related.
-  * @details AES encryption APIs which deliver HW/SW implemented reliable and safe AES solution.
-  * @author  Abel
-  * @date    2017.5.17
-  * @version v1.0
-   **************************************************************************************
-   * @attention
-   * <h2><center>&copy; COPYRIGHT 2017 Realtek Semiconductor Corporation</center></h2>
-   * *************************************************************************************
-  */
-
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 /*============================================================================*
  *                      Define to prevent recursive inclusion
@@ -130,9 +119,9 @@ bool aes128_ecb_decrypt_msb2lsb(uint8_t *input, const uint8_t *key, uint8_t *out
     * @brief  128 bit AES CBC encryption on specified plaintext and keys
     * @note   least significant octet of encrypted data corresponds to encrypted[0]
     * @param  cbc_ctx   specified plain text to be encrypted, iv and length in words
-    * @param  key          keys to decrypt the data
+    * @param  key          keys to encrypt the plaintext
     * @param  encrypted    output buffer to store encrypted data
-    * @return decryption results
+    * @return encryption results
     * @retval true      successful
     * @retval false     fail
     */
@@ -200,9 +189,9 @@ bool aes256_ecb_decrypt_msb2lsb(uint8_t *input, const uint8_t *key, uint8_t *out
     * @brief  256 bit AES CBC encryption on specified plaintext and keys
     * @note   least significant octet of encrypted data corresponds to encrypted[0]
     * @param  cbc_ctx   specified plain text to be encrypted, iv and length in words
-    * @param  key          keys to decrypt the data
+    * @param  key          keys to encrypt the plaintext
     * @param  encrypted    output buffer to store encrypted data
-    * @return decryption results
+    * @return encryption results
     * @retval true      successful
     * @retval false     fail
     */

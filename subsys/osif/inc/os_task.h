@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2024, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* @file      os_task.h
-* @brief     Header file for os task API.
-* @details   This file is used for task create, delete and other operation.
-* @author    rui_yu
-* @date      2024-12-30
-* @version   v1.0
-* *********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 #ifndef _OS_TASK_H_
 #define _OS_TASK_H_

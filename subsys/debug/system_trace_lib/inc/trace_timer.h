@@ -1,13 +1,9 @@
-/****************************************************************************************************//**
- * @file     trace_timer.h
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
  *
- * @brief
- *
- * @version  v0.1
- * @date     2018-11-05
- *
- * @note
- *******************************************************************************************************/
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
+
 #ifndef _TRACE_TIMER_H_
 #define _TRACE_TIMER_H_
 
@@ -24,13 +20,11 @@ typedef struct _TIMER_INFO
     uint16_t minimum_ever_remain_num;
 } TIMER_INFO;
 
-extern void trace_timer_init(void);
-extern void trace_timer(void);
+void trace_timer_init(void);
+void trace_timer(void);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /*_TRACE_TIMER_H_*/
-
-/******************* (C) COPYRIGHT 2015 Realtek Semiconductor Corporation *****END OF FILE****/

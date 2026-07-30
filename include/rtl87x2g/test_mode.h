@@ -1,14 +1,8 @@
-/**
-****************************************************************************************************
-*               Copyright(c) 2017, Realtek Semiconductor Corporation. All rights reserved.
-****************************************************************************************************
-* @file     test_mode.h
-* @brief    test mode definition.
-* @author   Serval Li
-* @date     2017-08-29
-* @version  v1.0
-****************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 #ifndef _TEST_MODE_H_
 #define _TEST_MODE_H_
@@ -79,4 +73,3 @@ extern void (*switch_into_hci_mode)(void);
 #endif
 
 #endif /* _TEST_MODE_H_ */
-

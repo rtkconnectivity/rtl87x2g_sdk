@@ -1,19 +1,9 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2021, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* @file      gap_big_mgr.h
-* @brief     Header file for GAP BIG
-* @details
-* @author
-* @date      2021-07-12
-* @version   v0.8
-*********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
-/*============================================================================*
- *               Define to prevent recursive inclusion
- *============================================================================*/
 #ifndef GAP_BIG_MGR_H
 #define GAP_BIG_MGR_H
 
@@ -224,9 +214,9 @@ typedef struct
     uint8_t rtn;                     /**< The number of times that every BIS Data PDU should be retransmitted.
                                           - Range: 0x00 to 0x1E. */
     uint8_t phy;                     /**< A bit field that indicates the PHY used for transmission of PDUs of BISes in the BIG.
-                                          - bit 0: The transmitter PHY of packets is LE 1M.
-                                          - bit 1: The transmitter PHY of packets is LE 2M.
-                                          - bit 2: The transmitter PHY of packets is LE Coded. */
+                                          - Bit 0: The transmitter PHY of packets is LE 1M.
+                                          - Bit 1: The transmitter PHY of packets is LE 2M.
+                                          - Bit 2: The transmitter PHY of packets is LE Coded. */
     uint8_t  packing;                /**< Indicate the preferred method of arranging subevents of multiple BISes.
                                           - 0x00: Sequential.
                                           - 0x01: Interleaved. */
@@ -296,9 +286,9 @@ typedef struct
     uint16_t max_pdu;      /**< Maximum size, in octets, of the payload.
                                 - Range: 0x0001 to 0x00FB.*/
     uint8_t phy;           /**< A bit field that indicates the PHY used for transmission of PDUs of BISes in the BIG.
-                                - bit 0: The transmitter PHY of packets is LE 1M.
-                                - bit 1: The transmitter PHY of packets is LE 2M.
-                                - bit 2: The transmitter PHY of packets is LE Coded. */
+                                - Bit 0: The transmitter PHY of packets is LE 1M.
+                                - Bit 1: The transmitter PHY of packets is LE 2M.
+                                - Bit 2: The transmitter PHY of packets is LE Coded. */
     uint8_t packing;       /**< Indicate the preferred method of arranging subevents of multiple BISes.
                                 - 0x00: Sequential.
                                 - 0x01: Interleaved. */

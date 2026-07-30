@@ -1,19 +1,9 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2016, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-  * @file    gap_msg.h
-  * @brief   This file contains function prototypes for all GAP roles.
-  * @details
-  * @author  ranhui
-  * @date    2016-02-18
-  * @version v0.1
-  * *************************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
-/*============================================================================*
- *               Define to prevent recursive inclusion
- *============================================================================*/
 #ifndef GAP_MSG_H
 #define GAP_MSG_H
 
@@ -47,7 +37,7 @@ extern "C"
   */
 #define GAP_MSG_LE_DEV_STATE_CHANGE        0x01 /**< Information msg type for device state.
                                                      The structure of callback data is @ref T_GAP_DEV_STATE_CHANGE. */
-#define GAP_MSG_LE_CONN_STATE_CHANGE       0x02 /**< Information msg type for connection state.
+#define GAP_MSG_LE_CONN_STATE_CHANGE       0x02 /**< Information msg type for Connection State.
                                                      The structure of callback data is @ref T_GAP_CONN_STATE_CHANGE. */
 #define GAP_MSG_LE_CONN_PARAM_UPDATE       0x03 /**< Information msg type for connection parameter update.
                                                      The structure of callback data is @ref T_GAP_CONN_PARAM_UPDATE. */
@@ -156,7 +146,7 @@ extern "C"
   * @{
   */
 
-/** @brief GAP connection states*/
+/** @brief GAP Connection States*/
 typedef enum
 {
     GAP_CONN_STATE_DISCONNECTED, //!< Disconnected.

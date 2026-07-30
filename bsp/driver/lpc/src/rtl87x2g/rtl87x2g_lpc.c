@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-**********************************************************************************************************
-* @file     rtl87x2g_adc.c
-* @brief    This file provides all the ADC firmware internal functions.
-* @details
-* @author   Bert
-* @date     2023-07-05
-* @version  v1.0
-*********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 /* Includes ------------------------------------------------------------------*/
 #include "rtl_lpc.h"
@@ -129,5 +122,3 @@ ITStatus LPC_GetINTStatusConfig(LPC_TypeDef *LPCx, uint32_t LPC_INT)
     /* Return the LPC_INT status */
     return  int_status;
 }
-/******************* (C) COPYRIGHT 2023 Realtek Semiconductor Corporation *****END OF FILE****/
-

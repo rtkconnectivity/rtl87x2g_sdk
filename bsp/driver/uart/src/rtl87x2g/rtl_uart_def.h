@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* \file     rtl_uart_def.h
-* \brief    UART related definitions for RTL87x2G
-* \details
-* \author
-* \date     2023-11-15
-* \version  v1.1
-* *********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 #ifndef RTL_UART_DEF_H
 #define RTL_UART_DEF_H
@@ -117,6 +110,9 @@ typedef struct
                                  ((PERIPH) == UART3) || \
                                  ((PERIPH) == UART4) || \
                                  ((PERIPH) == UART5)) //!< Check if the input parameter is valid.
+
+#define UART_TX_FIFO_ADDR(UARTx)    (uint32_t)(&(((UART_TypeDef *)(UARTx))->UART_RBR_THR))
+#define UART_RX_FIFO_ADDR(UARTx)    (uint32_t)(&(((UART_TypeDef *)(UARTx))->UART_RBR_THR))
 
 /** End of UART_Declaration
   * \}

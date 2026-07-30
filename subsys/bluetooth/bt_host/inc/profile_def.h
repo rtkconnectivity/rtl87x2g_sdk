@@ -1,20 +1,9 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-  * @file    profile_def.h
-  * @brief   This file contains all the function prototypes for common GATT Server
-  *          and Client.
-  * @details
-  * @author
-  * @date
-  * @version
-  * *************************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
-/*============================================================================*
- *               Define to prevent recursive inclusion
- *============================================================================*/
 #ifndef PROFILE_DEF_H
 #define PROFILE_DEF_H
 

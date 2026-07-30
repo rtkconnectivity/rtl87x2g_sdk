@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
+
 #ifndef _STDLIB_CORECRT_H
 #define _STDLIB_CORECRT_H
 #include <stdlib.h>

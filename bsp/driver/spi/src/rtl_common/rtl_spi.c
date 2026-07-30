@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* \file     rtl_spi.c
-* \brief    This file provides all the Spi firmware functions.
-* \details
-* \author   yuzhuo_liu
-* \date     2023-10-17
-* \version  v1.0
-*********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 /*============================================================================*
  *                        Header Files
@@ -28,6 +21,15 @@
 #if SPI0_SUPPORT_MASTER_SLAVE
 extern void SPI_ConfigMasterSlave(SPIMode_Typedef SPI_Mode);
 #endif
+
+#if (SPI_SUPPORT_APH_BRIDGE_FOR_HIGH_SPEED == 1)
+extern void SPI_ConfigAPHBridge(SPI_TypeDef *SPIx);
+#endif
+
+#if (SPI0_SUPPORT_HS == 1)
+extern void SPI_SPI0AHBBridgeConfig(FunctionalState NewState);
+#endif
+
 /*============================================================================*
  *                           Public Functions
  *============================================================================*/
@@ -829,19 +831,6 @@ void SPI_GDMACmd(SPI_TypeDef *SPIx, SPIGdmaTransferRequests_TypeDef SPI_GDMAReq,
   * \brief  Change SPI speed daynamically.
   * \param  SPIx: Select the SPI peripheral. \ref SPI_Declaration
   * \param  precalser: Value of prescaler.
-  *         This parameter can be one of the following values:
-  *         \arg  SPI_BaudRatePrescaler_2
-  *         \arg  SPI_BaudRatePrescaler_4
-  *         \arg  SPI_BaudRatePrescaler_6
-  *         \arg  SPI_BaudRatePrescaler_8
-  *         \arg  SPI_BaudRatePrescaler_10
-  *         \arg  SPI_BaudRatePrescaler_12
-  *         \arg  SPI_BaudRatePrescaler_14
-  *         \arg  SPI_BaudRatePrescaler_16
-  *         \arg  SPI_BaudRatePrescaler_32
-  *         \arg  SPI_BaudRatePrescaler_64
-  *         \arg  SPI_BaudRatePrescaler_128
-  *         \arg  SPI_BaudRatePrescaler_256
   * \return None.
   */
 void SPI_ChangeClock(SPI_TypeDef *SPIx, uint32_t prescaler)
@@ -1035,6 +1024,4 @@ void SPI_TaskEventStsClear(SPI_TypeDef *SPIx, uint32_t te)
     SPIx->SPI_WRAP_TASK_STS |= BIT(te);
 }
 #endif
-
-/******************* (C) COPYRIGHT 2023 Realtek Semiconductor Corporation *****END OF FILE****/
 

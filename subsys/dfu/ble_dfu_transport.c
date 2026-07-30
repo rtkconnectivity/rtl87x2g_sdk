@@ -1,17 +1,8 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-   * @file      ble_dfu_transport.c
-   * @brief     Source file for using ble dfu transport
-   * @author    Grace
-   * @date      2023-12-06
-   * @version   v1.1
-   **************************************************************************************
-   * @attention
-   * <h2><center>&copy; COPYRIGHT 2023 Realtek Semiconductor Corporation</center></h2>
-   **************************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 /*============================================================================*
  *                              Header Files
@@ -206,10 +197,10 @@ static bool dfu_check_section_size(void)
 {
     uint32_t section_size = dfu_get_temp_ota_bank_img_size_by_img_id((IMG_ID)ota_struct.image_id);
 
-    if (ota_struct.image_total_length > section_size)
+    if (ota_struct.image_total_length + ota_struct.next_subimage_offset > section_size)
     {
-        DFU_PRINT_ERROR2("dfu_check_section_size: total size 0x%x, section size 0x%x",
-                         ota_struct.image_total_length, section_size);
+        DFU_PRINT_ERROR3("dfu_check_section_size: total size 0x%x, next_subimage_offset 0x%x, section size 0x%x",
+                         ota_struct.image_total_length, ota_struct.next_subimage_offset, section_size);
         return false;
     }
 
@@ -261,8 +252,7 @@ static void ble_dfu_clear_local(T_OTA_CLEAR_LOCAL_CAUSE cause)
 
 /**
     * @brief  timeout callback for ota
-    * @param  timer_id  timer id
-    * @param  timer_chann  time channel
+    * @param  p_xtimer  timer handle
     * @return void
     */
 static void ble_dfu_timeout_cb(void *p_xtimer)
@@ -333,27 +323,6 @@ static uint8_t ble_dfu_cp_start_dfu_handle(uint8_t *p_data) //0x01
                      ota_struct.image_total_length
                     );
 
-    if (dfu_check_section_size() == false)
-    {
-        DFU_PRINT_ERROR0("ble_dfu_cp_start_dfu_handle: Image is oversize");
-        results = DFU_ARV_FAIL_INVALID_PARAMETER;
-        return results;
-    }
-
-    if (ota_struct.force_temp_mode)
-    {
-        //force_enable_ota_temp(true);
-    }
-
-    if ((!is_ota_support_bank_switch() && ota_struct.image_id == IMG_OTA)
-        || ota_struct.image_id < IMG_DFU_FIRST
-        || ((ota_struct.image_id >= IMG_DFU_MAX) &&
-            (ota_struct.image_id < IMG_USER_DATA_FIRST)))
-    {
-        results = DFU_ARV_FAIL_INVALID_PARAMETER;
-        return results;
-    }
-
 #if (SUPPORT_BL_COPY_SECURE_IMAGE == 1)
     if (is_ota_support_bank_switch())
     {
@@ -390,6 +359,27 @@ static uint8_t ble_dfu_cp_start_dfu_handle(uint8_t *p_data) //0x01
     }
 #endif
 
+    if (dfu_check_section_size() == false)
+    {
+        DFU_PRINT_ERROR0("ble_dfu_cp_start_dfu_handle: Image is oversize");
+        results = DFU_ARV_FAIL_INVALID_PARAMETER;
+        return results;
+    }
+
+    if (ota_struct.force_temp_mode)
+    {
+        //force_enable_ota_temp(true);
+    }
+
+    if ((!is_ota_support_bank_switch() && ota_struct.image_id == IMG_OTA)
+        || ota_struct.image_id < IMG_DFU_FIRST
+        || ((ota_struct.image_id >= IMG_DFU_MAX) &&
+            (ota_struct.image_id < IMG_USER_DATA_FIRST)))
+    {
+        results = DFU_ARV_FAIL_INVALID_PARAMETER;
+        return results;
+    }
+
     ota_struct.ota_flag.is_ota_process = true;
     ota_struct.ota_temp_buf_used_size = 0;
     ota_struct.cur_offset = 0;
@@ -412,9 +402,9 @@ static uint8_t ble_dfu_cp_start_dfu_handle(uint8_t *p_data) //0x01
 }
 
 /**
-    * @brief    Valid the image
-    * @param    p_date     point of input data
-    * @return   valid result
+    * @brief    Validate the image
+    * @param    p_data     point of input data
+    * @return   validate result
     */
 static uint8_t ble_dfu_cp_valid_handle(uint8_t *p_data) //0x03
 {
@@ -693,7 +683,7 @@ static void ble_dfu_cp_report_img_info_handle(uint8_t *p_data, uint8_t *p_notify
 }
 
 
-static void ble_dfu_cp_conn_para_update_handle(uint8_t *p_data, uint8_t *p_notify_data) //0x06
+static void ble_dfu_cp_conn_para_update_handle(uint8_t *p_data, uint8_t *p_notify_data) //0x07
 {
     uint16_t conn_interval_min;
     uint16_t conn_interval_max;
@@ -737,7 +727,7 @@ static void ble_dfu_cp_conn_para_update_handle(uint8_t *p_data, uint8_t *p_notif
     }
 
 
-    DFU_PRINT_TRACE2("ble_dfu_cp_report_img_info_handle: cur_offset=0x%x, buffer_check_offset=0x%x",
+    DFU_PRINT_TRACE2("ble_dfu_cp_conn_para_update_handle: cur_offset=0x%x, buffer_check_offset=0x%x",
                      ota_struct.cur_offset, ota_struct.buffer_check_offset);
 }
 /**
@@ -761,12 +751,12 @@ static void ble_dfu_cp_buffer_check_en_handle(uint8_t *p_notify_data,
     while (ota_struct.p_ota_temp_buf_head == NULL)
     {
         ota_struct.buffer_size = max_buffer_size >> size_factor;
-        ota_struct.p_ota_temp_buf_head = (uint8_t *)malloc(ota_struct.buffer_size);
-        size_factor ++;
-        if (ota_struct.buffer_size <= 0)
+        if (ota_struct.buffer_size == 0)
         {
             break;
         }
+        ota_struct.p_ota_temp_buf_head = (uint8_t *)malloc(ota_struct.buffer_size);
+        size_factor++;
     }
 
     if (ota_struct.p_ota_temp_buf_head == NULL
@@ -776,7 +766,7 @@ static void ble_dfu_cp_buffer_check_en_handle(uint8_t *p_notify_data,
     }
     p_notify_data[0] = ota_struct.ota_flag.buffer_check_en;
     LE_UINT16_TO_ARRAY(&p_notify_data[1], ota_struct.buffer_size);
-    //LE_UINT16_TO_ARRAY(&p_notify_data[3], ota_struct.mtu_size);  //ota verion =4, is rsvd val
+    //LE_UINT16_TO_ARRAY(&p_notify_data[3], ota_struct.mtu_size);  //ota version =4, is rsvd val
 
     DFU_PRINT_TRACE2("ble_dfu_cp_buffer_check_en: buffer_check_en=%d, buffer_size=%d",
                      ota_struct.ota_flag.buffer_check_en, ota_struct.buffer_size);
@@ -1105,7 +1095,7 @@ static void ble_dfu_cp_check_sha256_handle(uint8_t *p_data, uint8_t *p_notify_da
     for (uint16_t i = 0; i < num; i++)
     {
         memset(buffer, 0, sizeof(buffer));
-        *(uint16_t *)buffer = p_src->img_id;
+        LE_UINT16_TO_ARRAY(buffer, p_src->img_id);
 
         img_addr[0] = (T_IMG_HEADER_FORMAT *)dfu_get_temp_ota_bank_img_addr_by_img_id(p_src->img_id);
         img_addr[1] = (T_IMG_HEADER_FORMAT *)get_header_addr_by_img_id(p_src->img_id);
@@ -1118,7 +1108,7 @@ static void ble_dfu_cp_check_sha256_handle(uint8_t *p_data, uint8_t *p_notify_da
                 buffer[2] += (j + 1);
             }
         }
-        DFU_PRINT_TRACE2("<===ble_dfu_cp_check_sha256_handle: img_id=0x%x, check resut=%x",
+        DFU_PRINT_TRACE2("<===ble_dfu_cp_check_sha256_handle: img_id=0x%x, check result=%x",
                          *(uint16_t *)buffer, buffer[2]);
 
         memcpy(p_notify_data, buffer, sizeof(buffer));
@@ -1660,8 +1650,9 @@ T_APP_RESULT ble_dfu_service_handle_cp_req(uint8_t conn_id, uint16_t length, uin
     case DFU_OPCODE_CHECK_SHA256:
         {
             uint8_t notif_data[DFU_NOTIFY_LEN_CHECK_SHA256] = {0};
-            uint16_t num = *(uint16_t *)p;
-            DFU_PRINT_TRACE1("ble_dfu_service_handle_cp_req: CHECK SHA2556 num=%d", num);
+            uint16_t num;
+            LE_ARRAY_TO_UINT16(num, p);
+            DFU_PRINT_TRACE1("ble_dfu_service_handle_cp_req: CHECK SHA256 num=%d", num);
 
             cause = APP_RESULT_SUCCESS;
             ble_dfu_cp_check_sha256_handle(p, notif_data);
@@ -1702,7 +1693,7 @@ T_APP_RESULT ble_dfu_service_handle_cp_req(uint8_t conn_id, uint16_t length, uin
         }
         break;
     default:
-        DFU_PRINT_ERROR1("ble_dfu_service_handle_cp_req, opcode not expected", opcode);
+        DFU_PRINT_ERROR1("ble_dfu_service_handle_cp_req: opcode 0x%x not expected", opcode);
         break;
     }
 

@@ -1,18 +1,8 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2024, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-  * @file    crypto_engine_nsc.h
-  * @brief
-  * @author
-  * @date    2024.7.17
-  * @version v1.0
-   **************************************************************************************
-   * @attention
-   * <h2><center>&copy; COPYRIGHT 2024 Realtek Semiconductor Corporation</center></h2>
-   * *************************************************************************************
-  */
-
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 /*============================================================================*
  *                      Define to prevent recursive inclusion
@@ -22,6 +12,10 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /** @defgroup CRYPTO_ENGINE Crypto Engine
   * @brief
@@ -122,6 +116,57 @@ typedef struct
   * @brief
   * @{
   */
+/**
+ * @brief  Enable or disable the PKE hardware clock.
+ * @param[in]  enable    Set to true to enable the PKE clock, false to disable.
+ */
+void hw_pke_clock(bool enable);
+
+/**
+ * @brief  Initialize the PKE hardware module.
+ * @param[in]  byte_swap_en   Enable byte swap if true.
+ * @param[in]  word_swap_en   Enable word swap if true.
+ * @param[in]  word_swap_base Base address for word swap.
+ */
+void hw_pke_init(bool byte_swap_en, bool word_swap_en, uint32_t word_swap_base);
+
+/**
+ * @brief  Initialize the ECC hardware engine.
+ * @param[in]  key_bits        Size of the key in bits.
+ * @param[in]  mode            ECC operation mode. See @ref PKE_MODE.
+ * @param[in]  go_to_end_loop  Specify whether to force computation to run to the end.
+ * @param[in]  RR_mod_n_ready  Specify whether RR mod n is ready.
+ */
+void hw_ecc_init(uint32_t key_bits, PKE_MODE mode, bool go_to_end_loop, bool RR_mod_n_ready);
+
+/**
+ * @brief  Set a single ECC operand to the hardware engine.
+ * @param[in]  operand_addr  Target hardware register address for the operand.
+ * @param[in]  operands      Pointer to the operand buffer.
+ * @param[in]  byte_len      Size of the operand in bytes.
+ */
+void hw_ecc_set_sub_operand(uint32_t operand_addr, uint32_t *operands, uint32_t byte_len);
+
+/**
+ * @brief  Set all operands required for the ECC operation.
+ * @param[in]  grp         Pointer to the ECC group structure.
+ * @param[in]  e           Pointer to the buffer of scalar or hash value.
+ * @param[in]  e_byte_size Size of e in bytes.
+ * @return                 true if operands are set successfully, false otherwise.
+ * @retval true            Operands are set successfully.
+ * @retval false           Failed to set operands. Please check input parameters.
+ */
+bool hw_ecc_set_all_operands(ECC_GROUP *grp, uint32_t *e, uint32_t e_byte_size);
+
+/**
+ * @brief  Start the ECC computation and get the result.
+ * @param[out]  result       Pointer to the result buffer.
+ * @param[in]   output_addr  Output address in hardware for the result.
+ * @param[in]   func_id      Function ID specifying computation type.
+ * @return                   Error code of the ECC computation. 0 for success, others for specific errors.
+ */
+ERR_CODE hw_ecc_compute(void *result, uint32_t output_addr, uint16_t func_id);
+
 /**
  * @brief  Hardware sha256 process.
  * @param[in]  input    The addr of input buffer.
@@ -374,5 +419,9 @@ bool hw_sha256_finish(HW_SHA256_CTX *ctx, uint32_t *result);
 /** End of CRYPTO_ENGINE
   * @}
   */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

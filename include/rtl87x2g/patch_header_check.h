@@ -1,19 +1,8 @@
-/**
-  ******************************************************************************
-  * @file    patch_header_check.h
-  * @author
-  * @version V0.0.1
-  * @date    2017-09-01
-  * @brief   This file contains all the functions regarding patch header check.
-  ******************************************************************************
-  * @attention
-  *
-  * This module is a confidential and proprietary property of RealTek and
-  * possession or use of this module requires written permission of RealTek.
-  *
-  * Copyright(c) 2017, Realtek Semiconductor Corporation. All rights reserved.
-  ******************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 #ifndef _PATCH_HEADER_CHECK_NSC_H_
 #define _PATCH_HEADER_CHECK_NSC_H_

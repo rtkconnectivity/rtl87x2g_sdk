@@ -1,17 +1,9 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2021, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* @file      gap_past_recipient.h
-* @brief     Header file for GAP PAST recipient
-* @details
-* @author
-* @date      2021-07-12
-* @version   v0.8
-* *********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
-/* Define to prevent recursive inclusion **/
 #ifndef GAP_PAST_RECIPIENT_H
 #define GAP_PAST_RECIPIENT_H
 

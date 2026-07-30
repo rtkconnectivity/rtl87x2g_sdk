@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* \file     rtl_aon_qdec.h
-* \brief    The header file of the peripheral AON_AON_QDEC driver.
-* \details  This file provides all AON_AON_QDEC firmware functions.
-* \author   Grace_yan
-* \date     2023-10-17
-* \version  v1.0
-* *********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 /*============================================================================*
  *               Define to prevent recursive inclusion
@@ -235,6 +228,13 @@ typedef struct
   * \brief
   * \{
   */
+
+/**
+  * \brief  Reset AON QDEC.
+  *
+  * \param[in]  None
+  */
+void AON_QDEC_DeInit(void);
 
 /**
  * \brief   Initialize the AON_QDEC peripheral according to the specified
@@ -501,5 +501,4 @@ void AON_QDEC_CounterPauseCmd(AON_QDEC_TypeDef *AON_QDECx, uint32_t AON_QDEC_AXI
 #endif /* RTL_AON_QDEC_H */
 
 
-/******************* (C) COPYRIGHT 2023 Realtek Semiconductor *****END OF FILE****/
 

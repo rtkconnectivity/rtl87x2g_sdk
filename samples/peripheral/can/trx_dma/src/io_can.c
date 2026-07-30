@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2022, Realtek Semiconductor Corporation. All rights reserved.
-**********************************************************************************************************
-* @file      io_can.c
-* @brief     This file provides all the test code for CAN bus firmware functions.
-* @details
-* @author
-* @date      2023-07-17
-* @version  v1.0
-*********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 /*============================================================================*
  *                              Header Files
@@ -110,6 +103,7 @@ void can_dma_rx(void)
     rx_frame_type.frame_id_mask = CAN_FRAME_ID_MASK_MAX_VALUE;
     rx_frame_type.rx_dma_en = SET;
     rx_frame_type.auto_reply_bit = RESET;
+    rx_frame_type.rx_msg_buf_enable = SET;
     rx_error = CAN_SetMsgBufRxMode(&rx_frame_type);
 
     CAN_MBRxINTConfig(rx_frame_type.msg_buf_id, ENABLE);
@@ -226,7 +220,7 @@ void can_dma_tx(void)
     tx_can_ram_struct.u_CAN_RAM_MASK.CAN_RAM_MASK_BITS.b.can_ram_id_mask = 0;
 
     tx_can_ram_struct.u_CAN_RAM_CS.CAN_RAM_CS_BITS.b.can_ram_rxtx = SET;
-    tx_can_ram_struct.u_CAN_RAM_CS.CAN_RAM_CS_BITS.b.can_ram_edl = RESET;
+    tx_can_ram_struct.u_CAN_RAM_CS.CAN_RAM_CS_BITS.b.reset = 0;
     tx_can_ram_struct.u_CAN_RAM_CS.CAN_RAM_CS_BITS.b.can_ram_dlc = CAN_DLC_BYTES_8;
 
     tx_can_ram_struct.u_CAN_RAM_CMD.CAN_RAM_CMD_BITS.b.can_ram_start = SET;
@@ -401,8 +395,7 @@ void CAN_Handler(void)
                     memset(rx_data, 0, 8);
                     CAN_GetRamData(mb_info.data_length, rx_data);
 
-                    CANDataFrameSel_TypeDef frame_type = CAN_CheckFrameType(mb_info.rtr_bit, mb_info.ide_bit,
-                                                                            mb_info.edl_bit);
+                    CANDataFrameSel_TypeDef frame_type = CAN_CheckFrameType(mb_info.rtr_bit, mb_info.ide_bit);
 
                     DBG_DIRECT("[CAN HANDLER]  frame_type %d, frame_id = 0x%03x, ext_frame_id = 0x%05x", \
                                frame_type, mb_info.standard_frame_id, mb_info.extend_frame_id);
@@ -486,5 +479,5 @@ void TX_GDMA_Channel_Handler(void)
     GDMA_ClearINTPendingBit(TX_GDMA_CHANNEL_NUM, GDMA_INT_Transfer);
 }
 
-/******************* (C) COPYRIGHT 2022 Realtek Semiconductor Corporation *****END OF FILE****/
+
 

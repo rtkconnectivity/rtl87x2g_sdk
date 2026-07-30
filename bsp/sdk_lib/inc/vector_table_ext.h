@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2015, Realtek Semiconductor Corporation. All rights reserved.
-**********************************************************************************************************
-* @file     vector_table_ext.h
-* @brief    Non-secure Vector table extension implementation header file
-* @details
-* @author   Grace
-* @date     2021-9-02
-* @version  v1.0
-*********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 #include <stdbool.h>
 #include "vector_table.h"

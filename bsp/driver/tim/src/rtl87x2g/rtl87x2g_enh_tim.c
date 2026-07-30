@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2024, Realtek Semiconductor Corporation. All rights reserved.
-**********************************************************************************************************
-* \file     rtl87x2g_enh_tim.c
-* \brief    This file provides all the ENHTIM firmware internal functions.
-* \details
-* \author   Bert
-* \date     2024-08-01
-* \version  v1.0
-*********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 /*============================================================================*
  *                        Header Files
@@ -310,5 +303,4 @@ void ENHTIM_DLPSExit(void *PeriReg, void *StoreBuf)
     ENH_TIM3_PWM->ENHTIMER_PWM_CFG = store_buf->enhpwm_reg[3];
 }
 
-/******************* (C) COPYRIGHT 2024 Realtek Semiconductor Corporation *****END OF FILE****/
 

@@ -1,5 +1,7 @@
 /*
- * Copyright (c) 2018, Realtek Semiconductor Corporation. All rights reserved.
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 #ifndef _APP_MSG_H_
@@ -126,6 +128,10 @@ typedef enum
     IO_MSG_TYPE_CAN_SEND,
     IO_MSG_TYPE_CAN_RECEIVE,
     IO_MSG_TYPE_ELECTRIC_METER,
+    IO_MSG_TYPE_GUI,
+    IO_MSG_TYPE_ESL_COMMS,
+    IO_MSG_TYPE_PERIPHERALS_HAL,
+    IO_MSG_TYPE_ZB_LIGHT,        /**< Zigbee light control message */
 } T_IO_MSG_TYPE;
 
 /**  @brief IO subtype definitions for @ref T_IO_CONSOLE type */
@@ -152,6 +158,12 @@ typedef enum
     IO_MSG_UART_RX              = 0x10, /**< UART RX event */
 
     IO_MSG_UART_TX              = 0x20, /**< UART TX event */
+
+    IO_MSG_UART_RX_DONE         = 0x21, /**< UART RX done event */
+
+    IO_MSG_UART_DATA_PARSER_SUCCESS = 0x22, /**< UART data parser done event */
+
+    IO_MSG_UART_DATA_PARSER_FAILED = 0x23, /**< UART data parser done event */
 } T_IO_MSG_UART;
 
 /**  @brief IO subtype definitions for @ref IO_MSG_TYPE_GPIO type */
@@ -217,6 +229,13 @@ typedef enum
     IO_MSG_USB_WAKEUP_ENTER_DLPS,       /**< Trigger DONGLE Enter DLPS event */
     IO_MSG_USB_WAKEUP_EXIT_DLPS         /**< Notify  DONGLE Exit  DLPS event */
 } T_IO_MSG_USB_WAKEUP_EVENT;
+
+/**  @brief IO subtype definitions for @ref IO_MSG_TYPE_ZB_LIGHT type */
+typedef enum
+{
+    IO_MSG_ZB_LIGHT_ONOFF,  /**< Zigbee OnOff control, param = 0 (off) / 1 (on) */
+    IO_MSG_ZB_LIGHT_LEVEL,  /**< Zigbee Level control, param = level value (0-254) */
+} T_IO_MSG_ZB_LIGHT;
 
 /**  @brief IO message definition for communications between tasks*/
 typedef struct

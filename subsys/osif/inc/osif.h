@@ -1,5 +1,7 @@
 /*
- * Copyright (c) 2015, Realsil Semiconductor Corporation. All rights reserved.
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 #ifndef _OSIF_H_
@@ -154,4 +156,3 @@ extern void os_pm_func_init(void);
 #endif
 
 #endif /* _OSIF_H_ */
-

@@ -1,19 +1,9 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2016, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-  * @file    gap_le_types.h
-  * @brief   This file contains all the constants and functions prototypes for GAP protocol.
-  * @details This file is used for both BR/EDR and LE.
-  * @author  jane
-  * @date    2016-02-18
-  * @version v1.0
-  * *************************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
-/*============================================================================*
- *               Define to prevent recursive inclusion
- *============================================================================*/
 #ifndef GAP_LE_TYPES_H
 #define GAP_LE_TYPES_H
 
@@ -90,8 +80,8 @@ extern "C"
 #define GAP_ADTYPE_SM_OOB_FLAG                  0x11 //!< Security Manager OOB Flags.
 #define GAP_ADTYPE_SLAVE_CONN_INTERVAL_RANGE    0x12 //!< Minimum and Maximum values of the connection interval (2 octets Minimum, 2 octets Maximum) (0xFFFF indicates no conn interval minimum or maximum).
 #define GAP_ADTYPE_SIGNED_DATA                  0x13 //!< Signed Data field.
-#define GAP_ADTYPE_SERVICES_LIST_16BIT          0x14 //!< Service Solicitation: list of 16-bit Service UUIDs.
-#define GAP_ADTYPE_SERVICES_LIST_128BIT         0x15 //!< Service Solicitation: list of 128-bit Service UUIDs.
+#define GAP_ADTYPE_SERVICES_LIST_16BIT          0x14 //!< Service Solicitation: List of 16-bit Service UUIDs.
+#define GAP_ADTYPE_SERVICES_LIST_128BIT         0x15 //!< Service Solicitation: List of 128-bit Service UUIDs.
 #define GAP_ADTYPE_SERVICE_DATA                 0x16 //!< Service Data.
 #define GAP_ADTYPE_PUBLIC_TGT_ADDR              0x17 //!< Public Target Address.
 #define GAP_ADTYPE_RANDOM_TGT_ADDR              0x18 //!< Random Target Address.
@@ -111,11 +101,11 @@ extern "C"
 #define GAP_ADTYPE_TRANSPORT_DISCOVERY_DATA     0x26 //!< Transport Discovery Data.
 #define GAP_ADTYPE_LE_SUPPORTED_FEATURES        0x27 //!< LE Supported Features.
 #define GAP_ADTYPE_CHAN_MAP_UPDATE_IND          0x28 //!< Channel Map Update Indication.
-#define GAP_ADTYPE_MESH_PB_ADV                  0x29 //!< Mesh Pb-ADV.
+#define GAP_ADTYPE_MESH_PB_ADV                  0x29 //!< Mesh PB-ADV.
 #define GAP_ADTYPE_MESH_PACKET                  0x2A //!< Mesh Packet.
 #define GAP_ADTYPE_MESH_BEACON                  0x2B //!< Mesh Beacon.
 #define GAP_ADTYPE_3D_INFO_DATA                 0x3D //!< 3D Information Data.
-#define GAP_ADTYPE_MANUFACTURER_SPECIFIC        0xFF //!< Manufacturer Specific Data: first 2 octets contain the Company Identifier Code followed by the additional manufacturer specific data.
+#define GAP_ADTYPE_MANUFACTURER_SPECIFIC        0xFF //!< Manufacturer Specific Data: First 2 octets contain the Company Identifier Code followed by the additional manufacturer specific data.
 /** End of ADV_DATA_TYPE
   * @}
   */
@@ -232,27 +222,27 @@ parameters for the LE Coded PHY are provided.*/
 /** @brief Define local address type */
 typedef enum
 {
-    GAP_LOCAL_ADDR_LE_PUBLIC           = 0x00,    /**<  Bluetooth low energy public address. */
-    GAP_LOCAL_ADDR_LE_RANDOM           = 0x01,    /**<  Bluetooth low energy random address. */
+    GAP_LOCAL_ADDR_LE_PUBLIC           = 0x00,    /**<  Public Device Address. */
+    GAP_LOCAL_ADDR_LE_RANDOM           = 0x01,    /**<  Random Device Address. */
     GAP_LOCAL_ADDR_LE_RAP_OR_PUBLIC    = 0x02,    /**< Controller generates the Resolvable Private Address based on the local
 IRK from the resolving list. If the resolving list contains no matching entry, then use the public address. */
     GAP_LOCAL_ADDR_LE_RAP_OR_RAND      = 0x03     /**< Controller generates the Resolvable Private Address based on the local
-IRK from the resolving list. If the resolving list contains no matching entry, then use the random address from the most recent successful LE_Set_Random_Address Command. */
+IRK from the resolving list. If the resolving list contains no matching entry, then use the random address. */
 } T_GAP_LOCAL_ADDR_TYPE;
 
 /** @brief Define random address type */
 typedef enum
 {
-    GAP_RAND_ADDR_STATIC            = 0x00,/**<  Static random device address. */
-    GAP_RAND_ADDR_NON_RESOLVABLE    = 0x01,/**<  Non resolvable random device address. */
-    GAP_RAND_ADDR_RESOLVABLE        = 0x02 /**<  Resolvable random device address. */
+    GAP_RAND_ADDR_STATIC            = 0x00,/**<  Static device address. */
+    GAP_RAND_ADDR_NON_RESOLVABLE    = 0x01,/**<  Non-resolvable private address. */
+    GAP_RAND_ADDR_RESOLVABLE        = 0x02 /**<  Resolvable private address. */
 } T_GAP_RAND_ADDR_TYPE;
 
 /** @brief Define identity address type */
 typedef enum
 {
-    GAP_IDENT_ADDR_PUBLIC      = 0x00,    /**<  Low energy public address. */
-    GAP_IDENT_ADDR_RAND        = 0x01,    /**<  Low energy random address. */
+    GAP_IDENT_ADDR_PUBLIC      = 0x00,    /**< Identity Address Information uses public device address. */
+    GAP_IDENT_ADDR_RAND        = 0x01,    /**< Identity Address Information uses static random address. */
 } T_GAP_IDENT_ADDR_TYPE;
 
 /** @brief  Definition of LE direct address type.*/
@@ -260,7 +250,7 @@ typedef enum
 {
     GAP_DIRECT_ADDR_LE_PUBLIC              = 0x00, /**<  Public Device Address (default). */
     GAP_DIRECT_ADDR_LE_RAND                = 0x01, /**<  Random Device Address. */
-    GAP_DIRECT_ADDR_LE_PUBLIC_IDENT        = 0x02, /**<  Public Identity Address (Corresponds to Resolved Private Address ). */
+    GAP_DIRECT_ADDR_LE_PUBLIC_IDENT        = 0x02, /**<  Public Identity Address (Corresponds to Resolved Private Address). */
     GAP_DIRECT_ADDR_LE_RAND_IDENT          = 0x03, /**<  Random (static) Identity Address (Corresponds to Resolved Private Address). */
     GAP_DIRECT_ADDR_LE_RAND_UNABLE_RESOLV  = 0xFE  /**<  No address provided (anonymous advertisement). */
 } T_GAP_DIRECT_ADDR_TYPE;
@@ -314,9 +304,9 @@ where the initiator's identity address does not address this device.
 
 Directed advertising packets where the initiator's address is a resolvable private address that cannot be resolved are also accepted. */
     GAP_SCAN_FILTER_WHITE_LIST_RPA = 0x03,/**<  Accept all advertising packets except:
-- advertising packets where the advertiser's identity address is not in
+- Advertising packets where the advertiser's identity address is not in
 the Filter Accept List;
-- directed advertising packets where the initiator's identity address does not address this device.
+- Directed advertising packets where the initiator's identity address does not address this device.
 
 Directed advertising packets where the initiator's address is a
 resolvable private address that cannot be resolved are also accepted. */

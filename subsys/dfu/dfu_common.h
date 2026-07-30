@@ -1,17 +1,8 @@
-/**
-*****************************************************************************************
-*     Copyright (c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-   * @file      dfu_common.h
-   * @brief     Header file for using dfu common
-   * @author    Grace
-   * @date      2023-12-06
-   * @version   v1.1
-   **************************************************************************************
-   * @attention
-   * <h2><center>&copy; COPYRIGHT 2023 Realtek Semiconductor Corporation</center></h2>
-   **************************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 /*============================================================================*
  *                      Define to prevent recursive inclusion
@@ -197,6 +188,7 @@ uint32_t dfu_flash_erase(IMG_ID image_id, uint32_t offset);
  * @param[in]    image_id  The identifier of the image.
  * @param[in]    offset    Offset of the current image.
  * @param[in]    total_offset  Total offset of the image in OTA TEMP area.
+ * @param[in]    length    Length of the data to be written.
  * @param[in]    p_void    Pointer to the data to be written.
  * @return   0 on success, non-zero on failure.
  */

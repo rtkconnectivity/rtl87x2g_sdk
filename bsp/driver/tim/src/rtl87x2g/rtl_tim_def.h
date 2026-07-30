@@ -1,15 +1,8 @@
-/**
-**********************************************************************************************************
-*               Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-**********************************************************************************************************
-* @file     rtl_tim_def.h
-* @brief    TIMER related definitions for RTL87x2G
-* @details
-* @author   grace_ysn
-* @date     2023.02.17
-* @version  v1.0.0
-*********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 #ifndef RTL_TIM_DEF_H
 #define RTL_TIM_DEF_H
@@ -172,6 +165,8 @@ typedef struct
 
 #define TIMER_PWM_CLK_CR         *((volatile uint32_t *)0x4000232CUL)
 #define TIMER_PWM_CR             *((volatile uint32_t *)0x4000233CUL)
+#define TIM_GetCurrentControl(TIMx)      (((TIM_TypeDef *)(TIMx))->TIMER_CONTROLREG)
+#define TIM_GetCurrentLoadCnt(TIMx)      (((TIM_TypeDef *)(TIMx))->TIMER_LOADCOUNT)
 
 
 /*============================================================================*

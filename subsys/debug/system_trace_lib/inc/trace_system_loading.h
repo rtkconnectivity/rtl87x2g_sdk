@@ -1,15 +1,8 @@
-/**
-************************************************************************************************************
-*               Copyright(c) 2016, Realtek Semiconductor Corporation. All rights reserved.
-************************************************************************************************************
-* @file     rtl876x_lib_platform.h
-* @brief
-* @details
-* @author
-* @date
-* @version
-*************************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 #ifndef _TRACE_SYSTEM_LOADING_H_
 #define _TRACE_SYSTEM_LOADING_H_
@@ -22,13 +15,9 @@
 extern "C" {
 #endif
 
-
 void trace_system_loading_init(void);
-
 void get_system_loading(void);
-
 void reset_system_loading(void);
-
 
 #ifdef __cplusplus
 }

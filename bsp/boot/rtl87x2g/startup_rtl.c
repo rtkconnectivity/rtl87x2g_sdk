@@ -1,18 +1,8 @@
-/**
-  *************************************************************************************************
-  * @file    startup_rtl8762x.c
-  * @author  Grace
-  * @version V0.0.1
-  * @date    2020-11-04
-  * @brief   Startup File for ARMv8MML Device
-  *************************************************************************************************
-  * @attention
-  *
-  * This module is a confidential and proprietary property of RealTek and
-  * possession or use of this module requires written permission of RealTek.
-  *
-  * Copyright(c) 2020, Realtek Semiconductor Corporation. All rights reserved.
-  *************************************************************************************************/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 #include <string.h>
 #include "mem_config.h"
@@ -415,7 +405,7 @@ __attribute__((used)) const IRQ_Fun RamVectorTable_app[] __attribute__((
     GPIOB30_Handler,
     GPIOB31_Handler,
 };
-/**  static check VECTOR_TABLE_ITEMS value must be equal MAX_VECTORn but also sizeof(secure RamVectorTable)/4
+/**  static check VECTOR_TABLE_ITEMS value must be equal to MAX_VECTORn but also sizeof(secure RamVectorTable)/4
  *   To save code size, non-secure ram vector table must occupy the same size as secure ram vector
  *   the interrupt handlers will be initialized by update vector API.
 **/

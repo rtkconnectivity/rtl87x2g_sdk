@@ -1,19 +1,9 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2020, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* @file      gap_aox.h
-* @brief    Header file for GAP AoA/AoD
-* @details
-* @author
-* @date      2020-06-18
-* @version   v0.8
-* *********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
-/*============================================================================*
- *               Define to prevent recursive inclusion
- *============================================================================*/
 #ifndef GAP_AOX_H
 #define GAP_AOX_H
 
@@ -71,7 +61,7 @@ extern "C"
 
 #define GAP_MSG_LE_AOX_CONNLESS_TRANSMITTER_SET_CTE_TRANSMIT_PARAMS  0x40 /**< Response msg type for @ref le_aox_connless_transmitter_set_cte_transmit_params.
                                                                                The structure of callback data is @ref T_LE_AOX_CONNLESS_TRANSMITTER_SET_CTE_TRANSMIT_PARAMS_RSP. */
-#define GAP_MSG_LE_AOX_CONNLESS_TRANSMITTER_STATE_CHANGE_INFO        0x41 /**< Information msg type for Connectionless CTE transmitter state change.
+#define GAP_MSG_LE_AOX_CONNLESS_TRANSMITTER_STATE_CHANGE_INFO        0x41 /**< Information msg type for Connectionless CTE Transmitter state change.
                                                                                The structure of callback data is @ref T_LE_AOX_CONNLESS_TRANSMITTER_STATE_CHANGE_INFO. */
 
 #define GAP_MSG_LE_AOX_CONNLESS_RECEIVER_SET_IQ_SAMPLING_ENABLE      0x50 /**< Response msg type for @ref le_aox_connless_receiver_set_iq_sampling_enable.

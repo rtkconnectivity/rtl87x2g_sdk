@@ -1,17 +1,9 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2016, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* @file      gap_ext_scan.h
-* @brief     Header file for GAP ext scan
-* @details
-* @author    jane
-* @date      2016-02-18
-* @version   v1.0
-* *********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
-/* Define to prevent recursive inclusion **/
 #ifndef GAP_EXT_SCAN_H
 #define GAP_EXT_SCAN_H
 
@@ -169,7 +161,7 @@ typedef enum
  *
  * This function can be called with an extended scan parameter type @ref T_LE_EXT_SCAN_PARAM_TYPE and it will set the extended scan parameter.
  * The 'p_value' field must point to an appropriate data type that meets the requirements for the corresponding parameter type.
- * (For example: if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
+ * (For example, if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
  *
  * Combination of Duration parameter (@ref GAP_PARAM_EXT_SCAN_DURATION) and Period
  * parameter (@ref GAP_PARAM_EXT_SCAN_PERIOD) determines scan mode, please refer to below code about scan_mode.
@@ -235,7 +227,7 @@ T_GAP_CAUSE le_ext_scan_set_param(T_LE_EXT_SCAN_PARAM_TYPE param, uint8_t len, v
  *
  * This function can be called with an extended scan parameter type @ref T_LE_EXT_SCAN_PARAM_TYPE and it will get the extended scan parameter.
  * The 'p_value' field must point to an appropriate data type that meets the requirements for the corresponding parameter type.
- * (For example: if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
+ * (For example, if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
  *
  * @param[in]      param   Extended scan parameter type @ref T_LE_EXT_SCAN_PARAM_TYPE.
  * @param[in,out]  p_value Pointer to location to get the parameter value.

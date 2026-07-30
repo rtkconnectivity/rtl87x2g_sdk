@@ -1,19 +1,9 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2016, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* @file      gap_adv.h
-* @brief     Header file for GAP ADV
-* @details   This file defines advertising related API
-* @author    ranhui
-* @date      2016-02-18
-* @version   v1.0
-* *********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
-/*============================================================================*
- *               Define to prevent recursive inclusion
- *============================================================================*/
 #ifndef GAP_ADV_H
 #define GAP_ADV_H
 
@@ -96,7 +86,7 @@ typedef enum
  *
  * This function can be called with an advertising parameter type @ref T_LE_ADV_PARAM_TYPE and it will set the advertising parameter.
  * The 'p_value' field must point to an appropriate data type that meets the requirements for the corresponding parameter type.
- * (For example: if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
+ * (For example, if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
  *
  * @param[in]   param   @ref T_LE_ADV_PARAM_TYPE.
  * @param[in]   len     Length of data to write.
@@ -139,7 +129,7 @@ T_GAP_CAUSE le_adv_set_param(T_LE_ADV_PARAM_TYPE param, uint8_t len, void *p_val
  *
  * This function can be called with an advertising parameter type @ref T_LE_ADV_PARAM_TYPE and it will get the advertising parameter.
  * The 'p_value' field must point to an appropriate data type that meets the requirements for the corresponding parameter type.
- * (For example: if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
+ * (For example, if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
  *
  * @param[in]   param @ref T_LE_ADV_PARAM_TYPE.
  * @param[in,out]  p_value Pointer to location to get the value.

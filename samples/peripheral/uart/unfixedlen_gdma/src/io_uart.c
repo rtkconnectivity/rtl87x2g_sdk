@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2018, Realtek Semiconductor Corporation. All rights reserved.
-**********************************************************************************************************
-* @file     main.c
-* @brief    uart demo polling tx and rx.
-* @details
-* @author   yuan
-* @date     2018-06-28
-* @version  v0.1
-*********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 /* Includes ------------------------------------------------------------------*/
 #include <string.h>
@@ -227,7 +220,7 @@ void UART3_Handler(void)
         DBG_DIRECT("UART_FLAG_RX_IDLE");
 
         /*  Suspend GDMA_Channel2   */
-        GDMA_SuspendCmd(UART_RX_GDMA_CHANNEL, ENABLE);
+        GDMA_SafeSuspend(UART_RX_GDMA_CHANNEL);
         UART_INTConfig(UART3, UART_INT_RX_IDLE, DISABLE);
 
         data_len = GDMA_GetTransferLen(UART_RX_GDMA_CHANNEL);
@@ -247,33 +240,10 @@ void UART3_Handler(void)
                 //DBG_DIRECT("offset: %d, tx data is 0x%x", i, GDMA_Tx_Buf[i]);
             }
 
-#if NOT_ALLOW_DEINIT
-            uint32_t time_out = 0x1f;
-            while ((RESET == GDMA_GetSuspendChannelStatus(UART_RX_GDMA_CHANNEL)) && time_out)
-            {
-                time_out--;
-            }
-            time_out = 0x0f;
-            while ((RESET == GDMA_GetSuspendCmdStatus(UART_RX_GDMA_CHANNEL)) && time_out)
-            {
-                time_out--;
-            }
-            GDMA_Cmd(UART_RX_GDMA_CHANNEL_NUM, DISABLE);
-            GDMA_SuspendCmd(UART_RX_GDMA_CHANNEL, DISABLE);
-#else
-            GDMA_DeInit();
-#endif
-
-            driver_gdma4_init();
-            /* GDMA TX flag */
-            receiveflg = true;
         }
-        /* Run here if data length = N * GDMA_BLOCK_SIZE,  */
-        else
-        {
-            GDMA_SuspendCmd(UART_RX_GDMA_CHANNEL, DISABLE);
-            receiveflg = true;
-        }
+        /* DMA TX flag */
+        receiveflg = true;
+        driver_gdma4_init();
         UART_ClearRxFIFO(UART3);
         UART_INTConfig(UART3, UART_INT_RX_IDLE, ENABLE);
     }
@@ -378,4 +348,4 @@ void uart_demo(void)
     }
 }
 
-/******************* (C) COPYRIGHT 2018 Realtek Semiconductor Corporation *****END OF FILE****/
+

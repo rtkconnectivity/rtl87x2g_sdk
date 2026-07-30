@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* \file     rtl_pinmux.h
-* \brief    The header file of PAD and PINMUX driver.
-* \details  This file provides all PAD and PINMUX firmware functions.
-* \author   Bert
-* \date     2023-10-17
-* \version  v1.0.0
-* *******************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 /*============================================================================*
  *               Define to prevent recursive inclusion
@@ -1347,5 +1340,4 @@ void System_SetMFBWakeUpFunction(FunctionalState NewState);
 
 #endif /* RTL_PINMUX_H */
 
-/******************* (C) COPYRIGHT 2023 Realtek Semiconductor *****END OF FILE****/
 

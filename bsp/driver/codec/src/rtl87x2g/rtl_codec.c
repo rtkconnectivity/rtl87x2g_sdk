@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* \file     rtl_codec.c
-* \brief    This file provides all the CODEC firmware functions.
-* \details
-* \author   echo gao
-* \date     2023-10-17
-* \version  v1.0
-*********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 /*============================================================================*
  *                        Header Files
@@ -502,4 +495,3 @@ void CODEC_MICBIASCmd(CODEC_TypeDef *CODECx, FunctionalState NewState)
     CODEC->AUDIO_CONTROL_1 = codec_0x104.d32;
 }
 
-/******************* (C) COPYRIGHT 2023 Realtek Semiconductor Corporation *****END OF FILE****/

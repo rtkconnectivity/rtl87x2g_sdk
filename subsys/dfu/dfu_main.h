@@ -1,18 +1,8 @@
-/**
-**********************************************************************************************************
-*               Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-**********************************************************************************************************
-* @file     dfu_mian.h
-* @brief    normal ota APIs
-* @details
-* @author   Grace
-* @date     2023-12-06
-* @version  v1.1
-   **************************************************************************************
-   * @attention
-   * <h2><center>&copy; COPYRIGHT 2023 Realtek Semiconductor Corporation</center></h2>
-   **************************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 
 #ifndef _DFU_MAIN_H_
@@ -36,9 +26,9 @@
   */
 /* when start dfu will modify the value depend on dfu image total length.
 So this value is only need set based on the image size of 100KB */
-#define NORMAL_OTA_TIMEOUT_TOTAL               240  //uint: second
-//This value won't be modofy
-#define NORMAL_OTA_TIMEOUT_WAIT4_CONN          60   //uint: second
+#define NORMAL_OTA_TIMEOUT_TOTAL               240  //unit: second
+//This value won't be modified
+#define NORMAL_OTA_TIMEOUT_WAIT4_CONN          60   //unit: second
 
 /** End of DFU_MAIN_Exported_Macros
   * @}

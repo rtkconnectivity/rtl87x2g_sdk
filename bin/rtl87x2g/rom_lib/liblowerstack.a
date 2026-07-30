@@ -27,5 +27,6 @@ vhci_open = 0x0013f7b0 ;
 vhci_send = 0x0013f7b4 ;
 Bzdma_Manager = 0x0013fb54 ;
 g_modem_psd_report_array = 0x0013ffd8 ;
+low_task_handle = 0x00140f84 ;
 rcp_BB_handle_psd_end_intr_func = 0x00141218 ;
 rcp_BTMAC_Handler = 0x00141230 ;

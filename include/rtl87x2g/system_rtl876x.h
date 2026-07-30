@@ -1,18 +1,8 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2016, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-  * @file    System_rtl876x_ns.h
-  * @brief   CMSIS Device System Header file
-  * @details CMSIS Device System Header File for RTL876x Device Series
-  * @author
-  * @date    3. March 2016
-  * @version v1.0
-  * *************************************************************************************
-   * @attention
-   * <h2><center>&copy; COPYRIGHT 2016 Realtek Semiconductor Corporation</center></h2>
-   * ************************************************************************************
-   */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 /*============================================================================*
  *                      Define to prevent recursive inclusion
@@ -39,7 +29,7 @@ extern "C" {
 /*============================================================================*
  *                      Types
  *============================================================================*/
-/** @defgroup SYSTEM_RTL876X_Exported_types System RTL876x Exported types
+/** @defgroup SYSTEM_RTL876X_Exported_types System RTL876x Exported Types
   * @{
   */
 /* @brief Application main entry point function prototype. */
@@ -85,4 +75,3 @@ extern USER_CALL_BACK os_patch_init;
 #endif
 
 #endif /* SYSTEM_RTL876X_H */
-

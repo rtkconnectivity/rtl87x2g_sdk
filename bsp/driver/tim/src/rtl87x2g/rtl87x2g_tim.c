@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2024, Realtek Semiconductor Corporation. All rights reserved.
-**********************************************************************************************************
-* \file     rtl87x2g_tim.c
-* \brief    This file provides all the TIMER firmware internal functions.
-* \details
-* \author   Bert
-* \date     2024-08-01
-* \version  v1.0
-*********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 /*============================================================================*
  *                        Header Files
@@ -379,5 +372,4 @@ void TIM_DLPSExit(void *PeriReg, void *StoreBuf)
     PERIBLKCTRL_PERI_CLK->u_33C.REG_TIMER_PWM_WRAP_1_CFG = store_buf->tim_reg[28];
 }
 
-/******************* (C) COPYRIGHT 2024 Realtek Semiconductor Corporation *****END OF FILE****/
 

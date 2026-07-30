@@ -1,11 +1,7 @@
-/**
- * @copyright Copyright (C) 2023 Realtek Semiconductor Corporation.
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
  *
- * @file port_macro.h
- * @version 1.0
- * @brief
- *
- * @note:
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
  */
 #include "app_section.h"
 

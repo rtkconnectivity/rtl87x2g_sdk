@@ -1,15 +1,8 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2022, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-* @file
-* @brief
-* @author
-* @date
-* @version
-**************************************************************************************
-
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 /* Demo includes. */
 #include "stdlib.h"
 #include "app_section.h"

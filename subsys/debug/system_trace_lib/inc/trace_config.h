@@ -1,13 +1,9 @@
-/****************************************************************************************************//**
- * @file     trace_config.h
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
  *
- * @brief
- *
- * @version  v0.1
- * @date     2018-11-05
- *
- * @note
- *******************************************************************************************************/
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
+
 #ifndef _TRACE_CONFIG_H_
 #define _TRACE_CONFIG_H_
 
@@ -16,6 +12,7 @@
 #define TRACE_TIMER_EN                          1
 #define TRACE_QUEUE_EN                          1
 #define TRACE_SYSTEM_LOADING                    1
+#define TRACE_HARDFAULT                         1
 /******************* CONFIGURATION *******************/
 #define TRACE_PERIOD_TIME                       ( 10 * 1000 )
 
@@ -33,5 +30,3 @@ extern "C" {
 #endif
 
 #endif /*_TRACE_CONFIG_H_*/
-
-/******************* (C) COPYRIGHT 2015 Realtek Semiconductor Corporation *****END OF FILE****/

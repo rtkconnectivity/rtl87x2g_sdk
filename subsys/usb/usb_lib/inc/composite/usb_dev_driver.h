@@ -90,6 +90,13 @@ typedef struct _string_tab
 typedef bool (*USB_SPD_CB)(uint8_t);
 
 /**
+ *
+ * \brief   USB SOF callback.
+ *
+ */
+typedef void (*USB_SOF_CB)(void);
+
+/**
  * usb_dev_driver.h
  *
  * \brief   register USB speed callback.
@@ -99,6 +106,24 @@ typedef bool (*USB_SPD_CB)(uint8_t);
  */
 void usb_spd_cb_register(USB_SPD_CB cb);
 
+/**
+ * usb_dev_driver.h
+ *
+ * \brief   register USB SOF callback.
+ *
+ * \param USB_SOF_CB speed callbac \ref USB_SOF_CB.
+ *
+ */
+void usb_sof_cb_register(USB_SOF_CB cb);
+
+/**
+ * usb_dev_driver.h
+ *
+ * \brief Frame or Microframe Number of the Received SOF.
+ *
+ * \return The returned value range is 0-16383.
+ */
+uint32_t usb_get_frame_number(void);
 /**
  * usb_dev_driver.h
  *

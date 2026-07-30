@@ -1,19 +1,9 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2016, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-  * @file    gap_le.h
-  * @brief   This file contains all the constants and function prototypes for the GAP protocol.
-  * @details
-  * @author  jane
-  * @date    2016-02-18
-  * @version v1.0
-  * *************************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
-/*============================================================================*
- *               Define to prevent recursive inclusion
- *============================================================================*/
 #ifndef GAP_LE_H
 #define GAP_LE_H
 
@@ -211,7 +201,7 @@ void        le_register_app_cb(P_FUN_LE_APP_CB app_callback);
   *
   * This function can be called with a GAP LE Parameter type @ref T_GAP_LE_PARAM_TYPE and it will set the GAP LE parameter.
   * The 'p_value' field must point to an appropriate data type that meets the requirements for the corresponding parameter type.
-  * (For example: if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
+  * (For example, if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
   *
   * @param[in]  param GAP LE parameter type @ref T_GAP_LE_PARAM_TYPE.
   * @param[in]  len Length of data to write.
@@ -243,7 +233,7 @@ T_GAP_CAUSE le_set_gap_param(T_GAP_LE_PARAM_TYPE param, uint8_t len, void *p_val
   *
   * This function can be called with a GAP LE Parameter type @ref T_GAP_LE_PARAM_TYPE and it will get the GAP LE parameter.
   * The 'p_value' field must point to an appropriate data type that meets the requirements for the corresponding parameter type.
-  * (For example: if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
+  * (For example, if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
   *
   * @param[in]  param GAP LE parameter type @ref T_GAP_LE_PARAM_TYPE.
   * @param[in,out] p_value Pointer to location to get the parameter value.

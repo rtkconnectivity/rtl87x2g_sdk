@@ -1,10 +1,16 @@
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 #ifndef VECTOR_TABLE_AUTO_GEN_H
 #define VECTOR_TABLE_AUTO_GEN_H
 
 // *INDENT-OFF*
 /* ================================================================================ */
 /* ================                      IRQ                       ================ */
-/* ======== Reference: Bee4_AddrMap_IRQs_DmaPorts_20220913v0.xlsx   =========== */
+/* ======== Reference: RTL87x2G_AddrMap_IRQs_DmaPorts_20220913v0.xlsx   =========== */
 /* ================================================================================ */
 
 #define IRQn_AUTO_GEN \
@@ -215,7 +221,7 @@
 
 /* ================================================================================ */
 /* ================                     VECTOR                     ================ */
-/* ======== Reference: Bee4_AddrMap_IRQs_DmaPorts_20220913v0.xlsx   =========== */
+/* ======== Reference: RTL87x2G_AddrMap_IRQs_DmaPorts_20220913v0.xlsx   =========== */
 /* ================================================================================ */
 
 #define VECTORn_AUTO_GEN \
@@ -426,5 +432,5 @@
 #define GPIOB_First_VECTORn         GPIOB0_VECTORn
 #define GPIOB_Last_VECTORn          GPIOB31_VECTORn
 
-// *INDENT-ON* 
+// *INDENT-ON*
 #endif //#define VECTOR_TABLE_AUTO_GEN_H

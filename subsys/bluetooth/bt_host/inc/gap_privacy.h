@@ -1,20 +1,9 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2016, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-  * @file    gap_privacy.h
-  * @brief   This file contains all the function prototypes for the GAP bond and pairing
-  *          related functions.
-  * @details
-  * @author  ranhui
-  * @date    2016-02-18
-  * @version v1.0
-  * *************************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
-/*============================================================================*
- *               Define to prevent recursive inclusion
- *============================================================================*/
 #ifndef GAP_PRIVACY_H
 #define GAP_PRIVACY_H
 
@@ -59,7 +48,7 @@ extern "C"
                                                                   The structure of callback data is @ref T_LE_PRIVACY_SET_MODE_RSP. */
 
 
-/** @brief Define the privacy parameter type */
+/** @brief Define the privacy parameter type. */
 typedef enum
 {
     GAP_PARAM_PRIVACY_TIMEOUT           = 0x300, /**< Time Controller uses a Resolvable Private Address before a new resolvable
@@ -71,7 +60,7 @@ typedef enum
                                                       stored in Controller. Read only. Size is 1 octet. */
 } T_LE_PRIVACY_PARAM_TYPE;
 
-/** @brief Define the privacy state */
+/** @brief Define the privacy state. */
 typedef enum
 {
     LE_PRIVACY_RESOLUTION_DISABLED,     //!< Resolution disabled.
@@ -80,7 +69,7 @@ typedef enum
     LE_PRIVACY_RESOLUTION_ENABLED       //!< Resolution enabled.
 } T_LE_PRIVACY_STATE;
 
-/** @brief LE resolution status info */
+/** @brief LE resolution status info. */
 typedef struct
 {
     T_LE_PRIVACY_STATE   status;
@@ -120,7 +109,7 @@ typedef struct
     uint16_t             cause;
 } T_LE_PRIVACY_SET_MODE_RSP;
 
-/** @brief LE privacy callback data  */
+/** @brief LE privacy callback data.  */
 typedef union
 {
     T_LE_PRIVACY_RESOLUTION_STATUS_INFO            le_privacy_resolution_status_info;
@@ -156,7 +145,7 @@ typedef T_APP_RESULT(*P_FUN_PRIVACY_CB)(uint8_t msg_type, T_LE_PRIVACY_CB_DATA m
   *
   * This function can be called with a LE privacy parameter type @ref T_LE_PRIVACY_PARAM_TYPE and it will set the privacy parameter.
   * The 'p_value' field must point to an appropriate data type that meets the requirements for the corresponding parameter type.
-  * (For example: if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
+  * (For example, if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
   *
   * @param[in]  param LE privacy parameter type @ref T_LE_PRIVACY_PARAM_TYPE.
   * @param[in]  len Length of data to write.
@@ -172,7 +161,7 @@ T_GAP_CAUSE le_privacy_set_param(T_LE_PRIVACY_PARAM_TYPE param, uint8_t len, voi
   *
   * This function can be called with a LE privacy parameter type @ref T_LE_PRIVACY_PARAM_TYPE and it will get the privacy parameter.
   * The 'p_value' field must point to an appropriate data type that meets the requirements for the corresponding parameter type.
-  * (For example: if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
+  * (For example, if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
   *
   * @param[in]  param LE privacy parameter type @ref T_LE_PRIVACY_PARAM_TYPE.
   * @param[in,out]  p_value Pointer to location to get the parameter value.
@@ -286,7 +275,7 @@ T_GAP_CAUSE le_privacy_modify_resolv_list(T_GAP_RESOLV_LIST_OP operation,
   * @param[in] peer_irk              Pointer to peer IRK (16 octets).
                                      - NULL: No peer IRK, use all-zero IRK.
   * @param[in] use_local_irk         Indicates whether local IRK has been distributed to the peer device.
-                                     - false: Local IRK has not been distributed to the peer device
+                                     - false: Local IRK has not been distributed to the peer device.
                                      - true: Local IRK has been distributed to the peer device.
   * @return The result of sending request.
   * @retval GAP_CAUSE_SUCCESS Sending request operation is successful.

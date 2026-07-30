@@ -1,19 +1,9 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2021, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* @file      gap_pa_sync.h
-* @brief     Header file for GAP PA sync
-* @details
-* @author
-* @date      2021-07-12
-* @version   v0.8
-* *********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
-/*============================================================================*
- *               Define to prevent recursive inclusion
- *============================================================================*/
 #ifndef GAP_PA_SYNC_H
 #define GAP_PA_SYNC_H
 
@@ -265,7 +255,7 @@ T_GAP_CAUSE le_pa_sync_init(uint8_t sync_handle_num);
  *
  * This function can be called with a PA sync parameter type @ref T_GAP_PA_SYNC_PARAM_TYPE and it will get the PA sync parameter.
  * The 'p_value' field must point to an appropriate data type that meets the requirements for the corresponding parameter type.
- * (For example: if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
+ * (For example, if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
  *
  * @param[in]      param     GAP PA sync parameter types @ref T_GAP_PA_SYNC_PARAM_TYPE.
  * @param[in,out]  p_value   Pointer to location to get the parameter value.

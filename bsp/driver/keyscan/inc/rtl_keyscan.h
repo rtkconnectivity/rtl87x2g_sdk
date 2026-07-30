@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2024, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* \file     rtl_keyscan.h
-* \brief    The header file of the peripheral KEYSCAN driver.
-* \details  This file provides all KEYSCAN firmware functions.
-* \author   yuzhuo_liu
-* \date     2024-07-24
-* \version  v1.0
-* *********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 /*============================================================================*
  *               Define to prevent recursive inclusion
@@ -598,7 +591,7 @@ void KeyScan_FilterDataConfig(KEYSCAN_TypeDef *KeyScan, uint16_t data,
  * }
  * \endcode
  */
-void KeyScan_debounceConfig(KEYSCAN_TypeDef *KeyScan, uint8_t time,
+void KeyScan_debounceConfig(KEYSCAN_TypeDef *KeyScan, uint16_t time,
                             FunctionalState NewState);
 
 /**
@@ -743,4 +736,3 @@ void KeyScan_RAPQactiveCtrl(KEYSCAN_TypeDef *KeyScan, uint32_t Qactive, Function
 #endif /* RTL_KEYSCAN_H */
 
 
-/******************* (C) COPYRIGHT 2024 Realtek Semiconductor *****END OF FILE****/

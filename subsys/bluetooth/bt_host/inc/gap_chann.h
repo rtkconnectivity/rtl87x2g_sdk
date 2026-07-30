@@ -1,19 +1,9 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2021, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-  * @file    gap_chann.h
-  * @brief   This file contains all the constants and function prototypes for L2CAP channel.
-  * @details This L2CAP channel can transmit ATT PDU.
-  * @author  jane
-  * @date    2021-04-06
-  * @version v1.0
-  * *************************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
-/*============================================================================*
- *               Define to prevent recursive inclusion
- *============================================================================*/
 #ifndef GAP_CHANN_H
 #define GAP_CHANN_H
 
@@ -43,7 +33,7 @@ typedef enum
     GAP_CHANN_TYPE_BREDR_ECFC, //!< EATT bearer on BR/EDR transport.
 } T_GAP_CHANN_TYPE;
 
-/** @brief L2CAP channel connection state*/
+/** @brief L2CAP channel Connection State*/
 typedef enum
 {
     GAP_CHANNEL_STATE_DISCONNECTED  = 0, //!< Disconnected.
@@ -101,7 +91,7 @@ bool gap_chann_get_addr(uint16_t conn_handle, uint8_t *bd_addr, uint8_t *p_bd_ty
  * @brief  Get connection handle information.
  * @param[in]  bd_addr Pointer to remote Bluetooth device address.
  * @param[in]  bd_type Remote Bluetooth device address type.
- * @param[in,out] p_conn_handle Pointer to Connection handle.
+ * @param[in,out] p_conn_handle Pointer to connection handle.
  * @return Operation result.
  * @retval true Operation success.
  * @retval false Operation failure.

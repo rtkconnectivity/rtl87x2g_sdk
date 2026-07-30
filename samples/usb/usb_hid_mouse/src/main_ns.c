@@ -1,17 +1,8 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2022, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-* @file
-* @brief
-* @author
-* @date
-* @version
-**************************************************************************************
-* @attention
-* <h2><center>&copy; COPYRIGHT 2022 Realtek Semiconductor Corporation</center></h2>
-**************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 /* Demo includes. */
 #include "rtl876x.h"
 #include "rtl876x_lib_platform.h"

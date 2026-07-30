@@ -1,13 +1,9 @@
-/****************************************************************************************************//**
- * @file     trace_queue.h
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
  *
- * @brief
- *
- * @version  v0.1
- * @date     2018-11-05
- *
- * @note
- *******************************************************************************************************/
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
+
 #ifndef _TRACE_QUEUE_H_
 #define _TRACE_QUEUE_H_
 
@@ -26,13 +22,11 @@ typedef struct _QUEUE_INFO
     uint16_t reserved;
 } QUEUE_INFO;
 
-extern void trace_queue_init(uint32_t queue_num, ...);
-extern void trace_queue(void);
+void trace_queue_init(uint32_t queue_num, ...);
+void trace_queue(void);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /*_TRACE_QUEUE_H_*/
-
-/******************* (C) COPYRIGHT 2015 Realtek Semiconductor Corporation *****END OF FILE****/

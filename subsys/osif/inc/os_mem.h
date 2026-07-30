@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2024, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* @file      os_mem.h
-* @brief     Header file for os memory API.
-* @details   This file is used for memory malloc and free.
-* @author    rui_yu
-* @date      2024-12-30
-* @version   v1.0
-* *********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 #ifndef _OS_MEM_H_
 #define _OS_MEM_H_

@@ -1,11 +1,7 @@
-/**
- * @copyright Copyright (C) 2023 Realtek Semiconductor Corporation.
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
  *
- * @file usb_audio_spec.h
- * @version 1.0
- * @brief common definitions for both uac1.0 & uac2.0
- *
- * @note:
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
  */
 #ifndef __USB_AUDIO_SPEC_H__
 #define __USB_AUDIO_SPEC_H__

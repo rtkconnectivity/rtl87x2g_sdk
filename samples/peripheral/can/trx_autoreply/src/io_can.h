@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2022, Realtek Semiconductor Corporation. All rights reserved.
-**********************************************************************************************************
-* @file      io_can.c
-* @brief     This file provides all the demo code for CAN bus firmware functions.
-* @details
-* @author
-* @date      2023-07-17
-* @version  v1.0
-*********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 /*============================================================================*
  *                              Header Files
@@ -39,5 +32,5 @@ void can_tx_auto_reply(void);
 void can_rx_auto_reply(void);
 void can_demo(void);
 
-/******************* (C) COPYRIGHT 2022 Realtek Semiconductor Corporation *****END OF FILE****/
+
 

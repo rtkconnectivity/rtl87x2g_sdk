@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2016, Realtek Semiconductor Corporation. All rights reserved.
-**********************************************************************************************************
-* @file     gap_credit_based_conn.h
-* @brief    Header file for LE Credit-Based Connection message handling.
-* @details  None.
-* @author   Tifnan
-* @date     2016-03-16
-* @version  v0.1
-*********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 #ifndef _LE_CREDIT_BASED_CONN_H_
 #define _LE_CREDIT_BASED_CONN_H_
@@ -235,7 +228,7 @@ void        le_coc_register_app_cb(P_FUN_LE_COC_APP_CB app_callback);
  *
  * This function can be called with a COC parameter type @ref T_LE_COC_PARAM_TYPE and it will set the COC parameter.
  * The 'p_value' field must point to an appropriate data type that meets the requirements for the corresponding parameter type.
- * (For example: if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
+ * (For example, if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
  *
  * @param[in]   param    COC parameter type @ref T_LE_COC_PARAM_TYPE.
  * @param[in]   len      Length of data to write.
@@ -259,7 +252,7 @@ T_GAP_CAUSE le_coc_set_param(T_LE_COC_PARAM_TYPE param, uint8_t len, void *p_val
  *
  * This function can be called with a channel parameter type @ref T_LE_COC_CHANN_PARAM_TYPE and it will get the channel parameter.
  * The 'p_value' field must point to an appropriate data type that meets the requirements for the corresponding parameter type.
- * (For example: if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
+ * (For example, if required data length for parameter type is 2 octets, p_value should be cast to a pointer of uint16_t.)
  *
  * @param[in]       param    Channel parameter type @ref T_LE_COC_CHANN_PARAM_TYPE.
  * @param[in, out]  p_value  Pointer to location to get the value.

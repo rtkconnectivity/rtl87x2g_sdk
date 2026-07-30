@@ -1,19 +1,9 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2016, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-  * @file     profile_client.h
-  * @brief    Header file for profile client structure.
-  * @details  This file can be used when parameter use_ext of the client_cfg_use_ext_api is false.
-  * @author   ethan_su
-  * @date     2016-02-18
-  * @version  v1.0
-  * *************************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
-/*============================================================================*
- *               Define to prevent recursive inclusion
- *============================================================================*/
 #ifndef PROFILE_CLIENT_H
 #define PROFILE_CLIENT_H
 

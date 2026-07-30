@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
+
 #ifndef _GATT_H_
 #define _GATT_H_
 
@@ -196,12 +202,19 @@ Extended Properties Descriptor. */
   */
 #define UUID_16BIT_SIZE                 2   /**< 16 bits UUID size. */
 #define UUID_128BIT_SIZE                16  /**< 128 bits UUID size. */
+/** End of GATT_UUID_SIZE
+ * @}
+ */
 
+/** @defgroup  GATT_DEFS    GATT Definitions
+  * @brief     GATT definitions.
+  * @{
+  */
 #define ATT_ATTRIBUTE_MAX_LENGTH        512 /**< Attribute Maximum length. */
 
 #define HI_WORD(x)  ((uint8_t)((x & 0xFF00) >> 8))
 #define LO_WORD(x)  ((uint8_t)(x))
-/** End of GATT_UUID_SIZE
+/** End of GATT_DEFS
  * @}
  */
 
@@ -224,6 +237,7 @@ and value_len shall be set to the length of attribute value. */
 #define ATTRIB_FLAG_CCCD_APPL      0x0010 /**< Application will be informed about CCCD value is changed. */
 #define ATTRIB_FLAG_CCCD_NO_FILTER 0x0020 /**< Application will be informed about CCCD value
 when CCCD is write by client, no matter it is changed or not. */
+#define ATTRIB_FLAG_INCLUDE_MULTI  0x0040
 #define ATTRIB_FLAG_LE             0x0800 /**< Used only for primary service declaration attributes if GATT over Bluetooth LE is supported. */
 #define ATTRIB_FLAG_BREDR          0x0400 /**< Used only for primary service declaration attributes if GATT over BR/EDR is supported. */
 /** End of GATT_ATTRIBUTE_FLAG

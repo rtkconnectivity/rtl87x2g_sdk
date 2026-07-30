@@ -1,19 +1,9 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2021, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* @file      gap_aox_connless_transmitter.h
-* @brief     Header file for GAP AoA/AoD connectionless transmitter
-* @details
-* @author
-* @date      2021-07-12
-* @version   v0.8
-*********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
-/*============================================================================*
- *               Define to prevent recursive inclusion
- *============================================================================*/
 #ifndef GAP_AOX_CONNLESS_TRANSMITTER_H
 #define GAP_AOX_CONNLESS_TRANSMITTER_H
 

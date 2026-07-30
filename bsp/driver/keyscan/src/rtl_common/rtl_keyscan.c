@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-**********************************************************************************************************
-* \file     rtl_keyscan.c
-* \brief    This file provides all the KEYSCAN firmware functions.
-* \details
-* \author   yuzhuo_liu
-* \date     2023-10-17
-* \version  v1.0
-*********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 /*============================================================================*
  *                        Header Files
@@ -289,7 +282,7 @@ void KeyScan_FilterDataConfig(KEYSCAN_TypeDef *KeyScan, uint16_t data, Functiona
   *         This parameter can be: ENABLE or DISABLE.
   * \return none.
   */
-void KeyScan_debounceConfig(KEYSCAN_TypeDef *KeyScan, uint8_t time,
+void KeyScan_debounceConfig(KEYSCAN_TypeDef *KeyScan, uint16_t time,
                             FunctionalState NewState)
 {
     /* Check the parameters */
@@ -460,4 +453,3 @@ void KeyScan_RAPQactiveCtrl(KEYSCAN_TypeDef *KeyScan, uint32_t Qactive, Function
     return;
 }
 #endif
-/******************* (C) COPYRIGHT 2023 Realtek Semiconductor Corporation *****END OF FILE****/

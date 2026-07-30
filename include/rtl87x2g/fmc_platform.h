@@ -1,19 +1,13 @@
-/**
- *****************************************************************************************
- *     Copyright(c) 2018, Realtek Semiconductor Corporation. All rights reserved.
- *****************************************************************************************
- * @file    fmc_platform.h
- * @brief   Flexible memory controller (SPIC & PSRAMC) platform dependent implementation header file
- * @author  Yao-Yu
- * @date    2020-10-20
- * @version v0.1
- * ***************************************************************************************
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 #ifndef _FMC_PLATFORM_H
 #define _FMC_PLATFORM_H
 
-#include "stdint.h"
+#include <stdint.h>
 
 /** @defgroup FMC  Flexible Memory Controller
   * @brief

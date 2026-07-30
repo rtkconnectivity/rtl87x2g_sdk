@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2020, Realtek Semiconductor Corporation. All rights reserved.
-**********************************************************************************************************
-* @file     io_dlps.c
-* @brief    This file provides all the IO DLPS control firmware functions.
-* @details
-* @author
-* @date     2020-06-02
-* @version  v1.0
-*********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 #include <stddef.h>
 #include "app_section.h"
@@ -19,7 +12,6 @@
 #include "io_dlps.h"
 #include "rtl_pinmux.h"
 #include "rtl_nvic.h"
-#include "rtl_pinmux.h"
 #include "rtl_rcc.h"
 #include "rtl876x_lib_platform.h"
 #include "fmc_api.h"
@@ -35,7 +27,6 @@
 /******************** [PINMUX DLPS] *******************************************/
 /******************************************************************************/
 /******************************************************************************/
-#include "rtl_pinmux.h"
 
 volatile PINMUXStoreReg_Typedef Pinmux_StoreReg;
 
@@ -105,9 +96,8 @@ extern void I2C_DLPSExit(void *PeriReg, void *StoreBuf) RAM_FUNCTION;
 /******************** [IR DLPS] ***********************************************/
 /******************************************************************************/
 /******************************************************************************/
-#include "rtl_ir.h"
-
 #if USE_IR_DLPS
+#include "rtl_ir.h"
 
 volatile IRStoreReg_Typedef IR_StoreReg;
 
@@ -230,17 +220,17 @@ extern void UART_DLPSExit(void *PeriReg, void *StoreBuf) RAM_FUNCTION;
  *============================================================================*/
 
 /******************************************************************************/
-/******************** [USER Enter DLPS CALLBACK FUCN] *************************/
+/******************** [USER Enter DLPS CALLBACK FUNC] *************************/
 /******************************************************************************/
 /******************************************************************************/
 #if USE_USER_DEFINE_DLPS_ENTER_CB
 
 DLPS_IO_EnterDlpsCB User_IO_EnterDlpsCB = NULL;
 
-#endif /* USE_USER_DEFINE_DLPS_EXIT_CB */
+#endif /* USE_USER_DEFINE_DLPS_ENTER_CB */
 
 /******************************************************************************/
-/******************** [USER Exit DLPS CALLBACK FUCN] **************************/
+/******************** [USER Exit DLPS CALLBACK FUNC] **************************/
 /******************************************************************************/
 /******************************************************************************/
 #if USE_USER_DEFINE_DLPS_EXIT_CB
@@ -651,5 +641,5 @@ void DLPS_IORegister(void)
 #endif /* USE_IO_DRIVER_DLPS */
 
 
-/******************* (C) COPYRIGHT 2020 Realtek Semiconductor Corporation *****END OF FILE****/
+
 

@@ -1,17 +1,8 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-   * @file      ota_service.c
-   * @brief     Source file for using OTA service
-   * @author    Grace
-   * @date      2023-12-6
-   * @version   v1.1
-   **************************************************************************************
-   * @attention
-   * <h2><center>&copy; COPYRIGHT 2023 Realtek Semiconductor Corporation</center></h2>
-   **************************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 /*============================================================================*
  *                              Header Files
@@ -573,7 +564,7 @@ T_SERVER_ID ota_add_service(void *p_func)
     }
     p_ota_extended_cb = (P_FUN_SERVER_GENERAL_CB)p_func;
     ota_srv_id_local = service_id;
-    APP_PRINT_ERROR1("ota_add_service success: service_id %d", ota_srv_id_local);
+    APP_PRINT_INFO1("ota_add_service success: service_id %d", ota_srv_id_local);
     return service_id;
 #endif
 }

@@ -1,5 +1,7 @@
 /*
- * Copyright (c) 2017, Realtek Semiconductor Corporation. All rights reserved.
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
  */
 
 #ifndef _BT_TYPES_H_
@@ -523,7 +525,7 @@ extern "C" {
 #define HCI_ERR_UNKNOWN_CMD                     0x01        /**< The Controller does not understand the HCI Command packet opcode that the Host sent. */
 #define HCI_ERR_UNKNOWN_CONN_ID                 0x02        /**< Command sent from the Host should identify a connection, but that connection does not exist or does not identify the correct type of connection. */
 #define HCI_ERR_HARDWARE_FAIL                   0x03        /**< Something in the Controller has failed in a manner that cannot be described with any other error code. */
-#define HCI_ERR_PAGE_TIMEOUT                    0x04        /**< A page timed out because of the Page Timeout configuration parameter. This error code may occur only with the HCI_Remote_Name_Request and HCI_Create_Connection commands. */
+#define HCI_ERR_PAGE_TIMEOUT                    0x04        /**< A page timed out because of the Page Timeout configuration parameter. */
 #define HCI_ERR_AUTHEN_FAIL                     0x05        /**< Pairing or authentication failed due to incorrect results in the pairing or authentication procedure. This could be due to an incorrect PIN or Link Key. */
 #define HCI_ERR_KEY_MISSING                     0x06        /**< Pairing failed because of a missing PIN, or authentication failed because of a missing Key. */
 #define HCI_ERR_MEMORY_FULL                     0x07        /**< The Controller has run out of memory to store new parameters. */
@@ -536,14 +538,14 @@ extern "C" {
 #define HCI_ERR_REJECT_SECURITY_REASON          0x0E        /**< A connection was rejected due to security requirements not being fulfilled, like authentication or pairing. */
 #define HCI_ERR_REJECT_UNACCEPTABLE_ADDR        0x0F        /**< A connection was rejected because this device does not accept the BD_ADDR. This may be because the device will only accept connections from specific BD_ADDRs. */
 #define HCI_ERR_HOST_TIMEOUT                    0x10        /**< The Connection Accept Timeout has been exceeded for this connection attempt. */
-#define HCI_ERR_UNSUPPORTED_PARAM               0x11        /**< A feature or parameter value in the HCI command is not supported. This error code shall not be used in an LMP PDU. */
+#define HCI_ERR_UNSUPPORTED_PARAM               0x11        /**< A feature or parameter value in the HCI command is not supported. */
 #define HCI_ERR_INVALID_PARAM                   0x12        /**< At least one of the HCI command parameters is invalid. This shall be used when:
-* - the parameter total length is invalid.
-* - a command parameter is an invalid type.
-* - a connection identifier does not match the corresponding event.
-* - a parameter is odd when it is required to be even.
-* - a parameter is outside of the specified range.
-* - two or more parameter values have inconsistent values. */
+* - The parameter total length is invalid.
+* - A command parameter is an invalid type.
+* - A connection identifier does not match the corresponding event.
+* - A parameter is odd when it is required to be even.
+* - A parameter is outside of the specified range.
+* - Two or more parameter values have inconsistent values. */
 #define HCI_ERR_REMOTE_USER_TERMINATE           0x13        /**< The user on the remote device either terminated the connection or stopped broadcasting packets. */
 #define HCI_ERR_REMOTE_LOW_RESOURCE             0x14        /**< The remote device terminated the connection because of low resources. */
 #define HCI_ERR_REMOTE_POWER_OFF                0x15        /**< The remote device terminated the connection because the device is about to power off. */
@@ -553,17 +555,17 @@ extern "C" {
 #define HCI_ERR_UNKNOWN_LMP_PDU                 0x19        /**< The Controller has received an unknown LMP opcode. */
 #define HCI_ERR_UNSUPPORTED_REMOTE_FEAT         0x1A        /**< The remote device does not support the feature associated with the issued command, LMP PDU, or Link Layer Control PDU. */
 #define HCI_ERR_SCO_OFFSET_REJECTED             0x1B        /**< The offset requested in the
-* LMP_SCO_LINK_REQ PDU has been rejected. */
+LMP_SCO_LINK_REQ PDU has been rejected. */
 #define HCI_ERR_SCO_INTERVAL_REJECTED           0x1C        /**< The interval requested in the LMP_SCO_LINK_REQ PDU has been rejected. */
 #define HCI_ERR_SCO_AIR_MODE_REJECTED           0x1D        /**< The air mode requested in the LMP_SCO_LINK_REQ PDU has been rejected. */
 #define HCI_ERR_INVALID_LMP_PARAM               0x1E        /**< Some LMP PDU or LL Control PDU parameters were invalid. This shall be used when:
-* - the PDU length is invalid.
-* - a parameter is odd when it is required to be even.
-* - a parameter is outside of the specified range.
-* - two or more parameters have inconsistent values. */
+* - The PDU length is invalid.
+* - A parameter is odd when it is required to be even.
+* - A parameter is outside of the specified range.
+* - Two or more parameters have inconsistent values. */
 #define HCI_ERR_UNSPECIFIED_ERROR               0x1F        /**< No other error code specified is appropriate to use. */
 #define HCI_ERR_UNSUPPORTED_LMP_PARAM           0x20        /**< An LMP PDU or an LL Control PDU contains at least one parameter value that is not supported by the Controller at this time. This is normally used after a long negotiation procedure, for example during an
-* LMP_HOLD_REQ, LMP_SNIFF_REQ and LMP_ENCRYPTION_KEY_SIZE_REQ PDU exchanges. This may be used by the Link Layer, for example during the Connection Parameters Request Link Layer Control procedure. */
+LMP_HOLD_REQ, LMP_SNIFF_REQ and LMP_ENCRYPTION_KEY_SIZE_REQ PDU exchanges. This may be used by the Link Layer, for example during the Connection Parameters Request Link Layer Control procedure. */
 #define HCI_ERR_ROLE_CHANGE_NOT_ALLOWED         0x21        /**< A Controller will not allow a role change at this time. */
 #define HCI_ERR_LMP_RESPONSE_TIMEOUT            0x22        /**< An LMP transaction failed to respond within the LMP response timeout or an LL transaction failed to respond within the LL response timeout. */
 #define HCI_ERR_LMP_ERROR_TRANS_COLLISION       0x23        /**< An LMP transaction or LL procedure has collided with the same transaction or procedure that is already in progress. */
@@ -600,13 +602,13 @@ extern "C" {
 
 /* HCI local error code */
 #define HCI_ERR_INVALID_ADDR                    0x64        /**< Invalid address. */
-#define HCI_ERR_TIMEOUT                         0x65        /**< HCI if error timeout. */
-#define HCI_ERR_OUT_OF_SYNC                     0x66        /**< HCI if error out of sync. */
-#define HCI_ERR_NO_DESCRIPTOR                   0x67        /**< HCI allocates no descriptor of link when handle HCI_LE_Connection_Complete event. */
+#define HCI_ERR_TIMEOUT                         0x65        /**< HCI error timeout. */
+#define HCI_ERR_OUT_OF_SYNC                     0x66        /**< HCI error out of sync. */
+#define HCI_ERR_NO_DESCRIPTOR                   0x67        /**< HCI allocates no descriptor. */
 #define HCI_ERR_NO_MEMORY                       0x68        /**< HCI has run out of memory. */
 #define HCI_ERR_INVALID_STATE                   0x69        /**< Invalid state. */
 #define HCI_ERR_LOCAL_KEY_MISSING               0x6A        /**< Local link key is missing. */
-#define HCI_ERR_AUDIO_STOP                      0xFE        /**< Stop sniffing link audio. */
+#define HCI_ERR_AUDIO_STOP                      0xFE        /**< Audio sniffing stopped. */
 #define HCI_ERR_CONN_ROLESWAP                   0xFF        /**< Disconnect because of link role swap. */
 /** End of BT_HCI_ERROR
  * @}
@@ -783,7 +785,7 @@ extern "C" {
 #define ATT_ERR_INVALID_VALUE               0x80 /**< The attribute value is invalid for the operation. */
 
 /* Manufacturer specific error codes that are 'missing' in GATT spec. >= 0xC0:   */
-#define ATT_ERR_INVALID_CCC_BITS            0xC0 /**< Invalid client characteristic config bits. */
+#define ATT_ERR_INVALID_CCC_BITS            0xC0 /**< Invalid client characteristic configuration bits. */
 #define ATT_ERR_INVALID_SIGNED_COUNT        0xC1 /**< Invalid sign count. */
 #define ATT_ERR_INVALID_SIGNED_MAC_FAILED   0xC2 /**< Invalid sign MAC value. */
 #define ATT_ERR_MIN_APPLIC_CODE             0xC3 /**< ATT error occurs due to application code. */
@@ -861,12 +863,9 @@ extern "C" {
 
 #define SM_ERR_NO_ENTRY                         0xE1    /**< Host find no corresponding entry in the security database. */
 #define SM_ERR_DB_FULL                          0xE2    /**< The security database is full. */
-#define SM_ERR_INVALID_PARAM                    0xE3    /**< At least one of the SM parameters is invalid. This shall be used when:
-* - LE Secure Simple Pairing parameter to set is invalid.
-* - found key entry is invalid.
-* - a connection identifier does not match the corresponding event. */
+#define SM_ERR_INVALID_PARAM                    0xE3    /**< Invalid parameter. */
 #define SM_ERR_INSUFFICIENT_LINK_KEY            0xE4    /**< Link key is insufficiently secured. */
-#define SM_ERR_INVALID_STATE                    0xE6    /**< Invalid link state. */
+#define SM_ERR_INVALID_STATE                    0xE6    /**< Invalid state. */
 #define SM_ERR_NO_RESOURCE                      0xE7    /**< The security database has run out of resources. */
 #define SM_ERR_LINK_KEY_MISSING                 0xE8    /**< Host find no corresponding Link Key in the security database. */
 #define SM_ERR_DISCONNECT                       0xE9    /**< Pairing failed due to disconnection during the procedure. */
@@ -948,7 +947,7 @@ extern "C" {
  * @}
  */
 
-/** @defgroup    BT_BYTE_ORDER       Bluetooth Byte-order
+/** @defgroup    BT_BYTE_ORDER       Bluetooth Byte-Order
   * @brief       Bluetooth buffer/array byte-order utility macros.
   * @{
   */

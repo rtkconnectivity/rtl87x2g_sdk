@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+#ifndef PSRAM_H
+#define PSRAM_H
+
 #include <stdbool.h>
 #include <stdint.h>
 #include "fmc_platform.h"
@@ -36,8 +45,8 @@ typedef enum
 /**
 * @brief  PSRAM init
 * @return PSRAM init result
-* @retval Ture PSRAM init successfully
-* @retval False PSRAM init fail
+* @retval true PSRAM init successfully
+* @retval false PSRAM init fail
 */
 bool psram_winbond_opi_init(void);
 
@@ -78,3 +87,5 @@ bool psram_winbond_opi_read_cfg(FLASH_NOR_IDX_TYPE idx, uint16_t *cfg0, uint16_t
 /** End of PSRAM
  * @}
  */
+
+#endif /* PSRAM_H */

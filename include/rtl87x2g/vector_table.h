@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 #ifndef VECTOR_TABLE_H
 #define VECTOR_TABLE_H
 
@@ -42,6 +48,8 @@ typedef enum
 
 extern void *RamVectorTable[];
 
+#define GPIOA0_Handler    GPIO_A0_Handler
+#define GPIOA1_Handler    GPIO_A1_Handle
 
 /** End of VECTOR_TABLE_Exported_Types
   * @}

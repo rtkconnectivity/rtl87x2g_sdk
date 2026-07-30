@@ -1,15 +1,9 @@
-/**
-****************************************************************************************************
-*               Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-****************************************************************************************************
-* @file      ftl.h
-* @brief     Flash Transport Layer(FTL) is used as an abstraction layer for the user to read&write data on flash.
-* @note      FTL is designed for lightweight dynamical parameter storage, heavyweight and read-only data should not use it.
-* @author    Grace
-* @date      2023-11-30
-* @version   v1.0
-* **************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
+
 #ifndef _FTL_H_
 #define _FTL_H_
 #include <stdlib.h>

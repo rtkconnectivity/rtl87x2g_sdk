@@ -1,14 +1,8 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2024, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-* @file     main_ns.c
-* @brief    This file provides demo code of pwm.
-* @author   Grace_yan
-* @date     2024-07-24
-* @version  v1.0
-*****************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 /* Includes ------------------------------------------------------------------*/
 #include <stdlib.h>
@@ -47,4 +41,4 @@ int main(void)
 
 }
 
-/******************* (C) COPYRIGHT 2024 Realtek Semiconductor Corporation *****END OF FILE****/
+

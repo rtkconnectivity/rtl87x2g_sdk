@@ -1,14 +1,8 @@
-/**
-************************************************************************************************************
-*               Copyright (c) 2017, Realtek Semiconductor Corporation. All rights reserved.
-************************************************************************************************************
-* @file     utils.h
-* @brief    utility helper function for user application
-* @author   lory_xu
-* @date     2017-02
-* @version  v1.0
-*************************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 #ifndef _UTILS_NS_H_
 #define _UTILS_NS_H_
@@ -159,27 +153,27 @@ typedef enum
 
 #if   defined ( __CC_ARM )
 /**
- * @brief Busy delay for specified microsecond
- * @param t   to specify t microseconds to delay
+ * @brief Busy delay for specified millisecond
+ * @param t   to specify t milliseconds to delay
  * @return none
  */
 extern volatile void (*platform_delay_ms)(uint32_t t);
 /**
- * @brief Busy delay for specified millisecond
- * @param t   to specify t milliseconds to delay
+ * @brief Busy delay for specified microsecond
+ * @param t   to specify t microseconds to delay
  * @return none
  */
 extern volatile void (*platform_delay_us)(uint32_t t);
 #elif defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050) || defined (__GNUC__)
 /**
- * @brief Busy delay for specified microsecond
- * @param t   to specify t microseconds to delay
+ * @brief Busy delay for specified millisecond
+ * @param t   to specify t milliseconds to delay
  * @return none
  */
 extern void (*platform_delay_ms)(uint32_t t);
 /**
- * @brief Busy delay for specified millisecond
- * @param t   to specify t milliseconds to delay
+ * @brief Busy delay for specified microsecond
+ * @param t   to specify t microseconds to delay
  * @return none
  */
 extern void (*platform_delay_us)(uint32_t t);
@@ -331,4 +325,3 @@ uint32_t platform_random(uint32_t max);
 #endif
 
 #endif
-

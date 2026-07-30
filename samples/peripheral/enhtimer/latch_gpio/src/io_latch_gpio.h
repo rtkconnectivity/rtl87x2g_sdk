@@ -1,14 +1,8 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-* @file     io_latch_gpio.h
-* @brief    This file provides demo code of pwm.
-* @author   Grace_yan
-* @date     2023-07-21
-* @version  v1.0
-*****************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 /* Includes ------------------------------------------------------------------*/
 #include "rtl_pinmux.h"
@@ -61,4 +55,4 @@ void driver_gpio_init(void);
 void driver_enhance_timer_init(void);
 
 
-/******************* (C) COPYRIGHT 2023 Realtek Semiconductor Corporation *****END OF FILE****/
+

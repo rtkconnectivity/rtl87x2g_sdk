@@ -1,17 +1,9 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2016, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-  * @file     profile_server_ext.h
-  * @brief    Header file for server structure.
-  * @details  This file can be used when the parameter use_ext of the server_cfg_use_ext_api is true.
-  * @author
-  * @date     2021-04-07
-  * @version  v1.0
-  * *************************************************************************************
-  */
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
-/* Define to prevent recursive inclusion */
 #ifndef PROFILE_SERVER_EXT_H
 #define PROFILE_SERVER_EXT_H
 

@@ -1,14 +1,8 @@
-/**
-*****************************************************************************************
-*     Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-*****************************************************************************************
-* @file     io_latch_gpio.c
-* @brief    This file provides demo code of pwm.
-* @author   Grace_yan
-* @date     2023-07-21
-* @version  v1.0
-*****************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: LicenseRef-Realtek-5-Clause
+ */
 
 /* Includes ------------------------------------------------------------------*/
 #include <stdlib.h>
@@ -44,7 +38,7 @@ void driver_enhance_timer_init(void)
 
     ENHTIM_InitStruct.ENHTIM_ClockDiv               = ENHTIM_CLOCK_DIVIDER_1;
     ENHTIM_InitStruct.ENHTIM_Mode                   = ENHTIM_MODE_FreeRun;
-    /* Only enhtim_ ENHTIM_LatchCountEn[2] latch triggered by GPIO. */
+    /* Only enhtim_ ENHTIM_LatchCountEn[0] latch triggered by GPIO. */
     ENHTIM_InitStruct.ENHTIM_LatchCountEn[0]        = ENABLE;
     ENHTIM_InitStruct.ENHTIM_LatchCountTrigger[0]   = ENHTIM_LATCH_TRIGGER_RISING_EDGE;
     ENHTIM_InitStruct.ENHTIM_LatchCountThd          = 3;
@@ -138,4 +132,4 @@ void Enhanced_Timer0_Handler()
         ENHTIM_INTConfig(ENH_TIM0, ENHTIM_INT_LATCH_CNT_FIFO_THD, ENABLE);
     }
 }
-/******************* (C) COPYRIGHT 2023 Realtek Semiconductor Corporation *****END OF FILE****/
+

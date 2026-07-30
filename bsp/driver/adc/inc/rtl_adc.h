@@ -1,15 +1,8 @@
-/**
-*********************************************************************************************************
-*               Copyright(c) 2023, Realtek Semiconductor Corporation. All rights reserved.
-*********************************************************************************************************
-* \file     rtl_adc.h
-* \brief    The header file of the peripheral ADC driver.
-* \details  This file provides all ADC firmware functions.
-* \author   echo
-* \date     2023-10-17
-* \version  v1.0
-* *********************************************************************************************************
-*/
+/*
+ * Copyright (c) 2026, Realtek Semiconductor Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 /*============================================================================*
  *               Define to prevent recursive inclusion
@@ -27,6 +20,7 @@ extern "C" {
 #include "utils/rtl_utils.h"
 #if defined (CONFIG_SOC_SERIES_RTL87X2G)
 #include "adc/src/rtl87x2g/rtl_adc_def.h"
+#include "adc/src/rtl87x2g/adc_lib.h"
 #elif defined (CONFIG_SOC_SERIES_RTL87X3E)
 #include "adc/src/rtl87x3e/rtl_adc_def.h"
 #elif defined (CONFIG_SOC_SERIES_RTL87X3D)
@@ -796,11 +790,11 @@ void ADC_SchIndexConfig(ADC_TypeDef *ADCx, uint8_t AdcMode, uint16_t Index);
  * void adc_demo(void)
  * {
  *     uint16_t bit_map = 0x03;
- *     ADC_BitMapConfig(ADC,bit_map,ENABLE);
+ *     ADC_BitMapConfig(ADC,bit_map);
  * }
  * \endcode
  */
-void ADC_BitMapConfig(ADC_TypeDef *ADCx, uint16_t BitMap, FunctionalState NewState);
+void ADC_BitMapConfig(ADC_TypeDef *ADCx, uint16_t BitMap);
 
 /**
  * \brief   Enbale or disable write data to FIFO.
@@ -965,5 +959,3 @@ void ADC_TaskTrigger(ADC_TypeDef *ADCx, uint32_t Task);
 #endif
 
 #endif /* RTL_ADC_H */
-
-/******************* (C) COPYRIGHT 2023 Realtek Semiconductor *****END OF FILE****/
